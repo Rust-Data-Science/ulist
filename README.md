@@ -1,2 +1,2 @@
-# uvec
-Ultra fast vector - Python bindings to Rust Vector.
+# ulist
+Ultra fast list - Python bindings to Rust Vector.
