@@ -18,6 +18,14 @@ impl List {
         self.values.iter().sum()
     }
 
+    pub fn mean(&self) -> f32 {
+        self.sum() as f32 / self.values.len() as f32
+    }
+
+    pub fn size(&self) -> i32 {
+        self.values.len() as i32
+    }
+
     pub fn min(&self) -> i32 {
         *self.values.iter().min().unwrap()
     }
@@ -25,7 +33,6 @@ impl List {
     pub fn max(&self) -> i32 {
         *self.values.iter().max().unwrap()
     }
-
 }
 
 /// A Python module implemented in Rust. The name of this function must match
