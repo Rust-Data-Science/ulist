@@ -1,3 +1,4 @@
+use pyo3::class::sequence::PySequenceProtocol;
 use pyo3::prelude::*;
 
 /// A class to bind Rust Vector.
@@ -14,24 +15,31 @@ impl List {
         List { values, dtype }
     }
 
-    pub fn sum(&self) -> i32 {
-        self.values.iter().sum()
+    // Arrange the following methods in alphabetical order.
+    pub fn max(&self) -> i32 {
+        *self.values.iter().max().unwrap()
     }
-
     pub fn mean(&self) -> f32 {
         self.sum() as f32 / self.values.len() as f32
-    }
-
-    pub fn size(&self) -> i32 {
-        self.values.len() as i32
     }
 
     pub fn min(&self) -> i32 {
         *self.values.iter().min().unwrap()
     }
 
-    pub fn max(&self) -> i32 {
-        *self.values.iter().max().unwrap()
+    pub fn size(&self) -> usize {
+        self.values.len()
+    }
+
+    pub fn sum(&self) -> i32 {
+        self.values.iter().sum()
+    }
+}
+
+#[pyproto]
+impl PySequenceProtocol for List {
+    fn __len__(&self) -> usize {
+        self.values.len()
     }
 }
 
