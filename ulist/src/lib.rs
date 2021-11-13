@@ -1,45 +1,104 @@
+use num::traits::AsPrimitive;
 use pyo3::class::sequence::PySequenceProtocol;
 use pyo3::prelude::*;
+use std::iter::Sum;
 
-/// A class to bind Rust Vector.
+/// An abstract List.
+trait List<'a, T>
+where
+    T: AsPrimitive<f32> + Sum<&'a T>,
+{
+    fn values(&'a self) -> &'a Vec<T>;
+
+    // Arrange the following methods in alphabetical order.
+    fn max(&'a self) -> T;
+
+    fn mean(&'a self) -> f32 {
+        let numeritor: f32 = self.sum().as_();
+        let denominator: f32 = self.size().as_();
+        numeritor / denominator
+    }
+
+    fn min(&'a self) -> T;
+
+    fn size(&'a self) -> usize {
+        self.values().len()
+    }
+
+    fn sum(&'a self) -> T {
+        self.values().iter().sum()
+    }
+}
+
+/// List for f32.
 #[pyclass]
-struct List {
-    values: Vec<i32>,
-    dtype: String,
+struct FloatList {
+    list: Vec<f32>,
+}
+
+impl<'a> List<'a, f32> for FloatList {
+    fn values(&'a self) -> &'a Vec<f32> {
+        &self.list
+    }
+
+    fn max(&'a self) -> f32 {
+        self.values()
+            .iter()
+            .fold(f32::NEG_INFINITY, |x, &y| x.max(y))
+    }
+
+    fn min(&'a self) -> f32 {
+        self.values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
+    }
 }
 
 #[pymethods]
-impl List {
+impl FloatList {
     #[new]
-    fn new(values: Vec<i32>, dtype: String) -> Self {
-        List { values, dtype }
-    }
-
-    // Arrange the following methods in alphabetical order.
-    pub fn max(&self) -> i32 {
-        *self.values.iter().max().unwrap()
-    }
-    pub fn mean(&self) -> f32 {
-        self.sum() as f32 / self.values.len() as f32
-    }
-
-    pub fn min(&self) -> i32 {
-        *self.values.iter().min().unwrap()
-    }
-
-    pub fn size(&self) -> usize {
-        self.values.len()
-    }
-
-    pub fn sum(&self) -> i32 {
-        self.values.iter().sum()
+    fn new(list: Vec<f32>) -> Self {
+        FloatList { list }
     }
 }
 
 #[pyproto]
-impl PySequenceProtocol for List {
+impl PySequenceProtocol for FloatList {
     fn __len__(&self) -> usize {
-        self.values.len()
+        self.size()
+    }
+}
+
+/// List for i32.
+#[pyclass]
+struct IntegerList {
+    list: Vec<i32>,
+}
+
+impl<'a> List<'a, i32> for IntegerList {
+    fn values(&'a self) -> &'a Vec<i32> {
+        &self.list
+    }
+
+    fn max(&'a self) -> i32 {
+        *self.values().iter().max().unwrap()
+    }
+
+    fn min(&'a self) -> i32 {
+        *self.values().iter().min().unwrap()
+    }
+}
+
+#[pymethods]
+impl IntegerList {
+    #[new]
+    fn new(list: Vec<i32>) -> Self {
+        IntegerList { list }
+    }
+}
+
+#[pyproto]
+impl PySequenceProtocol for IntegerList {
+    fn __len__(&self) -> usize {
+        self.size()
     }
 }
 
@@ -48,7 +107,8 @@ impl PySequenceProtocol for List {
 /// import the module.
 #[pymodule]
 fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<List>()?;
+    m.add_class::<FloatList>()?;
+    m.add_class::<IntegerList>()?;
 
     Ok(())
 }
