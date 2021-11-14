@@ -48,3 +48,5 @@ def test(
         elif test_class is IntegerList:
             expected_type = int
     assert type(result) == expected_type, msg
+
+    assert len(arr) == arr.size()
