@@ -4,14 +4,19 @@ FROM konstin2/maturin
 # i.e. gh_username=myname
 ARG gh_username=tushushu
 ARG ulist_home="/home/ulist"
+ARG version = "0.1.0"
+ARG branch="release-$version"
 
 # Clone ulist repo
 RUN mkdir "$ulist_home" \
     && git clone "https://github.com/$gh_username/ulist.git" "$ulist_home" \
-    && cd "$ulist_home"
+    && cd "$ulist_home" \
+    && git fetch \
+    && git checkout "$branch"
 
-# Unit tests
-RUN Python test.py
+# Build
+RUN cd "$ulist_home/ulist" \
+    && maturin build --release
 
-# Build ulist
-RUN cd "ulist" && maturin build --release
+# Run bash
+ENTRYPOINT /bin/bash
