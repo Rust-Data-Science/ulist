@@ -21,6 +21,7 @@ Ultra fast list - Python bindings to Rust Vector.
 
 
 ### Docker
-* If we need to publish by docker, please run `docker run -it -i <container ID>`
-* If you want to customize the build, please consider to change the arguments `gh_username`, 
+The docker images are saved in https://hub.docker.com/repository/docker/tushushu/ulist
+* Build by docker, please run `docker run -it -i <container ID>`, and then run `maturin build`.
+* Customize the build, please consider to change the arguments `gh_username`, 
 `ulist_home` and `branch` in the `Dockerfile` before building.
