@@ -16,10 +16,11 @@ Ultra fast list - Python bindings to Rust Vector.
 * Run `maturin build --release` If we want to benchmark the package.
 
 
-### Build by docker
-* Run `docker build .` to build the docker image.
-* Run `docker cp <container>:"/home/ulist/ulist/target/release/wheels/" <local-dest-path> ` to copy the wheels folder and files from docker container to local path.
-
-
 ### Publish
 `maturin publish` builds the crate into python packages and publishes them to pypi.
+
+
+### Docker
+* If we need to publish by docker, please run `docker run -it -i <container ID>`
+* If you want to customize the build, please consider to change the arguments `gh_username`, 
+`ulist_home` and `branch` in the `Dockerfile` before building.

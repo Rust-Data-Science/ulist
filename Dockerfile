@@ -4,8 +4,7 @@ FROM konstin2/maturin
 # i.e. gh_username=myname
 ARG gh_username=tushushu
 ARG ulist_home="/home/ulist"
-ARG version = "0.1.0"
-ARG branch="release-$version"
+ARG branch="release-0.1.0"
 
 # Clone ulist repo
 RUN mkdir "$ulist_home" \
@@ -13,10 +12,6 @@ RUN mkdir "$ulist_home" \
     && cd "$ulist_home" \
     && git fetch \
     && git checkout "$branch"
-
-# Build
-RUN cd "$ulist_home/ulist" \
-    && maturin build --release
 
 # Run bash
 ENTRYPOINT /bin/bash
