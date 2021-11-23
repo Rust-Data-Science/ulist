@@ -8,9 +8,12 @@ trait List<'a, T>
 where
     T: AsPrimitive<f32> + Sum<&'a T>,
 {
-    fn values(&'a self) -> &'a Vec<T>;
-
     // Arrange the following methods in alphabetical order.
+
+    fn _values(&'a self) -> &'a Vec<T>;
+
+    fn copy(&self) -> Self;
+
     fn max(&'a self) -> T;
 
     fn mean(&'a self) -> f32 {
@@ -22,11 +25,15 @@ where
     fn min(&'a self) -> T;
 
     fn size(&'a self) -> usize {
-        self.values().len()
+        self._values().len()
     }
 
     fn sum(&'a self) -> T {
-        self.values().iter().sum()
+        self._values().iter().sum()
+    }
+
+    fn to_list(&'a self) -> Vec<T> {
+        self._values().clone()
     }
 }
 
@@ -41,6 +48,10 @@ impl FloatList {
     #[new]
     fn new(list: Vec<f32>) -> Self {
         FloatList { list }
+    }
+
+    pub fn copy(&self) -> Self {
+        List::copy(self)
     }
 
     pub fn max(&self) -> f32 {
@@ -62,21 +73,30 @@ impl FloatList {
     pub fn sum(&self) -> f32 {
         List::sum(self)
     }
+
+    pub fn to_list(&self) -> Vec<f32> {
+        List::to_list(self)
+    }
 }
 
 impl<'a> List<'a, f32> for FloatList {
-    fn values(&'a self) -> &'a Vec<f32> {
+    fn _values(&'a self) -> &'a Vec<f32> {
         &self.list
     }
 
+    fn copy(&self) -> Self {
+        let list = self.list.clone();
+        FloatList { list }
+    }
+
     fn max(&'a self) -> f32 {
-        self.values()
+        self._values()
             .iter()
             .fold(f32::NEG_INFINITY, |x, &y| x.max(y))
     }
 
     fn min(&'a self) -> f32 {
-        self.values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
+        self._values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
     }
 }
 
@@ -100,6 +120,10 @@ impl IntegerList {
         IntegerList { list }
     }
 
+    pub fn copy(&self) -> Self {
+        List::copy(self)
+    }
+
     pub fn max(&self) -> i32 {
         List::max(self)
     }
@@ -119,19 +143,28 @@ impl IntegerList {
     pub fn sum(&self) -> i32 {
         List::sum(self)
     }
+
+    pub fn to_list(&self) -> Vec<i32> {
+        List::to_list(self)
+    }
 }
 
 impl<'a> List<'a, i32> for IntegerList {
-    fn values(&'a self) -> &'a Vec<i32> {
+    fn _values(&'a self) -> &'a Vec<i32> {
         &self.list
     }
 
+    fn copy(&self) -> Self {
+        let list = self.list.clone();
+        Self { list }
+    }
+
     fn max(&'a self) -> i32 {
-        *self.values().iter().max().unwrap()
+        *self._values().iter().max().unwrap()
     }
 
     fn min(&'a self) -> i32 {
-        *self.values().iter().min().unwrap()
+        *self._values().iter().min().unwrap()
     }
 }
 
