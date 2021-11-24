@@ -40,14 +40,14 @@ where
 /// List for f32.
 #[pyclass]
 struct FloatList {
-    list: Vec<f32>,
+    _list: Vec<f32>,
 }
 
 #[pymethods]
 impl FloatList {
     #[new]
     fn new(list: Vec<f32>) -> Self {
-        FloatList { list }
+        FloatList { _list: list }
     }
 
     pub fn copy(&self) -> Self {
@@ -81,12 +81,13 @@ impl FloatList {
 
 impl<'a> List<'a, f32> for FloatList {
     fn _values(&'a self) -> &'a Vec<f32> {
-        &self.list
+        &self._list
     }
 
     fn copy(&self) -> Self {
-        let list = self.list.clone();
-        FloatList { list }
+        FloatList {
+            _list: self.to_list(),
+        }
     }
 
     fn max(&'a self) -> f32 {
@@ -110,14 +111,14 @@ impl PySequenceProtocol for FloatList {
 /// List for i32.
 #[pyclass]
 struct IntegerList {
-    list: Vec<i32>,
+    _list: Vec<i32>,
 }
 
 #[pymethods]
 impl IntegerList {
     #[new]
     fn new(list: Vec<i32>) -> Self {
-        IntegerList { list }
+        IntegerList { _list: list }
     }
 
     pub fn copy(&self) -> Self {
@@ -151,12 +152,13 @@ impl IntegerList {
 
 impl<'a> List<'a, i32> for IntegerList {
     fn _values(&'a self) -> &'a Vec<i32> {
-        &self.list
+        &self._list
     }
 
     fn copy(&self) -> Self {
-        let list = self.list.clone();
-        Self { list }
+        Self {
+            _list: self.to_list(),
+        }
     }
 
     fn max(&'a self) -> i32 {
