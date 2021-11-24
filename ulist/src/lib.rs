@@ -28,6 +28,8 @@ where
         self._values().len()
     }
 
+    fn sort(&self, ascending: bool) -> Self;
+
     fn sum(&'a self) -> T {
         self._values().iter().sum()
     }
@@ -70,6 +72,10 @@ impl FloatList {
         List::size(self)
     }
 
+    pub fn sort(&self, ascending: bool) -> Self {
+        List::sort(self, ascending)
+    }
+
     pub fn sum(&self) -> f32 {
         List::sum(self)
     }
@@ -98,6 +104,16 @@ impl<'a> List<'a, f32> for FloatList {
 
     fn min(&'a self) -> f32 {
         self._values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
+    }
+
+    fn sort(&self, ascending: bool) -> Self {
+        let mut list = self.to_list();
+        if ascending {
+            list.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        } else {
+            list.sort_by(|a, b| b.partial_cmp(a).unwrap());
+        }
+        FloatList { _list: list }
     }
 }
 
@@ -141,6 +157,10 @@ impl IntegerList {
         List::size(self)
     }
 
+    pub fn sort(&self, ascending: bool) -> Self {
+        List::sort(self, ascending)
+    }
+
     pub fn sum(&self) -> i32 {
         List::sum(self)
     }
@@ -167,6 +187,16 @@ impl<'a> List<'a, i32> for IntegerList {
 
     fn min(&'a self) -> i32 {
         *self._values().iter().min().unwrap()
+    }
+
+    fn sort(&self, ascending: bool) -> Self {
+        let mut list = self.to_list();
+        if ascending {
+            list.sort();
+        } else {
+            list.sort_by(|a, b| b.cmp(a))
+        }
+        IntegerList { _list: list }
     }
 }
 
