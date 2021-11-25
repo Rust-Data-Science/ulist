@@ -13,6 +13,8 @@ where
     // Arrange the following methods in alphabetical order.
     fn _new(list: Vec<T>) -> Self;
 
+    fn _sort(&self, ascending: bool) -> Vec<T>;
+
     fn _values(&'a self) -> &'a Vec<T>;
 
     fn copy(&'a self) -> Self {
@@ -33,7 +35,10 @@ where
         self._values().len()
     }
 
-    fn sort(&self, ascending: bool) -> Self;
+    fn sort(&self, ascending: bool) -> Self {
+        let list = self._sort(ascending);
+        List::_new(list)
+    }
 
     fn sum(&'a self) -> T {
         self._values().iter().sum()
@@ -95,6 +100,16 @@ impl<'a> List<'a, f32> for FloatList {
         Self { _list: list }
     }
 
+    fn _sort(&self, ascending: bool) -> Vec<f32> {
+        let mut list = self.to_list();
+        if ascending {
+            list.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        } else {
+            list.sort_by(|a, b| b.partial_cmp(a).unwrap());
+        }
+        list
+    }
+
     fn _values(&'a self) -> &'a Vec<f32> {
         &self._list
     }
@@ -107,16 +122,6 @@ impl<'a> List<'a, f32> for FloatList {
 
     fn min(&'a self) -> f32 {
         self._values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
-    }
-
-    fn sort(&self, ascending: bool) -> Self {
-        let mut list = self.to_list();
-        if ascending {
-            list.sort_by(|a, b| a.partial_cmp(b).unwrap());
-        } else {
-            list.sort_by(|a, b| b.partial_cmp(a).unwrap());
-        }
-        FloatList { _list: list }
     }
 }
 
@@ -178,6 +183,16 @@ impl<'a> List<'a, i32> for IntegerList {
         Self { _list: list }
     }
 
+    fn _sort(&self, ascending: bool) -> Vec<i32> {
+        let mut list = self.to_list();
+        if ascending {
+            list.sort();
+        } else {
+            list.sort_by(|a, b| b.cmp(a))
+        }
+        list
+    }
+
     fn _values(&'a self) -> &'a Vec<i32> {
         &self._list
     }
@@ -188,16 +203,6 @@ impl<'a> List<'a, i32> for IntegerList {
 
     fn min(&'a self) -> i32 {
         *self._values().iter().min().unwrap()
-    }
-
-    fn sort(&self, ascending: bool) -> Self {
-        let mut list = self.to_list();
-        if ascending {
-            list.sort();
-        } else {
-            list.sort_by(|a, b| b.cmp(a))
-        }
-        IntegerList { _list: list }
     }
 }
 
