@@ -2,17 +2,22 @@ use num::traits::AsPrimitive;
 use pyo3::class::sequence::PySequenceProtocol;
 use pyo3::prelude::*;
 use std::iter::Sum;
+use std::marker::Sized;
 
 /// An abstract List.
 trait List<'a, T>
 where
     T: AsPrimitive<f32> + Sum<&'a T>,
+    Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
+    fn _new(list: Vec<T>) -> Self;
 
     fn _values(&'a self) -> &'a Vec<T>;
 
-    fn copy(&self) -> Self;
+    fn copy(&'a self) -> Self {
+        List::_new(self.to_list())
+    }
 
     fn max(&'a self) -> T;
 
@@ -49,7 +54,7 @@ struct FloatList {
 impl FloatList {
     #[new]
     fn new(list: Vec<f32>) -> Self {
-        FloatList { _list: list }
+        List::_new(list)
     }
 
     pub fn copy(&self) -> Self {
@@ -86,14 +91,12 @@ impl FloatList {
 }
 
 impl<'a> List<'a, f32> for FloatList {
-    fn _values(&'a self) -> &'a Vec<f32> {
-        &self._list
+    fn _new(list: Vec<f32>) -> Self {
+        Self { _list: list }
     }
 
-    fn copy(&self) -> Self {
-        FloatList {
-            _list: self.to_list(),
-        }
+    fn _values(&'a self) -> &'a Vec<f32> {
+        &self._list
     }
 
     fn max(&'a self) -> f32 {
@@ -134,7 +137,7 @@ struct IntegerList {
 impl IntegerList {
     #[new]
     fn new(list: Vec<i32>) -> Self {
-        IntegerList { _list: list }
+        List::_new(list)
     }
 
     pub fn copy(&self) -> Self {
@@ -171,14 +174,12 @@ impl IntegerList {
 }
 
 impl<'a> List<'a, i32> for IntegerList {
-    fn _values(&'a self) -> &'a Vec<i32> {
-        &self._list
+    fn _new(list: Vec<i32>) -> Self {
+        Self { _list: list }
     }
 
-    fn copy(&self) -> Self {
-        Self {
-            _list: self.to_list(),
-        }
+    fn _values(&'a self) -> &'a Vec<i32> {
+        &self._list
     }
 
     fn max(&'a self) -> i32 {
