@@ -13,7 +13,7 @@ where
     // Arrange the following methods in alphabetical order.
     fn _new(list: Vec<T>) -> Self;
 
-    fn _sort(&self, ascending: bool) -> Vec<T>;
+    fn _sort(&self, list: &mut Vec<T>, ascending: bool);
 
     fn _values(&'a self) -> &'a Vec<T>;
 
@@ -35,8 +35,10 @@ where
         self._values().len()
     }
 
-    fn sort(&self, ascending: bool) -> Self {
-        let list = self._sort(ascending);
+    fn sort(&'a self, ascending: bool) -> Self {
+        let mut list = self.to_list();
+        let mut _list = &mut list;
+        self._sort(_list, ascending);
         List::_new(list)
     }
 
@@ -100,14 +102,12 @@ impl<'a> List<'a, f32> for FloatList {
         Self { _list: list }
     }
 
-    fn _sort(&self, ascending: bool) -> Vec<f32> {
-        let mut list = self.to_list();
+    fn _sort(&self, list: &mut Vec<f32>, ascending: bool) {
         if ascending {
             list.sort_by(|a, b| a.partial_cmp(b).unwrap());
         } else {
             list.sort_by(|a, b| b.partial_cmp(a).unwrap());
         }
-        list
     }
 
     fn _values(&'a self) -> &'a Vec<f32> {
@@ -183,14 +183,12 @@ impl<'a> List<'a, i32> for IntegerList {
         Self { _list: list }
     }
 
-    fn _sort(&self, ascending: bool) -> Vec<i32> {
-        let mut list = self.to_list();
+    fn _sort(&self, list: &mut Vec<i32>, ascending: bool) {
         if ascending {
             list.sort();
         } else {
             list.sort_by(|a, b| b.cmp(a))
         }
-        list
     }
 
     fn _values(&'a self) -> &'a Vec<i32> {
