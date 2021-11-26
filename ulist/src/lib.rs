@@ -57,6 +57,17 @@ where
         list.dedup();
         List::_new(list)
     }
+
+    fn filter(&'a self, condition: &BooleanList) -> Self {
+        let list = self
+            ._values()
+            .iter()
+            .zip(condition._list.iter())
+            .filter(|(_, y)| **y)
+            .map(|(x, _)| *x)
+            .collect();
+        List::_new(list)
+    }
 }
 
 /// List for f32.
@@ -74,6 +85,10 @@ impl FloatList {
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn filter(&self, condition: &BooleanList) -> Self {
+        List::filter(self, condition)
     }
 
     pub fn max(&self) -> f32 {
@@ -161,6 +176,10 @@ impl IntegerList {
         List::copy(self)
     }
 
+    pub fn filter(&self, condition: &BooleanList) -> Self {
+        List::filter(self, condition)
+    }
+
     pub fn max(&self) -> i32 {
         List::max(self)
     }
@@ -227,6 +246,20 @@ impl PySequenceProtocol for IntegerList {
     }
 }
 
+/// List for bool.
+#[pyclass]
+struct BooleanList {
+    _list: Vec<bool>,
+}
+
+#[pymethods]
+impl BooleanList {
+    #[new]
+    fn new(list: Vec<bool>) -> Self {
+        BooleanList { _list: list }
+    }
+}
+
 /// A Python module implemented in Rust. The name of this function must match
 /// the `lib.name` setting in the `Cargo.toml`, else Python will not be able to
 /// import the module.
@@ -234,6 +267,7 @@ impl PySequenceProtocol for IntegerList {
 fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<FloatList>()?;
     m.add_class::<IntegerList>()?;
+    m.add_class::<BooleanList>()?;
 
     Ok(())
 }

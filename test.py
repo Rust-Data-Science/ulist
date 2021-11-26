@@ -4,7 +4,7 @@
 @Date: 2021-11-14 16:02:00
 """
 import pytest
-from ulist import FloatList, IntegerList
+from ulist import FloatList, IntegerList, BooleanList
 from typing import Union, List, Optional
 
 LIST_TYPE = Union[FloatList, IntegerList]
@@ -60,9 +60,14 @@ def test_statistics_methods(
     "test_method, expected_value, kwargs",
     [
         ("copy", [5, 3, 2, 4, 1, 3], {}),
-        ("to_list", [5, 3, 2, 4, 1, 3], {}),
+        (
+            "filter",
+            [5, 4],
+            {"condition": BooleanList([True, False, False, True, False, False])},
+        ),
         ("sort", [1, 2, 3, 3, 4, 5], {"ascending": True}),
         ("sort", [5, 4, 3, 3, 2, 1], {"ascending": False}),
+        ("to_list", [5, 3, 2, 4, 1, 3], {}),
         ("unique", [1, 2, 3, 4, 5], {}),
     ],
 )
