@@ -1,13 +1,14 @@
 use num::traits::AsPrimitive;
 use pyo3::class::sequence::PySequenceProtocol;
 use pyo3::prelude::*;
+use std::cmp::PartialEq;
 use std::iter::Sum;
 use std::marker::Sized;
 
 /// An abstract List.
 trait List<'a, T>
 where
-    T: AsPrimitive<f32> + Sum<&'a T>,
+    T: AsPrimitive<f32> + Sum<&'a T> + PartialEq,
     Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
@@ -48,6 +49,13 @@ where
 
     fn to_list(&'a self) -> Vec<T> {
         self._values().clone()
+    }
+
+    fn unique(&'a self) -> Self {
+        let mut list = self.to_list();
+        self._sort(&mut list, true);
+        list.dedup();
+        List::_new(list)
     }
 }
 
@@ -94,6 +102,10 @@ impl FloatList {
 
     pub fn to_list(&self) -> Vec<f32> {
         List::to_list(self)
+    }
+
+    pub fn unique(&self) -> Self {
+        List::unique(self)
     }
 }
 
@@ -175,6 +187,10 @@ impl IntegerList {
 
     pub fn to_list(&self) -> Vec<i32> {
         List::to_list(self)
+    }
+
+    pub fn unique(&self) -> Self {
+        List::unique(self)
     }
 }
 
