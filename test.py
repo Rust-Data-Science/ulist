@@ -99,6 +99,10 @@ def test_data_process_methods(
 @pytest.mark.parametrize(
     "test_method, expected_value, kwargs",
     [
+        ("add", [2, 4, 6, 8, 10], {"other": [1, 2, 3, 4, 5]}),
+        ("sub", [0, 0, 0, 0, 0], {"other": [1, 2, 3, 4, 5]}),
+        ("mul", [1, 4, 9, 16, 25], {"other": [1, 2, 3, 4, 5]}),
+        ("div", [1, 1, 1, 1, 1], {"other": [1, 2, 3, 4, 5]}),
         ("add_scala", [2, 3, 4, 5, 6], {"num": 1}),
         ("sub_scala", [0, 1, 2, 3, 4], {"num": 1}),
         ("mul_scala", [2, 4, 6, 8, 10], {"num": 2}),
@@ -113,7 +117,10 @@ def test_arithmetic_methods(
     kwargs: dict,
 ):
     arr = test_class(nums)
-    result = getattr(arr, test_method)(**kwargs)
+    if test_method in ("add", "sub", "mul", "div"):
+        result = getattr(arr, test_method)(test_class(kwargs["other"]))
+    else:
+        result = getattr(arr, test_method)(**kwargs)
     if test_method != "to_list":
         result = result.to_list()
     msg = (

@@ -26,8 +26,18 @@ where
 
     fn _new(list: Vec<T>) -> Self;
 
-    fn _operate_scala(&'a self, func: impl Fn(&T) -> T) -> Self {
-        let list = self._values().iter().map(|x| func(x)).collect();
+    fn _operate(&'a self, other: &'a Self, func: impl Fn(T, T) -> T) -> Self {
+        let list = self
+            ._values()
+            .iter()
+            .zip(other._values().iter())
+            .map(|(x, y)| func(*x, *y))
+            .collect();
+        List::_new(list)
+    }
+
+    fn _operate_scala(&'a self, func: impl Fn(T) -> T) -> Self {
+        let list = self._values().iter().map(|x| func(*x)).collect();
         List::_new(list)
     }
 
@@ -35,13 +45,19 @@ where
 
     fn _values(&'a self) -> &'a Vec<T>;
 
+    fn add(&'a self, other: &'a Self) -> Self {
+        self._operate(other, |x, y| x + y)
+    }
+
     fn add_scala(&'a self, num: T) -> Self {
-        self._operate_scala(|x| *x + num)
+        self._operate_scala(|x| x + num)
     }
 
     fn copy(&'a self) -> Self {
         List::_new(self.to_list())
     }
+
+    fn div(&'a self, other: &'a Self) -> Vec<f32>;
 
     fn div_scala(&'a self, num: f32) -> Vec<f32>;
 
@@ -66,8 +82,12 @@ where
 
     fn min(&'a self) -> T;
 
+    fn mul(&'a self, other: &'a Self) -> Self {
+        self._operate(other, |x, y| x * y)
+    }
+
     fn mul_scala(&'a self, num: T) -> Self {
-        self._operate_scala(|x| *x * num)
+        self._operate_scala(|x| x * num)
     }
 
     fn size(&'a self) -> usize {
@@ -81,8 +101,12 @@ where
         List::_new(list)
     }
 
+    fn sub(&'a self, other: &'a Self) -> Self {
+        self._operate(other, |x, y| x - y)
+    }
+
     fn sub_scala(&'a self, num: T) -> Self {
-        self._operate_scala(|x| *x - num)
+        self._operate_scala(|x| x - num)
     }
 
     fn sum(&'a self) -> T {
@@ -114,12 +138,21 @@ impl FloatList {
         List::_new(list)
     }
 
+    pub fn add(&self, other: &Self) -> Self {
+        List::add(self, other)
+    }
+
     pub fn add_scala(&self, num: f32) -> Self {
         List::add_scala(self, num)
     }
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn div(&self, other: &Self) -> Self {
+        let list = List::div(self, other);
+        List::_new(list)
     }
 
     pub fn div_scala(&self, num: f32) -> Self {
@@ -143,6 +176,10 @@ impl FloatList {
         List::min(self)
     }
 
+    pub fn mul(&self, other: &Self) -> Self {
+        List::mul(self, other)
+    }
+
     pub fn mul_scala(&self, num: f32) -> Self {
         List::mul_scala(self, num)
     }
@@ -153,6 +190,10 @@ impl FloatList {
 
     pub fn sort(&self, ascending: bool) -> Self {
         List::sort(self, ascending)
+    }
+
+    pub fn sub(&self, other: &Self) -> Self {
+        List::sub(self, other)
     }
 
     pub fn sub_scala(&self, num: f32) -> Self {
@@ -187,6 +228,14 @@ impl<'a> List<'a, f32> for FloatList {
 
     fn _values(&'a self) -> &'a Vec<f32> {
         &self._list
+    }
+
+    fn div(&'a self, other: &Self) -> Vec<f32> {
+        self._values()
+            .iter()
+            .zip(other._values().iter())
+            .map(|(x, y)| x / y)
+            .collect()
     }
 
     fn div_scala(&'a self, num: f32) -> Vec<f32> {
@@ -224,12 +273,21 @@ impl IntegerList {
         List::_new(list)
     }
 
+    pub fn add(&self, other: &Self) -> Self {
+        List::add(self, other)
+    }
+
     pub fn add_scala(&self, num: i32) -> Self {
         List::add_scala(self, num)
     }
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn div(&self, other: &Self) -> FloatList {
+        let list = List::div(self, other);
+        List::_new(list)
     }
 
     pub fn div_scala(&self, num: f32) -> FloatList {
@@ -253,6 +311,10 @@ impl IntegerList {
         List::min(self)
     }
 
+    pub fn mul(&self, other: &Self) -> Self {
+        List::mul(self, other)
+    }
+
     pub fn mul_scala(&self, num: i32) -> Self {
         List::mul_scala(self, num)
     }
@@ -263,6 +325,10 @@ impl IntegerList {
 
     pub fn sort(&self, ascending: bool) -> Self {
         List::sort(self, ascending)
+    }
+
+    pub fn sub(&self, other: &Self) -> Self {
+        List::sub(self, other)
     }
 
     pub fn sub_scala(&self, num: i32) -> Self {
@@ -297,6 +363,14 @@ impl<'a> List<'a, i32> for IntegerList {
 
     fn _values(&'a self) -> &'a Vec<i32> {
         &self._list
+    }
+
+    fn div(&'a self, other: &'a Self) -> Vec<f32> {
+        self._values()
+            .iter()
+            .zip(other._values().iter())
+            .map(|(&x, &y)| x as f32 / y as f32)
+            .collect()
     }
 
     fn div_scala(&'a self, num: f32) -> Vec<f32> {
