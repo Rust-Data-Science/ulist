@@ -4,6 +4,8 @@ Ultra fast list - Python bindings to Rust Vector.
 
 ### Install
 `pip install ulist`  
+Python: 3.6+
+OS: Linux or MacOS
 
 
 ### Develop
