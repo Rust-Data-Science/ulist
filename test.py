@@ -107,6 +107,7 @@ def test_data_process_methods(
         ("sub_scala", [0, 1, 2, 3, 4], {"num": 1}),
         ("mul_scala", [2, 4, 6, 8, 10], {"num": 2}),
         ("div_scala", [0.5, 1.0, 1.5, 2.0, 2.5], {"num": 2}),
+        ("pow_scala", [1, 4, 9, 16, 25], {"num": 2}),
     ],
 )
 def test_arithmetic_methods(
@@ -117,7 +118,7 @@ def test_arithmetic_methods(
     kwargs: dict,
 ):
     arr = test_class(nums)
-    if test_method in ("add", "sub", "mul", "div"):
+    if not test_method.endswith("_scala"):
         result = getattr(arr, test_method)(test_class(kwargs["other"]))
     else:
         result = getattr(arr, test_method)(**kwargs)

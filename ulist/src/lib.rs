@@ -1,4 +1,6 @@
+use num::traits::pow::pow;
 use num::traits::AsPrimitive;
+use num::One;
 use pyo3::class::sequence::PySequenceProtocol;
 use pyo3::prelude::*;
 use std::cmp::PartialEq;
@@ -19,7 +21,8 @@ where
         + Add<Output = T>
         + Sub<Output = T>
         + Mul<Output = T>
-        + Div<Output = T>,
+        + Div<Output = T>
+        + One,
     Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
@@ -88,6 +91,10 @@ where
 
     fn mul_scala(&'a self, num: T) -> Self {
         self._operate_scala(|x| x * num)
+    }
+
+    fn pow_scala(&'a self, num: usize) -> Self {
+        self._operate_scala(|x| pow(x, num))
     }
 
     fn size(&'a self) -> usize {
@@ -182,6 +189,10 @@ impl FloatList {
 
     pub fn mul_scala(&self, num: f32) -> Self {
         List::mul_scala(self, num)
+    }
+
+    pub fn pow_scala(&self, num: usize) -> Self {
+        List::pow_scala(self, num)
     }
 
     pub fn size(&self) -> usize {
@@ -317,6 +328,10 @@ impl IntegerList {
 
     pub fn mul_scala(&self, num: i32) -> Self {
         List::mul_scala(self, num)
+    }
+
+    pub fn pow_scala(&self, num: usize) -> Self {
+        List::pow_scala(self, num)
     }
 
     pub fn size(&self) -> usize {
