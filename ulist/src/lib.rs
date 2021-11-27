@@ -24,11 +24,6 @@ where
 {
     // Arrange the following methods in alphabetical order.
 
-    fn _func(&self, x: T, denominator: f32) -> f32 {
-        let numeritor: f32 = x.as_();
-        numeritor / denominator
-    }
-
     fn _new(list: Vec<T>) -> Self;
 
     fn _operate_scala(&'a self, func: impl Fn(&T) -> T) -> Self {
@@ -48,13 +43,7 @@ where
         List::_new(self.to_list())
     }
 
-    fn div_scala(&'a self, num: T) -> Vec<f32> {
-        let denominator: f32 = num.as_();
-        self._values()
-            .iter()
-            .map(|x| self._func(*x, denominator))
-            .collect()
-    }
+    fn div_scala(&'a self, num: f32) -> Vec<f32>;
 
     fn filter(&'a self, condition: &BooleanList) -> Self {
         let list = self
@@ -200,6 +189,10 @@ impl<'a> List<'a, f32> for FloatList {
         &self._list
     }
 
+    fn div_scala(&'a self, num: f32) -> Vec<f32> {
+        self._values().iter().map(|x| *x / num).collect()
+    }
+
     fn max(&'a self) -> f32 {
         self._values()
             .iter()
@@ -239,7 +232,7 @@ impl IntegerList {
         List::copy(self)
     }
 
-    pub fn div_scala(&self, num: i32) -> FloatList {
+    pub fn div_scala(&self, num: f32) -> FloatList {
         let list = List::div_scala(self, num);
         List::_new(list)
     }
@@ -304,6 +297,10 @@ impl<'a> List<'a, i32> for IntegerList {
 
     fn _values(&'a self) -> &'a Vec<i32> {
         &self._list
+    }
+
+    fn div_scala(&'a self, num: f32) -> Vec<f32> {
+        self._values().iter().map(|x| *x as f32 / num).collect()
     }
 
     fn max(&'a self) -> i32 {
