@@ -22,6 +22,17 @@ where
         List::_new(self.to_list())
     }
 
+    fn filter(&'a self, condition: &BooleanList) -> Self {
+        let list = self
+            ._values()
+            .iter()
+            .zip(condition._list.iter())
+            .filter(|(_, y)| **y)
+            .map(|(x, _)| *x)
+            .collect();
+        List::_new(list)
+    }
+
     fn max(&'a self) -> T;
 
     fn mean(&'a self) -> f32 {
@@ -55,17 +66,6 @@ where
         let mut list = self.to_list();
         self._sort(&mut list, true);
         list.dedup();
-        List::_new(list)
-    }
-
-    fn filter(&'a self, condition: &BooleanList) -> Self {
-        let list = self
-            ._values()
-            .iter()
-            .zip(condition._list.iter())
-            .filter(|(_, y)| **y)
-            .map(|(x, _)| *x)
-            .collect();
         List::_new(list)
     }
 }
