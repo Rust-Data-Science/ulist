@@ -23,6 +23,12 @@ where
     Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
+
+    fn _func(&self, x: T, denominator: f32) -> f32 {
+        let numeritor: f32 = x.as_();
+        numeritor / denominator
+    }
+
     fn _new(list: Vec<T>) -> Self;
 
     fn _operate_scala(&'a self, func: impl Fn(&T) -> T) -> Self {
@@ -42,16 +48,11 @@ where
         List::_new(self.to_list())
     }
 
-    fn func(&self, x: T, denominator: f32) -> f32 {
-        let numeritor: f32 = x.as_();
-        numeritor / denominator
-    }
-
     fn div_scala(&'a self, num: T) -> Vec<f32> {
         let denominator: f32 = num.as_();
         self._values()
             .iter()
-            .map(|x| self.func(*x, denominator))
+            .map(|x| self._func(*x, denominator))
             .collect()
     }
 
