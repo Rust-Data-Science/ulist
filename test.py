@@ -7,8 +7,9 @@ import pytest
 from ulist import FloatList, IntegerList, BooleanList
 from typing import Union, List, Optional
 
-LIST_TYPE = Union[FloatList, IntegerList]
+ULIST_TYPE = Union[FloatList, IntegerList]
 NUM_TYPE = Union[float, int]
+LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
@@ -26,7 +27,7 @@ NUM_TYPE = Union[float, int]
     ],
 )
 def test_statistics_methods(
-    test_class: LIST_TYPE,
+    test_class: ULIST_TYPE,
     nums: List[NUM_TYPE],
     test_method: str,
     expected_value: NUM_TYPE,
@@ -71,11 +72,44 @@ def test_statistics_methods(
         ("unique", [1, 2, 3, 4, 5], {}),
     ],
 )
-def test_not_in_place_methods(
-    test_class: LIST_TYPE,
+def test_data_process_methods(
+    test_class: ULIST_TYPE,
     nums: List[NUM_TYPE],
     test_method: str,
-    expected_value: NUM_TYPE,
+    expected_value: LIST_TYPE,
+    kwargs: dict,
+):
+    arr = test_class(nums)
+    result = getattr(arr, test_method)(**kwargs)
+    if test_method != "to_list":
+        result = result.to_list()
+    msg = (
+        f"test_class - {test_class}"
+        + f" test_method - {test_method}"
+        + f" result - {result}"
+        + f" expected - {expected_value}"
+    )
+    assert result == expected_value, msg
+
+
+@pytest.mark.parametrize(
+    "test_class, nums",
+    [(FloatList, [1.0, 2.0, 3.0, 4.0, 5.0]), (IntegerList, [1, 2, 3, 4, 5])],
+)
+@pytest.mark.parametrize(
+    "test_method, expected_value, kwargs",
+    [
+        ("add_scala", [2, 3, 4, 5, 6], {"num": 1}),
+        ("sub_scala", [0, 1, 2, 3, 4], {"num": 1}),
+        ("mul_scala", [2, 4, 6, 8, 10], {"num": 2}),
+        ("div_scala", [0.5, 1.0, 1.5, 2.0, 2.5], {"num": 2}),
+    ],
+)
+def test_arithmetic_methods(
+    test_class: ULIST_TYPE,
+    nums: List[NUM_TYPE],
+    test_method: str,
+    expected_value: LIST_TYPE,
     kwargs: dict,
 ):
     arr = test_class(nums)

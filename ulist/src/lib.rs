@@ -4,22 +4,55 @@ use pyo3::prelude::*;
 use std::cmp::PartialEq;
 use std::iter::Sum;
 use std::marker::Sized;
+use std::ops::Add;
+use std::ops::Div;
+use std::ops::Fn;
+use std::ops::Mul;
+use std::ops::Sub;
 
 /// An abstract List.
 trait List<'a, T>
 where
-    T: AsPrimitive<f32> + Sum<&'a T> + PartialEq,
+    T: AsPrimitive<f32>
+        + Sum<&'a T>
+        + PartialEq
+        + Add<Output = T>
+        + Sub<Output = T>
+        + Mul<Output = T>
+        + Div<Output = T>,
     Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
     fn _new(list: Vec<T>) -> Self;
 
+    fn _operate_scala(&'a self, func: impl Fn(&T) -> T) -> Self {
+        let list = self._values().iter().map(|x| func(x)).collect();
+        List::_new(list)
+    }
+
     fn _sort(&self, list: &mut Vec<T>, ascending: bool);
 
     fn _values(&'a self) -> &'a Vec<T>;
 
+    fn add_scala(&'a self, num: T) -> Self {
+        self._operate_scala(|x| *x + num)
+    }
+
     fn copy(&'a self) -> Self {
         List::_new(self.to_list())
+    }
+
+    fn func(&self, x: T, denominator: f32) -> f32 {
+        let numeritor: f32 = x.as_();
+        numeritor / denominator
+    }
+
+    fn div_scala(&'a self, num: T) -> Vec<f32> {
+        let denominator: f32 = num.as_();
+        self._values()
+            .iter()
+            .map(|x| self.func(*x, denominator))
+            .collect()
     }
 
     fn filter(&'a self, condition: &BooleanList) -> Self {
@@ -43,6 +76,10 @@ where
 
     fn min(&'a self) -> T;
 
+    fn mul_scala(&'a self, num: T) -> Self {
+        self._operate_scala(|x| *x * num)
+    }
+
     fn size(&'a self) -> usize {
         self._values().len()
     }
@@ -52,6 +89,10 @@ where
         let mut _list = &mut list;
         self._sort(_list, ascending);
         List::_new(list)
+    }
+
+    fn sub_scala(&'a self, num: T) -> Self {
+        self._operate_scala(|x| *x - num)
     }
 
     fn sum(&'a self) -> T {
@@ -83,8 +124,17 @@ impl FloatList {
         List::_new(list)
     }
 
+    pub fn add_scala(&self, num: f32) -> Self {
+        List::add_scala(self, num)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn div_scala(&self, num: f32) -> Self {
+        let list = List::div_scala(self, num);
+        List::_new(list)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -103,12 +153,20 @@ impl FloatList {
         List::min(self)
     }
 
+    pub fn mul_scala(&self, num: f32) -> Self {
+        List::mul_scala(self, num)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
         List::sort(self, ascending)
+    }
+
+    pub fn sub_scala(&self, num: f32) -> Self {
+        List::sub_scala(self, num)
     }
 
     pub fn sum(&self) -> f32 {
@@ -172,8 +230,17 @@ impl IntegerList {
         List::_new(list)
     }
 
+    pub fn add_scala(&self, num: i32) -> Self {
+        List::add_scala(self, num)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn div_scala(&self, num: i32) -> FloatList {
+        let list = List::div_scala(self, num);
+        List::_new(list)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -192,12 +259,20 @@ impl IntegerList {
         List::min(self)
     }
 
+    pub fn mul_scala(&self, num: i32) -> Self {
+        List::mul_scala(self, num)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
         List::sort(self, ascending)
+    }
+
+    pub fn sub_scala(&self, num: i32) -> Self {
+        List::sub_scala(self, num)
     }
 
     pub fn sum(&self) -> i32 {
