@@ -1,74 +1,8 @@
-use num::traits::AsPrimitive;
+mod list;
+use list::BooleanList;
+use list::List;
 use pyo3::class::sequence::PySequenceProtocol;
 use pyo3::prelude::*;
-use std::cmp::PartialEq;
-use std::iter::Sum;
-use std::marker::Sized;
-
-/// An abstract List.
-trait List<'a, T>
-where
-    T: AsPrimitive<f32> + Sum<&'a T> + PartialEq,
-    Self: Sized,
-{
-    // Arrange the following methods in alphabetical order.
-    fn _new(list: Vec<T>) -> Self;
-
-    fn _sort(&self, list: &mut Vec<T>, ascending: bool);
-
-    fn _values(&'a self) -> &'a Vec<T>;
-
-    fn copy(&'a self) -> Self {
-        List::_new(self.to_list())
-    }
-
-    fn filter(&'a self, condition: &BooleanList) -> Self {
-        let list = self
-            ._values()
-            .iter()
-            .zip(condition._list.iter())
-            .filter(|(_, y)| **y)
-            .map(|(x, _)| *x)
-            .collect();
-        List::_new(list)
-    }
-
-    fn max(&'a self) -> T;
-
-    fn mean(&'a self) -> f32 {
-        let numeritor: f32 = self.sum().as_();
-        let denominator: f32 = self.size().as_();
-        numeritor / denominator
-    }
-
-    fn min(&'a self) -> T;
-
-    fn size(&'a self) -> usize {
-        self._values().len()
-    }
-
-    fn sort(&'a self, ascending: bool) -> Self {
-        let mut list = self.to_list();
-        let mut _list = &mut list;
-        self._sort(_list, ascending);
-        List::_new(list)
-    }
-
-    fn sum(&'a self) -> T {
-        self._values().iter().sum()
-    }
-
-    fn to_list(&'a self) -> Vec<T> {
-        self._values().clone()
-    }
-
-    fn unique(&'a self) -> Self {
-        let mut list = self.to_list();
-        self._sort(&mut list, true);
-        list.dedup();
-        List::_new(list)
-    }
-}
 
 /// List for f32.
 #[pyclass]
@@ -83,8 +17,26 @@ impl FloatList {
         List::_new(list)
     }
 
+    pub fn add(&self, other: &Self) -> Self {
+        List::add(self, other)
+    }
+
+    pub fn add_scala(&self, num: f32) -> Self {
+        List::add_scala(self, num)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn div(&self, other: &Self) -> Self {
+        let list = List::div(self, other);
+        List::_new(list)
+    }
+
+    pub fn div_scala(&self, num: f32) -> Self {
+        let list = List::div_scala(self, num);
+        List::_new(list)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -103,12 +55,32 @@ impl FloatList {
         List::min(self)
     }
 
+    pub fn mul(&self, other: &Self) -> Self {
+        List::mul(self, other)
+    }
+
+    pub fn mul_scala(&self, num: f32) -> Self {
+        List::mul_scala(self, num)
+    }
+
+    pub fn pow_scala(&self, num: usize) -> Self {
+        List::pow_scala(self, num)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
         List::sort(self, ascending)
+    }
+
+    pub fn sub(&self, other: &Self) -> Self {
+        List::sub(self, other)
+    }
+
+    pub fn sub_scala(&self, num: f32) -> Self {
+        List::sub_scala(self, num)
     }
 
     pub fn sum(&self) -> f32 {
@@ -139,6 +111,18 @@ impl<'a> List<'a, f32> for FloatList {
 
     fn _values(&'a self) -> &'a Vec<f32> {
         &self._list
+    }
+
+    fn div(&'a self, other: &Self) -> Vec<f32> {
+        self._values()
+            .iter()
+            .zip(other._values().iter())
+            .map(|(x, y)| x / y)
+            .collect()
+    }
+
+    fn div_scala(&'a self, num: f32) -> Vec<f32> {
+        self._values().iter().map(|x| *x / num).collect()
     }
 
     fn max(&'a self) -> f32 {
@@ -172,8 +156,26 @@ impl IntegerList {
         List::_new(list)
     }
 
+    pub fn add(&self, other: &Self) -> Self {
+        List::add(self, other)
+    }
+
+    pub fn add_scala(&self, num: i32) -> Self {
+        List::add_scala(self, num)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn div(&self, other: &Self) -> FloatList {
+        let list = List::div(self, other);
+        List::_new(list)
+    }
+
+    pub fn div_scala(&self, num: f32) -> FloatList {
+        let list = List::div_scala(self, num);
+        List::_new(list)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -192,12 +194,32 @@ impl IntegerList {
         List::min(self)
     }
 
+    pub fn mul(&self, other: &Self) -> Self {
+        List::mul(self, other)
+    }
+
+    pub fn mul_scala(&self, num: i32) -> Self {
+        List::mul_scala(self, num)
+    }
+
+    pub fn pow_scala(&self, num: usize) -> Self {
+        List::pow_scala(self, num)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
         List::sort(self, ascending)
+    }
+
+    pub fn sub(&self, other: &Self) -> Self {
+        List::sub(self, other)
+    }
+
+    pub fn sub_scala(&self, num: i32) -> Self {
+        List::sub_scala(self, num)
     }
 
     pub fn sum(&self) -> i32 {
@@ -230,6 +252,18 @@ impl<'a> List<'a, i32> for IntegerList {
         &self._list
     }
 
+    fn div(&'a self, other: &'a Self) -> Vec<f32> {
+        self._values()
+            .iter()
+            .zip(other._values().iter())
+            .map(|(&x, &y)| x as f32 / y as f32)
+            .collect()
+    }
+
+    fn div_scala(&'a self, num: f32) -> Vec<f32> {
+        self._values().iter().map(|x| *x as f32 / num).collect()
+    }
+
     fn max(&'a self) -> i32 {
         *self._values().iter().max().unwrap()
     }
@@ -243,20 +277,6 @@ impl<'a> List<'a, i32> for IntegerList {
 impl PySequenceProtocol for IntegerList {
     fn __len__(&self) -> usize {
         self.size()
-    }
-}
-
-/// List for bool.
-#[pyclass]
-struct BooleanList {
-    _list: Vec<bool>,
-}
-
-#[pymethods]
-impl BooleanList {
-    #[new]
-    fn new(list: Vec<bool>) -> Self {
-        BooleanList { _list: list }
     }
 }
 
