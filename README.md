@@ -11,11 +11,9 @@ Python: 3.6+
 OS: Linux or MacOS
 
 
-
-
 ### Examples
 
-#### 1. Calculate the average of unique numbers.
+#### Calculate the average of unique numbers.
 ```Python
 from ulist import FloatList
 
@@ -24,7 +22,8 @@ result = arr.unique().mean()
 print(result)
 ```
 
-#### 2. Dot product.
+
+#### Dot product.
 ```Python
 from ulist import IntegerList
 
@@ -35,7 +34,7 @@ print(result)
 ```
 
 
-#### 3. Subtract the mean from the list.
+#### Subtract the mean from the list.
 ```Python
 from ulist import FloatList
 
