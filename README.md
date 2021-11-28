@@ -24,6 +24,6 @@ OS: Linux or MacOS
 
 ### Docker
 The docker images are saved in https://hub.docker.com/repository/docker/tushushu/ulist
-* Build by docker, please run `docker run -it -i <container ID>`, and then run `maturin build`.
+* Build by docker, please run `docker run -it -i <image ID>`, and then run `maturin build`.
 * Customize the build, please consider to change the arguments `gh_username`, 
 `ulist_home` and `branch` in the `Dockerfile` before building.
