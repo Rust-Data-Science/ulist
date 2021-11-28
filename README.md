@@ -3,9 +3,46 @@ Ultra fast list - Python bindings to Rust Vector.
 
 
 ### Install
-`pip install ulist`  
+Run `pip install ulist`
+
+
+### Compatibility
 Python: 3.6+  
 OS: Linux or MacOS
+
+
+
+
+### Examples
+
+#### 1. Calculate the average of unique numbers.
+```Python
+from ulist import FloatList
+
+arr = FloatList([1.0, 2.0, 3.0, 2.0, 4.0, 5.0])
+result = arr.unique().mean()
+print(result)
+```
+
+#### 2. Dot product.
+```Python
+from ulist import IntegerList
+
+arr1 = IntegerList(range(1, 4))
+arr2 = IntegerList(range(1, 4))
+result = arr1.mul(arr2).sum()
+print(result)
+```
+
+
+#### 3. Subtract the mean from the list.
+```Python
+from ulist import FloatList
+
+arr = FloatList([1, 2, 3, 4, 5])
+result = arr.sub_scala(arr.mean()).to_list()
+print(result)
+```
 
 
 ### Develop
@@ -27,3 +64,4 @@ The docker images are saved in https://hub.docker.com/repository/docker/tushushu
 * Build by docker, please run `docker run -it -i <image ID>`, and then run `maturin build`.
 * Customize the build, please consider to change the arguments `gh_username`, 
 `ulist_home` and `branch` in the `Dockerfile` before building.
+* run `docker cp <containerId>:/home/ulist/ulist/target/wheels /host/path/target` to copy the wheel for Linux to local disk.
