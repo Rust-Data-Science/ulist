@@ -1,6 +1,6 @@
 [package]
 name = "ulist"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["tushushu"]
 edition = "2018"
 
@@ -19,3 +19,6 @@ num = "0.4.0"
 [dependencies.pyo3]
 version = "0.14.5"
 features = ["extension-module"]
+
+[package.metadata.maturin]
+python-source = "python"
