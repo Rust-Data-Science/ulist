@@ -1,1 +1,1 @@
-from .core import UltraFastList
+from .core import UltraFastList, from_iter
