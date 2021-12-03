@@ -26,26 +26,24 @@ where
 {
     // Arrange the following methods in alphabetical order.
 
-    fn _new(list: Vec<T>) -> Self;
+    fn _new(vec: Vec<T>) -> Self;
 
     fn _operate(&'a self, other: &'a Self, func: impl Fn(T, T) -> T) -> Self {
-        let list = self
-            ._values()
+        let vec = self
+            .values()
             .iter()
-            .zip(other._values().iter())
+            .zip(other.values().iter())
             .map(|(x, y)| func(*x, *y))
             .collect();
-        List::_new(list)
+        List::_new(vec)
     }
 
     fn _operate_scala(&'a self, func: impl Fn(T) -> T) -> Self {
-        let list = self._values().iter().map(|x| func(*x)).collect();
-        List::_new(list)
+        let vec = self.values().iter().map(|x| func(*x)).collect();
+        List::_new(vec)
     }
 
-    fn _sort(&self, list: &mut Vec<T>, ascending: bool);
-
-    fn _values(&'a self) -> &'a Vec<T>;
+    fn _sort(&self, vec: &mut Vec<T>, ascending: bool);
 
     fn add(&'a self, other: &'a Self) -> Self {
         self._operate(other, |x, y| x + y)
@@ -64,14 +62,14 @@ where
     fn div_scala(&'a self, num: f32) -> Vec<f32>;
 
     fn filter(&'a self, condition: &BooleanList) -> Self {
-        let list = self
-            ._values()
+        let vec = self
+            .values()
             .iter()
-            .zip(condition._list.iter())
+            .zip(condition._values.iter())
             .filter(|(_, y)| **y)
             .map(|(x, _)| *x)
             .collect();
-        List::_new(list)
+        List::_new(vec)
     }
 
     fn max(&'a self) -> T;
@@ -97,14 +95,14 @@ where
     }
 
     fn size(&'a self) -> usize {
-        self._values().len()
+        self.values().len()
     }
 
     fn sort(&'a self, ascending: bool) -> Self {
-        let mut list = self.to_list();
-        let mut _list = &mut list;
-        self._sort(_list, ascending);
-        List::_new(list)
+        let mut vec = self.to_list();
+        let mut _vec = &mut vec;
+        self._sort(_vec, ascending);
+        List::_new(vec)
     }
 
     fn sub(&'a self, other: &'a Self) -> Self {
@@ -116,31 +114,33 @@ where
     }
 
     fn sum(&'a self) -> T {
-        self._values().iter().sum()
+        self.values().iter().sum()
     }
 
     fn to_list(&'a self) -> Vec<T> {
-        self._values().clone()
+        self.values().clone()
     }
 
     fn unique(&'a self) -> Self {
-        let mut list = self.to_list();
-        self._sort(&mut list, true);
-        list.dedup();
-        List::_new(list)
+        let mut vec = self.to_list();
+        self._sort(&mut vec, true);
+        vec.dedup();
+        List::_new(vec)
     }
+
+    fn values(&'a self) -> &'a Vec<T>;
 }
 
 /// List for bool.
 #[pyclass]
 pub struct BooleanList {
-    _list: Vec<bool>,
+    _values: Vec<bool>,
 }
 
 #[pymethods]
 impl BooleanList {
     #[new]
-    fn new(list: Vec<bool>) -> Self {
-        BooleanList { _list: list }
+    fn new(vec: Vec<bool>) -> Self {
+        BooleanList { _values: vec }
     }
 }
