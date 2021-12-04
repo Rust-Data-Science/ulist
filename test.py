@@ -111,6 +111,14 @@ def test_data_process_methods(
         ("mul_scala", [2, 4, 6, 8, 10], {"num": 2}),
         ("div_scala", [0.5, 1.0, 1.5, 2.0, 2.5], {"num": 2}),
         ("pow_scala", [1, 4, 9, 16, 25], {"num": 2}),
+        ("__add__", [2, 4, 6, 8, 10], {"other": [1, 2, 3, 4, 5]}),
+        ("__sub__", [0, 0, 0, 0, 0], {"other": [1, 2, 3, 4, 5]}),
+        ("__mul__", [1, 4, 9, 16, 25], {"other": [1, 2, 3, 4, 5]}),
+        ("__div__", [1, 1, 1, 1, 1], {"other": [1, 2, 3, 4, 5]}),
+        ("__add__", [2, 3, 4, 5, 6], {"other": 1}),
+        ("__sub__", [0, 1, 2, 3, 4], {"other": 1}),
+        ("__mul__", [2, 4, 6, 8, 10], {"other": 2}),
+        ("__div__", [0.5, 1.0, 1.5, 2.0, 2.5], {"other": 2}),
     ],
 )
 def test_arithmetic_methods(
@@ -122,7 +130,10 @@ def test_arithmetic_methods(
 ):
     arr = ul.from_iter(nums, dtype)
     if not test_method.endswith("_scala"):
-        result = getattr(arr, test_method)(ul.from_iter(kwargs["other"], dtype))
+        if isinstance(kwargs["other"], list):
+            result = getattr(arr, test_method)(ul.from_iter(kwargs["other"], dtype))
+        else:
+            result = getattr(arr, test_method)(kwargs["other"])
     else:
         result = getattr(arr, test_method)(**kwargs)
     if test_method != "to_list":

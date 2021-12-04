@@ -15,9 +15,9 @@ OS: Linux or MacOS
 
 #### Calculate the average of unique numbers.
 ```Python
-from ulist import FloatList
+import ulist as ul
 
-arr = FloatList([1.0, 2.0, 3.0, 2.0, 4.0, 5.0])
+arr = ul.from_iter([1.0, 2.0, 3.0, 2.0, 4.0, 5.0], dtype="float")
 result = arr.unique().mean()
 print(result)
 ```
@@ -25,10 +25,10 @@ print(result)
 
 #### Dot product.
 ```Python
-from ulist import IntegerList
+import ulist as ul
 
-arr1 = IntegerList(range(1, 4))
-arr2 = IntegerList(range(1, 4))
+arr1 = ul.from_iter(range(1, 4), dtype="int")
+arr2 = ul.from_iter(range(1, 4), dtype="int")
 result = arr1.mul(arr2).sum()
 print(result)
 ```
@@ -36,9 +36,9 @@ print(result)
 
 #### Subtract the mean from the list.
 ```Python
-from ulist import FloatList
+import ulist as ul
 
-arr = FloatList([1, 2, 3, 4, 5])
+arr = ul.from_iter([1, 2, 3, 4, 5], dtype="float")
 result = arr.sub_scala(arr.mean()).to_list()
 print(result)
 ```
