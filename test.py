@@ -4,17 +4,16 @@
 @Date: 2021-11-14 16:02:00
 """
 import pytest
-from ulist import FloatList, IntegerList, BooleanList
+import ulist as ul
 from typing import Union, List, Optional
 
-ULIST_TYPE = Union[FloatList, IntegerList]
 NUM_TYPE = Union[float, int]
 LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
-    "test_class, nums",
-    [(FloatList, [1.0, 2.0, 3.0, 4.0, 5.0]), (IntegerList, [1, 2, 3, 4, 5])],
+    "dtype, nums",
+    [("float", [1.0, 2.0, 3.0, 4.0, 5.0]), ("int", [1, 2, 3, 4, 5])],
 )
 @pytest.mark.parametrize(
     "test_method, expected_value, expected_type",
@@ -27,16 +26,16 @@ LIST_TYPE = Union[List[float], List[int]]
     ],
 )
 def test_statistics_methods(
-    test_class: ULIST_TYPE,
+    dtype: str,
     nums: List[NUM_TYPE],
     test_method: str,
     expected_value: NUM_TYPE,
     expected_type: Optional[NUM_TYPE],
 ) -> None:
-    arr = test_class(nums)
+    arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)()
     msg = (
-        f"test_class - {test_class}"
+        f"dtype - {dtype}"
         + f" test_method - {test_method}"
         + f" result - {result}"
         + f" expected - {expected_value}"
@@ -44,9 +43,9 @@ def test_statistics_methods(
     assert result == expected_value, msg
 
     if expected_type is None:
-        if test_class is FloatList:
+        if dtype is "float":
             expected_type = float
-        elif test_class is IntegerList:
+        elif dtype is "int":
             expected_type = int
     assert type(result) == expected_type, msg
 
@@ -54,8 +53,8 @@ def test_statistics_methods(
 
 
 @pytest.mark.parametrize(
-    "test_class, nums",
-    [(FloatList, [5.0, 3.0, 2.0, 4.0, 1.0, 3.0]), (IntegerList, [5, 3, 2, 4, 1, 3])],
+    "dtype, nums",
+    [("float", [5.0, 3.0, 2.0, 4.0, 1.0, 3.0]), ("int", [5, 3, 2, 4, 1, 3])],
 )
 @pytest.mark.parametrize(
     "test_method, expected_value, kwargs",
@@ -64,7 +63,11 @@ def test_statistics_methods(
         (
             "filter",
             [5, 4],
-            {"condition": BooleanList([True, False, False, True, False, False])},
+            {
+                "condition": ul.from_iter(
+                    [True, False, False, True, False, False], "bool"
+                )
+            },
         ),
         ("sort", [1, 2, 3, 3, 4, 5], {"ascending": True}),
         ("sort", [5, 4, 3, 3, 2, 1], {"ascending": False}),
@@ -73,18 +76,18 @@ def test_statistics_methods(
     ],
 )
 def test_data_process_methods(
-    test_class: ULIST_TYPE,
+    dtype: str,
     nums: List[NUM_TYPE],
     test_method: str,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = test_class(nums)
+    arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     if test_method != "to_list":
         result = result.to_list()
     msg = (
-        f"test_class - {test_class}"
+        f"dtype - {dtype}"
         + f" test_method - {test_method}"
         + f" result - {result}"
         + f" expected - {expected_value}"
@@ -93,8 +96,8 @@ def test_data_process_methods(
 
 
 @pytest.mark.parametrize(
-    "test_class, nums",
-    [(FloatList, [1.0, 2.0, 3.0, 4.0, 5.0]), (IntegerList, [1, 2, 3, 4, 5])],
+    "dtype, nums",
+    [("float", [1.0, 2.0, 3.0, 4.0, 5.0]), ("int", [1, 2, 3, 4, 5])],
 )
 @pytest.mark.parametrize(
     "test_method, expected_value, kwargs",
@@ -108,24 +111,35 @@ def test_data_process_methods(
         ("mul_scala", [2, 4, 6, 8, 10], {"num": 2}),
         ("div_scala", [0.5, 1.0, 1.5, 2.0, 2.5], {"num": 2}),
         ("pow_scala", [1, 4, 9, 16, 25], {"num": 2}),
+        ("__add__", [2, 4, 6, 8, 10], {"other": [1, 2, 3, 4, 5]}),
+        ("__sub__", [0, 0, 0, 0, 0], {"other": [1, 2, 3, 4, 5]}),
+        ("__mul__", [1, 4, 9, 16, 25], {"other": [1, 2, 3, 4, 5]}),
+        ("__truediv__", [1, 1, 1, 1, 1], {"other": [1, 2, 3, 4, 5]}),
+        ("__add__", [2, 3, 4, 5, 6], {"other": 1}),
+        ("__sub__", [0, 1, 2, 3, 4], {"other": 1}),
+        ("__mul__", [2, 4, 6, 8, 10], {"other": 2}),
+        ("__truediv__", [0.5, 1.0, 1.5, 2.0, 2.5], {"other": 2}),
     ],
 )
 def test_arithmetic_methods(
-    test_class: ULIST_TYPE,
+    dtype: str,
     nums: List[NUM_TYPE],
     test_method: str,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = test_class(nums)
+    arr = ul.from_iter(nums, dtype)
     if not test_method.endswith("_scala"):
-        result = getattr(arr, test_method)(test_class(kwargs["other"]))
+        if isinstance(kwargs["other"], list):
+            result = getattr(arr, test_method)(ul.from_iter(kwargs["other"], dtype))
+        else:
+            result = getattr(arr, test_method)(kwargs["other"])
     else:
         result = getattr(arr, test_method)(**kwargs)
     if test_method != "to_list":
         result = result.to_list()
     msg = (
-        f"test_class - {test_class}"
+        f"dtype - {dtype}"
         + f" test_method - {test_method}"
         + f" result - {result}"
         + f" expected - {expected_value}"
