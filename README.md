@@ -44,6 +44,16 @@ print(result)
 ```
 
 
+#### Use operators instead of methods to calculate variance.
+```Python
+import ulist as ul
+
+arr = ul.from_iter([1, 2, 3], dtype="float")
+result = ((arr - arr.mean()) ** 2).mean()
+print(result)
+```
+
+
 ### Develop
 `ulist` is built and published by `maturin`, so make sure you have `maturin` installed before developing anything.
 
