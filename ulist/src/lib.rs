@@ -1,6 +1,7 @@
 mod list;
 use list::BooleanList;
 use list::List;
+use list::NumericalList;
 use pyo3::prelude::*;
 
 /// List for f32.
@@ -17,11 +18,11 @@ impl FloatList {
     }
 
     pub fn add(&self, other: &Self) -> Self {
-        List::add(self, other)
+        NumericalList::add(self, other)
     }
 
     pub fn add_scala(&self, num: f32) -> Self {
-        List::add_scala(self, num)
+        NumericalList::add_scala(self, num)
     }
 
     pub fn copy(&self) -> Self {
@@ -29,41 +30,41 @@ impl FloatList {
     }
 
     pub fn div(&self, other: &Self) -> Self {
-        let vec = List::div(self, other);
+        let vec = NumericalList::div(self, other);
         List::_new(vec)
     }
 
     pub fn div_scala(&self, num: f32) -> Self {
-        let vec = List::div_scala(self, num);
+        let vec = NumericalList::div_scala(self, num);
         List::_new(vec)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
-        List::filter(self, condition)
+        NumericalList::filter(self, condition)
     }
 
     pub fn max(&self) -> f32 {
-        List::max(self)
+        NumericalList::max(self)
     }
 
     pub fn mean(&self) -> f32 {
-        List::mean(self)
+        NumericalList::mean(self)
     }
 
     pub fn min(&self) -> f32 {
-        List::min(self)
+        NumericalList::min(self)
     }
 
     pub fn mul(&self, other: &Self) -> Self {
-        List::mul(self, other)
+        NumericalList::mul(self, other)
     }
 
     pub fn mul_scala(&self, num: f32) -> Self {
-        List::mul_scala(self, num)
+        NumericalList::mul_scala(self, num)
     }
 
     pub fn pow_scala(&self, num: usize) -> Self {
-        List::pow_scala(self, num)
+        NumericalList::pow_scala(self, num)
     }
 
     pub fn size(&self) -> usize {
@@ -71,19 +72,19 @@ impl FloatList {
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
-        List::sort(self, ascending)
+        NumericalList::sort(self, ascending)
     }
 
     pub fn sub(&self, other: &Self) -> Self {
-        List::sub(self, other)
+        NumericalList::sub(self, other)
     }
 
     pub fn sub_scala(&self, num: f32) -> Self {
-        List::sub_scala(self, num)
+        NumericalList::sub_scala(self, num)
     }
 
     pub fn sum(&self) -> f32 {
-        List::sum(self)
+        NumericalList::sum(self)
     }
 
     pub fn to_list(&self) -> Vec<f32> {
@@ -91,7 +92,7 @@ impl FloatList {
     }
 
     pub fn unique(&self) -> Self {
-        List::unique(self)
+        NumericalList::unique(self)
     }
 }
 
@@ -100,16 +101,18 @@ impl<'a> List<'a, f32> for FloatList {
         Self { _values: vec }
     }
 
+    fn values(&self) -> &Vec<f32> {
+        &self._values
+    }
+}
+
+impl<'a> NumericalList<'a, f32> for FloatList {
     fn _sort(&self, vec: &mut Vec<f32>, ascending: bool) {
         if ascending {
             vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
         } else {
             vec.sort_by(|a, b| b.partial_cmp(a).unwrap());
         }
-    }
-
-    fn values(&'a self) -> &'a Vec<f32> {
-        &self._values
     }
 
     fn div(&'a self, other: &Self) -> Vec<f32> {
@@ -149,11 +152,11 @@ impl IntegerList {
     }
 
     pub fn add(&self, other: &Self) -> Self {
-        List::add(self, other)
+        NumericalList::add(self, other)
     }
 
     pub fn add_scala(&self, num: i32) -> Self {
-        List::add_scala(self, num)
+        NumericalList::add_scala(self, num)
     }
 
     pub fn copy(&self) -> Self {
@@ -161,41 +164,41 @@ impl IntegerList {
     }
 
     pub fn div(&self, other: &Self) -> FloatList {
-        let vec = List::div(self, other);
+        let vec = NumericalList::div(self, other);
         List::_new(vec)
     }
 
     pub fn div_scala(&self, num: f32) -> FloatList {
-        let vec = List::div_scala(self, num);
+        let vec = NumericalList::div_scala(self, num);
         List::_new(vec)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
-        List::filter(self, condition)
+        NumericalList::filter(self, condition)
     }
 
     pub fn max(&self) -> i32 {
-        List::max(self)
+        NumericalList::max(self)
     }
 
     pub fn mean(&self) -> f32 {
-        List::mean(self)
+        NumericalList::mean(self)
     }
 
     pub fn min(&self) -> i32 {
-        List::min(self)
+        NumericalList::min(self)
     }
 
     pub fn mul(&self, other: &Self) -> Self {
-        List::mul(self, other)
+        NumericalList::mul(self, other)
     }
 
     pub fn mul_scala(&self, num: i32) -> Self {
-        List::mul_scala(self, num)
+        NumericalList::mul_scala(self, num)
     }
 
     pub fn pow_scala(&self, num: usize) -> Self {
-        List::pow_scala(self, num)
+        NumericalList::pow_scala(self, num)
     }
 
     pub fn size(&self) -> usize {
@@ -203,19 +206,19 @@ impl IntegerList {
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
-        List::sort(self, ascending)
+        NumericalList::sort(self, ascending)
     }
 
     pub fn sub(&self, other: &Self) -> Self {
-        List::sub(self, other)
+        NumericalList::sub(self, other)
     }
 
     pub fn sub_scala(&self, num: i32) -> Self {
-        List::sub_scala(self, num)
+        NumericalList::sub_scala(self, num)
     }
 
     pub fn sum(&self) -> i32 {
-        List::sum(self)
+        NumericalList::sum(self)
     }
 
     pub fn to_list(&self) -> Vec<i32> {
@@ -223,7 +226,7 @@ impl IntegerList {
     }
 
     pub fn unique(&self) -> Self {
-        List::unique(self)
+        NumericalList::unique(self)
     }
 }
 
@@ -232,16 +235,18 @@ impl<'a> List<'a, i32> for IntegerList {
         Self { _values: vec }
     }
 
+    fn values(&self) -> &Vec<i32> {
+        &self._values
+    }
+}
+
+impl<'a> NumericalList<'a, i32> for IntegerList {
     fn _sort(&self, vec: &mut Vec<i32>, ascending: bool) {
         if ascending {
             vec.sort();
         } else {
             vec.sort_by(|a, b| b.cmp(a))
         }
-    }
-
-    fn values(&'a self) -> &'a Vec<i32> {
-        &self._values
     }
 
     fn div(&'a self, other: &'a Self) -> Vec<f32> {

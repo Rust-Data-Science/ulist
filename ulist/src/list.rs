@@ -2,6 +2,7 @@ use num::traits::pow::pow;
 use num::traits::AsPrimitive;
 use num::One;
 use pyo3::prelude::*;
+use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::iter::Sum;
 use std::marker::Sized;
@@ -11,8 +12,33 @@ use std::ops::Fn;
 use std::ops::Mul;
 use std::ops::Sub;
 
-/// An abstract List.
+///An abstract List.
 pub trait List<'a, T>
+where
+    T: Clone,
+    Self: Sized,
+{
+    // Arrange the following methods in alphabetical order.
+
+    fn _new(vec: Vec<T>) -> Self;
+
+    fn copy(&'a self) -> Self {
+        List::_new(self.to_list())
+    }
+
+    fn size(&self) -> usize {
+        self.values().len()
+    }
+
+    fn to_list(&self) -> Vec<T> {
+        self.values().clone()
+    }
+
+    fn values(&self) -> &Vec<T>;
+}
+
+/// An abstract Numerical List.
+pub trait NumericalList<'a, T>: List<'a, T>
 where
     T: AsPrimitive<f32>
         + Sum<&'a T>
@@ -22,11 +48,8 @@ where
         + Mul<Output = T>
         + Div<Output = T>
         + One,
-    Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
-
-    fn _new(vec: Vec<T>) -> Self;
 
     fn _operate(&'a self, other: &'a Self, func: impl Fn(T, T) -> T) -> Self {
         let vec = self
@@ -51,10 +74,6 @@ where
 
     fn add_scala(&'a self, num: T) -> Self {
         self._operate_scala(|x| x + num)
-    }
-
-    fn copy(&'a self) -> Self {
-        List::_new(self.to_list())
     }
 
     fn div(&'a self, other: &'a Self) -> Vec<f32>;
@@ -94,10 +113,6 @@ where
         self._operate_scala(|x| pow(x, num))
     }
 
-    fn size(&'a self) -> usize {
-        self.values().len()
-    }
-
     fn sort(&'a self, ascending: bool) -> Self {
         let mut vec = self.to_list();
         let mut _vec = &mut vec;
@@ -117,18 +132,12 @@ where
         self.values().iter().sum()
     }
 
-    fn to_list(&'a self) -> Vec<T> {
-        self.values().clone()
-    }
-
     fn unique(&'a self) -> Self {
         let mut vec = self.to_list();
         self._sort(&mut vec, true);
         vec.dedup();
         List::_new(vec)
     }
-
-    fn values(&'a self) -> &'a Vec<T>;
 }
 
 /// List for bool.
@@ -142,5 +151,15 @@ impl BooleanList {
     #[new]
     fn new(vec: Vec<bool>) -> Self {
         BooleanList { _values: vec }
+    }
+}
+
+impl<'a> List<'a, bool> for BooleanList {
+    fn _new(vec: Vec<bool>) -> Self {
+        Self { _values: vec }
+    }
+
+    fn values(&self) -> &Vec<bool> {
+        &self._values
     }
 }
