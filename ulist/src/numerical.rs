@@ -1,43 +1,17 @@
+use crate::base::List;
+use crate::boolean::BooleanList;
 use num::traits::pow::pow;
 use num::traits::AsPrimitive;
 use num::One;
-use pyo3::prelude::*;
-use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::iter::Sum;
-use std::marker::Sized;
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Fn;
 use std::ops::Mul;
 use std::ops::Sub;
 
-///An abstract List.
-pub trait List<'a, T>
-where
-    T: Clone,
-    Self: Sized,
-{
-    // Arrange the following methods in alphabetical order.
-
-    fn _new(vec: Vec<T>) -> Self;
-
-    fn copy(&'a self) -> Self {
-        List::_new(self.to_list())
-    }
-
-    fn size(&self) -> usize {
-        self.values().len()
-    }
-
-    fn to_list(&self) -> Vec<T> {
-        self.values().clone()
-    }
-
-    fn values(&self) -> &Vec<T>;
-}
-
-/// An abstract Numerical List.
+/// Abstract List with Numerical type elements.
 pub trait NumericalList<'a, T>: List<'a, T>
 where
     T: AsPrimitive<f32>
@@ -84,7 +58,7 @@ where
         let vec = self
             .values()
             .iter()
-            .zip(condition._values.iter())
+            .zip(condition.values().iter())
             .filter(|(_, y)| **y)
             .map(|(x, _)| *x)
             .collect();
@@ -137,29 +111,5 @@ where
         self._sort(&mut vec, true);
         vec.dedup();
         List::_new(vec)
-    }
-}
-
-/// List for bool.
-#[pyclass]
-pub struct BooleanList {
-    _values: Vec<bool>,
-}
-
-#[pymethods]
-impl BooleanList {
-    #[new]
-    fn new(vec: Vec<bool>) -> Self {
-        BooleanList { _values: vec }
-    }
-}
-
-impl<'a> List<'a, bool> for BooleanList {
-    fn _new(vec: Vec<bool>) -> Self {
-        Self { _values: vec }
-    }
-
-    fn values(&self) -> &Vec<bool> {
-        &self._values
     }
 }
