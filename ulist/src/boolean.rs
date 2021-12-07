@@ -13,6 +13,18 @@ impl BooleanList {
     fn new(vec: Vec<bool>) -> Self {
         BooleanList { _values: vec }
     }
+
+    pub fn copy(&self) -> Self {
+        List::copy(self)
+    }
+
+    pub fn size(&self) -> usize {
+        List::size(self)
+    }
+
+    pub fn to_list(&self) -> Vec<bool> {
+        List::to_list(self)
+    }
 }
 
 impl<'a> List<'a, bool> for BooleanList {
