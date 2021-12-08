@@ -1,4 +1,5 @@
 use crate::base::List;
+use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
 
 /// List with boolean type elements.
@@ -9,6 +10,8 @@ pub struct BooleanList {
 
 #[pymethods]
 impl BooleanList {
+    // Arrange the following methods in alphabetical order.
+
     #[new]
     fn new(vec: Vec<bool>) -> Self {
         BooleanList { _values: vec }
@@ -16,6 +19,14 @@ impl BooleanList {
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn get(&self, index: usize) -> PyResult<bool> {
+        if index < self.size() {
+            Ok(List::get(self, index))
+        } else {
+            Err(PyIndexError::new_err("Index out of range!"))
+        }
     }
 
     pub fn size(&self) -> usize {

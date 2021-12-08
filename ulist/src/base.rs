@@ -15,6 +15,10 @@ where
         List::_new(self.to_list())
     }
 
+    fn get(&self, index: usize) -> T {
+        self.values()[index].clone()
+    }
+
     fn size(&self) -> usize {
         self.values().len()
     }

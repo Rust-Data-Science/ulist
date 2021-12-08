@@ -7,6 +7,8 @@ NUM_OR_LIST_TYPE = Union[NUM_TYPE, "UltraFastList"]
 
 
 class UltraFastList:
+    # Arrange the following methods in alphabetical order.
+
     def __init__(self, values: LIST_TYPE) -> None:
         if type(values) is FloatList:
             self.dtype = "float"
@@ -34,6 +36,9 @@ class UltraFastList:
 
     def __add__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
         return self._arithmetic_method(other, self.add, self.add_scala)
+
+    def __getitem__(self, index: int) -> NUM_TYPE:
+        return self.get(index)
 
     def __sub__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
         return self._arithmetic_method(other, self.sub, self.sub_scala)
@@ -64,6 +69,9 @@ class UltraFastList:
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
         return UltraFastList(self._values.filter(condition._values))
+
+    def get(self, index: int) -> NUM_TYPE:
+        return self._values.get(index)
 
     def max(self) -> NUM_TYPE:
         return self._values.max()

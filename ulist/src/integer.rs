@@ -2,6 +2,7 @@ use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
 use crate::numerical::NumericalList;
+use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
 
 /// List with integer type elements.
@@ -12,6 +13,8 @@ pub struct IntegerList {
 
 #[pymethods]
 impl IntegerList {
+    // Arrange the following methods in alphabetical order.
+
     #[new]
     fn new(vec: Vec<i32>) -> Self {
         List::_new(vec)
@@ -41,6 +44,14 @@ impl IntegerList {
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
         NumericalList::filter(self, condition)
+    }
+
+    pub fn get(&self, index: usize) -> PyResult<i32> {
+        if index < self.size() {
+            Ok(List::get(self, index))
+        } else {
+            Err(PyIndexError::new_err("Index out of range!"))
+        }
     }
 
     pub fn max(&self) -> i32 {

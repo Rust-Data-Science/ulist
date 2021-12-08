@@ -1,6 +1,7 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::numerical::NumericalList;
+use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
 
 /// List with float type elements.
@@ -11,6 +12,8 @@ pub struct FloatList {
 
 #[pymethods]
 impl FloatList {
+    // Arrange the following methods in alphabetical order.
+
     #[new]
     fn new(vec: Vec<f32>) -> Self {
         List::_new(vec)
@@ -40,6 +43,14 @@ impl FloatList {
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
         NumericalList::filter(self, condition)
+    }
+
+    pub fn get(&self, index: usize) -> PyResult<f32> {
+        if index < self.size() {
+            Ok(List::get(self, index))
+        } else {
+            Err(PyIndexError::new_err("Index out of range!"))
+        }
     }
 
     pub fn max(&self) -> f32 {
