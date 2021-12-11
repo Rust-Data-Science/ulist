@@ -41,11 +41,12 @@ class UltraFastList:
         return self._values.get(index)
 
     def __str__(self) -> str:
-        if self.size() < 100:
+        n = self.size()
+        if n < 100:
             return f"UltraFastList({str(self.to_list())})"
         return (
             f"UltraFastList([{self[0]}, {self[1]}, {self[2]}, ..., "
-            + f"{self[-3]}, {self[-2]}, {self[-1]}])"
+            + f"{self[n-3]}, {self[n-2]}, {self[n-1]}])"
         )
 
     def __sub__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
