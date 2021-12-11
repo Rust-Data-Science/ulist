@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-@Author: tushushu
-@Date: 2021-11-14 16:02:00
-"""
 import pytest
 import ulist as ul
 from typing import Union, List, Optional
@@ -13,7 +8,10 @@ LIST_TYPE = Union[List[float], List[int]]
 
 @pytest.mark.parametrize(
     "dtype, nums",
-    [("float", [1.0, 2.0, 3.0, 4.0, 5.0]), ("int", [1, 2, 3, 4, 5])],
+    [
+        ("float", [1.0, 2.0, 3.0, 4.0, 5.0]),
+        ("int", [1, 2, 3, 4, 5]),
+    ],
 )
 @pytest.mark.parametrize(
     "test_method, expected_value, expected_type",
@@ -21,7 +19,6 @@ LIST_TYPE = Union[List[float], List[int]]
         ("max", 5.0, None),
         ("mean", 3.0, float),
         ("min", 1.0, None),
-        ("size", 5, int),
         ("sum", 15.0, None),
     ],
 )
@@ -43,9 +40,9 @@ def test_statistics_methods(
     assert result == expected_value, msg
 
     if expected_type is None:
-        if dtype is "float":
+        if dtype == "float":
             expected_type = float
-        elif dtype is "int":
+        elif dtype == "int":
             expected_type = int
     assert type(result) == expected_type, msg
 
@@ -54,12 +51,14 @@ def test_statistics_methods(
 
 @pytest.mark.parametrize(
     "dtype, nums",
-    [("float", [5.0, 3.0, 2.0, 4.0, 1.0, 3.0]), ("int", [5, 3, 2, 4, 1, 3])],
+    [
+        ("float", [5.0, 3.0, 2.0, 4.0, 1.0, 3.0]),
+        ("int", [5, 3, 2, 4, 1, 3]),
+    ],
 )
 @pytest.mark.parametrize(
     "test_method, expected_value, kwargs",
     [
-        ("copy", [5, 3, 2, 4, 1, 3], {}),
         (
             "filter",
             [5, 4],
@@ -71,7 +70,6 @@ def test_statistics_methods(
         ),
         ("sort", [1, 2, 3, 3, 4, 5], {"ascending": True}),
         ("sort", [5, 4, 3, 3, 2, 1], {"ascending": False}),
-        ("to_list", [5, 3, 2, 4, 1, 3], {}),
         ("unique", [1, 2, 3, 4, 5], {}),
     ],
 )
@@ -97,7 +95,10 @@ def test_data_process_methods(
 
 @pytest.mark.parametrize(
     "dtype, nums",
-    [("float", [1.0, 2.0, 3.0, 4.0, 5.0]), ("int", [1, 2, 3, 4, 5])],
+    [
+        ("float", [1.0, 2.0, 3.0, 4.0, 5.0]),
+        ("int", [1, 2, 3, 4, 5]),
+    ],
 )
 @pytest.mark.parametrize(
     "test_method, expected_value, kwargs",
@@ -130,10 +131,11 @@ def test_arithmetic_methods(
 ):
     arr = ul.from_iter(nums, dtype)
     if not test_method.endswith("_scala"):
+        fn = getattr(arr, test_method)
         if isinstance(kwargs["other"], list):
-            result = getattr(arr, test_method)(ul.from_iter(kwargs["other"], dtype))
+            result = fn(ul.from_iter(kwargs["other"], dtype))
         else:
-            result = getattr(arr, test_method)(kwargs["other"])
+            result = fn(kwargs["other"])
     else:
         result = getattr(arr, test_method)(**kwargs)
     if test_method != "to_list":
