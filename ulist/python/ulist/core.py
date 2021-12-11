@@ -38,7 +38,15 @@ class UltraFastList:
         return self._arithmetic_method(other, self.add, self.add_scala)
 
     def __getitem__(self, index: int) -> NUM_TYPE:
-        return self.get(index)
+        return self._values.get(index)
+
+    def __str__(self) -> str:
+        if self.size() < 100:
+            return f"UltraFastList({str(self.to_list())})"
+        return (
+            f"UltraFastList([{self[0]}, {self[1]}, {self[2]}, ..., "
+            + f"{self[-3]}, {self[-2]}, {self[-1]}])"
+        )
 
     def __sub__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
         return self._arithmetic_method(other, self.sub, self.sub_scala)
