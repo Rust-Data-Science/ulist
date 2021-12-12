@@ -44,7 +44,7 @@ class UltraFastList:
         return self._values.get(index)
 
     def __gt__(self, other: NUM_TYPE) -> "UltraFastList":
-        return self.great_than_scala(other)
+        return self.greater_than_scala(other)
 
     def __le__(self, other: NUM_TYPE) -> "UltraFastList":
         return self.less_than_scala(other)
@@ -91,8 +91,8 @@ class UltraFastList:
     def get(self, index: int) -> NUM_TYPE:
         return self._values.get(index)
 
-    def great_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
-        return UltraFastList(self._values.great_than_scala(num))
+    def greater_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
+        return UltraFastList(self._values.greater_than_scala(num))
 
     def less_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
         return UltraFastList(self._values.less_than_scala(num))

@@ -112,6 +112,8 @@ def test_data_process_methods(
         ("mul_scala", [2, 4, 6, 8, 10], {"num": 2}),
         ("div_scala", [0.5, 1.0, 1.5, 2.0, 2.5], {"num": 2}),
         ("pow_scala", [1, 4, 9, 16, 25], {"num": 2}),
+        ("greater_than_scala", [False, False, True, True, True], {"num": 2}),
+        ("less_than_scala", [True, False, False, False, False], {"num": 2}),
         ("__add__", [2, 4, 6, 8, 10], {"other": [1, 2, 3, 4, 5]}),
         ("__sub__", [0, 0, 0, 0, 0], {"other": [1, 2, 3, 4, 5]}),
         ("__mul__", [1, 4, 9, 16, 25], {"other": [1, 2, 3, 4, 5]}),
