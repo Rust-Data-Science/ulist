@@ -53,7 +53,7 @@ impl FloatList {
         }
     }
 
-    pub fn great_than_scala(&self, num: f32) -> BooleanList {
+    pub fn greater_than_scala(&self, num: f32) -> BooleanList {
         NumericalList::greater_than_scala(self, num)
     }
 

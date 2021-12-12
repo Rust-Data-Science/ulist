@@ -54,7 +54,7 @@ impl IntegerList {
         }
     }
 
-    pub fn great_than_scala(&self, num: i32) -> BooleanList {
+    pub fn greater_than_scala(&self, num: i32) -> BooleanList {
         NumericalList::greater_than_scala(self, num)
     }
 
