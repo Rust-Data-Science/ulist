@@ -42,6 +42,10 @@ impl IntegerList {
         List::_new(vec)
     }
 
+    pub fn equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x == num))
+    }
+
     pub fn filter(&self, condition: &BooleanList) -> Self {
         NumericalList::filter(self, condition)
     }
