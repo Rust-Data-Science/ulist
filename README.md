@@ -1,5 +1,5 @@
 # ulist
-Ultra fast list - Python bindings to Rust Vector.   
+Ultra fast list data structures written in Rust with Python bindings.
 
 
 ### Install
