@@ -13,6 +13,8 @@ LIST_TYPE = Union[List[float], List[int]]
     [
         ([1, 2, 3], "equal_scala", [False, True, False], {"num": 2}),
         ([1, 2, 3], "__eq__", [False, True, False], {"other": 2}),
+        ([1, 2, 3], "not_equal_scala", [True, False, True], {"num": 2}),
+        ([1, 2, 3], "__ne__", [True, False, True], {"other": 2}),
     ],
 )
 def test_methods(

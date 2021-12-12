@@ -86,6 +86,10 @@ impl IntegerList {
         NumericalList::mul_scala(self, num)
     }
 
+    pub fn not_equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
+    }
+
     pub fn pow_scala(&self, num: usize) -> Self {
         NumericalList::pow_scala(self, num)
     }
