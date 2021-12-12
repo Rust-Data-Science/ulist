@@ -4,6 +4,7 @@ use num::traits::pow::pow;
 use num::traits::AsPrimitive;
 use num::One;
 use std::cmp::PartialEq;
+use std::cmp::PartialOrd;
 use std::iter::Sum;
 use std::ops::Add;
 use std::ops::Div;
@@ -17,6 +18,7 @@ where
     T: AsPrimitive<f32>
         + Sum<&'a T>
         + PartialEq
+        + PartialOrd
         + Add<Output = T>
         + Sub<Output = T>
         + Mul<Output = T>
@@ -24,20 +26,18 @@ where
         + One,
 {
     // Arrange the following methods in alphabetical order.
-
     fn _operate(&'a self, other: &'a Self, func: impl Fn(T, T) -> T) -> Self {
         let vec = self
             .values()
             .iter()
             .zip(other.values().iter())
-            .map(|(x, y)| func(*x, *y))
+            .map(|(&x, &y)| func(x, y))
             .collect();
         List::_new(vec)
     }
 
-    fn _operate_scala(&'a self, func: impl Fn(T) -> T) -> Self {
-        let vec = self.values().iter().map(|x| func(*x)).collect();
-        List::_new(vec)
+    fn _operate_scala<U>(&'a self, func: impl Fn(T) -> U) -> Vec<U> {
+        self.values().iter().map(|&x| func(x)).collect()
     }
 
     fn _sort(&self, vec: &mut Vec<T>, ascending: bool);
@@ -47,7 +47,7 @@ where
     }
 
     fn add_scala(&'a self, num: T) -> Self {
-        self._operate_scala(|x| x + num)
+        List::_new(self._operate_scala(|x| x + num))
     }
 
     fn div(&'a self, other: &'a Self) -> Vec<f32>;
@@ -65,6 +65,14 @@ where
         List::_new(vec)
     }
 
+    fn greater_than_scala(&'a self, num: T) -> BooleanList {
+        BooleanList::new(self._operate_scala(|x| x > num))
+    }
+
+    fn less_than_scala(&'a self, num: T) -> BooleanList {
+        BooleanList::new(self._operate_scala(|x| x < num))
+    }
+
     fn max(&'a self) -> T;
 
     fn mean(&'a self) -> f32 {
@@ -80,11 +88,11 @@ where
     }
 
     fn mul_scala(&'a self, num: T) -> Self {
-        self._operate_scala(|x| x * num)
+        List::_new(self._operate_scala(|x| x * num))
     }
 
     fn pow_scala(&'a self, num: usize) -> Self {
-        self._operate_scala(|x| pow(x, num))
+        List::_new(self._operate_scala(|x| pow(x, num)))
     }
 
     fn sort(&'a self, ascending: bool) -> Self {
@@ -99,7 +107,7 @@ where
     }
 
     fn sub_scala(&'a self, num: T) -> Self {
-        self._operate_scala(|x| x - num)
+        List::_new(self._operate_scala(|x| x - num))
     }
 
     fn sum(&'a self) -> T {
