@@ -28,7 +28,7 @@ class UltraFastList:
 
     def _arithmetic_method(
         self, other: NUM_OR_LIST_TYPE, fn: Callable, fn_scala: Callable
-    ) -> NUM_OR_LIST_TYPE:
+    ) -> "UltraFastList":
         if isinstance(other, int) or isinstance(other, float):
             return fn_scala(other)
         if type(other) is type(self):
@@ -37,11 +37,23 @@ class UltraFastList:
             "Parameter other should be int, " + "float or UltraFastList type!"
         )
 
-    def __add__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
+    def __add__(self, other: NUM_OR_LIST_TYPE) -> "UltraFastList":
         return self._arithmetic_method(other, self.add, self.add_scala)
 
     def __getitem__(self, index: int) -> NUM_TYPE:
         return self._values.get(index)
+
+    def __gt__(self, other: NUM_TYPE) -> "UltraFastList":
+        return self.great_than_scala(other)
+
+    def __le__(self, other: NUM_TYPE) -> "UltraFastList":
+        return self.less_than_scala(other)
+
+    def __mul__(self, other: NUM_OR_LIST_TYPE) -> "UltraFastList":
+        return self._arithmetic_method(other, self.mul, self.mul_scala)
+
+    def __pow__(self, other: int) -> "UltraFastList":
+        return self._arithmetic_method(other, lambda: None, self.pow_scala)
 
     def __str__(self) -> str:
         n = self.size()
@@ -52,17 +64,11 @@ class UltraFastList:
             + f"{self[n-3]}, {self[n-2]}, {self[n-1]}])"
         )
 
-    def __sub__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
+    def __sub__(self, other: NUM_OR_LIST_TYPE) -> "UltraFastList":
         return self._arithmetic_method(other, self.sub, self.sub_scala)
 
-    def __mul__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
-        return self._arithmetic_method(other, self.mul, self.mul_scala)
-
-    def __truediv__(self, other: NUM_OR_LIST_TYPE) -> NUM_OR_LIST_TYPE:
+    def __truediv__(self, other: NUM_OR_LIST_TYPE) -> "UltraFastList":
         return self._arithmetic_method(other, self.div, self.div_scala)
-
-    def __pow__(self, other: int) -> LIST_TYPE:
-        return self._arithmetic_method(other, lambda: None, self.pow_scala)
 
     def add(self, other: "UltraFastList") -> "UltraFastList":
         return UltraFastList(self._values.add(other._values))
@@ -84,6 +90,12 @@ class UltraFastList:
 
     def get(self, index: int) -> NUM_TYPE:
         return self._values.get(index)
+
+    def great_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
+        return UltraFastList(self._values.great_than_scala(num))
+
+    def less_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
+        return UltraFastList(self._values.less_than_scala(num))
 
     def max(self) -> NUM_TYPE:
         return self._values.max()
