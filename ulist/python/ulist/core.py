@@ -40,6 +40,9 @@ class UltraFastList:
     def __add__(self, other: NUM_OR_LIST_TYPE) -> "UltraFastList":
         return self._arithmetic_method(other, self.add, self.add_scala)
 
+    def __eq__(self, other: NUM_TYPE) -> "UltraFastList":
+        return self.equal_scala(other)
+
     def __getitem__(self, index: int) -> NUM_TYPE:
         return self._values.get(index)
 
@@ -84,6 +87,9 @@ class UltraFastList:
 
     def div_scala(self, num: float) -> "UltraFastList":
         return UltraFastList(self._values.div_scala(num))
+
+    def equal_scala(self, num: int) -> "UltraFastList":
+        return UltraFastList(self._values.equal_scala(num))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
         return UltraFastList(self._values.filter(condition._values))
