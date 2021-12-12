@@ -74,3 +74,18 @@ The docker images are saved in https://hub.docker.com/repository/docker/tushushu
 * Customize the build, please consider to change the arguments `gh_username`, 
 `ulist_home` and `branch` in the `Dockerfile` before building.
 * run `docker cp <containerId>:/home/ulist/ulist/target/wheels /host/path/target` to copy the wheel for Linux to local disk.
+
+
+### Wish-list
+* `sum`, `any`, and `all` methods for `BooleanList`
+* `map`, `where` methods for `NumericalList`
+* `zip` method for `List` and `ListPair` class
+* `agg` method for `ListPair`
+* More construction methods for `List`
+* Logical operators for `BooleanList`
+* Comparison operators `NumericalList`
+* Airspeed velocity to benchmark
+* Automatically generate documentation
+* More boundary check logics
+* Mypy linting
+* Stub files
