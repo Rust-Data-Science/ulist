@@ -46,10 +46,16 @@ class UltraFastList:
     def __getitem__(self, index: int) -> NUM_TYPE:
         return self._values.get(index)
 
+    def __ge__(self, other: int) -> "UltraFastList":
+        return self.greater_than_or_equal_scala(other)
+
     def __gt__(self, other: NUM_TYPE) -> "UltraFastList":
         return self.greater_than_scala(other)
 
     def __le__(self, other: NUM_TYPE) -> "UltraFastList":
+        return self.less_than_or_equal_scala(other)
+
+    def __lt__(self, other: NUM_TYPE) -> "UltraFastList":
         return self.less_than_scala(other)
 
     def __mul__(self, other: NUM_OR_LIST_TYPE) -> "UltraFastList":
@@ -100,8 +106,14 @@ class UltraFastList:
     def get(self, index: int) -> NUM_TYPE:
         return self._values.get(index)
 
+    def greater_than_or_equal_scala(self, num: int) -> "UltraFastList":
+        return UltraFastList(self._values.greater_than_or_equal_scala(num))
+
     def greater_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
         return UltraFastList(self._values.greater_than_scala(num))
+
+    def less_than_or_equal_scala(self, num: int) -> "UltraFastList":
+        return UltraFastList(self._values.less_than_or_equal_scala(num))
 
     def less_than_scala(self, num: NUM_TYPE) -> "UltraFastList":
         return UltraFastList(self._values.less_than_scala(num))

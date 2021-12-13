@@ -1,6 +1,7 @@
 import pytest
 import ulist as ul
-from typing import Union, List, Optional
+import operator as op
+from typing import Union, List, Optional, Callable
 
 NUM_TYPE = Union[float, int]
 LIST_TYPE = Union[List[float], List[int]]
@@ -114,14 +115,6 @@ def test_data_process_methods(
         ("pow_scala", [1, 4, 9, 16, 25], {"num": 2}),
         ("greater_than_scala", [False, False, True, True, True], {"num": 2}),
         ("less_than_scala", [True, False, False, False, False], {"num": 2}),
-        ("__add__", [2, 4, 6, 8, 10], {"other": [1, 2, 3, 4, 5]}),
-        ("__sub__", [0, 0, 0, 0, 0], {"other": [1, 2, 3, 4, 5]}),
-        ("__mul__", [1, 4, 9, 16, 25], {"other": [1, 2, 3, 4, 5]}),
-        ("__truediv__", [1, 1, 1, 1, 1], {"other": [1, 2, 3, 4, 5]}),
-        ("__add__", [2, 3, 4, 5, 6], {"other": 1}),
-        ("__sub__", [0, 1, 2, 3, 4], {"other": 1}),
-        ("__mul__", [2, 4, 6, 8, 10], {"other": 2}),
-        ("__truediv__", [0.5, 1.0, 1.5, 2.0, 2.5], {"other": 2}),
     ],
 )
 def test_arithmetic_methods(
@@ -140,8 +133,52 @@ def test_arithmetic_methods(
             result = fn(kwargs["other"])
     else:
         result = getattr(arr, test_method)(**kwargs)
-    if test_method != "to_list":
+    if hasattr(result, "to_list"):
         result = result.to_list()
+    msg = (
+        f"dtype - {dtype}"
+        + f" test_method - {test_method}"
+        + f" result - {result}"
+        + f" expected - {expected_value}"
+    )
+    assert result == expected_value, msg
+
+
+@pytest.mark.parametrize(
+    "dtype, nums",
+    [
+        ("float", [1.0, 2.0, 3.0, 4.0, 5.0]),
+        ("int", [1, 2, 3, 4, 5]),
+    ],
+)
+@pytest.mark.parametrize(
+    "test_method, expected_value, kwargs",
+    [
+        (op.add, [2, 4, 6, 8, 10], {"other": [1, 2, 3, 4, 5]}),
+        (op.sub, [0, 0, 0, 0, 0], {"other": [1, 2, 3, 4, 5]}),
+        (op.mul, [1, 4, 9, 16, 25], {"other": [1, 2, 3, 4, 5]}),
+        (op.truediv, [1, 1, 1, 1, 1], {"other": [1, 2, 3, 4, 5]}),
+        (op.add, [2, 3, 4, 5, 6], {"other": 1}),
+        (op.sub, [0, 1, 2, 3, 4], {"other": 1}),
+        (op.mul, [2, 4, 6, 8, 10], {"other": 2}),
+        (op.truediv, [0.5, 1.0, 1.5, 2.0, 2.5], {"other": 2}),
+        (op.gt, [False, False, True, True, True], {"other": 2}),
+        (op.lt, [True, False, False, False, False], {"other": 2}),
+    ],
+)
+def test_operators(
+    dtype: str,
+    nums: List[NUM_TYPE],
+    test_method: Callable,
+    expected_value: LIST_TYPE,
+    kwargs: dict,
+):
+    arr = ul.from_iter(nums, dtype)
+    if isinstance(kwargs["other"], list):
+        other = ul.from_iter(kwargs["other"], dtype)
+    else:
+        other = kwargs["other"]
+    result = test_method(arr, other).to_list()
     msg = (
         f"dtype - {dtype}"
         + f" test_method - {test_method}"

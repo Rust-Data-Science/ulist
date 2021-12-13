@@ -58,8 +58,16 @@ impl IntegerList {
         }
     }
 
+    pub fn greater_than_or_equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x >= num))
+    }
+
     pub fn greater_than_scala(&self, num: i32) -> BooleanList {
         NumericalList::greater_than_scala(self, num)
+    }
+
+    pub fn less_than_or_equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x <= num))
     }
 
     pub fn less_than_scala(&self, num: i32) -> BooleanList {
