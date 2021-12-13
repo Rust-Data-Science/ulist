@@ -1,8 +1,8 @@
-from collections import abc
 from typing import List, Union
 
 import pytest
 import ulist as ul
+from ulist.utils import check_test_result
 
 NUM_TYPE = Union[float, int]
 LIST_TYPE = Union[List[float], List[int]]
@@ -52,20 +52,7 @@ def test_methods_no_arg(
 ):
     arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)()
-    if hasattr(result, "to_list"):
-        result = result.to_list()
-    msg = (
-        f"dtype - {dtype}"
-        + f" test_method - {test_method}"
-        + f" result - {result}"
-        + f" expected - {expected_value}"
-    )
-    if isinstance(result, abc.Iterable):
-        for x, y in zip(result, expected_value):
-            assert type(x) == type(y) and x == y, msg
-    else:
-        assert type(result) == type(expected_value), msg
-        assert result == expected_value, msg
+    check_test_result(dtype, test_method, result, expected_value)
 
 
 @pytest.mark.parametrize(
@@ -88,17 +75,4 @@ def test_methods_with_args(
 ):
     arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
-    if hasattr(result, "to_list"):
-        result = result.to_list()
-    msg = (
-        f"dtype - {dtype}"
-        + f" test_method - {test_method}"
-        + f" result - {result}"
-        + f" expected - {expected_value}"
-    )
-    if isinstance(result, abc.Iterable):
-        for x, y in zip(result, expected_value):
-            assert type(x) == type(y) and x == y, msg
-    else:
-        assert type(result) == type(expected_value), msg
-        assert result == expected_value, msg
+    check_test_result(dtype, test_method, result, expected_value)
