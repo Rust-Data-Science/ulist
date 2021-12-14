@@ -10,16 +10,16 @@ LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
-    "dtype, nums, test_method, expected_value",
+    "test_method, dtype, nums, expected_value",
     [
-        ("float", [1.0, 2.0, 3.0, 4.0, 5.0], "max", 5.0),
-        ("float", [1.0, 2.0, 3.0, 4.0, 5.0], "mean", 3.0),
-        ("float", [1.0, 2.0, 3.0, 4.0, 5.0], "min", 1.0),
-        ("float", [1.0, 2.0, 3.0, 4.0, 5.0], "sum", 15.0),
-        ("int", [1, 2, 3, 4, 5], "max", 5),
-        ("int", [1, 2, 3, 4, 5], "mean", 3.0),
-        ("int", [1, 2, 3, 4, 5], "min", 1),
-        ("int", [1, 2, 3, 4, 5], "sum", 15),
+        ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
+        ('max', 'int', [1, 2, 3, 4, 5], 5),
+        ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
+        ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
+        ('min', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 1.0),
+        ('min', 'int', [1, 2, 3, 4, 5], 1),
+        ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
+        ('sum', 'int', [1, 2, 3, 4, 5], 15),
     ],
 )
 def test_statistics_methods(
@@ -34,69 +34,47 @@ def test_statistics_methods(
 
 
 @pytest.mark.parametrize(
-    "dtype, nums, test_method, expected_value, kwargs",
+    "test_method, dtype, nums, expected_value, kwargs",
     [
         (
-            "float",
+            'sort',
+            'float',
             [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            "filter",
-            [5.0, 4.0],
-            {
-                "condition": ul.from_iter(
-                    [True, False, False, True, False, False], "bool"
-                )
-            },
-        ),
-        (
-            "float",
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            "sort",
             [1.0, 2.0, 3.0, 3.0, 4.0, 5.0],
-            {"ascending": True},
+            {'ascending': True}
         ),
         (
-            "float",
+            'sort',
+            'float',
             [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            "sort",
             [5.0, 4.0, 3.0, 3.0, 2.0, 1.0],
-            {"ascending": False},
+            {'ascending': False}
         ),
         (
-            "float",
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            "unique",
-            [1.0, 2.0, 3.0, 4.0, 5.0],
-            {},
-        ),
-        (
-            "int",
+            'sort',
+            'int',
             [5, 3, 2, 4, 1, 3],
-            "filter",
-            [5, 4],
-            {
-                "condition": ul.from_iter(
-                    [True, False, False, True, False, False], "bool"
-                )
-            },
-        ),
-        (
-            "int",
-            [5, 3, 2, 4, 1, 3],
-            "sort",
             [1, 2, 3, 3, 4, 5],
-            {"ascending": True}
+            {'ascending': True}
         ),
         (
-            "int",
+            'sort',
+            'int',
             [5, 3, 2, 4, 1, 3],
-            "sort",
             [5, 4, 3, 3, 2, 1],
-            {"ascending": False}
+            {'ascending': False}
         ),
         (
-            "int",
+            'unique',
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            {}
+        ),
+        (
+            'unique',
+            'int',
             [5, 3, 2, 4, 1, 3],
-            "unique",
             [1, 2, 3, 4, 5],
             {}
         ),
@@ -115,6 +93,35 @@ def test_data_process_methods(
 
 
 @pytest.mark.parametrize(
+    "dtype, nums, expected_value, condition",
+    [
+        (
+            "float",
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [5.0, 4.0],
+            [True, False, False, True, False, False],
+        ),
+        (
+            "int",
+            [5, 3, 2, 4, 1, 3],
+            [5, 4],
+            [True, False, False, True, False, False],
+        ),
+    ],
+)
+def test_filter(
+    dtype: str,
+    nums: List[NUM_TYPE],
+    expected_value: LIST_TYPE,
+    condition: list,
+):
+    arr = ul.from_iter(nums, dtype)
+    cond = ul.from_iter(condition, dtype="bool")
+    result = arr.filter(cond)
+    check_test_result(dtype, "filter", result, expected_value)
+
+
+@ pytest.mark.parametrize(
     "dtype, nums, test_method, expected_value, kwargs",
     [
         (
@@ -269,6 +276,8 @@ def test_data_process_methods(
             {"num": 2},
         ),
     ],
+
+
 )
 def test_arithmetic_methods(
     dtype: str,
@@ -289,7 +298,7 @@ def test_arithmetic_methods(
     check_test_result(dtype, test_method, result, expected_value)
 
 
-@pytest.mark.parametrize(
+@ pytest.mark.parametrize(
     "dtype, nums, test_method, expected_value, kwargs",
     [
         (

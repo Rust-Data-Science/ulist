@@ -10,29 +10,29 @@ LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
-    "nums, test_method, expected_value, kwargs",
+    "test_method, nums, expected_value, kwargs",
     [
         (
-            [1, 2, 3],
             "equal_scala",
+            [1, 2, 3],
             [False, True, False],
             {"num": 2}
         ),
         (
-            [1, 2, 3],
             "not_equal_scala",
+            [1, 2, 3],
             [True, False, True],
             {"num": 2}
         ),
         (
-            [1, 2, 3],
             "greater_than_or_equal_scala",
+            [1, 2, 3],
             [False, True, True],
             {"num": 2}
         ),
         (
-            [1, 2, 3],
             "less_than_or_equal_scala",
+            [1, 2, 3],
             [True, True, False],
             {"num": 2}
         ),
@@ -51,12 +51,12 @@ def test_methods(
 
 
 @pytest.mark.parametrize(
-    "nums, test_method, expected_value, kwargs",
+    "test_method, nums, expected_value, kwargs",
     [
-        ([1, 2, 3], op.eq, [False, True, False], {"other": 2}),
-        ([1, 2, 3], op.ne, [True, False, True], {"other": 2}),
-        ([1, 2, 3], op.ge, [False, True, True], {"other": 2}),
-        ([1, 2, 3], op.le, [True, True, False], {"other": 2}),
+        (op.eq, [1, 2, 3], [False, True, False], {"other": 2}),
+        (op.ne, [1, 2, 3], [True, False, True], {"other": 2}),
+        (op.ge, [1, 2, 3], [False, True, True], {"other": 2}),
+        (op.le, [1, 2, 3], [True, True, False], {"other": 2}),
     ],
 )
 def test_operators(
