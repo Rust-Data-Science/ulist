@@ -91,6 +91,9 @@ class UltraFastList:
     def all(self) -> bool:
         return self._values.all()
 
+    def and_(self, other: "UltraFastList") -> "UltraFastList":
+        return UltraFastList(self._values.and_(other._values))
+
     def any(self) -> bool:
         return self._values.any()
 
@@ -141,6 +144,9 @@ class UltraFastList:
 
     def not_equal_scala(self, num: int) -> "UltraFastList":
         return UltraFastList(self._values.not_equal_scala(num))
+
+    def or_(self, other: "UltraFastList") -> "UltraFastList":
+        return UltraFastList(self._values.or_(other._values))
 
     def pow_scala(self, num: int) -> "UltraFastList":
         return UltraFastList(self._values.pow_scala(num))
