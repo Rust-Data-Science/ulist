@@ -17,7 +17,7 @@ impl IntegerList {
 
     #[new]
     fn new(vec: Vec<i32>) -> Self {
-        List::_new(vec)
+        IntegerList { _values: vec }
     }
 
     pub fn add(&self, other: &Self) -> Self {
@@ -34,12 +34,12 @@ impl IntegerList {
 
     pub fn div(&self, other: &Self) -> FloatList {
         let vec = NumericalList::div(self, other);
-        List::_new(vec)
+        FloatList::new(vec)
     }
 
     pub fn div_scala(&self, num: f32) -> FloatList {
         let vec = NumericalList::div_scala(self, num);
-        List::_new(vec)
+        FloatList::new(vec)
     }
 
     pub fn equal_scala(&self, num: i32) -> BooleanList {
