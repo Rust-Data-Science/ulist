@@ -42,6 +42,10 @@ impl IntegerList {
         List::_new(vec)
     }
 
+    pub fn equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x == num))
+    }
+
     pub fn filter(&self, condition: &BooleanList) -> Self {
         NumericalList::filter(self, condition)
     }
@@ -52,6 +56,22 @@ impl IntegerList {
         } else {
             Err(PyIndexError::new_err("Index out of range!"))
         }
+    }
+
+    pub fn greater_than_or_equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x >= num))
+    }
+
+    pub fn greater_than_scala(&self, num: i32) -> BooleanList {
+        NumericalList::greater_than_scala(self, num)
+    }
+
+    pub fn less_than_or_equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x <= num))
+    }
+
+    pub fn less_than_scala(&self, num: i32) -> BooleanList {
+        NumericalList::less_than_scala(self, num)
     }
 
     pub fn max(&self) -> i32 {
@@ -72,6 +92,10 @@ impl IntegerList {
 
     pub fn mul_scala(&self, num: i32) -> Self {
         NumericalList::mul_scala(self, num)
+    }
+
+    pub fn not_equal_scala(&self, num: i32) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
     }
 
     pub fn pow_scala(&self, num: usize) -> Self {

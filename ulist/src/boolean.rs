@@ -13,7 +13,7 @@ impl BooleanList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    fn new(vec: Vec<bool>) -> Self {
+    pub fn new(vec: Vec<bool>) -> Self {
         BooleanList { _values: vec }
     }
 

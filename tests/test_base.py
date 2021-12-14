@@ -1,47 +1,39 @@
-from collections import abc
 from typing import List, Union
 
 import pytest
 import ulist as ul
+from ulist.utils import check_test_result
 
 NUM_TYPE = Union[float, int]
 LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
-    "dtype, nums, test_method, expected_value",
+    "test_method, dtype, nums, expected_value",
     [
-        ("float", [1.0, 2.0], "copy", [1.0, 2.0]),
-        ("float", [1.0, 2.0], "size", 2),
-        ("float", [1.0, 2.0], "to_list", [1.0, 2.0]),
-        ("float", [1.0, 2.0], "__str__", "UltraFastList([1.0, 2.0])"),
         (
-            "float",
-            range(100),
             "__str__",
-            "UltraFastList([0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0])",
-        ),
-        ("int", [1, 2], "copy", [1, 2]),
-        ("int", [1, 2], "size", 2),
-        ("int", [1, 2], "to_list", [1, 2]),
-        ("int", [1, 2], "__str__", "UltraFastList([1, 2])"),
-        (
-            "int",
-            range(100),
-            "__str__",
-            "UltraFastList([0, 1, 2, ..., 97, 98, 99])",
-        ),
-        ("bool", [True, False], "copy", [True, False]),
-        ("bool", [True, False], "size", 2),
-        ("bool", [True, False], "to_list", [True, False]),
-        ("bool", [True, False], "to_list", [True, False]),
-        ("bool", [True, False], "__str__", "UltraFastList([True, False])"),
-        (
             "bool",
             [True, False] * 50,
-            "__str__",
             "UltraFastList([True, False, True, ..., False, True, False])",
         ),
+        ('__str__', 'bool', [True, False], 'UltraFastList([True, False])'),
+        ('__str__', 'float', [1.0, 2.0], 'UltraFastList([1.0, 2.0])'),
+        ('__str__', 'float', range(0, 100),
+         'UltraFastList([0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0])'),
+        ('__str__', 'int', [1, 2], 'UltraFastList([1, 2])'),
+        ('__str__', 'int', range(0, 100),
+         'UltraFastList([0, 1, 2, ..., 97, 98, 99])'),
+        ('copy', 'bool', [True, False], [True, False]),
+        ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
+        ('copy', 'int', [1, 2], [1, 2]),
+        ('size', 'bool', [True, False], 2),
+        ('size', 'float', [1.0, 2.0], 2),
+        ('size', 'int', [1, 2], 2),
+        ('to_list', 'bool', [True, False], [True, False]),
+        ('to_list', 'bool', [True, False], [True, False]),
+        ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
+        ('to_list', 'int', [1, 2], [1, 2]),
     ],
 )
 def test_methods_no_arg(
@@ -52,31 +44,18 @@ def test_methods_no_arg(
 ):
     arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)()
-    if hasattr(result, "to_list"):
-        result = result.to_list()
-    msg = (
-        f"dtype - {dtype}"
-        + f" test_method - {test_method}"
-        + f" result - {result}"
-        + f" expected - {expected_value}"
-    )
-    if isinstance(result, abc.Iterable):
-        for x, y in zip(result, expected_value):
-            assert type(x) == type(y) and x == y, msg
-    else:
-        assert type(result) == type(expected_value), msg
-        assert result == expected_value, msg
+    check_test_result(dtype, test_method, result, expected_value)
 
 
 @pytest.mark.parametrize(
-    "dtype, nums, test_method, expected_value, kwargs",
+    "test_method, dtype, nums, expected_value, kwargs",
     [
-        ("float", [1.0, 2.0, 3.0], "__getitem__", 2.0, {"index": 1}),
-        ("float", [1.0, 2.0, 3.0], "get", 2.0, {"index": 1}),
-        ("int", [1, 2, 3], "__getitem__", 1, {"index": 0}),
-        ("int", [1, 2, 3], "get", 1, {"index": 0}),
-        ("bool", [True, False, True], "__getitem__", True, {"index": 2}),
-        ("bool", [True, False, True], "get", True, {"index": 2}),
+        ('__getitem__', 'bool', [True, False, True], True, {'index': 2}),
+        ('__getitem__', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
+        ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
+        ('get', 'bool', [True, False, True], True, {'index': 2}),
+        ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
+        ('get', 'int', [1, 2, 3], 1, {'index': 0}),
     ],
 )
 def test_methods_with_args(
@@ -88,17 +67,4 @@ def test_methods_with_args(
 ):
     arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
-    if hasattr(result, "to_list"):
-        result = result.to_list()
-    msg = (
-        f"dtype - {dtype}"
-        + f" test_method - {test_method}"
-        + f" result - {result}"
-        + f" expected - {expected_value}"
-    )
-    if isinstance(result, abc.Iterable):
-        for x, y in zip(result, expected_value):
-            assert type(x) == type(y) and x == y, msg
-    else:
-        assert type(result) == type(expected_value), msg
-        assert result == expected_value, msg
+    check_test_result(dtype, test_method, result, expected_value)
