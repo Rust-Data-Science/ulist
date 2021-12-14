@@ -88,6 +88,12 @@ class UltraFastList:
     def add_scala(self, num: NUM_TYPE) -> "UltraFastList":
         return UltraFastList(self._values.add_scala(num))
 
+    def all(self) -> bool:
+        return self._values.all()
+
+    def any(self) -> bool:
+        return self._values.any()
+
     def copy(self) -> "UltraFastList":
         return UltraFastList(self._values.copy())
 

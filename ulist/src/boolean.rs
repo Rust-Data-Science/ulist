@@ -17,6 +17,14 @@ impl BooleanList {
         BooleanList { _values: vec }
     }
 
+    pub fn all(&self) -> bool {
+        self.values().iter().all(|&x| x)
+    }
+
+    pub fn any(&self) -> bool {
+        self.values().iter().any(|&x| x)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
     }
