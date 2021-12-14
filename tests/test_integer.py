@@ -5,9 +5,6 @@ import pytest
 import ulist as ul
 from ulist.utils import check_test_result
 
-NUM_TYPE = Union[float, int]
-LIST_TYPE = Union[List[float], List[int]]
-
 
 @pytest.mark.parametrize(
     "test_method, nums, expected_value, kwargs",
@@ -40,8 +37,8 @@ LIST_TYPE = Union[List[float], List[int]]
 )
 def test_methods(
     test_method: str,
-    nums: List[NUM_TYPE],
-    expected_value: LIST_TYPE,
+    nums: List[int],
+    expected_value: List[bool],
     kwargs: dict,
 ):
     dtype = "int"
@@ -61,8 +58,8 @@ def test_methods(
 )
 def test_operators(
     test_method: Callable,
-    nums: List[NUM_TYPE],
-    expected_value: LIST_TYPE,
+    nums: List[int],
+    expected_value: List[bool],
     kwargs: dict,
 ):
     dtype = "int"

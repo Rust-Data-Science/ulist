@@ -4,8 +4,9 @@ import pytest
 import ulist as ul
 from ulist.utils import check_test_result
 
-NUM_TYPE = Union[float, int]
-LIST_TYPE = Union[List[float], List[int]]
+NUM_TYPE = Union[float, int, bool]
+LIST_TYPE = Union[List[float], List[int], List[bool]]
+NUM_OR_LIST_TYPE = Union[NUM_TYPE, LIST_TYPE]
 
 
 @pytest.mark.parametrize(
@@ -39,8 +40,8 @@ LIST_TYPE = Union[List[float], List[int]]
 def test_methods_no_arg(
     test_method: str,
     dtype: str,
-    nums: List[NUM_TYPE],
-    expected_value: LIST_TYPE,
+    nums: LIST_TYPE,
+    expected_value: NUM_OR_LIST_TYPE,
 ):
     arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)()
@@ -61,8 +62,8 @@ def test_methods_no_arg(
 def test_methods_with_args(
     test_method: str,
     dtype: str,
-    nums: List[NUM_TYPE],
-    expected_value: LIST_TYPE,
+    nums: LIST_TYPE,
+    expected_value: NUM_OR_LIST_TYPE,
     kwargs: dict,
 ):
     arr = ul.from_iter(nums, dtype)

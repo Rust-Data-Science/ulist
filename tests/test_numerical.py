@@ -25,7 +25,7 @@ LIST_TYPE = Union[List[float], List[int]]
 def test_statistics_methods(
     test_method: str,
     dtype: str,
-    nums: List[NUM_TYPE],
+    nums: LIST_TYPE,
     expected_value: NUM_TYPE,
 ) -> None:
     arr = ul.from_iter(nums, dtype)
@@ -83,7 +83,7 @@ def test_statistics_methods(
 def test_data_process_methods(
     test_method: str,
     dtype: str,
-    nums: List[NUM_TYPE],
+    nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
@@ -111,9 +111,9 @@ def test_data_process_methods(
 )
 def test_filter(
     dtype: str,
-    nums: List[NUM_TYPE],
+    nums: LIST_TYPE,
     expected_value: LIST_TYPE,
-    condition: list,
+    condition: List[bool],
 ):
     arr = ul.from_iter(nums, dtype)
     cond = ul.from_iter(condition, dtype="bool")
