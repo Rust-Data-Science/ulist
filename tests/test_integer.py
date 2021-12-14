@@ -39,8 +39,8 @@ LIST_TYPE = Union[List[float], List[int]]
     ],
 )
 def test_methods(
-    nums: List[NUM_TYPE],
     test_method: str,
+    nums: List[NUM_TYPE],
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
@@ -60,8 +60,8 @@ def test_methods(
     ],
 )
 def test_operators(
-    nums: List[NUM_TYPE],
     test_method: Callable,
+    nums: List[NUM_TYPE],
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):

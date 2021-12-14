@@ -37,9 +37,9 @@ LIST_TYPE = Union[List[float], List[int]]
     ],
 )
 def test_methods_no_arg(
+    test_method: str,
     dtype: str,
     nums: List[NUM_TYPE],
-    test_method: str,
     expected_value: LIST_TYPE,
 ):
     arr = ul.from_iter(nums, dtype)
@@ -59,9 +59,9 @@ def test_methods_no_arg(
     ],
 )
 def test_methods_with_args(
+    test_method: str,
     dtype: str,
     nums: List[NUM_TYPE],
-    test_method: str,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
