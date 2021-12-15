@@ -142,6 +142,9 @@ class UltraFastList:
     def mul_scala(self, num: NUM_TYPE) -> "UltraFastList":
         return UltraFastList(self._values.mul_scala(num))
 
+    def not_(self) -> "UltraFastList":
+        return UltraFastList(self._values.not_())
+
     def not_equal_scala(self, num: int) -> "UltraFastList":
         return UltraFastList(self._values.not_equal_scala(num))
 

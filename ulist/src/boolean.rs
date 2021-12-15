@@ -42,6 +42,11 @@ impl BooleanList {
         }
     }
 
+    pub fn not_(&self) -> Self {
+        let vec = self.values().iter().map(|&x| !x).collect();
+        BooleanList::new(vec)
+    }
+
     pub fn or_(&self, other: &Self) -> Self {
         _logical_operate(&self, &other, |x, y| x || y)
     }

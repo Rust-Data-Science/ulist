@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 import pytest
 import ulist as ul
@@ -38,12 +38,17 @@ from ulist.utils import check_test_result
             [True, True, True],
             True,
         ),
+        (
+            "not_",
+            [True, False],
+            [False, True],
+        ),
     ],
 )
 def test_methods(
     test_method: str,
     nums: List[bool],
-    expected_value: bool,
+    expected_value: Union[bool, List[bool]],
 ):
     dtype = "bool"
     arr = ul.from_iter(nums, dtype=dtype)
