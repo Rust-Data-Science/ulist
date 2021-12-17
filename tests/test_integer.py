@@ -1,5 +1,5 @@
 import operator as op
-from typing import Callable, List, Union
+from typing import Callable, List
 
 import pytest
 import ulist as ul
