@@ -1,4 +1,5 @@
-from typing import List, Union
+import operator as op
+from typing import List, Optional, Union, Callable
 
 import pytest
 import ulist as ul
@@ -83,4 +84,43 @@ def test_methods_with_args(
     arr1 = ul.from_iter(nums, dtype=dtype)
     arr2 = ul.from_iter(other, dtype=dtype)
     result = getattr(arr1, test_method)(arr2)
+    check_test_result(dtype, test_method, result, expected_value)
+
+
+@pytest.mark.parametrize(
+    "test_method, nums, other, expected_value",
+    [
+        (
+            op.and_,
+            [True, True, False, False],
+            [True, False, True, False],
+            [True, False, False, False],
+        ),
+        (
+            op.invert,
+            [True, False],
+            None,
+            [False, True],
+        ),
+        (
+            op.or_,
+            [True, True, False, False],
+            [True, False, True, False],
+            [True, True, True, False],
+        ),
+    ],
+)
+def test_operators(
+    test_method: Callable,
+    nums: List[bool],
+    other: Optional[List[bool]],
+    expected_value: List[bool],
+):
+    dtype = "bool"
+    arr1 = ul.from_iter(nums, dtype)
+    if other is not None:
+        arr2 = ul.from_iter(other, dtype)
+        result = test_method(arr1, arr2)
+    else:
+        result = test_method(arr1)
     check_test_result(dtype, test_method, result, expected_value)
