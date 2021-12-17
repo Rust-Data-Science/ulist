@@ -1,12 +1,9 @@
 import operator as op
-from typing import Callable, List, Union
+from typing import Callable, List
 
 import pytest
 import ulist as ul
 from ulist.utils import check_test_result
-
-NUM_TYPE = Union[float, int]
-LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
@@ -39,9 +36,9 @@ LIST_TYPE = Union[List[float], List[int]]
     ],
 )
 def test_methods(
-    nums: List[NUM_TYPE],
     test_method: str,
-    expected_value: LIST_TYPE,
+    nums: List[int],
+    expected_value: List[bool],
     kwargs: dict,
 ):
     dtype = "int"
@@ -60,9 +57,9 @@ def test_methods(
     ],
 )
 def test_operators(
-    nums: List[NUM_TYPE],
     test_method: Callable,
-    expected_value: LIST_TYPE,
+    nums: List[int],
+    expected_value: List[bool],
     kwargs: dict,
 ):
     dtype = "int"

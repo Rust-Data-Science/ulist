@@ -23,9 +23,9 @@ LIST_TYPE = Union[List[float], List[int]]
     ],
 )
 def test_statistics_methods(
-    dtype: str,
-    nums: List[NUM_TYPE],
     test_method: str,
+    dtype: str,
+    nums: LIST_TYPE,
     expected_value: NUM_TYPE,
 ) -> None:
     arr = ul.from_iter(nums, dtype)
@@ -81,9 +81,9 @@ def test_statistics_methods(
     ],
 )
 def test_data_process_methods(
-    dtype: str,
-    nums: List[NUM_TYPE],
     test_method: str,
+    dtype: str,
+    nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
@@ -111,9 +111,9 @@ def test_data_process_methods(
 )
 def test_filter(
     dtype: str,
-    nums: List[NUM_TYPE],
+    nums: LIST_TYPE,
     expected_value: LIST_TYPE,
-    condition: list,
+    condition: List[bool],
 ):
     arr = ul.from_iter(nums, dtype)
     cond = ul.from_iter(condition, dtype="bool")
@@ -280,9 +280,9 @@ def test_filter(
 
 )
 def test_arithmetic_methods(
+    test_method: str,
     dtype: str,
     nums: List[NUM_TYPE],
-    test_method: str,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
@@ -443,9 +443,9 @@ def test_arithmetic_methods(
     ],
 )
 def test_operators(
+    test_method: Callable,
     dtype: str,
     nums: List[NUM_TYPE],
-    test_method: Callable,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):

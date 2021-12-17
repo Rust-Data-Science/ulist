@@ -15,8 +15,8 @@ impl FloatList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    fn new(vec: Vec<f32>) -> Self {
-        List::_new(vec)
+    pub fn new(vec: Vec<f32>) -> Self {
+        FloatList { _values: vec }
     }
 
     pub fn add(&self, other: &Self) -> Self {
@@ -33,12 +33,12 @@ impl FloatList {
 
     pub fn div(&self, other: &Self) -> Self {
         let vec = NumericalList::div(self, other);
-        List::_new(vec)
+        FloatList::new(vec)
     }
 
     pub fn div_scala(&self, num: f32) -> Self {
         let vec = NumericalList::div_scala(self, num);
-        List::_new(vec)
+        FloatList::new(vec)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
