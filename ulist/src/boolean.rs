@@ -67,7 +67,7 @@ impl BooleanList {
     }
 }
 
-impl<'a> List<bool> for BooleanList {
+impl List<bool> for BooleanList {
     fn _new(vec: Vec<bool>) -> Self {
         Self {
             _values: RefCell::new(vec),
