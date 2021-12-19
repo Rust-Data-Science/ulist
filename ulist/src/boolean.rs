@@ -58,6 +58,10 @@ impl BooleanList {
         _logical_operate(&self, &other, |x, y| x || y)
     }
 
+    pub fn pop(&self) {
+        List::pop(self);
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }

@@ -88,6 +88,10 @@ impl FloatList {
         NumericalList::mul_scala(self, num)
     }
 
+    pub fn pop(&self) {
+        List::pop(self);
+    }
+
     pub fn pow_scala(&self, num: usize) -> Self {
         NumericalList::pow_scala(self, num)
     }

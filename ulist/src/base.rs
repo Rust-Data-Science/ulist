@@ -25,6 +25,10 @@ where
         self.values()[index].clone()
     }
 
+    fn pop(&self) {
+        self.values_mut().pop();
+    }
+
     fn size(&self) -> usize {
         self.values().len()
     }

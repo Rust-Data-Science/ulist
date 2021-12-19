@@ -163,6 +163,9 @@ class UltraFastList:
     def or_(self, other: "UltraFastList") -> "UltraFastList":
         return UltraFastList(self._values.or_(other._values))
 
+    def pop(self) -> None:
+        self._values.pop()
+
     def pow_scala(self, num: int) -> "UltraFastList":
         return UltraFastList(self._values.pow_scala(num))
 

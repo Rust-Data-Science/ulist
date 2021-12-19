@@ -105,6 +105,10 @@ impl IntegerList {
         BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
     }
 
+    pub fn pop(&self) {
+        List::pop(self);
+    }
+
     pub fn pow_scala(&self, num: usize) -> Self {
         NumericalList::pow_scala(self, num)
     }

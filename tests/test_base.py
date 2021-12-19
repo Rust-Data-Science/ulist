@@ -77,6 +77,9 @@ def test_methods_with_args(
         ('append', 'bool', [True], [True, False], {'num': False}),
         ('append', 'float', [1.0], [1.0, 2.0], {'num': 2.0}),
         ('append', 'int', [1], [1, 2], {'num': 2}),
+        ('pop', 'bool', [True, False], [True], {}),
+        ('pop', 'float', [1.0, 2.0], [1.0], {}),
+        ('pop', 'int', [1, 2], [1], {}),
     ],
 )
 def test_multable_methods(
