@@ -106,6 +106,9 @@ class UltraFastList:
     def any(self) -> bool:
         return self._values.any()
 
+    def append(self, num: NUM_TYPE) -> None:
+        self._values.append(num)
+
     def copy(self) -> "UltraFastList":
         return UltraFastList(self._values.copy())
 

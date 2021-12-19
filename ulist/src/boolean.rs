@@ -1,12 +1,15 @@
 use crate::base::List;
 use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
+use std::cell::Ref;
+use std::cell::RefCell;
+use std::cell::RefMut;
 use std::ops::Fn;
 
 /// List with boolean type elements.
 #[pyclass]
 pub struct BooleanList {
-    _values: Vec<bool>,
+    _values: RefCell<Vec<bool>>,
 }
 
 #[pymethods]
@@ -15,7 +18,7 @@ impl BooleanList {
 
     #[new]
     pub fn new(vec: Vec<bool>) -> Self {
-        BooleanList { _values: vec }
+        List::_new(vec)
     }
 
     pub fn all(&self) -> bool {
@@ -28,6 +31,10 @@ impl BooleanList {
 
     pub fn any(&self) -> bool {
         self.values().iter().any(|&x| x)
+    }
+
+    pub fn append(&self, num: bool) {
+        List::append(self, num)
     }
 
     pub fn copy(&self) -> Self {
@@ -60,13 +67,19 @@ impl BooleanList {
     }
 }
 
-impl<'a> List<'a, bool> for BooleanList {
+impl<'a> List<bool> for BooleanList {
     fn _new(vec: Vec<bool>) -> Self {
-        Self { _values: vec }
+        Self {
+            _values: RefCell::new(vec),
+        }
     }
 
-    fn values(&self) -> &Vec<bool> {
-        &self._values
+    fn values(&self) -> Ref<Vec<bool>> {
+        self._values.borrow()
+    }
+
+    fn values_mut(&self) -> RefMut<Vec<bool>> {
+        self._values.borrow_mut()
     }
 }
 

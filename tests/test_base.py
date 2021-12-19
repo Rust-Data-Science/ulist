@@ -69,3 +69,23 @@ def test_methods_with_args(
     arr = ul.from_iter(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
+
+
+@pytest.mark.parametrize(
+    "test_method, dtype, nums, expected_value, kwargs",
+    [
+        ('append', 'bool', [True], [True, False], {'num': False}),
+        ('append', 'float', [1.0], [1.0, 2.0], {'num': 2.0}),
+        ('append', 'int', [1], [1, 2], {'num': 2}),
+    ],
+)
+def test_multable_methods(
+    test_method: str,
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_value: LIST_TYPE,
+    kwargs: dict,
+):
+    arr = ul.from_iter(nums, dtype)
+    getattr(arr, test_method)(**kwargs)
+    check_test_result(dtype, test_method, arr, expected_value)
