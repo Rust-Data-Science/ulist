@@ -21,8 +21,12 @@ where
         List::_new(self.to_list())
     }
 
-    fn get(&self, index: usize) -> T {
-        self.values()[index].clone()
+    unsafe fn get(&self, index: usize) -> T {
+        if index < self.size() {
+            self.values().get_unchecked(index).clone()
+        } else {
+            panic!("Index out of range!")
+        }
     }
 
     fn pop(&self) {

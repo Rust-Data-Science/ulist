@@ -1,5 +1,4 @@
 use crate::base::List;
-use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
@@ -41,12 +40,8 @@ impl BooleanList {
         List::copy(self)
     }
 
-    pub fn get(&self, index: usize) -> PyResult<bool> {
-        if index < self.size() {
-            Ok(List::get(self, index))
-        } else {
-            Err(PyIndexError::new_err("Index out of range!"))
-        }
+    pub unsafe fn get(&self, index: usize) -> bool {
+        List::get(self, index)
     }
 
     pub fn not_(&self) -> Self {

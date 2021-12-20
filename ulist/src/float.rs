@@ -1,7 +1,6 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::numerical::NumericalList;
-use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
@@ -52,12 +51,8 @@ impl FloatList {
         NumericalList::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> PyResult<f32> {
-        if index < self.size() {
-            Ok(List::get(self, index))
-        } else {
-            Err(PyIndexError::new_err("Index out of range!"))
-        }
+    pub unsafe fn get(&self, index: usize) -> f32 {
+        List::get(self, index)
     }
 
     pub fn greater_than_scala(&self, num: f32) -> BooleanList {
