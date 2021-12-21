@@ -74,12 +74,21 @@ def test_methods_with_args(
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
+        ('__setitem__', 'bool', [True, False], [
+            True, True], {'index': 1, 'num': True}),
+        ('__setitem__', 'float', [1.0, 2.0], [
+         1.0, 3.0], {'index': 1, 'num': 3.0}),
+        ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
         ('append', 'bool', [True], [True, False], {'num': False}),
         ('append', 'float', [1.0], [1.0, 2.0], {'num': 2.0}),
         ('append', 'int', [1], [1, 2], {'num': 2}),
         ('pop', 'bool', [True, False], [True], {}),
         ('pop', 'float', [1.0, 2.0], [1.0], {}),
         ('pop', 'int', [1, 2], [1], {}),
+        ('set', 'bool', [True, False], [
+         True, True], {'index': 1, 'num': True}),
+        ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'num': 3.0}),
+        ('set', 'int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
     ],
 )
 def test_multable_methods(
@@ -92,3 +101,32 @@ def test_multable_methods(
     arr = ul.from_iter(nums, dtype)
     getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, arr, expected_value)
+
+
+@pytest.mark.parametrize(
+    "dtype, nums, expected_value, kwargs",
+    [
+        ('bool', [True, False], [True, True], {'index': 1, 'num': True}),
+        ('float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'num': 3.0}),
+        ('int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
+    ],
+)
+def test_indexing_operations(
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_value: LIST_TYPE,
+    kwargs: dict,
+):
+    index = kwargs["index"]
+    num = kwargs["num"]
+    # Set
+    test_method = "set-item"
+    arr = ul.from_iter(nums, dtype)
+    arr[index] = num
+    check_test_result(dtype, test_method, arr, expected_value)
+
+    # Get
+    test_method = "get-item"
+    expected_value = kwargs["num"]
+    result = arr[index]
+    check_test_result(dtype, test_method, result, expected_value)

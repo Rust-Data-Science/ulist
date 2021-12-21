@@ -57,6 +57,10 @@ impl BooleanList {
         List::pop(self);
     }
 
+    pub unsafe fn set(&self, index: usize, num: bool) {
+        List::set(self, index, num)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }

@@ -108,6 +108,10 @@ impl IntegerList {
         NumericalList::pow_scala(self, num)
     }
 
+    pub unsafe fn set(&self, index: usize, num: i32) {
+        List::set(self, index, num)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }

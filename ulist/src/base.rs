@@ -33,6 +33,16 @@ where
         self.values_mut().pop();
     }
 
+    unsafe fn set(&self, index: usize, num: T) {
+        if index < self.size() {
+            let mut values = self.values_mut();
+            let element = values.get_unchecked_mut(index);
+            *element = num
+        } else {
+            panic!("Index out of range!")
+        }
+    }
+
     fn size(&self) -> usize {
         self.values().len()
     }
