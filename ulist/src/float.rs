@@ -91,6 +91,10 @@ impl FloatList {
         NumericalList::pow_scala(self, num)
     }
 
+    pub fn replace(&self, old: f32, new: f32) {
+        List::replace(self, old, &new)
+    }
+
     pub unsafe fn set(&self, index: usize, num: f32) {
         List::set(self, index, num)
     }

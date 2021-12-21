@@ -1,12 +1,14 @@
 use std::cell::Ref;
 use std::cell::RefMut;
 use std::clone::Clone;
+use std::cmp::PartialEq;
+use std::marker::Copy;
 use std::marker::Sized;
 
 /// Abstract List with generic type elements.
 pub trait List<T>
 where
-    T: Clone,
+    T: Clone + PartialEq + Copy,
     Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
@@ -31,6 +33,14 @@ where
 
     fn pop(&self) {
         self.values_mut().pop();
+    }
+
+    fn replace(&self, old: T, new: &T) {
+        for element in self.values_mut().iter_mut() {
+            if *element == old {
+                *element = *new;
+            }
+        }
     }
 
     unsafe fn set(&self, index: usize, num: T) {

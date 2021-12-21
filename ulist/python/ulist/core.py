@@ -172,6 +172,9 @@ class UltraFastList:
     def pow_scala(self, num: int) -> "UltraFastList":
         return UltraFastList(self._values.pow_scala(num))
 
+    def replace(self, old: NUM_TYPE, new: NUM_TYPE) -> None:
+        return self._values.replace(old, new)
+
     def set(self, index: int, num: NUM_TYPE) -> None:
         self._values.set(index, num)
 

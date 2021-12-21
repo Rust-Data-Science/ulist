@@ -112,6 +112,10 @@ impl IntegerList {
         List::set(self, index, num)
     }
 
+    pub fn replace(&self, old: i32, new: i32) {
+        List::replace(self, old, &new)
+    }
+
     pub fn size(&self) -> usize {
         List::size(self)
     }

@@ -3,7 +3,6 @@ use crate::boolean::BooleanList;
 use num::traits::pow::pow;
 use num::traits::AsPrimitive;
 use num::One;
-use std::cmp::PartialEq;
 use std::cmp::PartialOrd;
 use std::ops::Add;
 use std::ops::Div;
@@ -15,7 +14,6 @@ use std::ops::Sub;
 pub trait NumericalList<T>: List<T>
 where
     T: AsPrimitive<f32>
-        + PartialEq
         + PartialOrd
         + Add<Output = T>
         + Sub<Output = T>
