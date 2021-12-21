@@ -76,6 +76,9 @@ class UltraFastList:
     def __pow__(self, other: int) -> "UltraFastList":
         return self._arithmetic_method(other, lambda: None, self.pow_scala)
 
+    def __setitem__(self, index: int, num: NUM_TYPE) -> None:
+        self._values.set(index, num)
+
     def __str__(self) -> str:
         n = self.size()
         if n < 100:
@@ -105,6 +108,9 @@ class UltraFastList:
 
     def any(self) -> bool:
         return self._values.any()
+
+    def append(self, num: NUM_TYPE) -> None:
+        self._values.append(num)
 
     def copy(self) -> "UltraFastList":
         return UltraFastList(self._values.copy())
@@ -160,8 +166,17 @@ class UltraFastList:
     def or_(self, other: "UltraFastList") -> "UltraFastList":
         return UltraFastList(self._values.or_(other._values))
 
+    def pop(self) -> None:
+        self._values.pop()
+
     def pow_scala(self, num: int) -> "UltraFastList":
         return UltraFastList(self._values.pow_scala(num))
+
+    def replace(self, old: NUM_TYPE, new: NUM_TYPE) -> None:
+        return self._values.replace(old, new)
+
+    def set(self, index: int, num: NUM_TYPE) -> None:
+        self._values.set(index, num)
 
     def size(self) -> int:
         return self._values.size()

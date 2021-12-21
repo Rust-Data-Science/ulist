@@ -2,13 +2,15 @@ use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
 use crate::numerical::NumericalList;
-use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
+use std::cell::Ref;
+use std::cell::RefCell;
+use std::cell::RefMut;
 
 /// List with integer type elements.
 #[pyclass]
 pub struct IntegerList {
-    _values: Vec<i32>,
+    _values: RefCell<Vec<i32>>,
 }
 
 #[pymethods]
@@ -17,7 +19,7 @@ impl IntegerList {
 
     #[new]
     fn new(vec: Vec<i32>) -> Self {
-        IntegerList { _values: vec }
+        List::_new(vec)
     }
 
     pub fn add(&self, other: &Self) -> Self {
@@ -26,6 +28,10 @@ impl IntegerList {
 
     pub fn add_scala(&self, num: i32) -> Self {
         NumericalList::add_scala(self, num)
+    }
+
+    pub fn append(&self, num: i32) {
+        List::append(self, num)
     }
 
     pub fn copy(&self) -> Self {
@@ -50,12 +56,8 @@ impl IntegerList {
         NumericalList::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> PyResult<i32> {
-        if index < self.size() {
-            Ok(List::get(self, index))
-        } else {
-            Err(PyIndexError::new_err("Index out of range!"))
-        }
+    pub unsafe fn get(&self, index: usize) -> i32 {
+        List::get(self, index)
     }
 
     pub fn greater_than_or_equal_scala(&self, num: i32) -> BooleanList {
@@ -98,8 +100,20 @@ impl IntegerList {
         BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
     }
 
+    pub fn pop(&self) {
+        List::pop(self);
+    }
+
     pub fn pow_scala(&self, num: usize) -> Self {
         NumericalList::pow_scala(self, num)
+    }
+
+    pub unsafe fn set(&self, index: usize, num: i32) {
+        List::set(self, index, num)
+    }
+
+    pub fn replace(&self, old: i32, new: i32) {
+        List::replace(self, old, &new)
     }
 
     pub fn size(&self) -> usize {
@@ -131,17 +145,23 @@ impl IntegerList {
     }
 }
 
-impl<'a> List<'a, i32> for IntegerList {
+impl List<i32> for IntegerList {
     fn _new(vec: Vec<i32>) -> Self {
-        Self { _values: vec }
+        Self {
+            _values: RefCell::new(vec),
+        }
     }
 
-    fn values(&self) -> &Vec<i32> {
-        &self._values
+    fn values(&self) -> Ref<Vec<i32>> {
+        self._values.borrow()
+    }
+
+    fn values_mut(&self) -> RefMut<Vec<i32>> {
+        self._values.borrow_mut()
     }
 }
 
-impl<'a> NumericalList<'a, i32> for IntegerList {
+impl NumericalList<i32> for IntegerList {
     fn _sort(&self, vec: &mut Vec<i32>, ascending: bool) {
         if ascending {
             vec.sort();
@@ -150,7 +170,7 @@ impl<'a> NumericalList<'a, i32> for IntegerList {
         }
     }
 
-    fn div(&'a self, other: &'a Self) -> Vec<f32> {
+    fn div(&self, other: &Self) -> Vec<f32> {
         self.values()
             .iter()
             .zip(other.values().iter())
@@ -158,15 +178,19 @@ impl<'a> NumericalList<'a, i32> for IntegerList {
             .collect()
     }
 
-    fn div_scala(&'a self, num: f32) -> Vec<f32> {
+    fn div_scala(&self, num: f32) -> Vec<f32> {
         self.values().iter().map(|x| *x as f32 / num).collect()
     }
 
-    fn max(&'a self) -> i32 {
+    fn max(&self) -> i32 {
         *self.values().iter().max().unwrap()
     }
 
-    fn min(&'a self) -> i32 {
+    fn min(&self) -> i32 {
         *self.values().iter().min().unwrap()
+    }
+
+    fn sum(&self) -> i32 {
+        self.values().iter().sum()
     }
 }

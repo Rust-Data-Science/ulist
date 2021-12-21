@@ -4,7 +4,7 @@ FROM konstin2/maturin
 # i.e. gh_username=myname
 ARG gh_username=tushushu
 ARG ulist_home="/home/ulist"
-ARG branch="release-0.3.0"
+ARG branch="release-0.4.0"
 
 # Clone ulist repo
 RUN mkdir "$ulist_home" \

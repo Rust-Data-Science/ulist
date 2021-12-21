@@ -1,13 +1,15 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::numerical::NumericalList;
-use pyo3::exceptions::PyIndexError;
 use pyo3::prelude::*;
+use std::cell::Ref;
+use std::cell::RefCell;
+use std::cell::RefMut;
 
 /// List with float type elements.
 #[pyclass]
 pub struct FloatList {
-    _values: Vec<f32>,
+    _values: RefCell<Vec<f32>>,
 }
 
 #[pymethods]
@@ -16,7 +18,7 @@ impl FloatList {
 
     #[new]
     pub fn new(vec: Vec<f32>) -> Self {
-        FloatList { _values: vec }
+        List::_new(vec)
     }
 
     pub fn add(&self, other: &Self) -> Self {
@@ -25,6 +27,10 @@ impl FloatList {
 
     pub fn add_scala(&self, num: f32) -> Self {
         NumericalList::add_scala(self, num)
+    }
+
+    pub fn append(&self, num: f32) {
+        List::append(self, num)
     }
 
     pub fn copy(&self) -> Self {
@@ -45,12 +51,8 @@ impl FloatList {
         NumericalList::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> PyResult<f32> {
-        if index < self.size() {
-            Ok(List::get(self, index))
-        } else {
-            Err(PyIndexError::new_err("Index out of range!"))
-        }
+    pub unsafe fn get(&self, index: usize) -> f32 {
+        List::get(self, index)
     }
 
     pub fn greater_than_scala(&self, num: f32) -> BooleanList {
@@ -81,8 +83,20 @@ impl FloatList {
         NumericalList::mul_scala(self, num)
     }
 
+    pub fn pop(&self) {
+        List::pop(self);
+    }
+
     pub fn pow_scala(&self, num: usize) -> Self {
         NumericalList::pow_scala(self, num)
+    }
+
+    pub fn replace(&self, old: f32, new: f32) {
+        List::replace(self, old, &new)
+    }
+
+    pub unsafe fn set(&self, index: usize, num: f32) {
+        List::set(self, index, num)
     }
 
     pub fn size(&self) -> usize {
@@ -114,17 +128,23 @@ impl FloatList {
     }
 }
 
-impl<'a> List<'a, f32> for FloatList {
+impl List<f32> for FloatList {
     fn _new(vec: Vec<f32>) -> Self {
-        Self { _values: vec }
+        Self {
+            _values: RefCell::new(vec),
+        }
     }
 
-    fn values(&self) -> &Vec<f32> {
-        &self._values
+    fn values(&self) -> Ref<Vec<f32>> {
+        self._values.borrow()
+    }
+
+    fn values_mut(&self) -> RefMut<Vec<f32>> {
+        self._values.borrow_mut()
     }
 }
 
-impl<'a> NumericalList<'a, f32> for FloatList {
+impl NumericalList<f32> for FloatList {
     fn _sort(&self, vec: &mut Vec<f32>, ascending: bool) {
         if ascending {
             vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -133,7 +153,7 @@ impl<'a> NumericalList<'a, f32> for FloatList {
         }
     }
 
-    fn div(&'a self, other: &Self) -> Vec<f32> {
+    fn div(&self, other: &Self) -> Vec<f32> {
         self.values()
             .iter()
             .zip(other.values().iter())
@@ -141,17 +161,21 @@ impl<'a> NumericalList<'a, f32> for FloatList {
             .collect()
     }
 
-    fn div_scala(&'a self, num: f32) -> Vec<f32> {
+    fn div_scala(&self, num: f32) -> Vec<f32> {
         self.values().iter().map(|x| *x / num).collect()
     }
 
-    fn max(&'a self) -> f32 {
+    fn max(&self) -> f32 {
         self.values()
             .iter()
             .fold(f32::NEG_INFINITY, |x, &y| x.max(y))
     }
 
-    fn min(&'a self) -> f32 {
+    fn min(&self) -> f32 {
         self.values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
+    }
+
+    fn sum(&self) -> f32 {
+        self.values().iter().sum()
     }
 }
