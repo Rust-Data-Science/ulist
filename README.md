@@ -77,18 +77,14 @@ The docker images are saved in https://hub.docker.com/repository/docker/tushushu
 
 
 ### Wish-list
-* `sum`, `any`, and `all` methods for `BooleanList`
+* `sum` method for `BooleanList`
 * `map`, `where` methods for `NumericalList`
 * `zip` method for `List` and `ListPair` class
 * `agg` method for `ListPair`
 * `StringList` or `BytesList` class
 * More construction methods for `List`
-* Logical operators for `BooleanList`
-* Comparison operators `NumericalList`
 * Airspeed velocity to benchmark
 * Docstrings for python methods
 * Automatically generate documentation
-* More boundary check logics
 * Mypy linting
-* Stub files
-* Further optimizing the benchmark with ASM
+* Further optimizing the benchmark with SIMD
