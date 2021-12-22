@@ -1,7 +1,6 @@
 from collections import abc
 from typing import List, Union
 
-
 import ulist as ul
 
 NUM_TYPE = Union[float, int]

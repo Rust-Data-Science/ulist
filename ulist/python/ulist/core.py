@@ -1,5 +1,6 @@
-from .ulist import FloatList, IntegerList, BooleanList
-from typing import Iterable, Union, List, Callable
+from typing import Callable, Iterable, List, Union
+
+from .ulist import BooleanList, FloatList, IntegerList
 
 NUM_TYPE = Union[int, float]
 LIST_TYPE = Union[FloatList, IntegerList, BooleanList]
