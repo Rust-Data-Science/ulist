@@ -1,5 +1,11 @@
-# ulist
-Ultra fast list data structures written in Rust with Python bindings.
+# ulist: Ultra fast list data structures written in Rust with Python bindings.
+
+
+![PyPI](https://img.shields.io/pypi/v/ulist)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ulist)
+![License](https://img.shields.io/github/license/tushushu/ulist)
+![PyPI - Format](https://img.shields.io/pypi/format/ulist)
+![Code Style](https://img.shields.io/badge/code%20style-flake8-blue)
 
 
 ### Install
