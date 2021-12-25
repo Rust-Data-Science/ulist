@@ -1,17 +1,16 @@
 from collections import abc
-from typing import List, Union
+from typing import Callable, Union
 
 import ulist as ul
 
-NUM_TYPE = Union[float, int]
-LIST_TYPE = Union[List[float], List[int]]
+from .typedef import ELEM, LIST_PY
 
 
 def check_test_result(
     dtype: str,
-    test_method: str,
-    result: Union[NUM_TYPE, LIST_TYPE, ul.UltraFastList],
-    expected_value: LIST_TYPE,
+    test_method: Union[Callable, str],
+    result: Union[ELEM, LIST_PY, ul.UltraFastList],
+    expected_value: Union[ELEM, LIST_PY],
 ):
     msg = (
         f"dtype - {dtype}"
@@ -19,9 +18,10 @@ def check_test_result(
         + f" result - {result}"
         + f" expected - {expected_value}"
     )
-    if hasattr(result, "to_list"):
+    if isinstance(result, ul.UltraFastList):
         result = result.to_list()
-    if isinstance(result, abc.Iterable):
+    if isinstance(result, abc.Iterable) and \
+            isinstance(expected_value, abc.Iterable):
         for x, y in zip(result, expected_value):
             assert type(x) == type(y) and x == y, msg
     else:
