@@ -9,7 +9,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# MacOS
+
 jobs:
   macos:
     runs-on: macos-latest
@@ -41,9 +41,8 @@ jobs:
           cd tests
           sh run.sh
 
-# Linux
-jobs:
-  macos:
+
+  linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
