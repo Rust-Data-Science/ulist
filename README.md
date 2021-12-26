@@ -72,3 +72,6 @@ print(result)
 * Automatically generate documentation
 * Mypy linting
 * Further optimizing the benchmark with SIMD
+
+### Contribute
+All contributions are welcome. See [Developer Guide](https://github.com/tushushu/ulist/blob/main/develop.md)
