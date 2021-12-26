@@ -2,8 +2,8 @@
 
 
 ![PyPI](https://img.shields.io/pypi/v/ulist)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ulist)
 ![License](https://img.shields.io/github/license/tushushu/ulist)
+![CI](https://github.com/tushushu/ulist/workflows/CI/badge.svg)
 ![PyPI - Format](https://img.shields.io/pypi/format/ulist)
 ![Code Style](https://img.shields.io/badge/code%20style-flake8-blue)
 
