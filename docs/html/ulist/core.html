@@ -33,7 +33,10 @@ from .ulist import BooleanList, FloatList, IntegerList
 
 
 class UltraFastList:
-    # Arrange the following methods in alphabetical order.
+    &#34;&#34;&#34;
+    Ultra fast list data structures written in Rust with Python bindings,
+    which is abbreviated as ulist.
+    &#34;&#34;&#34;
 
     def __init__(self, values: LIST_RS) -&gt; None:
         if type(values) is FloatList:
@@ -50,6 +53,7 @@ class UltraFastList:
         self._values = values
 
     def __len__(self) -&gt; int:
+        &#34;&#34;&#34;Number of elements of self.&#34;&#34;&#34;
         return self.size()
 
     def _arithmetic_method(
@@ -64,48 +68,63 @@ class UltraFastList:
         )
 
     def __add__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self + other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.add, self.add_scala)
 
     def __and__(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &amp; other.&#34;&#34;&#34;
         return self.and_(other)
 
     def __eq__(self, other: int) -&gt; &#34;UltraFastList&#34;:  # type: ignore
+        &#34;&#34;&#34;Return self == other.&#34;&#34;&#34;
         return self.equal_scala(other)
 
     def __getitem__(self, index: int) -&gt; ELEM:
+        &#34;&#34;&#34;Return self[index].&#34;&#34;&#34;
         return self._values.get(index)
 
     def __ge__(self, other: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt;= other.&#34;&#34;&#34;
         return self.greater_than_or_equal_scala(other)
 
     def __gt__(self, other: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt; other.&#34;&#34;&#34;
         return self.greater_than_scala(other)
 
     def __invert__(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return ~self.&#34;&#34;&#34;
         return self.not_()
 
     def __le__(self, other: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt;= other.&#34;&#34;&#34;
         return self.less_than_or_equal_scala(other)
 
     def __lt__(self, other: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt; other.&#34;&#34;&#34;
         return self.less_than_scala(other)
 
     def __mul__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self * other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.mul, self.mul_scala)
 
     def __ne__(self, other: int) -&gt; &#34;UltraFastList&#34;:  # type: ignore
+        &#34;&#34;&#34;Return self != other.&#34;&#34;&#34;
         return self.not_equal_scala(other)
 
     def __or__(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self | other.&#34;&#34;&#34;
         return self.or_(other)
 
     def __pow__(self, other: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self ** other.&#34;&#34;&#34;
         return self._arithmetic_method(other, lambda: None, self.pow_scala)
 
     def __setitem__(self, index: int, num: ELEM) -&gt; None:
+        &#34;&#34;&#34;Set self[index] to num.&#34;&#34;&#34;
         self._values.set(index, num)
 
     def __str__(self) -&gt; str:
+        &#34;&#34;&#34;Return str(self).&#34;&#34;&#34;
         n = self.size()
         if n &lt; 100:
             return f&#34;UltraFastList({str(self.to_list())})&#34;
@@ -115,152 +134,208 @@ class UltraFastList:
         )
 
     def __sub__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self - other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.sub, self.sub_scala)
 
     def __truediv__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self / other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.div, self.div_scala)
 
     def add(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self + other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.add(other._values))
 
     def add_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self + num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.add_scala(num))
 
     def all(self) -&gt; bool:
+        &#34;&#34;&#34;Whether all the elements of self are True.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         return self._values.all()
 
     def and_(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &amp; other.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         assert isinstance(other._values, BooleanList)
         return UltraFastList(self._values.and_(other._values))
 
     def any(self) -&gt; bool:
+        &#34;&#34;&#34;Whether any element of self is True.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         return self._values.any()
 
     def append(self, num: ELEM) -&gt; None:
+        &#34;&#34;&#34;Adds a new element at the end of the self.&#34;&#34;&#34;
         self._values.append(num)
 
     def copy(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return a ulist copy of self.&#34;&#34;&#34;
         return UltraFastList(self._values.copy())
 
     def div(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self / other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.div(other._values))
 
     def div_scala(self, num: float) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self / num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.div_scala(num))
 
     def equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self == num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.equal_scala(num))
 
     def filter(self, condition: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;
+        According to the condition, return a ulist with elements of self
+        correspondingly.
+        &#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert isinstance(condition._values, BooleanList)
         return UltraFastList(self._values.filter(condition._values))
 
     def get(self, index: int) -&gt; ELEM:
+        &#34;&#34;&#34;Return self[index].&#34;&#34;&#34;
         return self._values.get(index)
 
     def greater_than_or_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt;= num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.greater_than_or_equal_scala(num))
 
     def greater_than_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt; num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.greater_than_scala(num))
 
     def less_than_or_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt;= num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.less_than_or_equal_scala(num))
 
     def less_than_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt; num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.less_than_scala(num))
 
     def max(self) -&gt; NUM:
+        &#34;&#34;&#34;Return the maximum of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.max()
 
     def mean(self) -&gt; float:
+        &#34;&#34;&#34;Return the mean of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.mean()
 
     def min(self) -&gt; NUM:
+        &#34;&#34;&#34;Return the minimum of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.min()
 
     def mul(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self * other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.mul(other._values))
 
     def mul_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self * num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.mul_scala(num))
 
     def not_(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return ~self.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         return UltraFastList(self._values.not_())
 
     def not_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self != num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.not_equal_scala(num))
 
     def or_(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self | other.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         assert isinstance(other._values, BooleanList)
         return UltraFastList(self._values.or_(other._values))
 
     def pop(self) -&gt; None:
+        &#34;&#34;&#34;Removes the last element of self.&#34;&#34;&#34;
         self._values.pop()
 
     def pow_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self ** num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.pow_scala(num))
 
     def replace(self, old: ELEM, new: ELEM) -&gt; None:
+        &#34;&#34;&#34;Replace the old elements of self with the new one.&#34;&#34;&#34;
         self._values.replace(old, new)
 
     def set(self, index: int, num: ELEM) -&gt; None:
+        &#34;&#34;&#34;Set self[index] to num.&#34;&#34;&#34;
         self._values.set(index, num)
 
     def size(self) -&gt; int:
+        &#34;&#34;&#34;Number of elements of self.&#34;&#34;&#34;
         return self._values.size()
 
     def sort(self, ascending: bool) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return a sorted copy of self.
+
+        Args:
+            ascending (bool): Ascending or descending.
+
+        Returns:
+            UltraFastList: The sorted ulist.
+        &#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.sort(ascending=ascending))
 
     def sub(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self - other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.sub(other._values))
 
     def sub_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self - num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.sub_scala(num))
 
     def sum(self) -&gt; NUM:
+        &#34;&#34;&#34;Return the sum of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.sum()
 
     def to_list(self) -&gt; LIST_PY:
+        &#34;&#34;&#34;Return a list with the elements of self.&#34;&#34;&#34;
         return self._values.to_list()
 
     def unique(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Returns the sorted unique elements of self. &#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.unique())
 
 
-def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
+def from_iter(obj: Iterable, dtype: str) -&gt; UltraFastList:
+    &#34;&#34;&#34;Construct a ulist object from iterable object.
+
+    Args:
+        obj (Iterable): Iterable object such as list, set and range.
+        dtype (str): &#39;int&#39;, &#39;float&#39; or &#39;bool&#39;.
+
+    Returns:
+        UltraFastList: A ulist object.
+    &#34;&#34;&#34;
     if dtype == &#34;int&#34;:
         return UltraFastList(IntegerList(obj))
     elif dtype == &#34;float&#34;:
@@ -282,12 +357,33 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">from_iter</span></span>(<span>obj: Iterable, dtype: str) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Construct a ulist object from iterable object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>obj</code></strong> :&ensp;<code>Iterable</code></dt>
+<dd>Iterable object such as list, set and range.</dd>
+<dt><strong><code>dtype</code></strong> :&ensp;<code>str</code></dt>
+<dd>'int', 'float' or 'bool'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></code></dt>
+<dd>A ulist object.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
+<pre><code class="python">def from_iter(obj: Iterable, dtype: str) -&gt; UltraFastList:
+    &#34;&#34;&#34;Construct a ulist object from iterable object.
+
+    Args:
+        obj (Iterable): Iterable object such as list, set and range.
+        dtype (str): &#39;int&#39;, &#39;float&#39; or &#39;bool&#39;.
+
+    Returns:
+        UltraFastList: A ulist object.
+    &#34;&#34;&#34;
     if dtype == &#34;int&#34;:
         return UltraFastList(IntegerList(obj))
     elif dtype == &#34;float&#34;:
@@ -308,13 +404,17 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>(</span><span>values: Union[FloatList, IntegerList, BooleanList])</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Ultra fast list data structures written in Rust with Python bindings,
+which is abbreviated as ulist.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class UltraFastList:
-    # Arrange the following methods in alphabetical order.
+    &#34;&#34;&#34;
+    Ultra fast list data structures written in Rust with Python bindings,
+    which is abbreviated as ulist.
+    &#34;&#34;&#34;
 
     def __init__(self, values: LIST_RS) -&gt; None:
         if type(values) is FloatList:
@@ -331,6 +431,7 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
         self._values = values
 
     def __len__(self) -&gt; int:
+        &#34;&#34;&#34;Number of elements of self.&#34;&#34;&#34;
         return self.size()
 
     def _arithmetic_method(
@@ -345,48 +446,63 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
         )
 
     def __add__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self + other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.add, self.add_scala)
 
     def __and__(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &amp; other.&#34;&#34;&#34;
         return self.and_(other)
 
     def __eq__(self, other: int) -&gt; &#34;UltraFastList&#34;:  # type: ignore
+        &#34;&#34;&#34;Return self == other.&#34;&#34;&#34;
         return self.equal_scala(other)
 
     def __getitem__(self, index: int) -&gt; ELEM:
+        &#34;&#34;&#34;Return self[index].&#34;&#34;&#34;
         return self._values.get(index)
 
     def __ge__(self, other: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt;= other.&#34;&#34;&#34;
         return self.greater_than_or_equal_scala(other)
 
     def __gt__(self, other: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt; other.&#34;&#34;&#34;
         return self.greater_than_scala(other)
 
     def __invert__(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return ~self.&#34;&#34;&#34;
         return self.not_()
 
     def __le__(self, other: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt;= other.&#34;&#34;&#34;
         return self.less_than_or_equal_scala(other)
 
     def __lt__(self, other: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt; other.&#34;&#34;&#34;
         return self.less_than_scala(other)
 
     def __mul__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self * other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.mul, self.mul_scala)
 
     def __ne__(self, other: int) -&gt; &#34;UltraFastList&#34;:  # type: ignore
+        &#34;&#34;&#34;Return self != other.&#34;&#34;&#34;
         return self.not_equal_scala(other)
 
     def __or__(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self | other.&#34;&#34;&#34;
         return self.or_(other)
 
     def __pow__(self, other: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self ** other.&#34;&#34;&#34;
         return self._arithmetic_method(other, lambda: None, self.pow_scala)
 
     def __setitem__(self, index: int, num: ELEM) -&gt; None:
+        &#34;&#34;&#34;Set self[index] to num.&#34;&#34;&#34;
         self._values.set(index, num)
 
     def __str__(self) -&gt; str:
+        &#34;&#34;&#34;Return str(self).&#34;&#34;&#34;
         n = self.size()
         if n &lt; 100:
             return f&#34;UltraFastList({str(self.to_list())})&#34;
@@ -396,147 +512,194 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
         )
 
     def __sub__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self - other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.sub, self.sub_scala)
 
     def __truediv__(self, other: NUM_OR_LIST) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self / other.&#34;&#34;&#34;
         return self._arithmetic_method(other, self.div, self.div_scala)
 
     def add(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self + other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.add(other._values))
 
     def add_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self + num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.add_scala(num))
 
     def all(self) -&gt; bool:
+        &#34;&#34;&#34;Whether all the elements of self are True.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         return self._values.all()
 
     def and_(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &amp; other.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         assert isinstance(other._values, BooleanList)
         return UltraFastList(self._values.and_(other._values))
 
     def any(self) -&gt; bool:
+        &#34;&#34;&#34;Whether any element of self is True.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         return self._values.any()
 
     def append(self, num: ELEM) -&gt; None:
+        &#34;&#34;&#34;Adds a new element at the end of the self.&#34;&#34;&#34;
         self._values.append(num)
 
     def copy(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return a ulist copy of self.&#34;&#34;&#34;
         return UltraFastList(self._values.copy())
 
     def div(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self / other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.div(other._values))
 
     def div_scala(self, num: float) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self / num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.div_scala(num))
 
     def equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self == num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.equal_scala(num))
 
     def filter(self, condition: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;
+        According to the condition, return a ulist with elements of self
+        correspondingly.
+        &#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert isinstance(condition._values, BooleanList)
         return UltraFastList(self._values.filter(condition._values))
 
     def get(self, index: int) -&gt; ELEM:
+        &#34;&#34;&#34;Return self[index].&#34;&#34;&#34;
         return self._values.get(index)
 
     def greater_than_or_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt;= num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.greater_than_or_equal_scala(num))
 
     def greater_than_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &gt; num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.greater_than_scala(num))
 
     def less_than_or_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt;= num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.less_than_or_equal_scala(num))
 
     def less_than_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self &lt; num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.less_than_scala(num))
 
     def max(self) -&gt; NUM:
+        &#34;&#34;&#34;Return the maximum of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.max()
 
     def mean(self) -&gt; float:
+        &#34;&#34;&#34;Return the mean of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.mean()
 
     def min(self) -&gt; NUM:
+        &#34;&#34;&#34;Return the minimum of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.min()
 
     def mul(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self * other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.mul(other._values))
 
     def mul_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self * num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.mul_scala(num))
 
     def not_(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return ~self.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         return UltraFastList(self._values.not_())
 
     def not_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self != num.&#34;&#34;&#34;
         assert isinstance(self._values, IntegerList)
         return UltraFastList(self._values.not_equal_scala(num))
 
     def or_(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self | other.&#34;&#34;&#34;
         assert isinstance(self._values, BooleanList)
         assert isinstance(other._values, BooleanList)
         return UltraFastList(self._values.or_(other._values))
 
     def pop(self) -&gt; None:
+        &#34;&#34;&#34;Removes the last element of self.&#34;&#34;&#34;
         self._values.pop()
 
     def pow_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self ** num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.pow_scala(num))
 
     def replace(self, old: ELEM, new: ELEM) -&gt; None:
+        &#34;&#34;&#34;Replace the old elements of self with the new one.&#34;&#34;&#34;
         self._values.replace(old, new)
 
     def set(self, index: int, num: ELEM) -&gt; None:
+        &#34;&#34;&#34;Set self[index] to num.&#34;&#34;&#34;
         self._values.set(index, num)
 
     def size(self) -&gt; int:
+        &#34;&#34;&#34;Number of elements of self.&#34;&#34;&#34;
         return self._values.size()
 
     def sort(self, ascending: bool) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return a sorted copy of self.
+
+        Args:
+            ascending (bool): Ascending or descending.
+
+        Returns:
+            UltraFastList: The sorted ulist.
+        &#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.sort(ascending=ascending))
 
     def sub(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self - other.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         assert not isinstance(other._values, BooleanList)
         return UltraFastList(self._values.sub(other._values))
 
     def sub_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Return self - num.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.sub_scala(num))
 
     def sum(self) -&gt; NUM:
+        &#34;&#34;&#34;Return the sum of self.&#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return self._values.sum()
 
     def to_list(self) -&gt; LIST_PY:
+        &#34;&#34;&#34;Return a list with the elements of self.&#34;&#34;&#34;
         return self._values.to_list()
 
     def unique(self) -&gt; &#34;UltraFastList&#34;:
+        &#34;&#34;&#34;Returns the sorted unique elements of self. &#34;&#34;&#34;
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.unique())</code></pre>
 </details>
@@ -546,12 +709,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">add</span></span>(<span>self, other: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self + other.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self + other.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     assert not isinstance(other._values, BooleanList)
     return UltraFastList(self._values.add(other._values))</code></pre>
@@ -561,12 +725,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">add_scala</span></span>(<span>self, num: Union[int, float]) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self + num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self + num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.add_scala(num))</code></pre>
 </details>
@@ -575,12 +740,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">all</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Whether all the elements of self are True.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def all(self) -&gt; bool:
+    &#34;&#34;&#34;Whether all the elements of self are True.&#34;&#34;&#34;
     assert isinstance(self._values, BooleanList)
     return self._values.all()</code></pre>
 </details>
@@ -589,12 +755,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">and_</span></span>(<span>self, other: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self &amp; other.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def and_(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self &amp; other.&#34;&#34;&#34;
     assert isinstance(self._values, BooleanList)
     assert isinstance(other._values, BooleanList)
     return UltraFastList(self._values.and_(other._values))</code></pre>
@@ -604,12 +771,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">any</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Whether any element of self is True.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def any(self) -&gt; bool:
+    &#34;&#34;&#34;Whether any element of self is True.&#34;&#34;&#34;
     assert isinstance(self._values, BooleanList)
     return self._values.any()</code></pre>
 </details>
@@ -618,12 +786,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">append</span></span>(<span>self, num: Union[int, float]) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Adds a new element at the end of the self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def append(self, num: ELEM) -&gt; None:
+    &#34;&#34;&#34;Adds a new element at the end of the self.&#34;&#34;&#34;
     self._values.append(num)</code></pre>
 </details>
 </dd>
@@ -631,12 +800,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">copy</span></span>(<span>self) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return a ulist copy of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def copy(self) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return a ulist copy of self.&#34;&#34;&#34;
     return UltraFastList(self._values.copy())</code></pre>
 </details>
 </dd>
@@ -644,12 +814,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">div</span></span>(<span>self, other: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self / other.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def div(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self / other.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     assert not isinstance(other._values, BooleanList)
     return UltraFastList(self._values.div(other._values))</code></pre>
@@ -659,12 +830,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">div_scala</span></span>(<span>self, num: float) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self / num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def div_scala(self, num: float) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self / num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.div_scala(num))</code></pre>
 </details>
@@ -673,12 +845,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">equal_scala</span></span>(<span>self, num: int) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self == num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self == num.&#34;&#34;&#34;
     assert isinstance(self._values, IntegerList)
     return UltraFastList(self._values.equal_scala(num))</code></pre>
 </details>
@@ -687,12 +860,17 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">filter</span></span>(<span>self, condition: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>According to the condition, return a ulist with elements of self
+correspondingly.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def filter(self, condition: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;
+    According to the condition, return a ulist with elements of self
+    correspondingly.
+    &#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     assert isinstance(condition._values, BooleanList)
     return UltraFastList(self._values.filter(condition._values))</code></pre>
@@ -702,12 +880,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">get</span></span>(<span>self, index: int) ‑> Union[int, float]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self[index].</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get(self, index: int) -&gt; ELEM:
+    &#34;&#34;&#34;Return self[index].&#34;&#34;&#34;
     return self._values.get(index)</code></pre>
 </details>
 </dd>
@@ -715,12 +894,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">greater_than_or_equal_scala</span></span>(<span>self, num: int) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self &gt;= num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def greater_than_or_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self &gt;= num.&#34;&#34;&#34;
     assert isinstance(self._values, IntegerList)
     return UltraFastList(self._values.greater_than_or_equal_scala(num))</code></pre>
 </details>
@@ -729,12 +909,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">greater_than_scala</span></span>(<span>self, num: Union[int, float]) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self &gt; num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def greater_than_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self &gt; num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.greater_than_scala(num))</code></pre>
 </details>
@@ -743,12 +924,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">less_than_or_equal_scala</span></span>(<span>self, num: int) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self &lt;= num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def less_than_or_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self &lt;= num.&#34;&#34;&#34;
     assert isinstance(self._values, IntegerList)
     return UltraFastList(self._values.less_than_or_equal_scala(num))</code></pre>
 </details>
@@ -757,12 +939,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">less_than_scala</span></span>(<span>self, num: Union[int, float]) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self &lt; num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def less_than_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self &lt; num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.less_than_scala(num))</code></pre>
 </details>
@@ -771,12 +954,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">max</span></span>(<span>self) ‑> Union[int, float]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return the maximum of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def max(self) -&gt; NUM:
+    &#34;&#34;&#34;Return the maximum of self.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return self._values.max()</code></pre>
 </details>
@@ -785,12 +969,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">mean</span></span>(<span>self) ‑> float</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return the mean of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def mean(self) -&gt; float:
+    &#34;&#34;&#34;Return the mean of self.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return self._values.mean()</code></pre>
 </details>
@@ -799,12 +984,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">min</span></span>(<span>self) ‑> Union[int, float]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return the minimum of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def min(self) -&gt; NUM:
+    &#34;&#34;&#34;Return the minimum of self.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return self._values.min()</code></pre>
 </details>
@@ -813,12 +999,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">mul</span></span>(<span>self, other: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self * other.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def mul(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self * other.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     assert not isinstance(other._values, BooleanList)
     return UltraFastList(self._values.mul(other._values))</code></pre>
@@ -828,12 +1015,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">mul_scala</span></span>(<span>self, num: Union[int, float]) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self * num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def mul_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self * num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.mul_scala(num))</code></pre>
 </details>
@@ -842,12 +1030,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">not_</span></span>(<span>self) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return ~self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def not_(self) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return ~self.&#34;&#34;&#34;
     assert isinstance(self._values, BooleanList)
     return UltraFastList(self._values.not_())</code></pre>
 </details>
@@ -856,12 +1045,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">not_equal_scala</span></span>(<span>self, num: int) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self != num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def not_equal_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self != num.&#34;&#34;&#34;
     assert isinstance(self._values, IntegerList)
     return UltraFastList(self._values.not_equal_scala(num))</code></pre>
 </details>
@@ -870,12 +1060,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">or_</span></span>(<span>self, other: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self | other.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def or_(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self | other.&#34;&#34;&#34;
     assert isinstance(self._values, BooleanList)
     assert isinstance(other._values, BooleanList)
     return UltraFastList(self._values.or_(other._values))</code></pre>
@@ -885,12 +1076,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">pop</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Removes the last element of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def pop(self) -&gt; None:
+    &#34;&#34;&#34;Removes the last element of self.&#34;&#34;&#34;
     self._values.pop()</code></pre>
 </details>
 </dd>
@@ -898,12 +1090,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">pow_scala</span></span>(<span>self, num: int) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self ** num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def pow_scala(self, num: int) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self ** num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.pow_scala(num))</code></pre>
 </details>
@@ -912,12 +1105,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">replace</span></span>(<span>self, old: Union[int, float], new: Union[int, float]) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Replace the old elements of self with the new one.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def replace(self, old: ELEM, new: ELEM) -&gt; None:
+    &#34;&#34;&#34;Replace the old elements of self with the new one.&#34;&#34;&#34;
     self._values.replace(old, new)</code></pre>
 </details>
 </dd>
@@ -925,12 +1119,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">set</span></span>(<span>self, index: int, num: Union[int, float]) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Set self[index] to num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def set(self, index: int, num: ELEM) -&gt; None:
+    &#34;&#34;&#34;Set self[index] to num.&#34;&#34;&#34;
     self._values.set(index, num)</code></pre>
 </details>
 </dd>
@@ -938,12 +1133,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">size</span></span>(<span>self) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Number of elements of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def size(self) -&gt; int:
+    &#34;&#34;&#34;Number of elements of self.&#34;&#34;&#34;
     return self._values.size()</code></pre>
 </details>
 </dd>
@@ -951,12 +1147,30 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">sort</span></span>(<span>self, ascending: bool) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return a sorted copy of self.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>ascending</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Ascending or descending.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></code></dt>
+<dd>The sorted ulist.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def sort(self, ascending: bool) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return a sorted copy of self.
+
+    Args:
+        ascending (bool): Ascending or descending.
+
+    Returns:
+        UltraFastList: The sorted ulist.
+    &#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.sort(ascending=ascending))</code></pre>
 </details>
@@ -965,12 +1179,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">sub</span></span>(<span>self, other: <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a>) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self - other.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def sub(self, other: &#34;UltraFastList&#34;) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self - other.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     assert not isinstance(other._values, BooleanList)
     return UltraFastList(self._values.sub(other._values))</code></pre>
@@ -980,12 +1195,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">sub_scala</span></span>(<span>self, num: Union[int, float]) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return self - num.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def sub_scala(self, num: NUM) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Return self - num.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.sub_scala(num))</code></pre>
 </details>
@@ -994,12 +1210,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">sum</span></span>(<span>self) ‑> Union[int, float]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return the sum of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def sum(self) -&gt; NUM:
+    &#34;&#34;&#34;Return the sum of self.&#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return self._values.sum()</code></pre>
 </details>
@@ -1008,12 +1225,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">to_list</span></span>(<span>self) ‑> Union[List[float], List[int], List[bool]]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return a list with the elements of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def to_list(self) -&gt; LIST_PY:
+    &#34;&#34;&#34;Return a list with the elements of self.&#34;&#34;&#34;
     return self._values.to_list()</code></pre>
 </details>
 </dd>
@@ -1021,12 +1239,13 @@ def from_iter(obj: Iterable, dtype: str) -&gt; &#34;UltraFastList&#34;:
 <span>def <span class="ident">unique</span></span>(<span>self) ‑> <a title="ulist.core.UltraFastList" href="#ulist.core.UltraFastList">UltraFastList</a></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the sorted unique elements of self.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def unique(self) -&gt; &#34;UltraFastList&#34;:
+    &#34;&#34;&#34;Returns the sorted unique elements of self. &#34;&#34;&#34;
     assert not isinstance(self._values, BooleanList)
     return UltraFastList(self._values.unique())</code></pre>
 </details>
