@@ -9,10 +9,10 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ammaraskar/sphinx-action@master
       with:
-        build-command: "sphinx-build -b html . _build"
+        build-command: "make html"
         docs-folder: "docs/"
 
     - uses: actions/upload-artifact@v1
       with:
         name: DocumentationHTML
-        path: docs/_build/
+        path: docs/html/
