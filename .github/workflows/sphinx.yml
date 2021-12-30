@@ -1,24 +1,18 @@
-name: Sphinx build
-
-on:
-  pull_request:
-  release:
+name: "Pull Request Docs Check"
+on: 
+- pull_request
 
 jobs:
-  build:
+  docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build HTML
-      uses: ammaraskar/sphinx-action@0.4
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v1
+    - uses: actions/checkout@v1
+    - uses: ammaraskar/sphinx-action@master
       with:
-        name: html-docs
-        path: docs/build/html/
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
+        build-command: "sphinx-build -b html . _build"
+        docs-folder: "docs/"
+
+    - uses: actions/upload-artifact@v1
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/build/html
+        name: DocumentationHTML
+        path: docs/_build/html/
