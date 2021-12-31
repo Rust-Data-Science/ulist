@@ -8,11 +8,11 @@ Welcome to ulist's documentation!
 Indices and tables
 ==================
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 * :doc:`api`
 
 
 Readme File
 ===========
-# .. include:: ../README.md
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_

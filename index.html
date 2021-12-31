@@ -43,14 +43,98 @@
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 <li><p><a class="reference internal" href="api.html"><span class="doc">API</span></a></p></li>
 </ul>
 </section>
 <section id="readme-file">
 <h1>Readme File<a class="headerlink" href="#readme-file" title="Permalink to this headline">¶</a></h1>
-<p># .. include:: ../README.md</p>
+<section class="tex2jax_ignore mathjax_ignore" id="ulist">
+<h2>ulist<a class="headerlink" href="#ulist" title="Permalink to this headline">¶</a></h2>
+<p><img alt="PyPI" src="https://img.shields.io/pypi/v/ulist" />
+<img alt="License" src="https://img.shields.io/github/license/tushushu/ulist" />
+<img alt="CI" src="https://github.com/tushushu/ulist/workflows/CI/badge.svg" />
+<img alt="PyPI - Format" src="https://img.shields.io/pypi/format/ulist" />
+<img alt="Code Style" src="https://img.shields.io/badge/code%20style-flake8-blue" /></p>
+<p><a class="reference external" href="https://tushushu.github.io/ulist/"><strong>Documentation</strong></a> | <a class="reference external" href="https://github.com/tushushu/ulist"><strong>Source Code</strong></a></p>
+<section id="what">
+<h3>What<a class="headerlink" href="#what" title="Permalink to this headline">¶</a></h3>
+<p>Ulist is an ultra fast list data structures written in Rust with Python bindings.</p>
+</section>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>Python: 3.6+
+OS: Linux or MacOS</p>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ulist</span></code></p>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<section id="calculate-the-average-of-unique-numbers">
+<h4>Calculate the average of unique numbers.<a class="headerlink" href="#calculate-the-average-of-unique-numbers" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_iter</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="dot-product">
+<h4>Dot product.<a class="headerlink" href="#dot-product" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="n">arr1</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+<span class="n">arr2</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">arr1</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">arr2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="subtract-the-mean-from-the-list">
+<h4>Subtract the mean from the list.<a class="headerlink" href="#subtract-the-mean-from-the-list" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">sub_scala</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="use-operators-instead-of-methods-to-calculate-variance">
+<h4>Use operators instead of methods to calculate variance.<a class="headerlink" href="#use-operators-instead-of-methods-to-calculate-variance" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">((</span><span class="n">arr</span> <span class="o">-</span> <span class="n">arr</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="wish-list">
+<h3>Wish-list<a class="headerlink" href="#wish-list" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sum</span></code> method for <code class="docutils literal notranslate"><span class="pre">BooleanList</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">map</span></code>, <code class="docutils literal notranslate"><span class="pre">where</span></code> methods for <code class="docutils literal notranslate"><span class="pre">NumericalList</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zip</span></code> method for <code class="docutils literal notranslate"><span class="pre">List</span></code> and <code class="docutils literal notranslate"><span class="pre">ListPair</span></code> class</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agg</span></code> method for <code class="docutils literal notranslate"><span class="pre">ListPair</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StringList</span></code> or <code class="docutils literal notranslate"><span class="pre">BytesList</span></code> class</p></li>
+<li><p>More construction methods for <code class="docutils literal notranslate"><span class="pre">List</span></code></p></li>
+<li><p>Airspeed velocity to benchmark</p></li>
+<li><p>Docstrings for python methods</p></li>
+<li><p>Automatically generate documentation</p></li>
+<li><p>Mypy linting</p></li>
+<li><p>Further optimizing the benchmark with SIMD</p></li>
+</ul>
+</section>
+<section id="contribute">
+<h3>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h3>
+<p>All contributions are welcome. See <a class="reference external" href="https://github.com/tushushu/ulist/blob/main/develop.md">Developer Guide</a></p>
+</section>
+</section>
 </section>
 
 
@@ -64,7 +148,24 @@
   <ul>
 <li><a class="reference internal" href="#">Welcome to ulist’s documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-<li><a class="reference internal" href="#readme-file">Readme File</a></li>
+<li><a class="reference internal" href="#readme-file">Readme File</a><ul>
+<li><a class="reference internal" href="#ulist">ulist</a><ul>
+<li><a class="reference internal" href="#what">What</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#calculate-the-average-of-unique-numbers">Calculate the average of unique numbers.</a></li>
+<li><a class="reference internal" href="#dot-product">Dot product.</a></li>
+<li><a class="reference internal" href="#subtract-the-mean-from-the-list">Subtract the mean from the list.</a></li>
+<li><a class="reference internal" href="#use-operators-instead-of-methods-to-calculate-variance">Use operators instead of methods to calculate variance.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wish-list">Wish-list</a></li>
+<li><a class="reference internal" href="#contribute">Contribute</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
   <div role="note" aria-label="source link">
