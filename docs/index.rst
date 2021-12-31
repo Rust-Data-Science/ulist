@@ -1,5 +1,6 @@
 Welcome to ulist's documentation!
 =================================
+**ulist** is an ultra fast list data structures written in Rust with Python bindings.
 
 .. toctree::
    :maxdepth: 2
