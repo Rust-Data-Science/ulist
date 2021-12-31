@@ -28,10 +28,11 @@ jobs:
       - name: Install ulist
         run: |
           pip install ulist --no-index --find-links dist --force-reinstall 
-      - uses: ammaraskar/sphinx-action@master
-        with:
-          build-command: "make html"
-          docs-folder: "docs/"
+      - name: Install ulist
+        run: |
+          cd docs
+          make html
+          cd ..
       - uses: actions/upload-artifact@v1
         with:
           name: DocumentationHTML
