@@ -72,7 +72,6 @@ print(result)
 * `zip` method for `List` and `ListPair` class
 * `agg` method for `ListPair`
 * `StringList` or `BytesList` class
-* More construction methods for `List`, such as `from_str`, `from_iter` `zeros`, `ones`, `empty` and `arrange`
 * Support missing values
 * Airspeed velocity to benchmark
 * Further optimizing the benchmark with SIMD
