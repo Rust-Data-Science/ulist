@@ -1,0 +1,56 @@
+name: "Pull Request Docs Check"
+on: 
+- pull_request
+
+jobs:
+  docs:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: ['3.6']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - name: Install Python packages
+        run: |
+          pip install maturin sphinx myst-parser[sphinx]
+      - name: Build ulist
+        run: |
+          maturin build --out dist -m ulist/Cargo.toml
+      - name: Install ulist
+        run: |
+          pip install ulist --no-index --find-links dist --force-reinstall 
+      - name: Make docs
+        run: |
+          cd docs
+          make html
+          cd ..
+      - uses: actions/upload-artifact@v1
+        with:
+          name: DocumentationHTML
+          path: docs/html/
+      - name: Commit documentation changes
+        run: |
+          git clone https://github.com/tushushu/ulist.git --branch gh-pages --single-branch gh-pages
+          cp -r docs/html/* gh-pages/
+          cd gh-pages
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update documentation" -a || true
+          # The above command will fail if no changes were present, so we ignore
+          # the return code.
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          directory: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}

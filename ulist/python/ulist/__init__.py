@@ -1,1 +1,2 @@
-from .core import UltraFastList, from_iter  # noqa:F401
+from .core import UltraFastList  # noqa:F401
+from .constructor import from_iter  # noqa:F401
