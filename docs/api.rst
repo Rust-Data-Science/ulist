@@ -1,4 +1,8 @@
 API
 =================
-.. autoclass:: ulist.core.UltraFastList
+.. automodule:: ulist
+   :members:
+.. automodule:: ulist.constructor
+   :members:
+.. automodule:: ulist.core
    :members:
