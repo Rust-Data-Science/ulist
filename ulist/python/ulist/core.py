@@ -1,4 +1,4 @@
-from typing import Callable, Iterable
+from typing import Callable
 
 from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST
 from .ulist import BooleanList, FloatList, IntegerList
@@ -296,23 +296,3 @@ class UltraFastList:
         """Returns the sorted unique elements of self. """
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.unique())
-
-
-def from_iter(obj: Iterable, dtype: str) -> UltraFastList:
-    """Construct a ulist object from iterable object.
-
-    Args:
-        obj (Iterable): Iterable object such as list, set and range.
-        dtype (str): 'int', 'float' or 'bool'.
-
-    Returns:
-        UltraFastList: A ulist object.
-    """
-    if dtype == "int":
-        return UltraFastList(IntegerList(obj))
-    elif dtype == "float":
-        return UltraFastList(FloatList(obj))
-    elif dtype == "bool":
-        return UltraFastList(BooleanList(obj))
-    else:
-        raise ValueError("Parameter dtype should be 'int', 'float' or 'bool'!")
