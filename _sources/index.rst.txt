@@ -1,18 +1,11 @@
 Welcome to ulist's documentation!
 =================================
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
-Indices and tables
-==================
-* :ref:`genindex`
-* :ref:`search`
 * :doc:`api`
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
 
-Readme File
-===========
+
 .. include:: ../README.md
    :parser: myst_parser.sphinx_

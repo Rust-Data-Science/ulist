@@ -24,6 +24,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ulist 0.5.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API</a></li> 
       </ul>
@@ -34,9 +37,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
+  <section id="module-ulist">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-ulist" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-ulist.constructor"></span><dl class="py function">
+<dt class="sig sig-object py" id="ulist.constructor.from_iter">
+<span class="sig-prename descclassname"><span class="pre">ulist.constructor.</span></span><span class="sig-name descname"><span class="pre">from_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.constructor.from_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a ulist object from iterable object.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj (Iterable): Iterable object such as list, set and range.
+dtype (str): ‘int’, ‘float’ or ‘bool’.</p>
+</dd>
+<dt>Returns:</dt><dd><p>UltraFastList: A ulist object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-ulist.core"></span><dl class="py class">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ulist.core.</span></span><span class="sig-name descname"><span class="pre">UltraFastList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatList</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">IntegerList</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BooleanList</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ulist.core.UltraFastList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ultra fast list data structures written in Rust with Python bindings,
@@ -296,6 +312,9 @@ correspondingly.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ulist 0.5.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API</a></li> 
       </ul>
