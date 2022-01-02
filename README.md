@@ -15,7 +15,7 @@ Ulist is an ultra fast list data structures written in Rust with Python bindings
 
 
 ### Requirements
-Python: 3.6+  
+Python: 3.7+  
 OS: Linux or MacOS
 
 
@@ -29,7 +29,7 @@ Run `pip install ulist`
 ```Python
 import ulist as ul
 
-arr = ul.from_iter([1.0, 2.0, 3.0, 2.0, 4.0, 5.0], dtype="float")
+arr = ul.from_seq([1.0, 2.0, 3.0, 2.0, 4.0, 5.0], dtype="float")
 result = arr.unique().mean()
 print(result)
 ```
@@ -39,8 +39,8 @@ print(result)
 ```Python
 import ulist as ul
 
-arr1 = ul.from_iter(range(1, 4), dtype="int")
-arr2 = ul.from_iter(range(1, 4), dtype="int")
+arr1 = ul.from_seq(range(1, 4), dtype="int")
+arr2 = ul.from_seq(range(1, 4), dtype="int")
 result = arr1.mul(arr2).sum()
 print(result)
 ```
@@ -50,7 +50,7 @@ print(result)
 ```Python
 import ulist as ul
 
-arr = ul.from_iter([1, 2, 3, 4, 5], dtype="float")
+arr = ul.from_seq([1, 2, 3, 4, 5], dtype="float")
 result = arr.sub_scala(arr.mean()).to_list()
 print(result)
 ```
@@ -60,7 +60,7 @@ print(result)
 ```Python
 import ulist as ul
 
-arr = ul.from_iter([1, 2, 3], dtype="float")
+arr = ul.from_seq([1, 2, 3], dtype="float")
 result = ((arr - arr.mean()) ** 2).mean()
 print(result)
 ```
