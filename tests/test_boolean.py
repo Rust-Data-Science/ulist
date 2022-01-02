@@ -54,7 +54,7 @@ def test_methods(
     expected_value: Union[bool, List[bool]],
 ):
     dtype = "bool"
-    arr = ul.from_iter(nums, dtype=dtype)
+    arr = ul.from_seq(nums, dtype=dtype)
     result = getattr(arr, test_method)()
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -83,8 +83,8 @@ def test_methods_with_args(
     expected_value: List[bool],
 ):
     dtype = "bool"
-    arr1 = ul.from_iter(nums, dtype=dtype)
-    arr2 = ul.from_iter(other, dtype=dtype)
+    arr1 = ul.from_seq(nums, dtype=dtype)
+    arr2 = ul.from_seq(other, dtype=dtype)
     result = getattr(arr1, test_method)(arr2)
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -119,9 +119,9 @@ def test_operators(
     expected_value: List[bool],
 ):
     dtype = "bool"
-    arr1 = ul.from_iter(nums, dtype)
+    arr1 = ul.from_seq(nums, dtype)
     if other is not None:
-        arr2 = ul.from_iter(other, dtype)
+        arr2 = ul.from_seq(other, dtype)
         result = test_method(arr1, arr2)
     else:
         result = test_method(arr1)

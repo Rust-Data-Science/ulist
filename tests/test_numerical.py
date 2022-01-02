@@ -31,7 +31,7 @@ def test_statistics_methods(
     nums: LIST_TYPE,
     expected_value: NUM_TYPE,
 ) -> None:
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)()
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -91,7 +91,7 @@ def test_data_process_methods(
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -119,8 +119,8 @@ def test_filter(
     expected_value: LIST_TYPE,
     condition: List[bool],
 ):
-    arr = ul.from_iter(nums, dtype)
-    cond = ul.from_iter(condition, dtype="bool")
+    arr = ul.from_seq(nums, dtype)
+    cond = ul.from_seq(condition, dtype="bool")
     result = arr.filter(cond)
     check_test_result(dtype, "filter", result, expected_value)
 
@@ -290,11 +290,11 @@ def test_arithmetic_methods(
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     if not test_method.endswith("_scala"):
         fn = getattr(arr, test_method)
         if isinstance(kwargs["other"], list):
-            result = fn(ul.from_iter(kwargs["other"], dtype))
+            result = fn(ul.from_seq(kwargs["other"], dtype))
         else:
             result = fn(kwargs["other"])
     else:
@@ -453,9 +453,9 @@ def test_operators(
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     if isinstance(kwargs["other"], list):
-        other = ul.from_iter(kwargs["other"], dtype)
+        other = ul.from_seq(kwargs["other"], dtype)
     else:
         other = kwargs["other"]
     result = test_method(arr, other)

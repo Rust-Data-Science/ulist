@@ -59,7 +59,7 @@ def test_methods_no_arg(
     nums: LIST_TYPE,
     expected_value: NUM_OR_LIST_TYPE,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)()
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -83,7 +83,7 @@ def test_methods_with_args(
     expected_value: NUM_OR_LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -124,7 +124,7 @@ def test_multable_methods(
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, arr, expected_value)
 
@@ -147,7 +147,7 @@ def test_indexing_operations(
     num = kwargs["num"]
     # Set
     test_method = "set-item"
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     arr[index] = num
     check_test_result(dtype, test_method, arr, expected_value)
 
