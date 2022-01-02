@@ -45,11 +45,12 @@
 </ul>
 <section class="tex2jax_ignore mathjax_ignore" id="ulist">
 <h2>ulist<a class="headerlink" href="#ulist" title="Permalink to this headline">¶</a></h2>
-<p><img alt="PyPI" src="https://img.shields.io/pypi/v/ulist" />
-<img alt="License" src="https://img.shields.io/github/license/tushushu/ulist" />
-<img alt="CI" src="https://github.com/tushushu/ulist/workflows/CI/badge.svg" />
+<p><a class="reference external" href="https://pypi.org/project/ulist/"><img alt="PyPI" src="https://img.shields.io/pypi/v/ulist" /></a>
+<a class="reference external" href="https://github.com/tushushu/ulist/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/tushushu/ulist" /></a>
+<a class="reference external" href="https://github.com/tushushu/ulist/actions/workflows/main.yml"><img alt="CI" src="https://github.com/tushushu/ulist/workflows/CI/badge.svg" /></a>
+<a class="reference external" href="https://github.com/tushushu/ulist/actions/workflows/sphinx.yml"><img alt="doc" src="https://github.com/tushushu/ulist/workflows/doc/badge.svg" /></a>
 <img alt="PyPI - Format" src="https://img.shields.io/pypi/format/ulist" />
-<img alt="Code Style" src="https://img.shields.io/badge/code%20style-flake8-blue" /></p>
+<a class="reference external" href="https://github.com/PyCQA/flake8"><img alt="Code Style" src="https://img.shields.io/badge/code%20style-flake8-blue" /></a></p>
 <p><a class="reference external" href="https://tushushu.github.io/ulist/"><strong>Documentation</strong></a> | <a class="reference external" href="https://github.com/tushushu/ulist"><strong>Source Code</strong></a></p>
 <section id="what">
 <h3>What<a class="headerlink" href="#what" title="Permalink to this headline">¶</a></h3>
@@ -80,8 +81,8 @@ OS: Linux or MacOS</p>
 <h4>Dot product.<a class="headerlink" href="#dot-product" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
 
-<span class="n">arr1</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_seq</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
-<span class="n">arr2</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_seq</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+<span class="n">arr1</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">arr2</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">arr1</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">arr2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
