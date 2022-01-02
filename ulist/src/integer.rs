@@ -18,7 +18,7 @@ impl IntegerList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    fn new(vec: Vec<i32>) -> Self {
+    pub fn new(vec: Vec<i32>) -> Self {
         List::_new(vec)
     }
 
