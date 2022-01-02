@@ -14,10 +14,13 @@ LIST_TYPE = Union[List[float], List[int]]
     [
         ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
         ('max', 'int', [1, 2, 3, 4, 5], 5),
+
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
+
         ('min', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 1.0),
         ('min', 'int', [1, 2, 3, 4, 5], 1),
+
         ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
         ('sum', 'int', [1, 2, 3, 4, 5], 15),
     ],
@@ -64,6 +67,7 @@ def test_statistics_methods(
             [5, 4, 3, 3, 2, 1],
             {'ascending': False}
         ),
+
         (
             'unique',
             'float',

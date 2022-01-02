@@ -24,6 +24,7 @@ from ulist.utils import check_test_result
             [True, True, True],
             True,
         ),
+
         (
             "any",
             [False, False, False],
@@ -39,6 +40,7 @@ from ulist.utils import check_test_result
             [True, True, True],
             True,
         ),
+
         (
             "not_",
             [True, False],
