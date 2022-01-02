@@ -40,8 +40,8 @@ print(result)
 ```Python
 import ulist as ul
 
-arr1 = ul.from_seq(range(1, 4), dtype="int")
-arr2 = ul.from_seq(range(1, 4), dtype="int")
+arr1 = ul.arange(1, 4)
+arr2 = ul.arange(1, 4)
 result = arr1.mul(arr2).sum()
 print(result)
 ```
