@@ -12,6 +12,25 @@ def from_iter(obj: Iterable, dtype: str) -> UltraFastList:
 
     Returns:
         UltraFastList: A ulist object.
+
+    Examples
+    --------
+    >>> import ulist as ul
+    >>> arr1 = ul.from_iter([1.0, 2.0, 3.0], dtype='float')
+    >>> arr1
+    UltraFastList([1.0, 2.0, 3.0])
+
+    >>> arr2 = ul.from_iter(range(3), dtype='int')
+    >>> arr2
+    UltraFastList([0, 1, 2])
+
+    >>> arr3 = ul.from_iter(range(3), dtype='int')
+    >>> arr2
+    UltraFastList([0, 1, 2])
+
+    >>> arr3 = ul.from_iter((True, True, False), dtype='bool')
+    >>> arr3
+    UltraFastList([True, True, False])
     """
     if dtype == "int":
         return UltraFastList(IntegerList(obj))
@@ -34,6 +53,21 @@ def arange(start: int, stop: Optional[int] = None, step: int = 1) -> UltraFastLi
 
     Returns:
         UltraFastList: A ulist object.
+
+    Examples
+    --------
+    >>> import ulist as ul
+    >>> arr1 = ul.arange(3)
+    >>> arr1
+    UltraFastList([0, 1, 2])
+
+    >>> arr2 = ul.arange(1, 4)
+    >>> arr2
+    UltraFastList([1, 2, 3])
+
+    >>> arr3 = ul.arange(1, 6, 2)
+    >>> arr3
+    UltraFastList([1, 3, 5])
     """
     if stop is None:
         stop = start
