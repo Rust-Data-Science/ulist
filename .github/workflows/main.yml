@@ -5,6 +5,7 @@ on:
   # Triggers the workflow on pull request and release events
   pull_request:
   release:
+    types: [published]
 
 
   # Allows you to run this workflow manually from the Actions tab
