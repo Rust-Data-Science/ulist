@@ -1,6 +1,7 @@
 name: "doc"
 on: 
-- release
+  release:
+    types: [published]
 
 jobs:
   docs:
