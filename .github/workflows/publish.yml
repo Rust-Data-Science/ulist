@@ -2,7 +2,6 @@ name: "publish"
 
 # Controls when the workflow will run
 on:
-  pull_request:
   release:
     types: [published]
 
@@ -14,7 +13,7 @@ jobs:
   maturin:
     strategy:
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:

@@ -4,7 +4,7 @@ on:
     types: [published]
 
 jobs:
-  docs:
+  sphinx:
     runs-on: macos-latest
     strategy:
       matrix:
