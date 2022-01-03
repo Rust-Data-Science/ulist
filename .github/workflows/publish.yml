@@ -14,7 +14,7 @@ jobs:
   maturin:
     strategy:
       matrix:
-        python-version: ['3.7', '3.8']
+        python-version: ['3.7']
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -34,6 +34,6 @@ jobs:
       - name: Publish ulist
         env:
             PYPI_PW: ${{ secrets.PYPI_PW }}
-            PYO3_PYTHON: python${{ matrix.python-version }}
+            PYTHON_VER: python${{ matrix.python-version }}
         run: |
-          maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW
+          maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
