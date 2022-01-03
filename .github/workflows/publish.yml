@@ -11,7 +11,7 @@ on:
 
 
 jobs:
-  py37:
+  publish:
     strategy:
       matrix:
         python-version: ['3.7', '3.8']
