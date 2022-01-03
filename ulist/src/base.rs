@@ -23,6 +23,11 @@ where
         List::_new(self.to_list())
     }
 
+    fn cycle(vec: &Vec<T>, size: usize) -> Self {
+        let v = vec.iter().cycle().take(size).map(|x| x.clone()).collect();
+        List::_new(v)
+    }
+
     unsafe fn get(&self, index: usize) -> T {
         if index < self.size() {
             self.values().get_unchecked(index).clone()
@@ -35,14 +40,6 @@ where
         self.values_mut().pop();
     }
 
-    fn replace(&self, old: T, new: &T) {
-        for element in self.values_mut().iter_mut() {
-            if *element == old {
-                *element = *new;
-            }
-        }
-    }
-
     unsafe fn set(&self, index: usize, num: T) {
         if index < self.size() {
             let mut values = self.values_mut();
@@ -50,6 +47,19 @@ where
             *element = num
         } else {
             panic!("Index out of range!")
+        }
+    }
+
+    fn repeat(num: T, size: usize) -> Self {
+        let vec = vec![num; size];
+        List::_new(vec)
+    }
+
+    fn replace(&self, old: T, new: &T) {
+        for element in self.values_mut().iter_mut() {
+            if *element == old {
+                *element = *new;
+            }
         }
     }
 

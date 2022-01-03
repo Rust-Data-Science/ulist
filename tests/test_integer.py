@@ -42,7 +42,7 @@ def test_methods(
     kwargs: dict,
 ):
     dtype = "int"
-    arr = ul.from_iter(nums, dtype=dtype)
+    arr = ul.from_seq(nums, dtype=dtype)
     result = getattr(arr, test_method)(**kwargs).to_list()
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -63,9 +63,9 @@ def test_operators(
     kwargs: dict,
 ):
     dtype = "int"
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     if isinstance(kwargs["other"], list):
-        other = ul.from_iter(kwargs["other"], dtype)
+        other = ul.from_seq(kwargs["other"], dtype)
     else:
         other = kwargs["other"]
     result = test_method(arr, other)

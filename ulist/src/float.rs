@@ -37,6 +37,11 @@ impl FloatList {
         List::copy(self)
     }
 
+    #[staticmethod]
+    pub fn cycle(vec: Vec<f32>, size: usize) -> Self {
+        List::cycle(&vec, size)
+    }
+
     pub fn div(&self, other: &Self) -> Self {
         let vec = NumericalList::div(self, other);
         FloatList::new(vec)
@@ -89,6 +94,11 @@ impl FloatList {
 
     pub fn pow_scala(&self, num: usize) -> Self {
         NumericalList::pow_scala(self, num)
+    }
+
+    #[staticmethod]
+    pub fn repeat(num: f32, size: usize) -> Self {
+        List::repeat(num, size)
     }
 
     pub fn replace(&self, old: f32, new: f32) {

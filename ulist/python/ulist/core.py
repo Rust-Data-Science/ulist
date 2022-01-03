@@ -91,6 +91,10 @@ class UltraFastList:
         """Return self ** other."""
         return self._arithmetic_method(other, lambda: None, self.pow_scala)
 
+    def __repr__(self) -> str:
+        """Return repr(self)."""
+        return f"UltraFastList({str(self)})"
+
     def __setitem__(self, index: int, num: ELEM) -> None:
         """Set self[index] to num."""
         self._values.set(index, num)
@@ -99,10 +103,10 @@ class UltraFastList:
         """Return str(self)."""
         n = self.size()
         if n < 100:
-            return f"UltraFastList({str(self.to_list())})"
+            return str(self.to_list())
         return (
-            f"UltraFastList([{self[0]}, {self[1]}, {self[2]}, ..., "
-            + f"{self[n-3]}, {self[n-2]}, {self[n-1]}])"
+            f"[{self[0]}, {self[1]}, {self[2]}, ..., "
+            + f"{self[n-3]}, {self[n-2]}, {self[n-1]}]"
         )
 
     def __sub__(self, other: NUM_OR_LIST) -> "UltraFastList":
@@ -264,7 +268,8 @@ class UltraFastList:
         """Return a sorted copy of self.
 
         Args:
-            ascending (bool): Ascending or descending.
+            ascending (bool):
+                Ascending or descending.
 
         Returns:
             UltraFastList: The sorted ulist.

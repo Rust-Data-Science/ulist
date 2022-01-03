@@ -13,24 +13,40 @@ NUM_OR_LIST_TYPE = Union[NUM_TYPE, LIST_TYPE]
     "test_method, dtype, nums, expected_value",
     [
         (
-            "__str__",
+            "__repr__",
             "bool",
             [True, False] * 50,
             "UltraFastList([True, False, True, ..., False, True, False])",
         ),
-        ('__str__', 'bool', [True, False], 'UltraFastList([True, False])'),
-        ('__str__', 'float', [1.0, 2.0], 'UltraFastList([1.0, 2.0])'),
-        ('__str__', 'float', range(0, 100),
+        ('__repr__', 'bool', [True, False], 'UltraFastList([True, False])'),
+        ('__repr__', 'float', [1.0, 2.0], 'UltraFastList([1.0, 2.0])'),
+        ('__repr__', 'float', range(0, 100),
          'UltraFastList([0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0])'),
-        ('__str__', 'int', [1, 2], 'UltraFastList([1, 2])'),
-        ('__str__', 'int', range(0, 100),
+        ('__repr__', 'int', [1, 2], 'UltraFastList([1, 2])'),
+        ('__repr__', 'int', range(0, 100),
          'UltraFastList([0, 1, 2, ..., 97, 98, 99])'),
+
+        (
+            "__str__",
+            "bool",
+            [True, False] * 50,
+            "[True, False, True, ..., False, True, False]",
+        ),
+        ('__str__', 'bool', [True, False], '[True, False]'),
+        ('__str__', 'float', [1.0, 2.0], '[1.0, 2.0]'),
+        ('__str__', 'float', range(0, 100),
+         '[0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0]'),
+        ('__str__', 'int', [1, 2], '[1, 2]'),
+        ('__str__', 'int', range(0, 100), '[0, 1, 2, ..., 97, 98, 99]'),
+
         ('copy', 'bool', [True, False], [True, False]),
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('copy', 'int', [1, 2], [1, 2]),
+
         ('size', 'bool', [True, False], 2),
         ('size', 'float', [1.0, 2.0], 2),
         ('size', 'int', [1, 2], 2),
+
         ('to_list', 'bool', [True, False], [True, False]),
         ('to_list', 'bool', [True, False], [True, False]),
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
@@ -43,7 +59,7 @@ def test_methods_no_arg(
     nums: LIST_TYPE,
     expected_value: NUM_OR_LIST_TYPE,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)()
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -54,6 +70,7 @@ def test_methods_no_arg(
         ('__getitem__', 'bool', [True, False, True], True, {'index': 2}),
         ('__getitem__', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
+
         ('get', 'bool', [True, False, True], True, {'index': 2}),
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
@@ -66,7 +83,7 @@ def test_methods_with_args(
     expected_value: NUM_OR_LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
@@ -79,17 +96,21 @@ def test_methods_with_args(
         ('__setitem__', 'float', [1.0, 2.0], [
          1.0, 3.0], {'index': 1, 'num': 3.0}),
         ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
+
         ('append', 'bool', [True], [True, False], {'num': False}),
         ('append', 'float', [1.0], [1.0, 2.0], {'num': 2.0}),
         ('append', 'int', [1], [1, 2], {'num': 2}),
+
         ('pop', 'bool', [True, False], [True], {}),
         ('pop', 'float', [1.0, 2.0], [1.0], {}),
         ('pop', 'int', [1, 2], [1], {}),
+
         ('replace', 'bool', [True, False, True], [
          False, False, False], {'old': True, 'new': False}),
         ('replace', 'float', [1.0, 0.0, 1.0], [
          0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
         ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
+
         ('set', 'bool', [True, False], [
          True, True], {'index': 1, 'num': True}),
         ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'num': 3.0}),
@@ -103,7 +124,7 @@ def test_multable_methods(
     expected_value: LIST_TYPE,
     kwargs: dict,
 ):
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, arr, expected_value)
 
@@ -126,7 +147,7 @@ def test_indexing_operations(
     num = kwargs["num"]
     # Set
     test_method = "set-item"
-    arr = ul.from_iter(nums, dtype)
+    arr = ul.from_seq(nums, dtype)
     arr[index] = num
     check_test_result(dtype, test_method, arr, expected_value)
 

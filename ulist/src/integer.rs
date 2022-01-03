@@ -18,7 +18,7 @@ impl IntegerList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    fn new(vec: Vec<i32>) -> Self {
+    pub fn new(vec: Vec<i32>) -> Self {
         List::_new(vec)
     }
 
@@ -36,6 +36,11 @@ impl IntegerList {
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    #[staticmethod]
+    pub fn cycle(vec: Vec<i32>, size: usize) -> Self {
+        List::cycle(&vec, size)
     }
 
     pub fn div(&self, other: &Self) -> FloatList {
@@ -110,6 +115,11 @@ impl IntegerList {
 
     pub unsafe fn set(&self, index: usize, num: i32) {
         List::set(self, index, num)
+    }
+
+    #[staticmethod]
+    pub fn repeat(num: i32, size: usize) -> Self {
+        List::repeat(num, size)
     }
 
     pub fn replace(&self, old: i32, new: i32) {

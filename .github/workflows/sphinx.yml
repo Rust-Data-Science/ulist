@@ -1,5 +1,6 @@
-name: "Pull Request Docs Check"
+name: "doc"
 on: 
+- pull_request
 - release
 
 jobs:
@@ -7,7 +8,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ['3.6']
+        python-version: ['3.8']
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
