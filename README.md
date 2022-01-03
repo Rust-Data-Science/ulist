@@ -1,10 +1,11 @@
 # ulist
 
 [![PyPI](https://img.shields.io/pypi/v/ulist)](https://pypi.org/project/ulist/)
+![PyPI - Format](https://img.shields.io/pypi/format/ulist)
 [![License](https://img.shields.io/github/license/tushushu/ulist)](https://github.com/tushushu/ulist/blob/main/LICENSE)
 [![CI](https://github.com/tushushu/ulist/workflows/CI/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/main.yml)
 [![doc](https://github.com/tushushu/ulist/workflows/doc/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/sphinx.yml)
-![PyPI - Format](https://img.shields.io/pypi/format/ulist)
+[![publish](https://github.com/tushushu/ulist/workflows/publish/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/publish.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-blue)](https://github.com/PyCQA/flake8)  
   
     

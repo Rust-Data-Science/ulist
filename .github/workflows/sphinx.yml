@@ -1,6 +1,5 @@
 name: "doc"
 on: 
-- pull_request
 - release
 
 jobs:
