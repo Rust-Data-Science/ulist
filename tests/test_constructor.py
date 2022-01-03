@@ -19,6 +19,10 @@ from ulist.utils import check_test_result
         (ul.arange, (5,), {"step": 2}, [0, 2, 4],),
         (ul.arange, (0,), {"stop": 5, "step": 2}, [0, 2, 4],),
 
+        (ul.repeat, (0, 3), {}, [0, 0, 0],),
+        (ul.repeat, (1.0, 3), {}, [1.0, 1.0, 1.0],),
+        (ul.repeat, (False, 3), {}, [False, False, False],),
+
         (ul.from_seq, (range(3), "int"), {}, [0, 1, 2],),
         (ul.from_seq, (range(3), "float"), {}, [0.0, 1.0, 2.0],),
         (ul.from_seq, ([False, True], "bool"), {}, [False, True],),

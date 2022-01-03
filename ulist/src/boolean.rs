@@ -57,6 +57,11 @@ impl BooleanList {
         List::pop(self);
     }
 
+    #[staticmethod]
+    pub fn repeat(num: bool, size: usize) -> Self {
+        List::repeat(num, size)
+    }
+
     pub fn replace(&self, old: bool, new: bool) {
         List::replace(self, old, &new)
     }

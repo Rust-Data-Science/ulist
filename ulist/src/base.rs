@@ -53,6 +53,11 @@ where
         }
     }
 
+    fn repeat(num: T, size: usize) -> Self {
+        let vec = vec![num; size];
+        List::_new(vec)
+    }
+
     fn size(&self) -> usize {
         self.values().len()
     }

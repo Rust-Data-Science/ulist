@@ -112,6 +112,11 @@ impl IntegerList {
         List::set(self, index, num)
     }
 
+    #[staticmethod]
+    pub fn repeat(num: i32, size: usize) -> Self {
+        List::repeat(num, size)
+    }
+
     pub fn replace(&self, old: i32, new: i32) {
         List::replace(self, old, &new)
     }

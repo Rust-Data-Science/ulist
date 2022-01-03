@@ -91,6 +91,11 @@ impl FloatList {
         NumericalList::pow_scala(self, num)
     }
 
+    #[staticmethod]
+    pub fn repeat(num: f32, size: usize) -> Self {
+        List::repeat(num, size)
+    }
+
     pub fn replace(&self, old: f32, new: f32) {
         List::replace(self, old, &new)
     }

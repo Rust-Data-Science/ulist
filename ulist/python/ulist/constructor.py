@@ -1,6 +1,8 @@
-from typing import Sequence, Optional
+from typing import Optional, Sequence, Union
+
 from .core import UltraFastList
-from .ulist import BooleanList, FloatList, IntegerList, arange as _arange
+from .ulist import BooleanList, FloatList, IntegerList
+from .ulist import arange as _arange
 
 
 def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
@@ -11,6 +13,9 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
             Sequence object such as list, tuple and range.
         dtype (str):
             The type of the output ulist. 'int', 'float' or 'bool'.
+
+    Raises:
+        ValueError: Parameter dtype should be 'int', 'float' or 'bool'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -23,10 +28,6 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     UltraFastList([1.0, 2.0, 3.0])
 
     >>> arr2 = ul.from_seq(range(3), dtype='int')
-    >>> arr2
-    UltraFastList([0, 1, 2])
-
-    >>> arr3 = ul.from_seq(range(3), dtype='int')
     >>> arr2
     UltraFastList([0, 1, 2])
 
@@ -83,3 +84,41 @@ def arange(start: int, stop: Optional[int] = None, step: int = 1
         stop = start
         start = 0
     return UltraFastList(_arange(start=start, stop=stop, step=step))
+
+
+def repeat(num: Union[bool, float, int], size: int) -> UltraFastList:
+    """Return a new ulist of given size, filled with num.
+
+    Args:
+        num (Union[bool, float, int]): Element to repeat.
+        size (int): Size of the new ulist.
+
+    Raises:
+        TypeError: Parameter num should be int, float or bool type!
+
+    Returns:
+        UltraFastList: A ulist object.
+
+    Examples
+    --------
+    >>> import ulist as ul
+    >>> arr1 = ul.repeat(0, 3)
+    >>> arr1
+    UltraFastList([0, 0, 0])
+
+    >>> arr2 = ul.repeat(1.0, 3)
+    >>> arr2
+    UltraFastList([1.0, 1.0, 1.0])
+
+    >>> arr3 = ul.repeat(True, 3)
+    >>> arr3
+    UltraFastList([True, True, True])
+    """
+    if isinstance(num, bool):
+        return UltraFastList(BooleanList.repeat(num, size))
+    elif isinstance(num, float):
+        return UltraFastList(FloatList.repeat(num, size))
+    elif isinstance(num, int):
+        return UltraFastList(IntegerList.repeat(num, size))
+    else:
+        raise TypeError("Parameter num should be int, float or bool type!")
