@@ -37,6 +37,11 @@ impl FloatList {
         List::copy(self)
     }
 
+    #[staticmethod]
+    pub fn cycle(vec: Vec<f32>, size: usize) -> Self {
+        List::cycle(&vec, size)
+    }
+
     pub fn div(&self, other: &Self) -> Self {
         let vec = NumericalList::div(self, other);
         FloatList::new(vec)

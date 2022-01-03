@@ -40,6 +40,11 @@ impl BooleanList {
         List::copy(self)
     }
 
+    #[staticmethod]
+    pub fn cycle(vec: Vec<bool>, size: usize) -> Self {
+        List::cycle(&vec, size)
+    }
+
     pub unsafe fn get(&self, index: usize) -> bool {
         List::get(self, index)
     }
