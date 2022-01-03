@@ -14,7 +14,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7']
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -30,29 +30,7 @@ jobs:
         run: |
           pip install maturin
       - name: Publish ulist
+        env:
+            PYPI_PW: ${{ secrets.PYPI_PW }}
         run: |
-          maturin publish -m ulist/Cargo.toml -u tushushu -p ${{ secrets.PYPI_PW }}
-
-
-  linux:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          default: true
-      - name: Install Python packages
-        run: |
-          pip install maturin
-      - name: Publish ulist
-        run: |
-          maturin publish -m ulist/Cargo.toml -u tushushu -p ${{ secrets.PYPI_PW }}
+          maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW
