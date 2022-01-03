@@ -73,6 +73,9 @@ print(result)
 * `zip` method for `List` and `ListPair` class
 * `agg` method for `ListPair`
 * `StringList` or `BytesList` class
+* Support Windows users
+* Doctest to check examples in Docstrings
+* Inplace and non-inplace mode
 * Support missing values
 * Airspeed velocity to benchmark
 * Further optimizing the benchmark with SIMD
