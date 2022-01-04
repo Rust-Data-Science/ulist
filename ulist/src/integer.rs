@@ -122,8 +122,8 @@ impl IntegerList {
         List::repeat(num, size)
     }
 
-    pub fn replace(&self, old: i32, new: i32) {
-        List::replace(self, old, &new)
+    pub fn replace(&self, old: i32, new: i32) -> Self {
+        List::replace(self, old, new)
     }
 
     pub fn size(&self) -> usize {
