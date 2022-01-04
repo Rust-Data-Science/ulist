@@ -55,12 +55,13 @@ where
         List::_new(vec)
     }
 
-    fn replace(&self, old: T, new: &T) {
-        for element in self.values_mut().iter_mut() {
-            if *element == old {
-                *element = *new;
-            }
-        }
+    fn replace(&self, old: T, new: T) -> Self {
+        let vec = self
+            .values()
+            .iter()
+            .map(|&x| if x == old { new } else { x })
+            .collect();
+        List::_new(vec)
     }
 
     fn size(&self) -> usize {

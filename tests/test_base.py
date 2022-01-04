@@ -74,6 +74,12 @@ def test_methods_no_arg(
         ('get', 'bool', [True, False, True], True, {'index': 2}),
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
+
+        ('replace', 'bool', [True, False, True], [
+         False, False, False], {'old': True, 'new': False}),
+        ('replace', 'float', [1.0, 0.0, 1.0], [
+         0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
+        ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
     ],
 )
 def test_methods_with_args(
@@ -104,12 +110,6 @@ def test_methods_with_args(
         ('pop', 'bool', [True, False], [True], {}),
         ('pop', 'float', [1.0, 2.0], [1.0], {}),
         ('pop', 'int', [1, 2], [1], {}),
-
-        ('replace', 'bool', [True, False, True], [
-         False, False, False], {'old': True, 'new': False}),
-        ('replace', 'float', [1.0, 0.0, 1.0], [
-         0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
-        ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
 
         ('set', 'bool', [True, False], [
          True, True], {'index': 1, 'num': True}),

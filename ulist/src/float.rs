@@ -101,8 +101,8 @@ impl FloatList {
         List::repeat(num, size)
     }
 
-    pub fn replace(&self, old: f32, new: f32) {
-        List::replace(self, old, &new)
+    pub fn replace(&self, old: f32, new: f32) -> Self {
+        List::replace(self, old, new)
     }
 
     pub unsafe fn set(&self, index: usize, num: f32) {
