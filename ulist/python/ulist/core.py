@@ -290,7 +290,6 @@ class UltraFastList:
 
     def sum(self) -> NUM:
         """Return the sum of self."""
-        assert not isinstance(self._values, BooleanList)
         return self._values.sum()
 
     def to_list(self) -> LIST_PY:

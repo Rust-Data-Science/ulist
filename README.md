@@ -69,12 +69,12 @@ print(result)
 
 
 ### Wish-list
-* `sum` method for `BooleanList`
 * `map`, `where` methods for `NumericalList`
 * `zip` method for `List` and `ListPair` class
 * `agg` method for `ListPair`
 * `StringList` or `BytesList` class
 * Support Windows users
+* Code coverage test
 * Doctest to check examples in Docstrings
 * Inplace and non-inplace mode
 * Support missing values
