@@ -79,6 +79,10 @@ impl BooleanList {
         List::size(self)
     }
 
+    pub fn sum(&self) -> i32 {
+        self.values().iter().map(|&x| if x { 1 } else { 0 }).sum()
+    }
+
     pub fn to_list(&self) -> Vec<bool> {
         List::to_list(self)
     }

@@ -46,6 +46,12 @@ from ulist.utils import check_test_result
             [True, False],
             [False, True],
         ),
+
+        (
+            "sum",
+            [True, False, True],
+            2,
+        ),
     ],
 )
 def test_methods(
