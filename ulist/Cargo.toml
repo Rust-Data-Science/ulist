@@ -1,6 +1,6 @@
 [package]
 name = "ulist"
-version = "0.5.1"
+version = "0.6.0"
 authors = ["tushushu"]
 edition = "2018"
 
