@@ -85,10 +85,6 @@ impl IntegerList {
         NumericalList::max(self)
     }
 
-    pub fn mean(&self) -> f32 {
-        NumericalList::mean(self)
-    }
-
     pub fn min(&self) -> i32 {
         NumericalList::min(self)
     }

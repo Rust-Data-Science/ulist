@@ -10,19 +10,16 @@ LIST_TYPE = Union[List[float], List[int]]
 
 
 @pytest.mark.parametrize(
-    "test_method, dtype, nums, expected_value",
+    "test_method, dtype, nums, expected_value, kwargs",
     [
-        ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
-        ('max', 'int', [1, 2, 3, 4, 5], 5),
+        ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0, {}),
+        ('max', 'int', [1, 2, 3, 4, 5], 5, {}),
 
-        ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
-        ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
+        ('min', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 1.0, {}),
+        ('min', 'int', [1, 2, 3, 4, 5], 1, {}),
 
-        ('min', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 1.0),
-        ('min', 'int', [1, 2, 3, 4, 5], 1),
-
-        ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
-        ('sum', 'int', [1, 2, 3, 4, 5], 15),
+        ('var', 'float', [1.0, 2.0, 3.0, 4.0], 1.25, {}),
+        ('var', 'float', [1.0, 2.0, 3.0], 1.0, {"ddof": 1}),
     ],
 )
 def test_statistics_methods(
@@ -30,9 +27,10 @@ def test_statistics_methods(
     dtype: str,
     nums: LIST_TYPE,
     expected_value: NUM_TYPE,
+    kwargs: dict,
 ) -> None:
     arr = ul.from_seq(nums, dtype)
-    result = getattr(arr, test_method)()
+    result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
 

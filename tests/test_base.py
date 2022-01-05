@@ -43,9 +43,17 @@ NUM_OR_LIST_TYPE = Union[NUM_TYPE, LIST_TYPE]
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('copy', 'int', [1, 2], [1, 2]),
 
+        ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
+        ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
+        ('mean', 'bool', [True, False, True, False], 0.5),
+
         ('size', 'bool', [True, False], 2),
         ('size', 'float', [1.0, 2.0], 2),
         ('size', 'int', [1, 2], 2),
+
+        ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
+        ('sum', 'int', [1, 2, 3, 4, 5], 15),
+        ('sum', 'bool', [True, False, True], 2,),
 
         ('to_list', 'bool', [True, False], [True, False]),
         ('to_list', 'bool', [True, False], [True, False]),
