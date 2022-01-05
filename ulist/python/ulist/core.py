@@ -299,3 +299,21 @@ class UltraFastList:
         """Returns the sorted unique elements of self. """
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.unique())
+
+    def var(self, ddof: int = 0) -> float:
+        """Returns the variance of self.
+
+        Args:
+            ddof (int, optional):
+                Delta Degrees of Freedom - the divisor used in the
+                calculation is N - ddof, where N represents the number
+                of elements. Defaults to 0.
+
+        Returns:
+            float: variance
+        """
+        assert isinstance(self._values, FloatList)
+        mean = self.mean()
+        numerator = self.sub_scala(mean).pow_scala(2).sum()
+        denominator = self.size() - ddof
+        return numerator / denominator
