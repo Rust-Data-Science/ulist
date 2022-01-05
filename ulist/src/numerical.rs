@@ -1,9 +1,9 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use num::traits::pow::pow;
-use num::traits::AsPrimitive;
 use num::One;
 use std::cmp::PartialOrd;
+use std::marker::Copy;
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Fn;
@@ -13,7 +13,7 @@ use std::ops::Sub;
 /// Abstract List with Numerical type elements.
 pub trait NumericalList<T>: List<T>
 where
-    T: AsPrimitive<f32>
+    T: Copy
         + PartialOrd
         + Add<Output = T>
         + Sub<Output = T>
@@ -70,12 +70,6 @@ where
     }
 
     fn max(&self) -> T;
-
-    fn mean(&self) -> f32 {
-        let numeritor: f32 = self.sum().as_();
-        let denominator: f32 = self.size().as_();
-        numeritor / denominator
-    }
 
     fn min(&self) -> T;
 
