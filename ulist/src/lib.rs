@@ -3,6 +3,7 @@ mod boolean;
 mod float;
 mod integer;
 mod numerical;
+mod types;
 use integer::IntegerList;
 use pyo3::prelude::*;
 
