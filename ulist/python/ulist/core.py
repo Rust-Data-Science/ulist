@@ -208,8 +208,7 @@ class UltraFastList:
 
     def mean(self) -> float:
         """Return the mean of self."""
-        assert not isinstance(self._values, BooleanList)
-        return self._values.mean()
+        return self.sum() / self.size()
 
     def min(self) -> NUM:
         """Return the minimum of self."""
