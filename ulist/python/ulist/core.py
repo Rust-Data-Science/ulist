@@ -148,6 +148,36 @@ class UltraFastList:
         """Adds a new element at the end of the self."""
         self._values.append(num)
 
+    def astype(self, dtype: str) -> "UltraFastList":
+        """Copy of the array, cast to a specified dtype.
+
+        Raises:
+            ValueError: Parameter dtype should be 'int', 'float' or 'bool'!
+
+        Returns:
+            UltraFastList: A ulist object.
+        """
+        if dtype == "int":
+            if isinstance(self._values, IntegerList):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_int())
+        elif dtype == "float":
+            if isinstance(self._values, FloatList):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_float())
+        elif dtype == "bool":
+            if isinstance(self._values, BooleanList):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_bool())
+        else:
+            raise ValueError(
+                "Parameter dtype should be 'int', 'float' or 'bool'!"
+            )
+        return result
+
     def copy(self) -> "UltraFastList":
         """Return a ulist copy of self."""
         return UltraFastList(self._values.copy())

@@ -2,6 +2,8 @@ use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
 use crate::numerical::NumericalList;
+use crate::types::AsBooleanList;
+use crate::types::AsFloatList;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
@@ -32,6 +34,14 @@ impl IntegerList {
 
     pub fn append(&self, num: i32) {
         List::append(self, num)
+    }
+
+    pub fn as_bool(&self) -> BooleanList {
+        AsBooleanList::as_bool(self)
+    }
+
+    pub fn as_float(&self) -> FloatList {
+        AsFloatList::as_float(self)
     }
 
     pub fn copy(&self) -> Self {
@@ -198,5 +208,19 @@ impl NumericalList<i32> for IntegerList {
 
     fn sum(&self) -> i32 {
         self.values().iter().sum()
+    }
+}
+
+impl AsBooleanList for IntegerList {
+    fn as_bool(&self) -> BooleanList {
+        let vec = self.values().iter().map(|&x| x != 0).collect();
+        BooleanList::new(vec)
+    }
+}
+
+impl AsFloatList for IntegerList {
+    fn as_float(&self) -> FloatList {
+        let vec = self.values().iter().map(|&x| x as f32).collect();
+        FloatList::new(vec)
     }
 }
