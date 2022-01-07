@@ -66,7 +66,7 @@ def test_methods_no_arg(
     dtype: str,
     nums: LIST_TYPE,
     expected_value: NUM_OR_LIST_TYPE,
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)()
     check_test_result(dtype, test_method, result, expected_value)
@@ -78,6 +78,21 @@ def test_methods_no_arg(
         ('__getitem__', 'bool', [True, False, True], True, {'index': 2}),
         ('__getitem__', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
+
+        ('astype', 'bool', [True, False], [1, 0], {'dtype': 'int'}),
+        ('astype', 'bool', [True, False], [1.0, 0.0], {'dtype': 'float'}),
+        ('astype', 'bool', [True, False], [True, False], {'dtype': 'bool'}),
+
+        ('astype', 'float', [1.0, 2.0, 3.0], [1, 2, 3], {'dtype': 'int'}),
+        ('astype', 'float', [1.0, 2.0, 3.0], [
+         1.0, 2.0, 3.0], {'dtype': 'float'}),
+        ('astype', 'float', [-2.0, -1.0, 0.0, 1.0, 2.0],
+         [True, True, False, True, True], {'dtype': 'bool'}),
+
+        ('astype', 'int', [1, 2, 3], [1, 2, 3], {'dtype': 'int'}),
+        ('astype', 'int', [1, 2, 3], [1.0, 2.0, 3.0], {'dtype': 'float'}),
+        ('astype', 'int', [-2, -1, 0, 1, 2],
+         [True, True, False, True, True], {'dtype': 'bool'}),
 
         ('get', 'bool', [True, False, True], True, {'index': 2}),
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
@@ -96,7 +111,7 @@ def test_methods_with_args(
     nums: LIST_TYPE,
     expected_value: NUM_OR_LIST_TYPE,
     kwargs: dict,
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
@@ -131,7 +146,7 @@ def test_multable_methods(
     nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, arr, expected_value)
@@ -150,7 +165,7 @@ def test_indexing_operations(
     nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
-):
+) -> None:
     index = kwargs["index"]
     num = kwargs["num"]
     # Set
@@ -164,3 +179,36 @@ def test_indexing_operations(
     expected_value = kwargs["num"]
     result = arr[index]
     check_test_result(dtype, test_method, result, expected_value)
+
+
+@pytest.mark.parametrize(
+    "dtype, nums, expected_dtype",
+    [
+        ('bool', [True, False], 'int'),
+        ('bool', [True, False], 'float'),
+        ('bool', [True, False], 'bool'),
+
+        ('float', [1.0, 2.0], 'int'),
+        ('float', [1.0, 2.0], 'float'),
+        ('float', [1.0, 2.0], 'bool'),
+
+        ('int', [1, 2], 'int'),
+        ('int', [1, 2], 'float'),
+        ('int', [1, 2], 'bool'),
+    ],
+)
+def test_astype(
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_dtype: str,
+) -> None:
+    """
+    The output of `astype` is already tested in `test_methods_with_args`.
+    We run additional tests here:
+        1. The astype method should return a new ulist object;
+        2. The returned object should has correct dtype;
+    """
+    arr = ul.from_seq(nums, dtype=dtype)
+    result = arr.astype(expected_dtype)
+    assert result.dtype == expected_dtype
+    assert id(result) != id(arr)

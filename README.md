@@ -69,12 +69,12 @@ print(result)
 
 
 ### Wish-list
+* `eq`, `ge`, `le` and `ne` methods for `FloatList`
 * `map`, `where` methods for `NumericalList`
 * `zip` method for `List` and `ListPair` class
 * `agg` method for `ListPair`
 * `StringList` or `BytesList` class
 * `var` method for `IntegerList` and `BooleanList`
-* Type conversions between `FloatList`, `IntegerList` and `BooleanList`
 * Support Windows users
 * Code coverage test
 * Doctest to check examples in Docstrings
