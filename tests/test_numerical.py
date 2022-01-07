@@ -88,7 +88,7 @@ def test_data_process_methods(
     nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
@@ -116,7 +116,7 @@ def test_filter(
     nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     condition: List[bool],
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     cond = ul.from_seq(condition, dtype="bool")
     result = arr.filter(cond)
@@ -287,7 +287,7 @@ def test_arithmetic_methods(
     nums: List[NUM_TYPE],
     expected_value: LIST_TYPE,
     kwargs: dict,
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     if not test_method.endswith("_scala"):
         fn = getattr(arr, test_method)
@@ -450,7 +450,7 @@ def test_operators(
     nums: List[NUM_TYPE],
     expected_value: LIST_TYPE,
     kwargs: dict,
-):
+) -> None:
     arr = ul.from_seq(nums, dtype)
     if isinstance(kwargs["other"], list):
         other = ul.from_seq(kwargs["other"], dtype)

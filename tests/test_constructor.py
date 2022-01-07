@@ -45,7 +45,7 @@ def test_constructors(
     args: tuple,
     kwargs: dict,
     expected_value: List[bool],
-):
+) -> None:
     result = test_method(*args, **kwargs)
     if type(expected_value[0]) == int:
         dtype = "int"

@@ -40,7 +40,7 @@ def test_methods(
     nums: List[int],
     expected_value: List[bool],
     kwargs: dict,
-):
+) -> None:
     dtype = "int"
     arr = ul.from_seq(nums, dtype=dtype)
     result = getattr(arr, test_method)(**kwargs).to_list()
