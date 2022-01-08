@@ -10,18 +10,6 @@ from ulist.utils import check_test_result
     "test_method, nums, expected_value, kwargs",
     [
         (
-            "equal_scala",
-            [1, 2, 3],
-            [False, True, False],
-            {"num": 2}
-        ),
-        (
-            "not_equal_scala",
-            [1, 2, 3],
-            [True, False, True],
-            {"num": 2}
-        ),
-        (
             "greater_than_or_equal_scala",
             [1, 2, 3],
             [False, True, True],
@@ -50,8 +38,6 @@ def test_methods(
 @pytest.mark.parametrize(
     "test_method, nums, expected_value, kwargs",
     [
-        (op.eq, [1, 2, 3], [False, True, False], {"other": 2}),
-        (op.ne, [1, 2, 3], [True, False, True], {"other": 2}),
         (op.ge, [1, 2, 3], [False, True, True], {"other": 2}),
         (op.le, [1, 2, 3], [True, True, False], {"other": 2}),
     ],

@@ -50,6 +50,10 @@ where
 
     fn div_scala(&self, num: f32) -> Vec<f32>;
 
+    fn equal_scala(&self, num: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x == num))
+    }
+
     fn filter(&self, condition: &BooleanList) -> Self {
         let vec = self
             .values()
@@ -79,6 +83,10 @@ where
 
     fn mul_scala(&self, num: T) -> Self {
         List::_new(self._operate_scala(|x| x * num))
+    }
+
+    fn not_equal_scala(&self, num: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
     }
 
     fn pow_scala(&self, num: usize) -> Self {
