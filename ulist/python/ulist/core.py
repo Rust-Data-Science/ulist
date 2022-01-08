@@ -211,9 +211,9 @@ class UltraFastList:
         """Return self[index]."""
         return self._values.get(index)
 
-    def greater_than_or_equal_scala(self, num: int) -> "UltraFastList":
+    def greater_than_or_equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self >= num."""
-        assert isinstance(self._values, IntegerList)
+        assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.greater_than_or_equal_scala(num))
 
     def greater_than_scala(self, num: NUM) -> "UltraFastList":
@@ -221,9 +221,9 @@ class UltraFastList:
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.greater_than_scala(num))
 
-    def less_than_or_equal_scala(self, num: int) -> "UltraFastList":
+    def less_than_or_equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self <= num."""
-        assert isinstance(self._values, IntegerList)
+        assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.less_than_or_equal_scala(num))
 
     def less_than_scala(self, num: NUM) -> "UltraFastList":

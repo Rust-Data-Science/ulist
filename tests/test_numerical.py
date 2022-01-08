@@ -149,10 +149,21 @@ def test_filter(
          [False, True, False], {"num": 2.0}),
         ("equal_scala", 'int', [1, 2, 3], [False, True, False], {"num": 2}),
 
+
+        ("greater_than_or_equal_scala", 'float', [
+         1.0, 2.0, 3.0], [False, True, True], {"num": 2.0}),
+        ("greater_than_or_equal_scala", 'int', [
+         1, 2, 3], [False, True, True], {"num": 2}),
+
         ('greater_than_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          False, False, True, True, True], {'num': 2}),
         ('greater_than_scala', 'int', [1, 2, 3, 4, 5], [
          False, False, True, True, True], {'num': 2}),
+
+        ("less_than_or_equal_scala", 'float', [
+         1.0, 2.0, 3.0], [True, True, False], {"num": 2.0}),
+        ("less_than_or_equal_scala", 'int', [
+         1, 2, 3], [True, True, False], {"num": 2}),
 
         ('less_than_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          True, False, False, False, False], {'num': 2}),
@@ -222,10 +233,16 @@ def test_arithmetic_methods(
          False, True, False], {"other": 2.0}),
         (op.eq, 'int', [1, 2, 3], [False, True, False], {"other": 2}),
 
+        (op.ge, 'float', [1.0, 2.0, 3.0], [False, True, True], {"other": 2.0}),
+        (op.ge, 'int', [1, 2, 3], [False, True, True], {"other": 2}),
+
         (op.gt, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          False, False, True, True, True], {'other': 2}),
         (op.gt, 'int', [1, 2, 3, 4, 5], [
          False, False, True, True, True], {'other': 2}),
+
+        (op.le, 'float', [1.0, 2.0, 3.0], [True, True, False], {"other": 2.0}),
+        (op.le, 'int', [1, 2, 3], [True, True, False], {"other": 2}),
 
         (op.lt, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          True, False, False, False, False], {'other': 2}),
