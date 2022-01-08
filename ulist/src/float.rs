@@ -75,8 +75,16 @@ impl FloatList {
         List::get(self, index)
     }
 
+    pub fn greater_than_or_equal_scala(&self, num: f32) -> BooleanList {
+        NumericalList::greater_than_or_equal_scala(self, num)
+    }
+
     pub fn greater_than_scala(&self, num: f32) -> BooleanList {
         NumericalList::greater_than_scala(self, num)
+    }
+
+    pub fn less_than_or_equal_scala(&self, num: f32) -> BooleanList {
+        NumericalList::less_than_or_equal_scala(self, num)
     }
 
     pub fn less_than_scala(&self, num: f32) -> BooleanList {

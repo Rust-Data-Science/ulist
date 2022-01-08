@@ -65,8 +65,16 @@ where
         List::_new(vec)
     }
 
+    fn greater_than_or_equal_scala(&self, num: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x >= num))
+    }
+
     fn greater_than_scala(&self, num: T) -> BooleanList {
         BooleanList::new(self._operate_scala(|x| x > num))
+    }
+
+    fn less_than_or_equal_scala(&self, num: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x <= num))
     }
 
     fn less_than_scala(&self, num: T) -> BooleanList {
