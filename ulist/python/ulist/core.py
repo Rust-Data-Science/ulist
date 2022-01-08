@@ -193,9 +193,9 @@ class UltraFastList:
         assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.div_scala(num))
 
-    def equal_scala(self, num: int) -> "UltraFastList":
+    def equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self == num."""
-        assert isinstance(self._values, IntegerList)
+        assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.equal_scala(num))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
@@ -261,9 +261,9 @@ class UltraFastList:
         assert isinstance(self._values, BooleanList)
         return UltraFastList(self._values.not_())
 
-    def not_equal_scala(self, num: int) -> "UltraFastList":
+    def not_equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self != num."""
-        assert isinstance(self._values, IntegerList)
+        assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.not_equal_scala(num))
 
     def or_(self, other: "UltraFastList") -> "UltraFastList":

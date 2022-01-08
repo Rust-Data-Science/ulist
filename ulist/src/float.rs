@@ -63,6 +63,10 @@ impl FloatList {
         FloatList::new(vec)
     }
 
+    pub fn equal_scala(&self, num: f32) -> BooleanList {
+        NumericalList::equal_scala(self, num)
+    }
+
     pub fn filter(&self, condition: &BooleanList) -> Self {
         NumericalList::filter(self, condition)
     }
@@ -93,6 +97,10 @@ impl FloatList {
 
     pub fn mul_scala(&self, num: f32) -> Self {
         NumericalList::mul_scala(self, num)
+    }
+
+    pub fn not_equal_scala(&self, num: f32) -> BooleanList {
+        NumericalList::not_equal_scala(self, num)
     }
 
     pub fn pop(&self) {

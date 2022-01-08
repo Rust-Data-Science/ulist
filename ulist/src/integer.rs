@@ -64,7 +64,7 @@ impl IntegerList {
     }
 
     pub fn equal_scala(&self, num: i32) -> BooleanList {
-        BooleanList::new(NumericalList::_operate_scala(self, |x| x == num))
+        NumericalList::equal_scala(self, num)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -108,7 +108,7 @@ impl IntegerList {
     }
 
     pub fn not_equal_scala(&self, num: i32) -> BooleanList {
-        BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
+        NumericalList::not_equal_scala(self, num)
     }
 
     pub fn pop(&self) {
