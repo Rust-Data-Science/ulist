@@ -69,12 +69,13 @@ print(result)
 
 
 ### Wish-list
-* `eq`, `ge`, `le` and `ne` methods for `FloatList`
-* `map`, `where` methods for `NumericalList`
-* `zip` method for `List` and `ListPair` class
-* `agg` method for `ListPair`
-* `StringList` or `BytesList` class
+* `ge` and `le` methods for `FloatList`
+* `apply`, `where`, `nth`, `argmin`, `argmax`, `median`, `top` methods for `NumericalList`
+* Implement `StringList` or `BytesList`
 * `var` method for `IntegerList` and `BooleanList`
+* `union` and `case-when` methods for `List` class
+* Implement `IndexList`
+* Remove unnecessary methods for `BooleanList`, and user can cast `BooleanList` to `IntegerList` if needed.
 * Support Windows users
 * Code coverage test
 * Doctest to check examples in Docstrings
