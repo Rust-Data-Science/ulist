@@ -1,11 +1,9 @@
-# See: https://github.com/nedbat/coveragepy/blob/master/.github/workflows/coverage.yml
-
 name: "Coverage"
 
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 
