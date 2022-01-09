@@ -27,6 +27,10 @@ jobs:
           toolchain: stable
           profile: minimal
           default: true
+      - name: Create conda environment
+        run: |
+          conda create -n py38 python=3.8
+          conda activate py38
       - name: Install Python packages
         run: |
           pip install mypy pytest flake8 maturin pytest-cov
