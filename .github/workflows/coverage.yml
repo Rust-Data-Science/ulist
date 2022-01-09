@@ -31,6 +31,7 @@ jobs:
         run: |
           sudo chown -R 501:20 /usr/local/miniconda/pkgs/
           conda create -n py38 python=3.8
+          conda init shell
           conda activate py38
       - name: Install Python packages
         run: |
