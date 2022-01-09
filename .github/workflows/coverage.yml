@@ -1,0 +1,56 @@
+# See: https://github.com/nedbat/coveragepy/blob/master/.github/workflows/coverage.yml
+
+name: "Coverage"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+
+jobs:
+  tests:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: ['3.8']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - name: Install Python packages
+        run: |
+          pip install mypy pytest flake8 maturin pytest-cov
+      - name: Build ulist
+        run: |
+          maturin build --out dist -m ulist/Cargo.toml
+      - name: Install ulist
+        run: |
+          pip install ulist --no-index --find-links dist --force-reinstall 
+      - name: Run tests
+        run: |
+          pytest --cov-report html  --cov-report term-missing --cov=ulist tests/
+      - name: Extract coverage result
+        run: |
+          cd .github
+          python extract_coverage.py
+
+      - name: "Create badge"
+        # https://gist.github.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 3a76a8f4c0d25c24b840fe66a3cf44c1
+          filename: metacov.json
+          label: Coverage
+          message: ${{ env.total }}
+          color: green
