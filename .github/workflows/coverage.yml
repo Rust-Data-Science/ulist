@@ -30,12 +30,9 @@ jobs:
       - name: Install Python packages
         run: |
           pip install mypy pytest flake8 maturin pytest-cov
-      - name: Build ulist
+      - name: Build and install ulist
         run: |
-          maturin build --out dist -m ulist/Cargo.toml
-      - name: Install ulist
-        run: |
-          pip install ulist --no-index --find-links dist --force-reinstall 
+          maturin develop -m ulist/Cargo.toml
       - name: Run tests
         run: |
           pytest --cov-report html  --cov-report term-missing --cov=ulist tests/
