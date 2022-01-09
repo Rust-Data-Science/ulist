@@ -2,7 +2,7 @@
 
 ### Python Packages
 * `ulist` is built and published by `maturin`, so make sure you have `maturin` installed before developing anything;
-* `pytest` is the testing framework for `ulist`, we aim to 100% test coverage;
+* `pytest` and `pytest-cov` is the testing framework for `ulist`, we aim to 100% test coverage;
 * `Flake8` and `mypy` are the linters for `ulist`, they help us to check the code style, bugs and type annotation;
 * `sphinx` auto-generates API documentation for `ulist`.
 
