@@ -55,4 +55,4 @@ jobs:
           filename: metacov.json
           label: Coverage
           message: ${{ env.total }}
-          color: green
+          color: ${{ env.badge_color }}
