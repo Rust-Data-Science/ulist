@@ -29,16 +29,16 @@ jobs:
           sudo chown -R 501:20 /usr/local/miniconda/pkgs/
           conda create -n py38 python=3.8
           eval "$(conda shell.bash hook)"
-      - name: Install Python packages
-        run: |
           conda activate py38
           pip install mypy pytest flake8 maturin pytest-cov
       - name: Build and install ulist
         run: |
+          eval "$(conda shell.bash hook)"
           conda activate py38
           maturin develop -m ulist/Cargo.toml
       - name: Run tests
         run: |
+          eval "$(conda shell.bash hook)"
           conda activate py38
           pytest --cov-report html  --cov-report term-missing --cov=ulist tests/
       - name: Extract coverage result
