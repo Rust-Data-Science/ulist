@@ -29,6 +29,7 @@ jobs:
           default: true
       - name: Create conda environment
         run: |
+          sudo chown 501:20 /usr/local/miniconda/pkgs/cache/
           conda create -n py38 python=3.8
           conda activate py38
       - name: Install Python packages
