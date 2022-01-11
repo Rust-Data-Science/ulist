@@ -69,21 +69,5 @@ print(result)
 ```
 
 
-### Wish-list
-* `ge` and `le` methods for `FloatList`
-* `apply`, `where`, `nth`, `argmin`, `argmax`, `median`, `top` methods for `NumericalList`
-* Implement `StringList` or `BytesList`
-* `var` method for `IntegerList` and `BooleanList`
-* `union` and `case-when` methods for `List` class
-* Implement `IndexList`
-* Remove unnecessary methods for `BooleanList`, and user can cast `BooleanList` to `IntegerList` if needed.
-* Support Windows users
-* Code coverage test
-* Doctest to check examples in Docstrings
-* Inplace and non-inplace mode
-* Support missing values
-* Airspeed velocity to benchmark
-* Further optimizing the benchmark with SIMD
-
 ### Contribute
 All contributions are welcome. See [Developer Guide](https://github.com/tushushu/ulist/blob/main/develop.md)
