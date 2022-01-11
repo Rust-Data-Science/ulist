@@ -8,7 +8,7 @@ def run() -> None:
         text = file.read()
     start = text.index("total")
     text = text[start:]
-    score = float(re.findall('[0-9]+\.?[0-9]+%{1}', text)[0].replace('%', ''))
+    score = int(re.findall('[0-9]+\.?[0-9]+%{1}', text)[0].replace('%', ''))
     print(f"The coverage is {score}%!")
     subprocess.run([f'echo "total={score}%" >> $GITHUB_ENV'], shell=True)
 
