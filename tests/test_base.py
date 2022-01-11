@@ -103,6 +103,13 @@ def test_methods_no_arg(
         ('replace', 'float', [1.0, 0.0, 1.0], [
          0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
         ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
+
+        ('var', 'bool', [True, False], 0.25, {}),
+        ('var', 'bool', [True, True, True, False], 0.25, {"ddof": 1}),
+        ('var', 'float', [1.0, 2.0, 3.0, 4.0], 1.25, {}),
+        ('var', 'float', [1.0, 2.0, 3.0], 1.0, {"ddof": 1}),
+        ('var', 'int', [1, 2, 3, 4], 1.25, {}),
+        ('var', 'int', [1, 2, 3], 1.0, {"ddof": 1}),
     ],
 )
 def test_methods_with_args(
