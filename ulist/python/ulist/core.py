@@ -339,11 +339,21 @@ class UltraFastList:
                 calculation is N - ddof, where N represents the number
                 of elements. Defaults to 0.
 
+        Raises:
+            TypeError: Only support dtype int, float and bool.
+
         Returns:
             float: variance
         """
-        assert isinstance(self._values, FloatList)
-        mean = self.mean()
-        numerator = self.sub_scala(mean).pow_scala(2).sum()
-        denominator = self.size() - ddof
+        if isinstance(self._values, FloatList):
+            data = self
+        elif isinstance(self._values, IntegerList):
+            data = self.astype('float')
+        elif isinstance(self._values, BooleanList):
+            data = self.astype('float')
+        else:
+            raise TypeError(f"Var method does not support dtype {self.dtype}!")
+        mean = data.mean()
+        numerator = data.sub_scala(mean).pow_scala(2).sum()
+        denominator = data.size() - ddof
         return numerator / denominator
