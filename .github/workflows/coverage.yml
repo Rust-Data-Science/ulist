@@ -50,6 +50,6 @@ jobs:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: 3a76a8f4c0d25c24b840fe66a3cf44c1
           filename: metacov.json
-          label: Coverage
+          label: coverage
           message: ${{ env.total }}
           color: ${{ env.badge_color }}
