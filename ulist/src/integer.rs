@@ -36,6 +36,14 @@ impl IntegerList {
         List::append(self, num)
     }
 
+    pub fn argmax(&self) -> usize {
+        NumericalList::argmax(self)
+    }
+
+    pub fn argmin(&self) -> usize {
+        NumericalList::argmin(self)
+    }
+
     pub fn as_bool(&self) -> BooleanList {
         AsBooleanList::as_bool(self)
     }
@@ -184,6 +192,24 @@ impl NumericalList<i32> for IntegerList {
         } else {
             vec.sort_by(|a, b| b.cmp(a))
         }
+    }
+
+    fn argmax(&self) -> usize {
+        self.values()
+            .iter()
+            .enumerate()
+            .max_by_key(|x| x.1)
+            .unwrap()
+            .0
+    }
+
+    fn argmin(&self) -> usize {
+        self.values()
+            .iter()
+            .enumerate()
+            .min_by_key(|x| x.1)
+            .unwrap()
+            .0
     }
 
     fn div(&self, other: &Self) -> Vec<f32> {
