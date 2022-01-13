@@ -196,30 +196,22 @@ impl NumericalList<f32> for FloatList {
 
     fn argmax(&self) -> usize {
         let mut result = (0, &self.values()[0]);
-        let mut last = result;
         let vec = self.values();
         for cur in vec.iter().enumerate() {
-            if cur.1 > last.1 {
+            if cur.1 > result.1 {
                 result = cur;
-            } else {
-                result = last;
             }
-            last = cur;
         }
         result.0
     }
 
     fn argmin(&self) -> usize {
         let mut result = (0, &self.values()[0]);
-        let mut last = result;
         let vec = self.values();
         for cur in vec.iter().enumerate() {
-            if cur.1 < last.1 {
+            if cur.1 < result.1 {
                 result = cur;
-            } else {
-                result = last;
             }
-            last = cur;
         }
         result.0
     }

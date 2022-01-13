@@ -148,6 +148,16 @@ class UltraFastList:
         """Adds a new element at the end of the self."""
         self._values.append(num)
 
+    def argmax(self) -> int:
+        """Returns the indices of the maximum values of self."""
+        assert not isinstance(self._values, BooleanList)
+        return self._values.argmax()
+
+    def argmin(self) -> int:
+        """Returns the indices of the minimum values of self."""
+        assert not isinstance(self._values, BooleanList)
+        return self._values.argmin()
+
     def astype(self, dtype: str) -> "UltraFastList":
         """Copy of the array, cast to a specified dtype.
 
