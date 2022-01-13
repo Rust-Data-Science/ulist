@@ -270,6 +270,9 @@ def test_arithmetic_methods(
         (op.ne, 'float', [1.0, 2.0, 3.0], [True, False, True], {"other": 2.0}),
         (op.ne, 'int', [1, 2, 3], [True, False, True], {"other": 2}),
 
+        (op.pow, 'float', [1.0, 2.0, 3.0], [1.0, 4.0, 9.0], {"other": 2}),
+        (op.pow, 'int', [1, 2, 3], [1, 4, 9], {"other": 2}),
+
         (op.sub, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          0.0, 0.0, 0.0, 0.0, 0.0], {'other': [1, 2, 3, 4, 5]}),
         (op.sub, 'float', [1.0, 2.0, 3.0, 4.0, 5.0],
