@@ -46,6 +46,10 @@ where
         List::_new(self._operate_scala(|x| x + num))
     }
 
+    fn argmax(&self) -> usize;
+
+    fn argmin(&self) -> usize;
+
     fn div(&self, other: &Self) -> Vec<f32>;
 
     fn div_scala(&self, num: f32) -> Vec<f32>;

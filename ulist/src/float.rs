@@ -36,6 +36,14 @@ impl FloatList {
         List::append(self, num)
     }
 
+    pub fn argmax(&self) -> usize {
+        NumericalList::argmax(self)
+    }
+
+    pub fn argmin(&self) -> usize {
+        NumericalList::argmin(self)
+    }
+
     pub fn as_bool(&self) -> BooleanList {
         AsBooleanList::as_bool(self)
     }
@@ -184,6 +192,28 @@ impl NumericalList<f32> for FloatList {
         } else {
             vec.sort_by(|a, b| b.partial_cmp(a).unwrap());
         }
+    }
+
+    fn argmax(&self) -> usize {
+        let mut result = (0, &self.values()[0]);
+        let vec = self.values();
+        for cur in vec.iter().enumerate() {
+            if cur.1 > result.1 {
+                result = cur;
+            }
+        }
+        result.0
+    }
+
+    fn argmin(&self) -> usize {
+        let mut result = (0, &self.values()[0]);
+        let vec = self.values();
+        for cur in vec.iter().enumerate() {
+            if cur.1 < result.1 {
+                result = cur;
+            }
+        }
+        result.0
     }
 
     fn div(&self, other: &Self) -> Vec<f32> {

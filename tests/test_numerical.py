@@ -12,6 +12,20 @@ LIST_TYPE = Union[List[float], List[int]]
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value",
     [
+        ('argmax', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 4),
+        ('argmax', 'float', [5.0, 1.0, 2.0, 3.0, 4.0], 0),
+        ('argmax', 'float', [1.0, 2.0, 5.0, 3.0, 4.0], 2),
+        ('argmax', 'int', [1, 2, 3, 4, 5], 4),
+        ('argmax', 'int', [5, 1, 2, 3, 4], 0),
+        ('argmax', 'int', [1, 2, 5, 3, 4], 2),
+
+        ('argmin', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 0),
+        ('argmin', 'float', [2.0, 3.0, 4.0, 5.0, 1.0], 4),
+        ('argmin', 'float', [2.0, 5.0, 1.0, 3.0, 4.0], 2),
+        ('argmin', 'int', [1, 2, 3, 4, 5], 0),
+        ('argmin', 'int', [2, 3, 4, 5, 1], 4),
+        ('argmin', 'int', [2, 5, 1, 3, 4], 2),
+
         ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
         ('max', 'int', [1, 2, 3, 4, 5], 5),
 
