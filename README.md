@@ -7,7 +7,7 @@
 [![doc](https://github.com/tushushu/ulist/workflows/doc/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/sphinx.yml)
 [![publish](https://github.com/tushushu/ulist/workflows/publish/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/publish.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-blue)](https://github.com/PyCQA/flake8)  
-[![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1/raw/dde38d61670379e703400ea2d89d88c5a3bb2588/metacov.json)](https://github.com/tushushu/ulist/actions/workflows/coverage.yml)  
+[![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1/raw/metacov.json)](https://github.com/tushushu/ulist/actions/workflows/coverage.yml)  
   
     
 [**Documentation**](https://tushushu.github.io/ulist/) | [**Source Code**](https://github.com/tushushu/ulist)  
