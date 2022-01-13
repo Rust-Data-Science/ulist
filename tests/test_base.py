@@ -12,6 +12,10 @@ NUM_OR_LIST_TYPE = Union[NUM_TYPE, LIST_TYPE]
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value",
     [
+        ('__len__', 'float', [1.0, 2.0, 3.0], 3),
+        ('__len__', 'int', [1, 2, 3], 3),
+        ('__len__', 'bool', [True, False, True], 3),
+
         (
             "__repr__",
             "bool",
