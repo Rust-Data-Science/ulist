@@ -47,6 +47,10 @@ def test_statistics_methods(
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
+        ('replace', 'float', [1.0, 0.0, 1.0], [
+         0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
+        ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
+
         (
             'sort',
             'float',

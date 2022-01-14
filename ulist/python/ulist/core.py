@@ -293,6 +293,7 @@ class UltraFastList:
 
     def replace(self, old: ELEM, new: ELEM) -> "UltraFastList":
         """Replace the old elements of self with the new one."""
+        assert not isinstance(self._values, BooleanList)
         return UltraFastList(self._values.replace(old, new))
 
     def set(self, index: int, num: ELEM) -> None:
