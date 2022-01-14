@@ -95,6 +95,15 @@ where
 
     fn pow_scala(&self, num: V) -> Self;
 
+    fn replace(&self, old: T, new: T) -> Self {
+        let vec = self
+            .values()
+            .iter()
+            .map(|&x| if x == old { new } else { x })
+            .collect();
+        List::_new(vec)
+    }
+
     fn sort(&self, ascending: bool) -> Self {
         let mut vec = self.to_list();
         let mut _vec = &mut vec;

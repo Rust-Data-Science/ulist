@@ -79,10 +79,6 @@ impl BooleanList {
         List::repeat(num, size)
     }
 
-    pub fn replace(&self, old: bool, new: bool) -> Self {
-        List::replace(self, old, new)
-    }
-
     pub unsafe fn set(&self, index: usize, num: bool) {
         List::set(self, index, num)
     }
