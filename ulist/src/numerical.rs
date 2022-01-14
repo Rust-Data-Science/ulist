@@ -1,7 +1,5 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
-use num::traits::pow::pow;
-use num::One;
 use std::cmp::PartialOrd;
 use std::marker::Copy;
 use std::ops::Add;
@@ -11,15 +9,9 @@ use std::ops::Mul;
 use std::ops::Sub;
 
 /// Abstract List with Numerical type elements.
-pub trait NumericalList<T>: List<T>
+pub trait NumericalList<T, V>: List<T>
 where
-    T: Copy
-        + PartialOrd
-        + Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + One,
+    T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
     fn _operate(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
@@ -101,9 +93,7 @@ where
         BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
     }
 
-    fn pow_scala(&self, num: usize) -> Self {
-        List::_new(self._operate_scala(|x| pow(x, num)))
-    }
+    fn pow_scala(&self, num: V) -> Self;
 
     fn sort(&self, ascending: bool) -> Self {
         let mut vec = self.to_list();

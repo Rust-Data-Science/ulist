@@ -123,7 +123,7 @@ impl FloatList {
         List::pop(self);
     }
 
-    pub fn pow_scala(&self, num: usize) -> Self {
+    pub fn pow_scala(&self, num: i32) -> Self {
         NumericalList::pow_scala(self, num)
     }
 
@@ -185,7 +185,7 @@ impl List<f32> for FloatList {
     }
 }
 
-impl NumericalList<f32> for FloatList {
+impl NumericalList<f32, i32> for FloatList {
     fn _sort(&self, vec: &mut Vec<f32>, ascending: bool) {
         if ascending {
             vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -229,13 +229,24 @@ impl NumericalList<f32> for FloatList {
     }
 
     fn max(&self) -> f32 {
-        self.values()
+        *self
+            .values()
             .iter()
-            .fold(f32::NEG_INFINITY, |x, &y| x.max(y))
+            .max_by(|&x, &y| x.partial_cmp(y).unwrap())
+            .unwrap()
     }
 
     fn min(&self) -> f32 {
-        self.values().iter().fold(f32::INFINITY, |x, &y| x.min(y))
+        *self
+            .values()
+            .iter()
+            .min_by(|&x, &y| x.partial_cmp(y).unwrap())
+            .unwrap()
+    }
+
+    fn pow_scala(&self, num: i32) -> Self {
+        let vec = self.values().iter().map(|&x| x.powi(num)).collect();
+        FloatList::new(vec)
     }
 
     fn sum(&self) -> f32 {

@@ -123,7 +123,7 @@ impl IntegerList {
         List::pop(self);
     }
 
-    pub fn pow_scala(&self, num: usize) -> Self {
+    pub fn pow_scala(&self, num: u32) -> Self {
         NumericalList::pow_scala(self, num)
     }
 
@@ -185,7 +185,7 @@ impl List<i32> for IntegerList {
     }
 }
 
-impl NumericalList<i32> for IntegerList {
+impl NumericalList<i32, u32> for IntegerList {
     fn _sort(&self, vec: &mut Vec<i32>, ascending: bool) {
         if ascending {
             vec.sort();
@@ -230,6 +230,11 @@ impl NumericalList<i32> for IntegerList {
 
     fn min(&self) -> i32 {
         *self.values().iter().min().unwrap()
+    }
+
+    fn pow_scala(&self, num: u32) -> Self {
+        let vec = self.values().iter().map(|&x| x.pow(num)).collect();
+        IntegerList::new(vec)
     }
 
     fn sum(&self) -> i32 {
