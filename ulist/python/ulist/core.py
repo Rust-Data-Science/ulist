@@ -188,6 +188,34 @@ class UltraFastList:
             )
         return result
 
+    def case(self, default: ELEM) -> 'CaseObject':
+        """A method similar to SQL's `case` statement.
+
+        Args:
+            default (ELEM):
+                The element inserted in output when all conditions evaluate
+                to False.
+
+        Returns:
+            CaseObject
+
+        Examples
+        --------
+        >>> import ulist as ul
+        >>> arr = ul.arange(6)
+        >>> arr
+        UltraFastList([0, 1, 2, 3, 4, 5])
+
+        >>> result = arr.case(default=2)\
+        ...             .when(lambda x: x < 2, then=0)\
+        ...             .when(lambda x: x < 4, then=1)\
+        ...             .end()
+        >>> result
+        UltraFastList([0, 0, 1, 1, 2, 2])
+        """
+        from .control_flow import CaseObject
+        return CaseObject(self, default=default)
+
     def copy(self) -> "UltraFastList":
         """Return a ulist copy of self."""
         return UltraFastList(self._values.copy())
