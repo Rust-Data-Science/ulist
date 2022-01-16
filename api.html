@@ -179,6 +179,53 @@ size (int): Size of the new ulist.</p>
 </div>
 </dd></dl>
 
+<span class="target" id="module-ulist.control_flow"></span><dl class="py function">
+<dt class="sig sig-object py" id="ulist.control_flow.select">
+<span class="sig-prename descclassname"><span class="pre">ulist.control_flow.</span></span><span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.control_flow.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a ulist drawn from elements in <cite>choices</cite>, depending on`conditions`.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>conditions (List[UltraFastList]):</dt><dd><p>The list of conditions which determine from which array in
+<cite>choices</cite> the output elements are taken. When multiple conditions
+are satisfied, the first one encountered in <cite>conditions</cite> is used.</p>
+</dd>
+<dt>choices (LIST_PY):</dt><dd><p>The list of ulist from which the output elements are taken.
+It has to be of the same length as <cite>conditions</cite>.</p>
+</dd>
+<dt>default (ELEM):</dt><dd><p>The element inserted in output when all conditions evaluate
+to False.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>TypeError:</dt><dd><p>The type of parameter <cite>default</cite> should be bool, float or int!</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>UltraFastList: A ulist object.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span>
+<span class="go">UltraFastList([0, 1, 2, 3, 4, 5])</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arr</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conditions</span>
+<span class="go">[</span>
+<span class="go">    UltraFastList([True, True, False, False, False, False]),</span>
+<span class="go">    UltraFastList([True, True, True, True, False, False])</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">conditions</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">UltraFastList([0, 0, 1, 1, 2, 2])</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <span class="target" id="module-ulist.core"></span><dl class="py class">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ulist.core.</span></span><span class="sig-name descname"><span class="pre">UltraFastList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatList</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">IntegerList</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BooleanList</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ulist.core.UltraFastList" title="Permalink to this definition">¶</a></dt>
