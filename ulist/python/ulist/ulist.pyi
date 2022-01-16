@@ -1,6 +1,6 @@
-from typing import Sequence, List
+from typing import List, Sequence
 
-from .typedef import ELEM, NUM, NUM_LIST_RS
+from .typedef import ELEM, LIST_PY, NUM, NUM_LIST_RS
 
 
 class BooleanList:
@@ -115,3 +115,24 @@ class IntegerList:
 
 
 def arange(start: int, stop: int, step: int) -> IntegerList: ...
+
+
+def select_bool(
+    conditions: List[BooleanList],
+    choices: LIST_PY,
+    default: bool,
+) -> BooleanList: ...
+
+
+def select_float(
+    conditions: List[BooleanList],
+    choices: LIST_PY,
+    default: float,
+) -> FloatList: ...
+
+
+def select_int(
+    conditions: List[BooleanList],
+    choices: LIST_PY,
+    default: int,
+) -> IntegerList: ...
