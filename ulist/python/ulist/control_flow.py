@@ -1,11 +1,15 @@
-from typing import Callable, List
+from __future__ import annotations  # To avoid circular import.
+from typing import Callable, List, TYPE_CHECKING
 
-from . import UltraFastList
 from .ulist import BooleanList
 from .typedef import ELEM, LIST_PY
 from .ulist import select_bool as _select_bool
 from .ulist import select_float as _select_float
 from .ulist import select_int as _select_int
+
+
+if TYPE_CHECKING:  # To avoid circular import.
+    from . import UltraFastList
 
 
 def select(
@@ -70,6 +74,8 @@ def select(
         assert isinstance(cond._values, BooleanList)
         _conditions.append(cond._values)
     result = fn(_conditions, choices, default)
+
+    from . import UltraFastList  # To avoid circular import.
     return UltraFastList(result)
 
 
@@ -82,10 +88,14 @@ class CaseObject:
     def __init__(self, nums: UltraFastList, default: ELEM) -> None:
         self._values = nums
         self._default = default
-        self._conditions = []
-        self._choices = []
+        self._conditions: List[UltraFastList] = []
+        self._choices: list = []
 
-    def when(self, fn: Callable[[UltraFastList], UltraFastList], then: ELEM) -> 'CaseObject':
+    def when(
+        self,
+        fn: Callable[[UltraFastList], UltraFastList],
+        then: ELEM
+    ) -> 'CaseObject':
         """Calculate the condition, and keep the condition and element to use.
 
         Args:
@@ -109,11 +119,13 @@ class CaseObject:
                 "Calling parameter `fn` should return a ulist with dtype bool!"
             )
         self._conditions.append(cond)
-        if type(then) != type(self._default):
+
+        if not isinstance(then, type(self._default)):
             raise TypeError(
                 "The type of parameter `then` should be the same as `default`!"
             )
         self._choices.append(then)
+
         return self
 
     def end(self) -> UltraFastList:

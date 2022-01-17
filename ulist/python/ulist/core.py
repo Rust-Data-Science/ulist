@@ -1,7 +1,13 @@
-from typing import Callable
+from __future__ import annotations  # To avoid circular import.
+from typing import TYPE_CHECKING, Callable
+
 
 from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST
 from .ulist import BooleanList, FloatList, IntegerList
+
+
+if TYPE_CHECKING:  # To avoid circular import.
+    from .control_flow import CaseObject
 
 
 class UltraFastList:
@@ -188,7 +194,7 @@ class UltraFastList:
             )
         return result
 
-    def case(self, default: ELEM) -> 'CaseObject':
+    def case(self, default: ELEM) -> CaseObject:
         """A method similar to SQL's `case` statement.
 
         Args:
@@ -213,7 +219,7 @@ class UltraFastList:
         >>> result
         UltraFastList([0, 0, 1, 1, 2, 2])
         """
-        from .control_flow import CaseObject
+        from .control_flow import CaseObject  # To avoid circular import.
         return CaseObject(self, default=default)
 
     def copy(self) -> "UltraFastList":
