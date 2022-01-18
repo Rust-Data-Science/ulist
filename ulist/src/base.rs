@@ -1,6 +1,9 @@
 use std::cell::Ref;
 use std::cell::RefMut;
+use std::cmp::Eq;
 use std::cmp::PartialEq;
+use std::collections::HashMap;
+use std::hash::Hash;
 use std::marker::Copy;
 use std::marker::Sized;
 
@@ -65,4 +68,14 @@ where
     fn values(&self) -> Ref<Vec<T>>;
 
     fn values_mut(&self) -> RefMut<Vec<T>>;
+}
+
+// TODO: Move this method inside `List`
+pub fn counter<T: Eq + Hash + Copy>(vec: Ref<Vec<T>>) -> HashMap<T, usize> {
+    let mut result: HashMap<T, usize> = HashMap::new();
+    for &key in vec.iter() {
+        let val = result.entry(key).or_insert(0);
+        *val += 1;
+    }
+    result
 }

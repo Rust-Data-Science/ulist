@@ -1,3 +1,4 @@
+use crate::base::counter;
 use crate::base::List;
 use crate::float::FloatList;
 use crate::integer::IntegerList;
@@ -7,6 +8,7 @@ use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
+use std::collections::HashMap;
 use std::ops::Fn;
 
 /// List with boolean type elements.
@@ -50,6 +52,10 @@ impl BooleanList {
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn counter(&self) -> HashMap<bool, usize> {
+        counter(self.values())
     }
 
     #[staticmethod]
