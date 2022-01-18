@@ -94,3 +94,104 @@ def test_select(
     else:
         raise TypeError(f"Unexpected type {type(expected_value[0])}!")
     check_test_result(dtype, "ul.select", result, expected_value)
+
+
+@pytest.mark.parametrize(
+    "dtype, nums, kwargs, expected_value",
+    [
+        (
+            "float",
+            [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+            {
+                "fn_and_then": [
+                    (lambda x: x < 2.0, False),
+                    (lambda x: x < 4.0, True),
+                ],
+                "default": False,
+            },
+            [False, False, True, True, False, False],
+        ),
+        (
+            "float",
+            [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+            {
+                "fn_and_then": [
+                    (lambda x: x < 2.0, 0.0),
+                    (lambda x: x < 4.0, 1.0),
+                ],
+                "default": 2.0,
+            },
+            [0.0, 0.0, 1.0, 1.0, 2.0, 2.0],
+        ),
+        (
+            "float",
+            [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+            {
+                "fn_and_then": [
+                    (lambda x: x < 2.0, 0),
+                    (lambda x: x < 4.0, 1),
+                ],
+                "default": 2,
+            },
+            [0, 0, 1, 1, 2, 2],
+        ),
+
+        (
+            "int",
+            [0, 1, 2, 3, 4, 5],
+            {
+                "fn_and_then": [
+                    (lambda x: x < 2, False),
+                    (lambda x: x < 4, True),
+                ],
+                "default": False,
+            },
+            [False, False, True, True, False, False],
+        ),
+        (
+            "int",
+            [0, 1, 2, 3, 4, 5],
+            {
+                "fn_and_then": [
+                    (lambda x: x < 2, 0.0),
+                    (lambda x: x < 4, 1.0),
+                ],
+                "default": 2.0,
+            },
+            [0.0, 0.0, 1.0, 1.0, 2.0, 2.0],
+        ),
+        (
+            "int",
+            [0, 1, 2, 3, 4, 5],
+            {
+                "fn_and_then": [
+                    (lambda x: x < 2, 0),
+                    (lambda x: x < 4, 1),
+                ],
+                "default": 2,
+            },
+            [0, 0, 1, 1, 2, 2],
+        ),
+    ],
+)
+def test_case_when(
+    dtype: str,
+    nums: LIST_TYPE,
+    kwargs: dict,
+    expected_value: List[bool],
+) -> None:
+    arr = ul.from_seq(nums, dtype)
+    default = kwargs["default"]
+    result = arr.case(default)\
+        .when(kwargs["fn_and_then"][0][0], then=kwargs["fn_and_then"][0][1])\
+        .when(kwargs["fn_and_then"][1][0], then=kwargs["fn_and_then"][1][1])\
+        .end()
+    if type(expected_value[0]) == int:
+        dtype = "int"
+    elif type(expected_value[0]) == float:
+        dtype = "float"
+    elif type(expected_value[0]) == bool:
+        dtype = "bool"
+    else:
+        raise TypeError(f"Unexpected type {type(expected_value[0])}!")
+    check_test_result(dtype, "ul.select", result, expected_value)

@@ -1,7 +1,13 @@
-from typing import Callable
+from __future__ import annotations  # To avoid circular import.
+from typing import TYPE_CHECKING, Callable
+
 
 from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST
 from .ulist import BooleanList, FloatList, IntegerList
+
+
+if TYPE_CHECKING:  # To avoid circular import.
+    from .control_flow import CaseObject
 
 
 class UltraFastList:
@@ -187,6 +193,34 @@ class UltraFastList:
                 "Parameter dtype should be 'int', 'float' or 'bool'!"
             )
         return result
+
+    def case(self, default: ELEM) -> CaseObject:
+        """A method similar to SQL's `case` statement.
+
+        Args:
+            default (ELEM):
+                The element inserted in output when all conditions evaluate
+                to False.
+
+        Returns:
+            CaseObject
+
+        Examples
+        --------
+        >>> import ulist as ul
+        >>> arr = ul.arange(6)
+        >>> arr
+        UltraFastList([0, 1, 2, 3, 4, 5])
+
+        >>> result = arr.case(default=2)\
+        ...             .when(lambda x: x < 2, then=0)\
+        ...             .when(lambda x: x < 4, then=1)\
+        ...             .end()
+        >>> result
+        UltraFastList([0, 0, 1, 1, 2, 2])
+        """
+        from .control_flow import CaseObject  # To avoid circular import.
+        return CaseObject(self, default=default)
 
     def copy(self) -> "UltraFastList":
         """Return a ulist copy of self."""
