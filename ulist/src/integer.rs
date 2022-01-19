@@ -1,3 +1,4 @@
+use crate::base::counter;
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
@@ -8,6 +9,7 @@ use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
+use std::collections::HashMap;
 
 /// List with integer type elements.
 #[pyclass]
@@ -54,6 +56,10 @@ impl IntegerList {
 
     pub fn copy(&self) -> Self {
         List::copy(self)
+    }
+
+    pub fn counter(&self) -> HashMap<i32, usize> {
+        counter(self.values())
     }
 
     #[staticmethod]

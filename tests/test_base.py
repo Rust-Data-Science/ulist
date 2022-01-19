@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Dict, List, Union
 
 import pytest
 import ulist as ul
@@ -6,7 +6,8 @@ from ulist.utils import check_test_result
 
 NUM_TYPE = Union[float, int, bool]
 LIST_TYPE = Union[List[float], List[int], List[bool]]
-NUM_OR_LIST_TYPE = Union[NUM_TYPE, LIST_TYPE]
+COUNTER = Union[Dict[int, int], Dict[bool, int]]
+RESULT = Union[NUM_TYPE, LIST_TYPE, COUNTER]
 
 
 @pytest.mark.parametrize(
@@ -47,6 +48,9 @@ NUM_OR_LIST_TYPE = Union[NUM_TYPE, LIST_TYPE]
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('copy', 'int', [1, 2], [1, 2]),
 
+        ('counter', 'bool', [True, False, True], {True: 2, False: 1}),
+        ('counter', 'int', [1, 0, 1], {1: 2, 0: 1}),
+
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
         ('mean', 'bool', [True, False, True, False], 0.5),
@@ -69,7 +73,7 @@ def test_methods_no_arg(
     test_method: str,
     dtype: str,
     nums: LIST_TYPE,
-    expected_value: NUM_OR_LIST_TYPE,
+    expected_value: RESULT,
 ) -> None:
     arr = ul.from_seq(nums, dtype)
     result = getattr(arr, test_method)()
@@ -114,7 +118,7 @@ def test_methods_with_args(
     test_method: str,
     dtype: str,
     nums: LIST_TYPE,
-    expected_value: NUM_OR_LIST_TYPE,
+    expected_value: RESULT,
     kwargs: dict,
 ) -> None:
     arr = ul.from_seq(nums, dtype)
