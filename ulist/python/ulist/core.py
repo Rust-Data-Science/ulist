@@ -2,7 +2,7 @@ from __future__ import annotations  # To avoid circular import.
 from typing import TYPE_CHECKING, Callable
 
 
-from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST
+from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST, COUNTER
 from .ulist import BooleanList, FloatList, IntegerList
 
 
@@ -225,6 +225,14 @@ class UltraFastList:
     def copy(self) -> "UltraFastList":
         """Return a ulist copy of self."""
         return UltraFastList(self._values.copy())
+
+    def counter(self) -> COUNTER:
+        """
+        Return a dictionary where the elements of self are stored as
+        dictionary keys and their counts are stored as dictionary values.
+        """
+        assert not isinstance(self._values, FloatList)
+        return self._values.counter()
 
     def div(self, other: "UltraFastList") -> "UltraFastList":
         """Return self / other."""
