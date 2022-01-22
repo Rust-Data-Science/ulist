@@ -378,6 +378,10 @@ class UltraFastList:
         """Return a list with the elements of self."""
         return self._values.to_list()
 
+    def union(self, other: "UltraFastList") -> "UltraFastList":
+        """Concatenate self and other together as a new ulist."""
+        return UltraFastList(self._values.union(other.values()))
+
     def unique(self) -> "UltraFastList":
         """Returns the sorted unique elements of self. """
         assert not isinstance(self._values, BooleanList)
