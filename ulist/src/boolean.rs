@@ -100,6 +100,10 @@ impl BooleanList {
     pub fn to_list(&self) -> Vec<bool> {
         List::to_list(self)
     }
+
+    pub fn union(&self, other: &Self) -> Self {
+        List::union(self, other)
+    }
 }
 
 impl List<bool> for BooleanList {

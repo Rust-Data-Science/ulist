@@ -65,6 +65,16 @@ where
         self.values().clone()
     }
 
+    fn union(&self, other: &Self) -> Self {
+        let vec = self
+            .values()
+            .iter()
+            .cloned()
+            .chain(other.values().iter().cloned())
+            .collect();
+        List::_new(vec)
+    }
+
     fn values(&self) -> Ref<Vec<T>>;
 
     fn values_mut(&self) -> RefMut<Vec<T>>;
