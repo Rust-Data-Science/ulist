@@ -380,7 +380,7 @@ class UltraFastList:
 
     def union(self, other: "UltraFastList") -> "UltraFastList":
         """Concatenate self and other together as a new ulist."""
-        return UltraFastList(self._values.union(other.values()))
+        return UltraFastList(self._values.union(other._values))
 
     def unique(self) -> "UltraFastList":
         """Returns the sorted unique elements of self. """

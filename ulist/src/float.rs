@@ -164,6 +164,10 @@ impl FloatList {
         List::to_list(self)
     }
 
+    pub fn union(&self, other: &Self) -> Self {
+        List::union(self, other)
+    }
+
     pub fn unique(&self) -> Self {
         NumericalList::unique(self)
     }
