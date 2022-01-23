@@ -30,10 +30,16 @@ impl StringList {
 
     // TODO: Inherit this from `List` trait.
     pub fn counter(&self) -> HashMap<String, usize> {
-        let mut result: HashMap<String, usize> = HashMap::new();
-        for key in self.values().iter() {
-            let val = result.entry(key.to_string()).or_insert(0);
+        let mut _result: HashMap<&str, usize> = HashMap::new();
+        let vec = self.values();
+        for key in vec.iter() {
+            let val = _result.entry(key).or_insert(0);
             *val += 1;
+        }
+
+        let mut result: HashMap<String, usize> = HashMap::with_capacity(_result.capacity());
+        for (&key, &val) in _result.iter() {
+            result.insert(key.to_string(), val);
         }
         result
     }
