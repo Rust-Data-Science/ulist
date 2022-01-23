@@ -4,6 +4,7 @@ mod control_flow;
 mod float;
 mod integer;
 mod numerical;
+mod string;
 mod types;
 use control_flow::*;
 use pyo3::prelude::*;
