@@ -1,7 +1,6 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use std::cmp::PartialOrd;
-use std::marker::Copy;
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Fn;

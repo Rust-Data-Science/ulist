@@ -5,7 +5,6 @@ use crate::integer::IntegerList;
 use pyo3::prelude::*;
 use pyo3::Py;
 use std::cmp::PartialEq;
-use std::marker::Copy;
 
 unsafe fn select<T, U>(
     py: Python,

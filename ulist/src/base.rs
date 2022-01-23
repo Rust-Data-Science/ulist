@@ -4,13 +4,12 @@ use std::cmp::Eq;
 use std::cmp::PartialEq;
 use std::collections::HashMap;
 use std::hash::Hash;
-use std::marker::Copy;
 use std::marker::Sized;
 
 /// Abstract List with generic type elements.
 pub trait List<T>
 where
-    T: PartialEq + Copy,
+    T: PartialEq + Clone,
     Self: Sized,
 {
     // Arrange the following methods in alphabetical order.
@@ -80,11 +79,11 @@ where
     fn values_mut(&self) -> RefMut<Vec<T>>;
 }
 
-// TODO: Move this method inside `List`
+// TODO: Move this method inside `List` trait.
 pub fn counter<T: Eq + Hash + Copy>(vec: Ref<Vec<T>>) -> HashMap<T, usize> {
     let mut result: HashMap<T, usize> = HashMap::new();
-    for &key in vec.iter() {
-        let val = result.entry(key).or_insert(0);
+    for key in vec.iter() {
+        let val = result.entry(*key).or_insert(0);
         *val += 1;
     }
     result
