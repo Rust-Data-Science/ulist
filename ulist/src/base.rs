@@ -64,7 +64,7 @@ where
         self.values().clone()
     }
 
-    fn union(&self, other: &Self) -> Self {
+    fn union_all(&self, other: &Self) -> Self {
         let vec = self
             .values()
             .iter()
