@@ -126,13 +126,13 @@ def test_methods_no_arg(
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
         ('get', 'str', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
 
-        ('union', 'bool', [True, False], [True, False, False, True], {
+        ('union_all', 'bool', [True, False], [True, False, False, True], {
          'other': ul.from_seq([False, True], dtype='bool')}),
-        ('union', 'float', [1.0, 2.0], [1.0, 2.0, 3.0, 4.0], {
+        ('union_all', 'float', [1.0, 2.0], [1.0, 2.0, 3.0, 4.0], {
          'other': ul.from_seq([3.0, 4.0], dtype='float')}),
-        ('union', 'int', [1, 2], [1, 2, 3, 4], {
+        ('union_all', 'int', [1, 2], [1, 2, 3, 4], {
          'other': ul.from_seq([3, 4], dtype='int')}),
-        ('union', 'str', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
+        ('union_all', 'str', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
          'other': ul.from_seq(['baz', 'zoo'], dtype='str')}),
 
         ('var', 'bool', [True, False], 0.25, {}),

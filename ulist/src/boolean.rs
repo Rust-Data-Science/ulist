@@ -101,8 +101,8 @@ impl BooleanList {
         List::to_list(self)
     }
 
-    pub fn union(&self, other: &Self) -> Self {
-        List::union(self, other)
+    pub fn union_all(&self, other: &Self) -> Self {
+        List::union_all(self, other)
     }
 }
 
