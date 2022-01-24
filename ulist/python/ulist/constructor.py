@@ -1,7 +1,7 @@
 from typing import Optional, Sequence, Union
 
 from .core import UltraFastList
-from .ulist import BooleanList, FloatList, IntegerList
+from .ulist import BooleanList, FloatList, IntegerList, StringList
 from .ulist import arange as _arange
 
 
@@ -54,10 +54,10 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
         size (int):
             size (int): Size of the new ulist.
         dtype (str):
-            The type of the output ulist. 'int', 'float' or 'bool'.
+            The type of the output ulist. 'int', 'float', 'bool' or 'str'.
 
     Raises:
-        ValueError: Parameter dtype should be 'int', 'float' or 'bool'!
+        ValueError: Parameter dtype should be 'int', 'float', 'bool' or 'str'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -69,13 +69,17 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     >>> arr1
     UltraFastList([0, 1, 2, 0, 1])
 
-    >>> arr2 = ul.repeat((0.0, 0.1), 4, 'float')
+    >>> arr2 = ul.cycle((0.0, 0.1), 4, 'float')
     >>> arr2
     UltraFastList([0.0, 0.1, 0.0, 0.1])
 
-    >>> arr3 = ul.repeat([True], 3, 'bool')
+    >>> arr3 = ul.cycle([True], 3, 'bool')
     >>> arr3
     UltraFastList([True, True, True])
+
+    >>> arr4 = ul.cycle(['foo'], 3, 'str')
+    >>> arr4
+    UltraFastList(['foo', 'foo', 'foo'])
     """
     if dtype == "int":
         result = UltraFastList(IntegerList.cycle(obj, size))
@@ -83,8 +87,11 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
         result = UltraFastList(FloatList.cycle(obj, size))
     elif dtype == "bool":
         result = UltraFastList(BooleanList.cycle(obj, size))
+    elif dtype == "str":
+        result = UltraFastList(StringList.cycle(obj, size))
     else:
-        raise ValueError("Parameter dtype should be 'int', 'float' or 'bool'!")
+        raise ValueError(
+            "Parameter dtype should be 'int', 'float', 'bool' or 'str'!")
     return result
 
 
@@ -95,10 +102,10 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         obj (Sequence):
             Sequence object such as list, tuple and range.
         dtype (str):
-            The type of the output ulist. 'int', 'float' or 'bool'.
+            The type of the output ulist. 'int', 'float', 'bool' or 'str'.
 
     Raises:
-        ValueError: Parameter dtype should be 'int', 'float' or 'bool'!
+        ValueError: Parameter dtype should be 'int', 'float', 'bool' or 'str'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -117,6 +124,10 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     >>> arr3 = ul.from_seq((True, True, False), dtype='bool')
     >>> arr3
     UltraFastList([True, True, False])
+
+    >>> arr4 = ul.from_seq(('foo', 'bar', 'baz'), dtype='str')
+    >>> arr4
+    UltraFastList(['foo', 'bar', 'baz'])
     """
     if dtype == "int":
         result = UltraFastList(IntegerList(obj))
@@ -124,8 +135,11 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         result = UltraFastList(FloatList(obj))
     elif dtype == "bool":
         result = UltraFastList(BooleanList(obj))
+    elif dtype == "str":
+        result = UltraFastList(StringList(obj))
     else:
-        raise ValueError("Parameter dtype should be 'int', 'float' or 'bool'!")
+        raise ValueError(
+            "Parameter dtype should be 'int', 'float', 'bool' or 'str'!")
     return result
 
 
@@ -137,7 +151,7 @@ def repeat(num: Union[bool, float, int], size: int) -> UltraFastList:
         size (int): Size of the new ulist.
 
     Raises:
-        TypeError: Parameter num should be int, float or bool type!
+        TypeError: Parameter num should be int, float, bool or str type!
 
     Returns:
         UltraFastList: A ulist object.
@@ -156,6 +170,10 @@ def repeat(num: Union[bool, float, int], size: int) -> UltraFastList:
     >>> arr3 = ul.repeat(True, 3)
     >>> arr3
     UltraFastList([True, True, True])
+
+    >>> arr4 = ul.repeat('foo', 3)
+    >>> arr4
+    UltraFastList(['foo', 'foo', 'foo'])
     """
     if isinstance(num, bool):
         return UltraFastList(BooleanList.repeat(num, size))
@@ -163,5 +181,8 @@ def repeat(num: Union[bool, float, int], size: int) -> UltraFastList:
         return UltraFastList(FloatList.repeat(num, size))
     elif isinstance(num, int):
         return UltraFastList(IntegerList.repeat(num, size))
+    elif isinstance(num, str):
+        return UltraFastList(StringList.repeat(num, size))
     else:
-        raise TypeError("Parameter num should be int, float or bool type!")
+        raise TypeError(
+            "Parameter num should be int, float, bool or str type!")
