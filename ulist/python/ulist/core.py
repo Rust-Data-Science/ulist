@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Callable
 
 
 from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST, COUNTER
-from .ulist import BooleanList, FloatList, IntegerList
+from .ulist import BooleanList, FloatList, IntegerList, StringList
 
 
 if TYPE_CHECKING:  # To avoid circular import.
@@ -23,10 +23,12 @@ class UltraFastList:
             self.dtype = "int"
         elif type(values) is BooleanList:
             self.dtype = "bool"
+        elif type(values) is StringList:
+            self.dtype = "str"
         else:
             raise TypeError(
                 "Parameter values should be FloatList, "
-                + "IntegerList or BooleanList type!"
+                + "IntegerList, BooleanList or StringList type!"
             )
         self._values = values
 
@@ -110,6 +112,11 @@ class UltraFastList:
         n = self.size()
         if n < 100:
             return str(self.to_list())
+        if self.dtype == 'str':
+            return (
+                f"['{self[0]}', '{self[1]}', '{self[2]}', ..., "
+                + f"'{self[n-3]}', '{self[n-2]}', '{self[n-1]}']"
+            )
         return (
             f"[{self[0]}, {self[1]}, {self[2]}, ..., "
             + f"{self[n-3]}, {self[n-2]}, {self[n-1]}]"
@@ -125,13 +132,13 @@ class UltraFastList:
 
     def add(self, other: "UltraFastList") -> "UltraFastList":
         """Return self + other."""
-        assert not isinstance(self._values, BooleanList)
-        assert not isinstance(other._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
+        assert not isinstance(other._values, (BooleanList, StringList))
         return UltraFastList(self._values.add(other._values))
 
     def add_scala(self, num: NUM) -> "UltraFastList":
         """Return self + num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.add_scala(num))
 
     def all(self) -> bool:
@@ -156,12 +163,12 @@ class UltraFastList:
 
     def argmax(self) -> int:
         """Returns the indices of the maximum values of self."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return self._values.argmax()
 
     def argmin(self) -> int:
         """Returns the indices of the minimum values of self."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return self._values.argmin()
 
     def astype(self, dtype: str) -> "UltraFastList":
@@ -173,6 +180,7 @@ class UltraFastList:
         Returns:
             UltraFastList: A ulist object.
         """
+        assert not isinstance(self._values, StringList)
         if dtype == "int":
             if isinstance(self._values, IntegerList):
                 result = self.copy()
@@ -236,18 +244,18 @@ class UltraFastList:
 
     def div(self, other: "UltraFastList") -> "UltraFastList":
         """Return self / other."""
-        assert not isinstance(self._values, BooleanList)
-        assert not isinstance(other._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
+        assert not isinstance(other._values, (BooleanList, StringList))
         return UltraFastList(self._values.div(other._values))
 
     def div_scala(self, num: float) -> "UltraFastList":
         """Return self / num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.div_scala(num))
 
     def equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self == num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.equal_scala(num))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
@@ -255,7 +263,7 @@ class UltraFastList:
         According to the condition, return a ulist with elements of self
         correspondingly.
         """
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         assert isinstance(condition._values, BooleanList)
         return UltraFastList(self._values.filter(condition._values))
 
@@ -265,27 +273,27 @@ class UltraFastList:
 
     def greater_than_or_equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self >= num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.greater_than_or_equal_scala(num))
 
     def greater_than_scala(self, num: NUM) -> "UltraFastList":
         """Return self > num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.greater_than_scala(num))
 
     def less_than_or_equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self <= num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.less_than_or_equal_scala(num))
 
     def less_than_scala(self, num: NUM) -> "UltraFastList":
         """Return self < num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.less_than_scala(num))
 
     def max(self) -> NUM:
         """Return the maximum of self."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return self._values.max()
 
     def mean(self) -> float:
@@ -294,18 +302,18 @@ class UltraFastList:
 
     def min(self) -> NUM:
         """Return the minimum of self."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return self._values.min()
 
     def mul(self, other: "UltraFastList") -> "UltraFastList":
         """Return self * other."""
-        assert not isinstance(self._values, BooleanList)
-        assert not isinstance(other._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
+        assert not isinstance(other._values, (BooleanList, StringList))
         return UltraFastList(self._values.mul(other._values))
 
     def mul_scala(self, num: NUM) -> "UltraFastList":
         """Return self * num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.mul_scala(num))
 
     def not_(self) -> "UltraFastList":
@@ -315,7 +323,7 @@ class UltraFastList:
 
     def not_equal_scala(self, num: NUM) -> "UltraFastList":
         """Return self != num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.not_equal_scala(num))
 
     def or_(self, other: "UltraFastList") -> "UltraFastList":
@@ -330,12 +338,12 @@ class UltraFastList:
 
     def pow_scala(self, num: int) -> "UltraFastList":
         """Return self ** num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.pow_scala(num))
 
     def replace(self, old: ELEM, new: ELEM) -> "UltraFastList":
         """Replace the old elements of self with the new one."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.replace(old, new))
 
     def set(self, index: int, num: ELEM) -> None:
@@ -356,22 +364,23 @@ class UltraFastList:
         Returns:
             UltraFastList: The sorted ulist.
         """
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.sort(ascending=ascending))
 
     def sub(self, other: "UltraFastList") -> "UltraFastList":
         """Return self - other."""
-        assert not isinstance(self._values, BooleanList)
-        assert not isinstance(other._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
+        assert not isinstance(other._values, (BooleanList, StringList))
         return UltraFastList(self._values.sub(other._values))
 
     def sub_scala(self, num: NUM) -> "UltraFastList":
         """Return self - num."""
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.sub_scala(num))
 
     def sum(self) -> NUM:
         """Return the sum of self."""
+        assert not isinstance(self._values, StringList)
         return self._values.sum()
 
     def to_list(self) -> LIST_PY:
@@ -384,7 +393,7 @@ class UltraFastList:
 
     def unique(self) -> "UltraFastList":
         """Returns the sorted unique elements of self. """
-        assert not isinstance(self._values, BooleanList)
+        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.unique())
 
     def var(self, ddof: int = 0) -> float:

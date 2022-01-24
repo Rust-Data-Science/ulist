@@ -4,6 +4,7 @@ mod control_flow;
 mod float;
 mod integer;
 mod numerical;
+mod string;
 mod types;
 use control_flow::*;
 use pyo3::prelude::*;
@@ -23,6 +24,7 @@ fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<boolean::BooleanList>()?;
     m.add_class::<float::FloatList>()?;
     m.add_class::<integer::IntegerList>()?;
+    m.add_class::<string::StringList>()?;
     m.add_function(wrap_pyfunction!(arange, m)?)?;
     m.add_function(wrap_pyfunction!(select_bool, m)?)?;
     m.add_function(wrap_pyfunction!(select_float, m)?)?;
