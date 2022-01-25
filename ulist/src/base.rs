@@ -16,8 +16,8 @@ where
 
     fn _new(vec: Vec<T>) -> Self;
 
-    fn append(&self, num: T) {
-        self.values_mut().push(num);
+    fn append(&self, elem: T) {
+        self.values_mut().push(elem);
     }
 
     fn copy(&self) -> Self {
@@ -41,18 +41,18 @@ where
         self.values_mut().pop();
     }
 
-    unsafe fn set(&self, index: usize, num: T) {
+    unsafe fn set(&self, index: usize, elem: T) {
         if index < self.size() {
             let mut values = self.values_mut();
             let element = values.get_unchecked_mut(index);
-            *element = num
+            *element = elem
         } else {
             panic!("Index out of range!")
         }
     }
 
-    fn repeat(num: T, size: usize) -> Self {
-        let vec = vec![num; size];
+    fn repeat(elem: T, size: usize) -> Self {
+        let vec = vec![elem; size];
         List::_new(vec)
     }
 

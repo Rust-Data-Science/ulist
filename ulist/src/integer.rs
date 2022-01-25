@@ -30,12 +30,12 @@ impl IntegerList {
         NumericalList::add(self, other)
     }
 
-    pub fn add_scala(&self, num: i32) -> Self {
-        NumericalList::add_scala(self, num)
+    pub fn add_scala(&self, elem: i32) -> Self {
+        NumericalList::add_scala(self, elem)
     }
 
-    pub fn append(&self, num: i32) {
-        List::append(self, num)
+    pub fn append(&self, elem: i32) {
+        List::append(self, elem)
     }
 
     pub fn argmax(&self) -> usize {
@@ -72,13 +72,13 @@ impl IntegerList {
         FloatList::new(vec)
     }
 
-    pub fn div_scala(&self, num: f32) -> FloatList {
-        let vec = NumericalList::div_scala(self, num);
+    pub fn div_scala(&self, elem: f32) -> FloatList {
+        let vec = NumericalList::div_scala(self, elem);
         FloatList::new(vec)
     }
 
-    pub fn equal_scala(&self, num: i32) -> BooleanList {
-        NumericalList::equal_scala(self, num)
+    pub fn equal_scala(&self, elem: i32) -> BooleanList {
+        NumericalList::equal_scala(self, elem)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -89,20 +89,20 @@ impl IntegerList {
         List::get(self, index)
     }
 
-    pub fn greater_than_or_equal_scala(&self, num: i32) -> BooleanList {
-        NumericalList::greater_than_or_equal_scala(self, num)
+    pub fn greater_than_or_equal_scala(&self, elem: i32) -> BooleanList {
+        NumericalList::greater_than_or_equal_scala(self, elem)
     }
 
-    pub fn greater_than_scala(&self, num: i32) -> BooleanList {
-        NumericalList::greater_than_scala(self, num)
+    pub fn greater_than_scala(&self, elem: i32) -> BooleanList {
+        NumericalList::greater_than_scala(self, elem)
     }
 
-    pub fn less_than_or_equal_scala(&self, num: i32) -> BooleanList {
-        NumericalList::less_than_or_equal_scala(self, num)
+    pub fn less_than_or_equal_scala(&self, elem: i32) -> BooleanList {
+        NumericalList::less_than_or_equal_scala(self, elem)
     }
 
-    pub fn less_than_scala(&self, num: i32) -> BooleanList {
-        NumericalList::less_than_scala(self, num)
+    pub fn less_than_scala(&self, elem: i32) -> BooleanList {
+        NumericalList::less_than_scala(self, elem)
     }
 
     pub fn max(&self) -> i32 {
@@ -117,29 +117,29 @@ impl IntegerList {
         NumericalList::mul(self, other)
     }
 
-    pub fn mul_scala(&self, num: i32) -> Self {
-        NumericalList::mul_scala(self, num)
+    pub fn mul_scala(&self, elem: i32) -> Self {
+        NumericalList::mul_scala(self, elem)
     }
 
-    pub fn not_equal_scala(&self, num: i32) -> BooleanList {
-        NumericalList::not_equal_scala(self, num)
+    pub fn not_equal_scala(&self, elem: i32) -> BooleanList {
+        NumericalList::not_equal_scala(self, elem)
     }
 
     pub fn pop(&self) {
         List::pop(self);
     }
 
-    pub fn pow_scala(&self, num: u32) -> Self {
-        NumericalList::pow_scala(self, num)
+    pub fn pow_scala(&self, elem: u32) -> Self {
+        NumericalList::pow_scala(self, elem)
     }
 
-    pub unsafe fn set(&self, index: usize, num: i32) {
-        List::set(self, index, num)
+    pub unsafe fn set(&self, index: usize, elem: i32) {
+        List::set(self, index, elem)
     }
 
     #[staticmethod]
-    pub fn repeat(num: i32, size: usize) -> Self {
-        List::repeat(num, size)
+    pub fn repeat(elem: i32, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: i32, new: i32) -> Self {
@@ -158,8 +158,8 @@ impl IntegerList {
         NumericalList::sub(self, other)
     }
 
-    pub fn sub_scala(&self, num: i32) -> Self {
-        NumericalList::sub_scala(self, num)
+    pub fn sub_scala(&self, elem: i32) -> Self {
+        NumericalList::sub_scala(self, elem)
     }
 
     pub fn sum(&self) -> i32 {
@@ -230,8 +230,8 @@ impl NumericalList<i32, u32> for IntegerList {
             .collect()
     }
 
-    fn div_scala(&self, num: f32) -> Vec<f32> {
-        self.values().iter().map(|x| *x as f32 / num).collect()
+    fn div_scala(&self, elem: f32) -> Vec<f32> {
+        self.values().iter().map(|x| *x as f32 / elem).collect()
     }
 
     fn max(&self) -> i32 {
@@ -242,8 +242,8 @@ impl NumericalList<i32, u32> for IntegerList {
         *self.values().iter().min().unwrap()
     }
 
-    fn pow_scala(&self, num: u32) -> Self {
-        let vec = self.values().iter().map(|&x| x.pow(num)).collect();
+    fn pow_scala(&self, elem: u32) -> Self {
+        let vec = self.values().iter().map(|&x| x.pow(elem)).collect();
         IntegerList::new(vec)
     }
 

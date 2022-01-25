@@ -38,8 +38,8 @@ impl BooleanList {
         self.values().iter().any(|&x| x)
     }
 
-    pub fn append(&self, num: bool) {
-        List::append(self, num)
+    pub fn append(&self, elem: bool) {
+        List::append(self, elem)
     }
 
     pub fn as_float(&self) -> FloatList {
@@ -81,12 +81,12 @@ impl BooleanList {
     }
 
     #[staticmethod]
-    pub fn repeat(num: bool, size: usize) -> Self {
-        List::repeat(num, size)
+    pub fn repeat(elem: bool, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
-    pub unsafe fn set(&self, index: usize, num: bool) {
-        List::set(self, index, num)
+    pub unsafe fn set(&self, index: usize, elem: bool) {
+        List::set(self, index, elem)
     }
 
     pub fn size(&self) -> usize {

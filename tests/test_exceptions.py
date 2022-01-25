@@ -20,7 +20,7 @@ _ARR._values = [0, 1, 2]  # type: ignore
         (_ARR.astype, {"dtype": "foo"}, ValueError),
         (ul.cycle, {"obj": [1, 2], "size": 3, "dtype": "foo"}, ValueError),
         (ul.from_seq, {"obj": [1, 2], "dtype": "foo"}, ValueError),
-        (ul.repeat, {"num": dict(), "size": 3}, TypeError),
+        (ul.repeat, {"elem": dict(), "size": 3}, TypeError),
         (ul.UltraFastList, {"values": [1, 2]}, TypeError),
         (_ARR.var, {}, TypeError),
     ],

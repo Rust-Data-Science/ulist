@@ -1,8 +1,9 @@
-from typing import Optional, Sequence, Union
+from typing import Optional, Sequence
 
 from .core import UltraFastList
 from .ulist import BooleanList, FloatList, IntegerList, StringList
 from .ulist import arange as _arange
+from .typedef import ELEM
 
 
 def arange(start: int, stop: Optional[int] = None, step: int = 1
@@ -143,15 +144,15 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     return result
 
 
-def repeat(num: Union[bool, float, int], size: int) -> UltraFastList:
-    """Return a new ulist of given size, filled with num.
+def repeat(elem: ELEM, size: int) -> UltraFastList:
+    """Return a new ulist of given size, filled with elem.
 
     Args:
-        num (Union[bool, float, int]): Element to repeat.
+        elem (ELEM): Element to repeat.
         size (int): Size of the new ulist.
 
     Raises:
-        TypeError: Parameter num should be int, float, bool or str type!
+        TypeError: Parameter elem should be int, float, bool or str type!
 
     Returns:
         UltraFastList: A ulist object.
@@ -175,14 +176,14 @@ def repeat(num: Union[bool, float, int], size: int) -> UltraFastList:
     >>> arr4
     UltraFastList(['foo', 'foo', 'foo'])
     """
-    if isinstance(num, bool):
-        return UltraFastList(BooleanList.repeat(num, size))
-    elif isinstance(num, float):
-        return UltraFastList(FloatList.repeat(num, size))
-    elif isinstance(num, int):
-        return UltraFastList(IntegerList.repeat(num, size))
-    elif isinstance(num, str):
-        return UltraFastList(StringList.repeat(num, size))
+    if isinstance(elem, bool):
+        return UltraFastList(BooleanList.repeat(elem, size))
+    elif isinstance(elem, float):
+        return UltraFastList(FloatList.repeat(elem, size))
+    elif isinstance(elem, int):
+        return UltraFastList(IntegerList.repeat(elem, size))
+    elif isinstance(elem, str):
+        return UltraFastList(StringList.repeat(elem, size))
     else:
         raise TypeError(
-            "Parameter num should be int, float, bool or str type!")
+            "Parameter elem should be int, float, bool or str type!")
