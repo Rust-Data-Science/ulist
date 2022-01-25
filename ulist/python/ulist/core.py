@@ -172,15 +172,15 @@ class UltraFastList:
         return self._values.argmin()
 
     def astype(self, dtype: str) -> "UltraFastList":
-        """Copy of the array, cast to a specified dtype.
+        """Copy of self, cast to a specified dtype.
 
         Raises:
-            ValueError: Parameter dtype should be 'int', 'float' or 'bool'!
+            ValueError:
+                Parameter dtype should be 'int', 'float', 'bool' or 'str'!
 
         Returns:
             UltraFastList: A ulist object.
         """
-        assert not isinstance(self._values, StringList)
         if dtype == "int":
             if isinstance(self._values, IntegerList):
                 result = self.copy()
@@ -196,9 +196,14 @@ class UltraFastList:
                 result = self.copy()
             else:
                 result = UltraFastList(self._values.as_bool())
+        elif dtype == "str":
+            if isinstance(self._values, StringList):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_str())
         else:
             raise ValueError(
-                "Parameter dtype should be 'int', 'float' or 'bool'!"
+                "Parameter dtype should be 'int', 'float', 'bool' or 'str'!"
             )
         return result
 
