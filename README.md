@@ -14,7 +14,7 @@
 
 
 ### What
-Ulist is an ultra fast list data structures written in Rust with Python bindings.
+Ulist is an ultra fast list/array data structures written in Rust with Python bindings.
 
 
 ### Requirements
