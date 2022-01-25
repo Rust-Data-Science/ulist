@@ -159,17 +159,17 @@ def test_methods_with_args(
     "test_method, dtype, nums, expected_value, kwargs",
     [
         ('__setitem__', 'bool', [True, False], [
-            True, True], {'index': 1, 'num': True}),
+            True, True], {'index': 1, 'elem': True}),
         ('__setitem__', 'float', [1.0, 2.0], [
-         1.0, 3.0], {'index': 1, 'num': 3.0}),
-        ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
+         1.0, 3.0], {'index': 1, 'elem': 3.0}),
+        ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
         ('__setitem__', 'str', ['foo', 'bar'], [
-         'foo', 'baz'], {'index': 1, 'num': 'baz'}),
+         'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
 
-        ('append', 'bool', [True], [True, False], {'num': False}),
-        ('append', 'float', [1.0], [1.0, 2.0], {'num': 2.0}),
-        ('append', 'int', [1], [1, 2], {'num': 2}),
-        ('append', 'str', ['foo'], ['foo', 'bar'], {'num': 'bar'}),
+        ('append', 'bool', [True], [True, False], {'elem': False}),
+        ('append', 'float', [1.0], [1.0, 2.0], {'elem': 2.0}),
+        ('append', 'int', [1], [1, 2], {'elem': 2}),
+        ('append', 'str', ['foo'], ['foo', 'bar'], {'elem': 'bar'}),
 
         ('pop', 'bool', [True, False], [True], {}),
         ('pop', 'float', [1.0, 2.0], [1.0], {}),
@@ -177,11 +177,11 @@ def test_methods_with_args(
         ('pop', 'str', ['foo', 'bar'], ['foo'], {}),
 
         ('set', 'bool', [True, False], [
-         True, True], {'index': 1, 'num': True}),
-        ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'num': 3.0}),
-        ('set', 'int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
+         True, True], {'index': 1, 'elem': True}),
+        ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
+        ('set', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
         ('set', 'str', ['foo', 'bar'], [
-         'foo', 'baz'], {'index': 1, 'num': 'baz'}),
+         'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
     ],
 )
 def test_multable_methods(
@@ -199,10 +199,10 @@ def test_multable_methods(
 @pytest.mark.parametrize(
     "dtype, nums, expected_value, kwargs",
     [
-        ('bool', [True, False], [True, True], {'index': 1, 'num': True}),
-        ('float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'num': 3.0}),
-        ('int', [1, 2], [1, 3], {'index': 1, 'num': 3}),
-        ('str', ['foo', 'bar'], ['foo', 'baz'], {'index': 1, 'num': 'baz'}),
+        ('bool', [True, False], [True, True], {'index': 1, 'elem': True}),
+        ('float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
+        ('int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
+        ('str', ['foo', 'bar'], ['foo', 'baz'], {'index': 1, 'elem': 'baz'}),
     ],
 )
 def test_indexing_operations(
@@ -212,16 +212,16 @@ def test_indexing_operations(
     kwargs: dict,
 ) -> None:
     index = kwargs["index"]
-    num = kwargs["num"]
+    elem = kwargs["elem"]
     # Set
     test_method = "set-item"
     arr = ul.from_seq(nums, dtype)
-    arr[index] = num
+    arr[index] = elem
     check_test_result(dtype, test_method, arr, expected_value)
 
     # Get
     test_method = "get-item"
-    expected_value = kwargs["num"]
+    expected_value = kwargs["elem"]
     result = arr[index]
     check_test_result(dtype, test_method, result, expected_value)
 

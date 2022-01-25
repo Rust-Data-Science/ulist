@@ -20,8 +20,8 @@ impl StringList {
         List::_new(vec)
     }
 
-    pub fn append(&self, num: String) {
-        List::append(self, num)
+    pub fn append(&self, elem: String) {
+        List::append(self, elem)
     }
 
     pub fn copy(&self) -> Self {
@@ -58,12 +58,12 @@ impl StringList {
     }
 
     #[staticmethod]
-    pub fn repeat(num: String, size: usize) -> Self {
-        List::repeat(num, size)
+    pub fn repeat(elem: String, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
-    pub unsafe fn set(&self, index: usize, num: String) {
-        List::set(self, index, num)
+    pub unsafe fn set(&self, index: usize, elem: String) {
+        List::set(self, index, elem)
     }
 
     pub fn size(&self) -> usize {

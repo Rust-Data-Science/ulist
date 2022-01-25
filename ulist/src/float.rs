@@ -28,12 +28,12 @@ impl FloatList {
         NumericalList::add(self, other)
     }
 
-    pub fn add_scala(&self, num: f32) -> Self {
-        NumericalList::add_scala(self, num)
+    pub fn add_scala(&self, elem: f32) -> Self {
+        NumericalList::add_scala(self, elem)
     }
 
-    pub fn append(&self, num: f32) {
-        List::append(self, num)
+    pub fn append(&self, elem: f32) {
+        List::append(self, elem)
     }
 
     pub fn argmax(&self) -> usize {
@@ -66,13 +66,13 @@ impl FloatList {
         FloatList::new(vec)
     }
 
-    pub fn div_scala(&self, num: f32) -> Self {
-        let vec = NumericalList::div_scala(self, num);
+    pub fn div_scala(&self, elem: f32) -> Self {
+        let vec = NumericalList::div_scala(self, elem);
         FloatList::new(vec)
     }
 
-    pub fn equal_scala(&self, num: f32) -> BooleanList {
-        NumericalList::equal_scala(self, num)
+    pub fn equal_scala(&self, elem: f32) -> BooleanList {
+        NumericalList::equal_scala(self, elem)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
@@ -83,20 +83,20 @@ impl FloatList {
         List::get(self, index)
     }
 
-    pub fn greater_than_or_equal_scala(&self, num: f32) -> BooleanList {
-        NumericalList::greater_than_or_equal_scala(self, num)
+    pub fn greater_than_or_equal_scala(&self, elem: f32) -> BooleanList {
+        NumericalList::greater_than_or_equal_scala(self, elem)
     }
 
-    pub fn greater_than_scala(&self, num: f32) -> BooleanList {
-        NumericalList::greater_than_scala(self, num)
+    pub fn greater_than_scala(&self, elem: f32) -> BooleanList {
+        NumericalList::greater_than_scala(self, elem)
     }
 
-    pub fn less_than_or_equal_scala(&self, num: f32) -> BooleanList {
-        NumericalList::less_than_or_equal_scala(self, num)
+    pub fn less_than_or_equal_scala(&self, elem: f32) -> BooleanList {
+        NumericalList::less_than_or_equal_scala(self, elem)
     }
 
-    pub fn less_than_scala(&self, num: f32) -> BooleanList {
-        NumericalList::less_than_scala(self, num)
+    pub fn less_than_scala(&self, elem: f32) -> BooleanList {
+        NumericalList::less_than_scala(self, elem)
     }
 
     pub fn max(&self) -> f32 {
@@ -111,33 +111,33 @@ impl FloatList {
         NumericalList::mul(self, other)
     }
 
-    pub fn mul_scala(&self, num: f32) -> Self {
-        NumericalList::mul_scala(self, num)
+    pub fn mul_scala(&self, elem: f32) -> Self {
+        NumericalList::mul_scala(self, elem)
     }
 
-    pub fn not_equal_scala(&self, num: f32) -> BooleanList {
-        NumericalList::not_equal_scala(self, num)
+    pub fn not_equal_scala(&self, elem: f32) -> BooleanList {
+        NumericalList::not_equal_scala(self, elem)
     }
 
     pub fn pop(&self) {
         List::pop(self);
     }
 
-    pub fn pow_scala(&self, num: i32) -> Self {
-        NumericalList::pow_scala(self, num)
+    pub fn pow_scala(&self, elem: i32) -> Self {
+        NumericalList::pow_scala(self, elem)
     }
 
     #[staticmethod]
-    pub fn repeat(num: f32, size: usize) -> Self {
-        List::repeat(num, size)
+    pub fn repeat(elem: f32, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: f32, new: f32) -> Self {
         NumericalList::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, num: f32) {
-        List::set(self, index, num)
+    pub unsafe fn set(&self, index: usize, elem: f32) {
+        List::set(self, index, elem)
     }
 
     pub fn size(&self) -> usize {
@@ -152,8 +152,8 @@ impl FloatList {
         NumericalList::sub(self, other)
     }
 
-    pub fn sub_scala(&self, num: f32) -> Self {
-        NumericalList::sub_scala(self, num)
+    pub fn sub_scala(&self, elem: f32) -> Self {
+        NumericalList::sub_scala(self, elem)
     }
 
     pub fn sum(&self) -> f32 {
@@ -228,8 +228,8 @@ impl NumericalList<f32, i32> for FloatList {
             .collect()
     }
 
-    fn div_scala(&self, num: f32) -> Vec<f32> {
-        self.values().iter().map(|x| *x / num).collect()
+    fn div_scala(&self, elem: f32) -> Vec<f32> {
+        self.values().iter().map(|x| *x / elem).collect()
     }
 
     fn max(&self) -> f32 {
@@ -248,8 +248,8 @@ impl NumericalList<f32, i32> for FloatList {
             .unwrap()
     }
 
-    fn pow_scala(&self, num: i32) -> Self {
-        let vec = self.values().iter().map(|&x| x.powi(num)).collect();
+    fn pow_scala(&self, elem: i32) -> Self {
+        let vec = self.values().iter().map(|&x| x.powi(elem)).collect();
         FloatList::new(vec)
     }
 

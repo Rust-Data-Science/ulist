@@ -33,8 +33,8 @@ where
         self._operate(other, |x, y| x + y)
     }
 
-    fn add_scala(&self, num: T) -> Self {
-        List::_new(self._operate_scala(|x| x + num))
+    fn add_scala(&self, elem: T) -> Self {
+        List::_new(self._operate_scala(|x| x + elem))
     }
 
     fn argmax(&self) -> usize;
@@ -43,10 +43,10 @@ where
 
     fn div(&self, other: &Self) -> Vec<f32>;
 
-    fn div_scala(&self, num: f32) -> Vec<f32>;
+    fn div_scala(&self, elem: f32) -> Vec<f32>;
 
-    fn equal_scala(&self, num: T) -> BooleanList {
-        BooleanList::new(NumericalList::_operate_scala(self, |x| x == num))
+    fn equal_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x == elem))
     }
 
     fn filter(&self, condition: &BooleanList) -> Self {
@@ -60,20 +60,20 @@ where
         List::_new(vec)
     }
 
-    fn greater_than_or_equal_scala(&self, num: T) -> BooleanList {
-        BooleanList::new(NumericalList::_operate_scala(self, |x| x >= num))
+    fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x >= elem))
     }
 
-    fn greater_than_scala(&self, num: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x > num))
+    fn greater_than_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(self._operate_scala(|x| x > elem))
     }
 
-    fn less_than_or_equal_scala(&self, num: T) -> BooleanList {
-        BooleanList::new(NumericalList::_operate_scala(self, |x| x <= num))
+    fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x <= elem))
     }
 
-    fn less_than_scala(&self, num: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x < num))
+    fn less_than_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(self._operate_scala(|x| x < elem))
     }
 
     fn max(&self) -> T;
@@ -84,15 +84,15 @@ where
         self._operate(other, |x, y| x * y)
     }
 
-    fn mul_scala(&self, num: T) -> Self {
-        List::_new(self._operate_scala(|x| x * num))
+    fn mul_scala(&self, elem: T) -> Self {
+        List::_new(self._operate_scala(|x| x * elem))
     }
 
-    fn not_equal_scala(&self, num: T) -> BooleanList {
-        BooleanList::new(NumericalList::_operate_scala(self, |x| x != num))
+    fn not_equal_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(NumericalList::_operate_scala(self, |x| x != elem))
     }
 
-    fn pow_scala(&self, num: V) -> Self;
+    fn pow_scala(&self, elem: V) -> Self;
 
     fn replace(&self, old: T, new: T) -> Self {
         let vec = self
@@ -114,8 +114,8 @@ where
         self._operate(other, |x, y| x - y)
     }
 
-    fn sub_scala(&self, num: T) -> Self {
-        List::_new(self._operate_scala(|x| x - num))
+    fn sub_scala(&self, elem: T) -> Self {
+        List::_new(self._operate_scala(|x| x - elem))
     }
 
     // There is no elegant way to implement the sum method here, and have to
