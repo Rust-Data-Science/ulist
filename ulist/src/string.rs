@@ -2,6 +2,7 @@ use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
 use crate::integer::IntegerList;
+use crate::non_float::NonFloatList;
 use crate::types::AsBooleanList;
 use crate::types::AsFloatList;
 use crate::types::AsIntegerList;
@@ -46,7 +47,6 @@ impl StringList {
         List::copy(self)
     }
 
-    // TODO: Inherit this from `List` trait.
     pub fn counter(&self) -> HashMap<String, usize> {
         let mut _result: HashMap<&str, usize> = HashMap::new();
         let vec = self.values();
@@ -67,8 +67,20 @@ impl StringList {
         List::cycle(&vec, size)
     }
 
+    pub fn equal_scala(&self, elem: String) -> BooleanList {
+        List::equal_scala(self, elem)
+    }
+
+    pub fn filter(&self, condition: &BooleanList) -> Self {
+        List::filter(self, condition)
+    }
+
     pub unsafe fn get(&self, index: usize) -> String {
         List::get(self, index)
+    }
+
+    pub fn not_equal_scala(&self, elem: String) -> BooleanList {
+        List::not_equal_scala(self, elem)
     }
 
     pub fn pop(&self) {
@@ -80,6 +92,10 @@ impl StringList {
         List::repeat(elem, size)
     }
 
+    pub fn replace(&self, old: String, new: String) -> Self {
+        List::replace(self, old, new)
+    }
+
     pub unsafe fn set(&self, index: usize, elem: String) {
         List::set(self, index, elem)
     }
@@ -88,12 +104,20 @@ impl StringList {
         List::size(self)
     }
 
+    pub fn sort(&self, ascending: bool) -> Self {
+        NonFloatList::sort(self, ascending)
+    }
+
     pub fn to_list(&self) -> Vec<String> {
         List::to_list(self)
     }
 
     pub fn union_all(&self, other: &Self) -> Self {
         List::union_all(self, other)
+    }
+
+    pub fn unique(&self) -> Self {
+        NonFloatList::unique(self)
     }
 }
 
@@ -112,6 +136,8 @@ impl List<String> for StringList {
         self._values.borrow_mut()
     }
 }
+
+impl NonFloatList<String> for StringList {}
 
 impl AsBooleanList for StringList {
     fn as_bool(&self) -> BooleanList {

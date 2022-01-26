@@ -78,11 +78,11 @@ impl FloatList {
     }
 
     pub fn equal_scala(&self, elem: f32) -> BooleanList {
-        NumericalList::equal_scala(self, elem)
+        List::equal_scala(self, elem)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
-        NumericalList::filter(self, condition)
+        List::filter(self, condition)
     }
 
     pub unsafe fn get(&self, index: usize) -> f32 {
@@ -122,7 +122,7 @@ impl FloatList {
     }
 
     pub fn not_equal_scala(&self, elem: f32) -> BooleanList {
-        NumericalList::not_equal_scala(self, elem)
+        List::not_equal_scala(self, elem)
     }
 
     pub fn pop(&self) {
@@ -139,7 +139,7 @@ impl FloatList {
     }
 
     pub fn replace(&self, old: f32, new: f32) -> Self {
-        NumericalList::replace(self, old, new)
+        List::replace(self, old, new)
     }
 
     pub unsafe fn set(&self, index: usize, elem: f32) {
@@ -151,7 +151,10 @@ impl FloatList {
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
-        NumericalList::sort(self, ascending)
+        let mut vec = self.to_list();
+        let mut _vec = &mut vec;
+        _sort(_vec, ascending);
+        List::_new(vec)
     }
 
     pub fn sub(&self, other: &Self) -> Self {
@@ -175,7 +178,10 @@ impl FloatList {
     }
 
     pub fn unique(&self) -> Self {
-        NumericalList::unique(self)
+        let mut vec = self.to_list();
+        _sort(&mut vec, true);
+        vec.dedup();
+        List::_new(vec)
     }
 }
 
@@ -196,14 +202,6 @@ impl List<f32> for FloatList {
 }
 
 impl NumericalList<f32, i32> for FloatList {
-    fn _sort(&self, vec: &mut Vec<f32>, ascending: bool) {
-        if ascending {
-            vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
-        } else {
-            vec.sort_by(|a, b| b.partial_cmp(a).unwrap());
-        }
-    }
-
     fn argmax(&self) -> usize {
         let mut result = (0, &self.values()[0]);
         let vec = self.values();
@@ -282,5 +280,13 @@ impl AsStringList for FloatList {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| format!("{:?}", x)).collect();
         StringList::new(vec)
+    }
+}
+
+fn _sort(vec: &mut Vec<f32>, ascending: bool) {
+    if ascending {
+        vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    } else {
+        vec.sort_by(|a, b| b.partial_cmp(a).unwrap());
     }
 }

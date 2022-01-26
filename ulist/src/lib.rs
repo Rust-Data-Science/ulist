@@ -3,6 +3,7 @@ mod boolean;
 mod control_flow;
 mod float;
 mod integer;
+mod non_float;
 mod numerical;
 mod string;
 mod types;
