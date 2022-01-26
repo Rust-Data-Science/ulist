@@ -4,10 +4,10 @@ import pytest
 import ulist as ul
 from ulist.utils import check_test_result
 
-NUM_TYPE = Union[float, int, bool]
-LIST_TYPE = Union[List[float], List[int], List[bool]]
+ELEM_TYPE = Union[float, int, bool, str]
+LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
 COUNTER = Union[Dict[int, int], Dict[bool, int]]
-RESULT = Union[NUM_TYPE, LIST_TYPE, COUNTER]
+RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
 
 @pytest.mark.parametrize(
@@ -227,33 +227,54 @@ def test_indexing_operations(
 
 
 @pytest.mark.parametrize(
-    "dtype, nums, expected_dtype",
+    "dtype, nums, expected_value, expected_dtype",
     [
-        ('bool', [True, False], 'int'),
-        ('bool', [True, False], 'float'),
-        ('bool', [True, False], 'bool'),
+        ('bool', [True, False], [1, 0], 'int'),
+        ('bool', [True, False], [1.0, 0.0], 'float'),
+        ('bool', [True, False], [True, False], 'bool'),
+        ('bool', [True, False], ['true', 'false'], 'str'),
 
-        ('float', [1.0, 2.0], 'int'),
-        ('float', [1.0, 2.0], 'float'),
-        ('float', [1.0, 2.0], 'bool'),
+        ('float', [1.0, 2.0], [1, 2], 'int'),
+        ('float', [1.0, 2.0], [1.0, 2.0], 'float'),
+        ('float', [-1.0, 0.0, 1.0, 2.0], [True, False, True, True], 'bool'),
+        ('float', [1.0, 1.1], ['1.0', '1.1'], 'str'),
 
-        ('int', [1, 2], 'int'),
-        ('int', [1, 2], 'float'),
-        ('int', [1, 2], 'bool'),
+        ('int', [1, 2], [1, 2], 'int'),
+        ('int', [1, 2], [1.0, 2.0], 'float'),
+        ('int', [-1, 0, 1, 2], [True, False, True, True], 'bool'),
+        ('int', [1, 2], ['1', '2'], 'str'),
+
+        ('str', ['1', '2'], [1, 2], 'int'),
+        ('str', ['1.0', '2.0'], [1.0, 2.0], 'float'),
+        ('str', ['true', 'false'], [True, False], 'bool'),
+        ('str', ['foo', 'bar'], ['foo', 'bar'], 'str'),
     ],
 )
 def test_astype(
     dtype: str,
     nums: LIST_TYPE,
+    expected_value: LIST_TYPE,
     expected_dtype: str,
 ) -> None:
     """
     The output of `astype` is already tested in `test_methods_with_args`.
     We run additional tests here:
-        1. The astype method should return a new ulist object;
-        2. The returned object should has correct dtype;
+        - The astype method should return a new ulist object;
+        - The returned object should has correct dtype;
+        - The returned object should has correct values;
+        - If the returned object is not a BooleanList,  then it can be
+          casted back to `arr`.
     """
+    # Type conversion
     arr = ul.from_seq(nums, dtype=dtype)
     result = arr.astype(expected_dtype)
+    test_method = f"astype {expected_dtype}"
+    check_test_result(dtype, test_method, result, expected_value)
     assert result.dtype == expected_dtype
     assert id(result) != id(arr)
+
+    # Cast back to origin type
+    if result.dtype != "bool":
+        arr1 = result.astype(dtype)
+        test_method = f"Cast back {dtype}"
+        check_test_result(expected_dtype, test_method, arr1, arr.to_list())

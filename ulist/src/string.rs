@@ -1,4 +1,10 @@
 use crate::base::List;
+use crate::boolean::BooleanList;
+use crate::float::FloatList;
+use crate::integer::IntegerList;
+use crate::types::AsBooleanList;
+use crate::types::AsFloatList;
+use crate::types::AsIntegerList;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
@@ -22,6 +28,18 @@ impl StringList {
 
     pub fn append(&self, elem: String) {
         List::append(self, elem)
+    }
+
+    pub fn as_bool(&self) -> BooleanList {
+        AsBooleanList::as_bool(self)
+    }
+
+    pub fn as_float(&self) -> FloatList {
+        AsFloatList::as_float(self)
+    }
+
+    pub fn as_int(&self) -> IntegerList {
+        AsIntegerList::as_int(self)
     }
 
     pub fn copy(&self) -> Self {
@@ -92,5 +110,26 @@ impl List<String> for StringList {
 
     fn values_mut(&self) -> RefMut<Vec<String>> {
         self._values.borrow_mut()
+    }
+}
+
+impl AsBooleanList for StringList {
+    fn as_bool(&self) -> BooleanList {
+        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        BooleanList::new(vec)
+    }
+}
+
+impl AsFloatList for StringList {
+    fn as_float(&self) -> FloatList {
+        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        FloatList::new(vec)
+    }
+}
+
+impl AsIntegerList for StringList {
+    fn as_int(&self) -> IntegerList {
+        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        IntegerList::new(vec)
     }
 }

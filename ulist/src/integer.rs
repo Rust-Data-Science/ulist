@@ -3,8 +3,10 @@ use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
 use crate::numerical::NumericalList;
+use crate::string::StringList;
 use crate::types::AsBooleanList;
 use crate::types::AsFloatList;
+use crate::types::AsStringList;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
@@ -52,6 +54,10 @@ impl IntegerList {
 
     pub fn as_float(&self) -> FloatList {
         AsFloatList::as_float(self)
+    }
+
+    pub fn as_str(&self) -> StringList {
+        AsStringList::as_str(self)
     }
 
     pub fn copy(&self) -> Self {
@@ -263,5 +269,12 @@ impl AsFloatList for IntegerList {
     fn as_float(&self) -> FloatList {
         let vec = self.values().iter().map(|&x| x as f32).collect();
         FloatList::new(vec)
+    }
+}
+
+impl AsStringList for IntegerList {
+    fn as_str(&self) -> StringList {
+        let vec = self.values().iter().map(|&x| x.to_string()).collect();
+        StringList::new(vec)
     }
 }
