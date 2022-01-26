@@ -280,7 +280,7 @@ impl AsIntegerList for FloatList {
 
 impl AsStringList for FloatList {
     fn as_str(&self) -> StringList {
-        let vec = self.values().iter().map(|&x| x.to_string()).collect();
+        let vec = self.values().iter().map(|&x| format!("{:?}", x)).collect();
         StringList::new(vec)
     }
 }

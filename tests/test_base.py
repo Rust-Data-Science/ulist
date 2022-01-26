@@ -237,7 +237,7 @@ def test_indexing_operations(
         ('float', [1.0, 2.0], [1, 2], 'int'),
         ('float', [1.0, 2.0], [1.0, 2.0], 'float'),
         ('float', [-1.0, 0.0, 1.0, 2.0], [True, False, True, True], 'bool'),
-        ('float', [1.0, 1.1], ['1', '1.1'], 'str'),
+        ('float', [1.0, 1.1], ['1.0', '1.1'], 'str'),
 
         ('int', [1, 2], [1, 2], 'int'),
         ('int', [1, 2], [1.0, 2.0], 'float'),
@@ -259,12 +259,22 @@ def test_astype(
     """
     The output of `astype` is already tested in `test_methods_with_args`.
     We run additional tests here:
-        1. The astype method should return a new ulist object;
-        2. The returned object should has correct dtype;
+        - The astype method should return a new ulist object;
+        - The returned object should has correct dtype;
+        - The returned object should has correct values;
+        - If the returned object is not a BooleanList,  then it can be
+          casted back to `arr`.
     """
+    # Type conversion
     arr = ul.from_seq(nums, dtype=dtype)
     result = arr.astype(expected_dtype)
     test_method = f"astype {expected_dtype}"
     check_test_result(dtype, test_method, result, expected_value)
     assert result.dtype == expected_dtype
     assert id(result) != id(arr)
+
+    # Cast back to origin type
+    if result.dtype != "bool":
+        arr1 = result.astype(dtype)
+        test_method = f"Cast back {dtype}"
+        check_test_result(expected_dtype, test_method, arr1, arr.to_list())
