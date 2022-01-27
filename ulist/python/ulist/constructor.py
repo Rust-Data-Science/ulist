@@ -58,7 +58,8 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
             The type of the output ulist. 'int', 'float', 'bool' or 'string'.
 
     Raises:
-        ValueError: Parameter dtype should be 'int', 'float', 'bool' or 'string'!
+        ValueError:
+            Parameter dtype should be 'int', 'float', 'bool' or 'string'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -106,7 +107,8 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
             The type of the output ulist. 'int', 'float', 'bool' or 'string'.
 
     Raises:
-        ValueError: Parameter dtype should be 'int', 'float', 'bool' or 'string'!
+        ValueError:
+            Parameter dtype should be 'int', 'float', 'bool' or 'string'!
 
     Returns:
         UltraFastList: A ulist object.
