@@ -24,7 +24,7 @@ class UltraFastList:
         elif type(values) is BooleanList:
             self.dtype = "bool"
         elif type(values) is StringList:
-            self.dtype = "str"
+            self.dtype = "string"
         else:
             raise TypeError(
                 "Parameter values should be FloatList, "
@@ -112,7 +112,7 @@ class UltraFastList:
         n = self.size()
         if n < 100:
             return str(self.to_list())
-        if self.dtype == 'str':
+        if self.dtype == 'string':
             return (
                 f"['{self[0]}', '{self[1]}', '{self[2]}', ..., "
                 + f"'{self[n-3]}', '{self[n-2]}', '{self[n-1]}']"
@@ -176,7 +176,7 @@ class UltraFastList:
 
         Raises:
             ValueError:
-                Parameter dtype should be 'int', 'float', 'bool' or 'str'!
+                Parameter dtype should be 'int', 'float', 'bool' or 'string'!
 
         Returns:
             UltraFastList: A ulist object.
@@ -196,14 +196,14 @@ class UltraFastList:
                 result = self.copy()
             else:
                 result = UltraFastList(self._values.as_bool())
-        elif dtype == "str":
+        elif dtype == "string":
             if isinstance(self._values, StringList):
                 result = self.copy()
             else:
                 result = UltraFastList(self._values.as_str())
         else:
             raise ValueError(
-                "Parameter dtype should be 'int', 'float', 'bool' or 'str'!"
+                "Parameter dtype should be 'int', 'float', 'bool' or 'string'!"
             )
         return result
 

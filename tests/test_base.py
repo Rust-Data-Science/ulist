@@ -16,7 +16,7 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('__len__', 'float', [1.0, 2.0, 3.0], 3),
         ('__len__', 'int', [1, 2, 3], 3),
         ('__len__', 'bool', [True, False, True], 3),
-        ('__len__', 'str', ['foo', 'bar', 'baz'], 3),
+        ('__len__', 'string', ['foo', 'bar', 'baz'], 3),
 
         (
             "__repr__",
@@ -33,11 +33,12 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
          'UltraFastList([0, 1, 2, ..., 97, 98, 99])'),
         (
             "__repr__",
-            "str",
+            "string",
             ['foo', 'bar'] * 50,
             "UltraFastList(['foo', 'bar', 'foo', ..., 'bar', 'foo', 'bar'])",
         ),
-        ('__repr__', 'str', ['foo', 'bar'], "UltraFastList(['foo', 'bar'])"),
+        ('__repr__', 'string', ['foo', 'bar'],
+         "UltraFastList(['foo', 'bar'])"),
 
         (
             "__str__",
@@ -53,20 +54,20 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('__str__', 'int', range(0, 100), '[0, 1, 2, ..., 97, 98, 99]'),
         (
             "__str__",
-            "str",
+            "string",
             ['foo', 'bar'] * 50,
             "['foo', 'bar', 'foo', ..., 'bar', 'foo', 'bar']",
         ),
-        ('__str__', 'str', ['foo', 'bar'], "['foo', 'bar']"),
+        ('__str__', 'string', ['foo', 'bar'], "['foo', 'bar']"),
 
         ('copy', 'bool', [True, False], [True, False]),
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('copy', 'int', [1, 2], [1, 2]),
-        ('copy', 'str', ['foo', 'bar'], ['foo', 'bar']),
+        ('copy', 'string', ['foo', 'bar'], ['foo', 'bar']),
 
         ('counter', 'bool', [True, False, True], {True: 2, False: 1}),
         ('counter', 'int', [1, 0, 1], {1: 2, 0: 1}),
-        ('counter', 'str', ['foo', 'bar', 'foo'], {'foo': 2, 'bar': 1}),
+        ('counter', 'string', ['foo', 'bar', 'foo'], {'foo': 2, 'bar': 1}),
 
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
@@ -75,7 +76,7 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('size', 'bool', [True, False], 2),
         ('size', 'float', [1.0, 2.0], 2),
         ('size', 'int', [1, 2], 2),
-        ('size', 'str', ['foo', 'bar'], 2),
+        ('size', 'string', ['foo', 'bar'], 2),
 
         ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
         ('sum', 'int', [1, 2, 3, 4, 5], 15),
@@ -84,7 +85,7 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('to_list', 'bool', [True, False], [True, False]),
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('to_list', 'int', [1, 2], [1, 2]),
-        ('to_list', 'str', ['foo', 'bar'], ['foo', 'bar']),
+        ('to_list', 'string', ['foo', 'bar'], ['foo', 'bar']),
     ],
 )
 def test_methods_no_arg(
@@ -104,7 +105,7 @@ def test_methods_no_arg(
         ('__getitem__', 'bool', [True, False, True], True, {'index': 2}),
         ('__getitem__', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
-        ('__getitem__', 'str', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
+        ('__getitem__', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
 
         ('astype', 'bool', [True, False], [1, 0], {'dtype': 'int'}),
         ('astype', 'bool', [True, False], [1.0, 0.0], {'dtype': 'float'}),
@@ -124,7 +125,7 @@ def test_methods_no_arg(
         ('get', 'bool', [True, False, True], True, {'index': 2}),
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
-        ('get', 'str', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
+        ('get', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
 
         ('union_all', 'bool', [True, False], [True, False, False, True], {
          'other': ul.from_seq([False, True], dtype='bool')}),
@@ -132,8 +133,8 @@ def test_methods_no_arg(
          'other': ul.from_seq([3.0, 4.0], dtype='float')}),
         ('union_all', 'int', [1, 2], [1, 2, 3, 4], {
          'other': ul.from_seq([3, 4], dtype='int')}),
-        ('union_all', 'str', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
-         'other': ul.from_seq(['baz', 'zoo'], dtype='str')}),
+        ('union_all', 'string', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
+         'other': ul.from_seq(['baz', 'zoo'], dtype='string')}),
 
         ('var', 'bool', [True, False], 0.25, {}),
         ('var', 'bool', [True, True, True, False], 0.25, {"ddof": 1}),
@@ -163,24 +164,24 @@ def test_methods_with_args(
         ('__setitem__', 'float', [1.0, 2.0], [
          1.0, 3.0], {'index': 1, 'elem': 3.0}),
         ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
-        ('__setitem__', 'str', ['foo', 'bar'], [
+        ('__setitem__', 'string', ['foo', 'bar'], [
          'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
 
         ('append', 'bool', [True], [True, False], {'elem': False}),
         ('append', 'float', [1.0], [1.0, 2.0], {'elem': 2.0}),
         ('append', 'int', [1], [1, 2], {'elem': 2}),
-        ('append', 'str', ['foo'], ['foo', 'bar'], {'elem': 'bar'}),
+        ('append', 'string', ['foo'], ['foo', 'bar'], {'elem': 'bar'}),
 
         ('pop', 'bool', [True, False], [True], {}),
         ('pop', 'float', [1.0, 2.0], [1.0], {}),
         ('pop', 'int', [1, 2], [1], {}),
-        ('pop', 'str', ['foo', 'bar'], ['foo'], {}),
+        ('pop', 'string', ['foo', 'bar'], ['foo'], {}),
 
         ('set', 'bool', [True, False], [
          True, True], {'index': 1, 'elem': True}),
         ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
         ('set', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
-        ('set', 'str', ['foo', 'bar'], [
+        ('set', 'string', ['foo', 'bar'], [
          'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
     ],
 )
@@ -202,7 +203,8 @@ def test_multable_methods(
         ('bool', [True, False], [True, True], {'index': 1, 'elem': True}),
         ('float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
         ('int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
-        ('str', ['foo', 'bar'], ['foo', 'baz'], {'index': 1, 'elem': 'baz'}),
+        ('string', ['foo', 'bar'], ['foo', 'baz'],
+         {'index': 1, 'elem': 'baz'}),
     ],
 )
 def test_indexing_operations(
@@ -232,22 +234,22 @@ def test_indexing_operations(
         ('bool', [True, False], [1, 0], 'int'),
         ('bool', [True, False], [1.0, 0.0], 'float'),
         ('bool', [True, False], [True, False], 'bool'),
-        ('bool', [True, False], ['true', 'false'], 'str'),
+        ('bool', [True, False], ['true', 'false'], 'string'),
 
         ('float', [1.0, 2.0], [1, 2], 'int'),
         ('float', [1.0, 2.0], [1.0, 2.0], 'float'),
         ('float', [-1.0, 0.0, 1.0, 2.0], [True, False, True, True], 'bool'),
-        ('float', [1.0, 1.1], ['1.0', '1.1'], 'str'),
+        ('float', [1.0, 1.1], ['1.0', '1.1'], 'string'),
 
         ('int', [1, 2], [1, 2], 'int'),
         ('int', [1, 2], [1.0, 2.0], 'float'),
         ('int', [-1, 0, 1, 2], [True, False, True, True], 'bool'),
-        ('int', [1, 2], ['1', '2'], 'str'),
+        ('int', [1, 2], ['1', '2'], 'string'),
 
-        ('str', ['1', '2'], [1, 2], 'int'),
-        ('str', ['1.0', '2.0'], [1.0, 2.0], 'float'),
-        ('str', ['true', 'false'], [True, False], 'bool'),
-        ('str', ['foo', 'bar'], ['foo', 'bar'], 'str'),
+        ('string', ['1', '2'], [1, 2], 'int'),
+        ('string', ['1.0', '2.0'], [1.0, 2.0], 'float'),
+        ('string', ['true', 'false'], [True, False], 'bool'),
+        ('string', ['foo', 'bar'], ['foo', 'bar'], 'string'),
     ],
 )
 def test_astype(
