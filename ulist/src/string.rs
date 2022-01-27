@@ -48,18 +48,7 @@ impl StringList {
     }
 
     pub fn counter(&self) -> HashMap<String, usize> {
-        let mut _result: HashMap<&str, usize> = HashMap::new();
-        let vec = self.values();
-        for key in vec.iter() {
-            let val = _result.entry(key).or_insert(0);
-            *val += 1;
-        }
-
-        let mut result: HashMap<String, usize> = HashMap::with_capacity(_result.capacity());
-        for (&key, &val) in _result.iter() {
-            result.insert(key.to_string(), val);
-        }
-        result
+        NonFloatList::counter(self)
     }
 
     #[staticmethod]

@@ -12,8 +12,8 @@ where
 
     fn _new(vec: Vec<T>) -> Self;
 
-    fn _operate_scala<U>(&self, func: impl Fn(T) -> U) -> Vec<U> {
-        self.values().iter().map(|&x| func(x)).collect()
+    fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
+        self.values().iter().map(|x| func(x)).collect()
     }
 
     fn append(&self, elem: T) {
@@ -30,7 +30,7 @@ where
     }
 
     fn equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x == elem))
+        BooleanList::new(self._fn_scala(|x| x == &elem))
     }
 
     fn filter(&self, condition: &BooleanList) -> Self {
@@ -39,7 +39,7 @@ where
             .iter()
             .zip(condition.values().iter())
             .filter(|(_, y)| **y)
-            .map(|(x, _)| *x)
+            .map(|(x, _)| x.clone())
             .collect();
         List::_new(vec)
     }
@@ -53,7 +53,7 @@ where
     }
 
     fn not_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x != elem))
+        BooleanList::new(self._fn_scala(|x| x != &elem))
     }
 
     fn pop(&self) {
@@ -64,7 +64,7 @@ where
         let vec = self
             .values()
             .iter()
-            .map(|&x| if x == old { new } else { x })
+            .map(|x| if x == &old { new.clone() } else { x.clone() })
             .collect();
         List::_new(vec)
     }

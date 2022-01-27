@@ -19,7 +19,7 @@ where
         let vec = self.values();
         let mut result: HashMap<T, usize> = HashMap::new();
         for key in vec.iter() {
-            let val = result.entry(*key).or_insert(0);
+            let val = result.entry(key.clone()).or_insert(0);
             *val += 1;
         }
         result

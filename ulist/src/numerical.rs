@@ -12,7 +12,11 @@ where
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
-    fn _operate(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
+    fn _fn_num<U>(&self, func: impl Fn(T) -> U) -> Vec<U> {
+        self.values().iter().map(|&x| func(x)).collect()
+    }
+
+    fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
         let vec = self
             .values()
             .iter()
@@ -23,11 +27,11 @@ where
     }
 
     fn add(&self, other: &Self) -> Self {
-        self._operate(other, |x, y| x + y)
+        self._fn(other, |x, y| x + y)
     }
 
     fn add_scala(&self, elem: T) -> Self {
-        List::_new(self._operate_scala(|x| x + elem))
+        List::_new(self._fn_num(|x| x + elem))
     }
 
     fn argmax(&self) -> usize;
@@ -39,19 +43,19 @@ where
     fn div_scala(&self, elem: f32) -> Vec<f32>;
 
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x >= elem))
+        BooleanList::new(self._fn_num(|x| x >= elem))
     }
 
     fn greater_than_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x > elem))
+        BooleanList::new(self._fn_num(|x| x > elem))
     }
 
     fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x <= elem))
+        BooleanList::new(self._fn_num(|x| x <= elem))
     }
 
     fn less_than_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._operate_scala(|x| x < elem))
+        BooleanList::new(self._fn_num(|x| x < elem))
     }
 
     fn max(&self) -> T;
@@ -59,21 +63,21 @@ where
     fn min(&self) -> T;
 
     fn mul(&self, other: &Self) -> Self {
-        self._operate(other, |x, y| x * y)
+        self._fn(other, |x, y| x * y)
     }
 
     fn mul_scala(&self, elem: T) -> Self {
-        List::_new(self._operate_scala(|x| x * elem))
+        List::_new(self._fn_num(|x| x * elem))
     }
 
     fn pow_scala(&self, elem: V) -> Self;
 
     fn sub(&self, other: &Self) -> Self {
-        self._operate(other, |x, y| x - y)
+        self._fn(other, |x, y| x - y)
     }
 
     fn sub_scala(&self, elem: T) -> Self {
-        List::_new(self._operate_scala(|x| x - elem))
+        List::_new(self._fn_num(|x| x - elem))
     }
 
     // There is no elegant way to implement the sum method here, and have to
