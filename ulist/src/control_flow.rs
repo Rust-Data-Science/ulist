@@ -4,7 +4,6 @@ use crate::float::FloatList;
 use crate::integer::IntegerList;
 use pyo3::prelude::*;
 use pyo3::Py;
-use std::cmp::PartialEq;
 
 unsafe fn select<T, U>(
     py: Python,

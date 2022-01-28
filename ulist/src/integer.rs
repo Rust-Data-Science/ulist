@@ -1,7 +1,7 @@
-use crate::base::counter;
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
+use crate::non_float::NonFloatList;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
 use crate::types::AsBooleanList;
@@ -65,7 +65,7 @@ impl IntegerList {
     }
 
     pub fn counter(&self) -> HashMap<i32, usize> {
-        counter(self.values())
+        NonFloatList::counter(self)
     }
 
     #[staticmethod]
@@ -84,11 +84,11 @@ impl IntegerList {
     }
 
     pub fn equal_scala(&self, elem: i32) -> BooleanList {
-        NumericalList::equal_scala(self, elem)
+        List::equal_scala(self, elem)
     }
 
     pub fn filter(&self, condition: &BooleanList) -> Self {
-        NumericalList::filter(self, condition)
+        List::filter(self, condition)
     }
 
     pub unsafe fn get(&self, index: usize) -> i32 {
@@ -128,7 +128,7 @@ impl IntegerList {
     }
 
     pub fn not_equal_scala(&self, elem: i32) -> BooleanList {
-        NumericalList::not_equal_scala(self, elem)
+        List::not_equal_scala(self, elem)
     }
 
     pub fn pop(&self) {
@@ -139,17 +139,17 @@ impl IntegerList {
         NumericalList::pow_scala(self, elem)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: i32) {
-        List::set(self, index, elem)
-    }
-
     #[staticmethod]
     pub fn repeat(elem: i32, size: usize) -> Self {
         List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: i32, new: i32) -> Self {
-        NumericalList::replace(self, old, new)
+        List::replace(self, old, new)
+    }
+
+    pub unsafe fn set(&self, index: usize, elem: i32) {
+        List::set(self, index, elem)
     }
 
     pub fn size(&self) -> usize {
@@ -157,7 +157,7 @@ impl IntegerList {
     }
 
     pub fn sort(&self, ascending: bool) -> Self {
-        NumericalList::sort(self, ascending)
+        NonFloatList::sort(self, ascending)
     }
 
     pub fn sub(&self, other: &Self) -> Self {
@@ -181,7 +181,7 @@ impl IntegerList {
     }
 
     pub fn unique(&self) -> Self {
-        NumericalList::unique(self)
+        NonFloatList::unique(self)
     }
 }
 
@@ -201,15 +201,9 @@ impl List<i32> for IntegerList {
     }
 }
 
-impl NumericalList<i32, u32> for IntegerList {
-    fn _sort(&self, vec: &mut Vec<i32>, ascending: bool) {
-        if ascending {
-            vec.sort();
-        } else {
-            vec.sort_by(|a, b| b.cmp(a))
-        }
-    }
+impl NonFloatList<i32> for IntegerList {}
 
+impl NumericalList<i32, u32> for IntegerList {
     fn argmax(&self) -> usize {
         self.values()
             .iter()

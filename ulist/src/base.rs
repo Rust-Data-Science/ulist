@@ -1,10 +1,6 @@
+use crate::boolean::BooleanList;
 use std::cell::Ref;
 use std::cell::RefMut;
-use std::cmp::Eq;
-use std::cmp::PartialEq;
-use std::collections::HashMap;
-use std::hash::Hash;
-use std::marker::Sized;
 
 /// Abstract List with generic type elements.
 pub trait List<T>
@@ -15,6 +11,10 @@ where
     // Arrange the following methods in alphabetical order.
 
     fn _new(vec: Vec<T>) -> Self;
+
+    fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
+        self.values().iter().map(|x| func(x)).collect()
+    }
 
     fn append(&self, elem: T) {
         self.values_mut().push(elem);
@@ -29,6 +29,21 @@ where
         List::_new(v)
     }
 
+    fn equal_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(self._fn_scala(|x| x == &elem))
+    }
+
+    fn filter(&self, condition: &BooleanList) -> Self {
+        let vec = self
+            .values()
+            .iter()
+            .zip(condition.values().iter())
+            .filter(|(_, y)| **y)
+            .map(|(x, _)| x.clone())
+            .collect();
+        List::_new(vec)
+    }
+
     unsafe fn get(&self, index: usize) -> T {
         if index < self.size() {
             self.values().get_unchecked(index).clone()
@@ -37,8 +52,21 @@ where
         }
     }
 
+    fn not_equal_scala(&self, elem: T) -> BooleanList {
+        BooleanList::new(self._fn_scala(|x| x != &elem))
+    }
+
     fn pop(&self) {
         self.values_mut().pop();
+    }
+
+    fn replace(&self, old: T, new: T) -> Self {
+        let vec = self
+            .values()
+            .iter()
+            .map(|x| if x == &old { new.clone() } else { x.clone() })
+            .collect();
+        List::_new(vec)
     }
 
     unsafe fn set(&self, index: usize, elem: T) {
@@ -77,14 +105,4 @@ where
     fn values(&self) -> Ref<Vec<T>>;
 
     fn values_mut(&self) -> RefMut<Vec<T>>;
-}
-
-// TODO: Move this method inside `List` trait.
-pub fn counter<T: Eq + Hash + Copy>(vec: Ref<Vec<T>>) -> HashMap<T, usize> {
-    let mut result: HashMap<T, usize> = HashMap::new();
-    for key in vec.iter() {
-        let val = result.entry(*key).or_insert(0);
-        *val += 1;
-    }
-    result
 }

@@ -55,10 +55,11 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
         size (int):
             size (int): Size of the new ulist.
         dtype (str):
-            The type of the output ulist. 'int', 'float', 'bool' or 'str'.
+            The type of the output ulist. 'int', 'float', 'bool' or 'string'.
 
     Raises:
-        ValueError: Parameter dtype should be 'int', 'float', 'bool' or 'str'!
+        ValueError:
+            Parameter dtype should be 'int', 'float', 'bool' or 'string'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -78,7 +79,7 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     >>> arr3
     UltraFastList([True, True, True])
 
-    >>> arr4 = ul.cycle(['foo'], 3, 'str')
+    >>> arr4 = ul.cycle(['foo'], 3, 'string')
     >>> arr4
     UltraFastList(['foo', 'foo', 'foo'])
     """
@@ -88,11 +89,11 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
         result = UltraFastList(FloatList.cycle(obj, size))
     elif dtype == "bool":
         result = UltraFastList(BooleanList.cycle(obj, size))
-    elif dtype == "str":
+    elif dtype == "string":
         result = UltraFastList(StringList.cycle(obj, size))
     else:
         raise ValueError(
-            "Parameter dtype should be 'int', 'float', 'bool' or 'str'!")
+            "Parameter dtype should be 'int', 'float', 'bool' or 'string'!")
     return result
 
 
@@ -103,10 +104,11 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         obj (Sequence):
             Sequence object such as list, tuple and range.
         dtype (str):
-            The type of the output ulist. 'int', 'float', 'bool' or 'str'.
+            The type of the output ulist. 'int', 'float', 'bool' or 'string'.
 
     Raises:
-        ValueError: Parameter dtype should be 'int', 'float', 'bool' or 'str'!
+        ValueError:
+            Parameter dtype should be 'int', 'float', 'bool' or 'string'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -126,7 +128,7 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     >>> arr3
     UltraFastList([True, True, False])
 
-    >>> arr4 = ul.from_seq(('foo', 'bar', 'baz'), dtype='str')
+    >>> arr4 = ul.from_seq(('foo', 'bar', 'baz'), dtype='string')
     >>> arr4
     UltraFastList(['foo', 'bar', 'baz'])
     """
@@ -136,11 +138,11 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         result = UltraFastList(FloatList(obj))
     elif dtype == "bool":
         result = UltraFastList(BooleanList(obj))
-    elif dtype == "str":
+    elif dtype == "string":
         result = UltraFastList(StringList(obj))
     else:
         raise ValueError(
-            "Parameter dtype should be 'int', 'float', 'bool' or 'str'!")
+            "Parameter dtype should be 'int', 'float', 'bool' or 'string'!")
     return result
 
 

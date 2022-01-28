@@ -1,7 +1,7 @@
-use crate::base::counter;
 use crate::base::List;
 use crate::float::FloatList;
 use crate::integer::IntegerList;
+use crate::non_float::NonFloatList;
 use crate::string::StringList;
 use crate::types::AsFloatList;
 use crate::types::AsIntegerList;
@@ -61,12 +61,20 @@ impl BooleanList {
     }
 
     pub fn counter(&self) -> HashMap<bool, usize> {
-        counter(self.values())
+        NonFloatList::counter(self)
     }
 
     #[staticmethod]
     pub fn cycle(vec: Vec<bool>, size: usize) -> Self {
         List::cycle(&vec, size)
+    }
+
+    pub fn equal_scala(&self, elem: bool) -> BooleanList {
+        List::equal_scala(self, elem)
+    }
+
+    pub fn filter(&self, condition: &BooleanList) -> Self {
+        List::filter(self, condition)
     }
 
     pub unsafe fn get(&self, index: usize) -> bool {
@@ -76,6 +84,10 @@ impl BooleanList {
     pub fn not_(&self) -> Self {
         let vec = self.values().iter().map(|&x| !x).collect();
         BooleanList::new(vec)
+    }
+
+    pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
+        List::not_equal_scala(self, elem)
     }
 
     pub fn or_(&self, other: &Self) -> Self {
@@ -91,12 +103,20 @@ impl BooleanList {
         List::repeat(elem, size)
     }
 
+    pub fn replace(&self, old: bool, new: bool) -> Self {
+        List::replace(self, old, new)
+    }
+
     pub unsafe fn set(&self, index: usize, elem: bool) {
         List::set(self, index, elem)
     }
 
     pub fn size(&self) -> usize {
         List::size(self)
+    }
+
+    pub fn sort(&self, ascending: bool) -> Self {
+        NonFloatList::sort(self, ascending)
     }
 
     pub fn sum(&self) -> i32 {
@@ -109,6 +129,10 @@ impl BooleanList {
 
     pub fn union_all(&self, other: &Self) -> Self {
         List::union_all(self, other)
+    }
+
+    pub fn unique(&self) -> Self {
+        NonFloatList::unique(self)
     }
 }
 
@@ -127,6 +151,8 @@ impl List<bool> for BooleanList {
         self._values.borrow_mut()
     }
 }
+
+impl NonFloatList<bool> for BooleanList {}
 
 fn _logical_operate(
     this: &BooleanList,

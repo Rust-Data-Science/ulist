@@ -47,99 +47,6 @@ def test_statistics_methods(
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
-        ('replace', 'float', [1.0, 0.0, 1.0], [
-         0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
-        ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
-
-        (
-            'sort',
-            'float',
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            [1.0, 2.0, 3.0, 3.0, 4.0, 5.0],
-            {'ascending': True}
-        ),
-        (
-            'sort',
-            'float',
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            [5.0, 4.0, 3.0, 3.0, 2.0, 1.0],
-            {'ascending': False}
-        ),
-        (
-            'sort',
-            'int',
-            [5, 3, 2, 4, 1, 3],
-            [1, 2, 3, 3, 4, 5],
-            {'ascending': True}
-        ),
-        (
-            'sort',
-            'int',
-            [5, 3, 2, 4, 1, 3],
-            [5, 4, 3, 3, 2, 1],
-            {'ascending': False}
-        ),
-
-        (
-            'unique',
-            'float',
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            [1.0, 2.0, 3.0, 4.0, 5.0],
-            {}
-        ),
-        (
-            'unique',
-            'int',
-            [5, 3, 2, 4, 1, 3],
-            [1, 2, 3, 4, 5],
-            {}
-        ),
-    ],
-)
-def test_data_process_methods(
-    test_method: str,
-    dtype: str,
-    nums: LIST_TYPE,
-    expected_value: LIST_TYPE,
-    kwargs: dict,
-) -> None:
-    arr = ul.from_seq(nums, dtype)
-    result = getattr(arr, test_method)(**kwargs)
-    check_test_result(dtype, test_method, result, expected_value)
-
-
-@pytest.mark.parametrize(
-    "dtype, nums, expected_value, condition",
-    [
-        (
-            "float",
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            [5.0, 4.0],
-            [True, False, False, True, False, False],
-        ),
-        (
-            "int",
-            [5, 3, 2, 4, 1, 3],
-            [5, 4],
-            [True, False, False, True, False, False],
-        ),
-    ],
-)
-def test_filter(
-    dtype: str,
-    nums: LIST_TYPE,
-    expected_value: LIST_TYPE,
-    condition: List[bool],
-) -> None:
-    arr = ul.from_seq(nums, dtype)
-    cond = ul.from_seq(condition, dtype="bool")
-    result = arr.filter(cond)
-    check_test_result(dtype, "filter", result, expected_value)
-
-
-@pytest.mark.parametrize(
-    "test_method, dtype, nums, expected_value, kwargs",
-    [
         ('add', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          2.0, 4.0, 6.0, 8.0, 10.0], {'other': [1, 2, 3, 4, 5]}),
         ('add', 'int', [1, 2, 3, 4, 5], [
@@ -158,11 +65,6 @@ def test_filter(
          0.5, 1.0, 1.5, 2.0, 2.5], {'elem': 2}),
         ('div_scala', 'int', [1, 2, 3, 4, 5], [
          0.5, 1.0, 1.5, 2.0, 2.5], {'elem': 2}),
-
-        ("equal_scala", 'float', [1.0, 2.0, 3.0],
-         [False, True, False], {"elem": 2.0}),
-        ("equal_scala", 'int', [1, 2, 3], [False, True, False], {"elem": 2}),
-
 
         ("greater_than_or_equal_scala", 'float', [
          1.0, 2.0, 3.0], [False, True, True], {"elem": 2.0}),
@@ -192,11 +94,6 @@ def test_filter(
         ('mul_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          2.0, 4.0, 6.0, 8.0, 10.0], {'elem': 2}),
         ('mul_scala', 'int', [1, 2, 3, 4, 5], [2, 4, 6, 8, 10], {'elem': 2}),
-
-        ("not_equal_scala", 'float', [1.0, 2.0, 3.0], [
-         True, False, True], {"elem": 2.0}),
-        ("not_equal_scala", 'int', [1, 2, 3],
-         [True, False, True], {"elem": 2}),
 
         ('pow_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          1.0, 4.0, 9.0, 16.0, 25.0], {'elem': 2}),
@@ -233,7 +130,7 @@ def test_arithmetic_methods(
     check_test_result(dtype, test_method, result, expected_value)
 
 
-@ pytest.mark.parametrize(
+@pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
         (op.add, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
@@ -243,10 +140,6 @@ def test_arithmetic_methods(
         (op.add, 'int', [1, 2, 3, 4, 5], [
          2, 4, 6, 8, 10], {'other': [1, 2, 3, 4, 5]}),
         (op.add, 'int', [1, 2, 3, 4, 5], [2, 3, 4, 5, 6], {'other': 1}),
-
-        (op.eq, 'float', [1.0, 2.0, 3.0], [
-         False, True, False], {"other": 2.0}),
-        (op.eq, 'int', [1, 2, 3], [False, True, False], {"other": 2}),
 
         (op.ge, 'float', [1.0, 2.0, 3.0], [False, True, True], {"other": 2.0}),
         (op.ge, 'int', [1, 2, 3], [False, True, True], {"other": 2}),
@@ -271,9 +164,6 @@ def test_arithmetic_methods(
         (op.mul, 'int', [1, 2, 3, 4, 5], [
          1, 4, 9, 16, 25], {'other': [1, 2, 3, 4, 5]}),
         (op.mul, 'int', [1, 2, 3, 4, 5], [2, 4, 6, 8, 10], {'other': 2}),
-
-        (op.ne, 'float', [1.0, 2.0, 3.0], [True, False, True], {"other": 2.0}),
-        (op.ne, 'int', [1, 2, 3], [True, False, True], {"other": 2}),
 
         (op.pow, 'float', [1.0, 2.0, 3.0], [1.0, 4.0, 9.0], {"other": 2}),
         (op.pow, 'int', [1, 2, 3], [1, 4, 9], {"other": 2}),

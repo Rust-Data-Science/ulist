@@ -24,7 +24,7 @@ class UltraFastList:
         elif type(values) is BooleanList:
             self.dtype = "bool"
         elif type(values) is StringList:
-            self.dtype = "str"
+            self.dtype = "string"
         else:
             raise TypeError(
                 "Parameter values should be FloatList, "
@@ -112,7 +112,7 @@ class UltraFastList:
         n = self.size()
         if n < 100:
             return str(self.to_list())
-        if self.dtype == 'str':
+        if self.dtype == 'string':
             return (
                 f"['{self[0]}', '{self[1]}', '{self[2]}', ..., "
                 + f"'{self[n-3]}', '{self[n-2]}', '{self[n-1]}']"
@@ -176,7 +176,7 @@ class UltraFastList:
 
         Raises:
             ValueError:
-                Parameter dtype should be 'int', 'float', 'bool' or 'str'!
+                Parameter dtype should be 'int', 'float', 'bool' or 'string'!
 
         Returns:
             UltraFastList: A ulist object.
@@ -196,14 +196,14 @@ class UltraFastList:
                 result = self.copy()
             else:
                 result = UltraFastList(self._values.as_bool())
-        elif dtype == "str":
+        elif dtype == "string":
             if isinstance(self._values, StringList):
                 result = self.copy()
             else:
                 result = UltraFastList(self._values.as_str())
         else:
             raise ValueError(
-                "Parameter dtype should be 'int', 'float', 'bool' or 'str'!"
+                "Parameter dtype should be 'int', 'float', 'bool' or 'string'!"
             )
         return result
 
@@ -260,7 +260,6 @@ class UltraFastList:
 
     def equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self == elem."""
-        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.equal_scala(elem))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
@@ -268,7 +267,6 @@ class UltraFastList:
         According to the condition, return a ulist with elements of self
         correspondingly.
         """
-        assert not isinstance(self._values, (BooleanList, StringList))
         assert isinstance(condition._values, BooleanList)
         return UltraFastList(self._values.filter(condition._values))
 
@@ -328,7 +326,6 @@ class UltraFastList:
 
     def not_equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self != elem."""
-        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.not_equal_scala(elem))
 
     def or_(self, other: "UltraFastList") -> "UltraFastList":
@@ -348,7 +345,6 @@ class UltraFastList:
 
     def replace(self, old: ELEM, new: ELEM) -> "UltraFastList":
         """Replace the old elements of self with the new one."""
-        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.replace(old, new))
 
     def set(self, index: int, elem: ELEM) -> None:
@@ -369,7 +365,6 @@ class UltraFastList:
         Returns:
             UltraFastList: The sorted ulist.
         """
-        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.sort(ascending=ascending))
 
     def sub(self, other: "UltraFastList") -> "UltraFastList":
@@ -398,7 +393,6 @@ class UltraFastList:
 
     def unique(self) -> "UltraFastList":
         """Returns the sorted unique elements of self. """
-        assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.unique())
 
     def var(self, ddof: int = 0) -> float:
