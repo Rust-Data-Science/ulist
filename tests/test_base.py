@@ -1,5 +1,6 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Callable
 
+import operator as op
 import pytest
 import ulist as ul
 from ulist.utils import check_test_result
@@ -86,6 +87,31 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('to_list', 'int', [1, 2], [1, 2]),
         ('to_list', 'string', ['foo', 'bar'], ['foo', 'bar']),
+
+        (
+            'unique',
+            'bool',
+            [True, False, True, False, True],
+            [False, True],
+        ),
+        (
+            'unique',
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+        ),
+        (
+            'unique',
+            'int',
+            [5, 3, 2, 4, 1, 3],
+            [1, 2, 3, 4, 5],
+        ),
+        (
+            'unique',
+            'string',
+            ['foo', 'bar', 'foo'],
+            ['bar', 'foo'],
+        ),
     ],
 )
 def test_methods_no_arg(
@@ -122,10 +148,128 @@ def test_methods_no_arg(
         ('astype', 'int', [-2, -1, 0, 1, 2],
          [True, True, False, True, True], {'dtype': 'bool'}),
 
+        ("equal_scala", 'bool', [True, False], [False, True], {"elem": False}),
+        ("equal_scala", 'float', [1.0, 2.0, 3.0],
+         [False, True, False], {"elem": 2.0}),
+        ("equal_scala", 'int', [1, 2, 3], [False, True, False], {"elem": 2}),
+        ("equal_scala", 'string', ['foo', 'bar'],
+         [False, True], {"elem": 'bar'}),
+
+        (
+            "filter",
+            "bool",
+            [True, True, False],
+            [True, False],
+            {"condition": ul.from_seq([True, False, True], 'bool')},
+        ),
+        (
+            "filter",
+            "float",
+            [1.0, 2.0, 3.0],
+            [1.0, 3.0],
+            {"condition": ul.from_seq([True, False, True], 'bool')},
+        ),
+        (
+            "filter",
+            "int",
+            [1, 2, 3],
+            [1, 3],
+            {"condition": ul.from_seq([True, False, True], 'bool')},
+        ),
+        (
+            "filter",
+            "string",
+            ['foo', 'bar', 'baz'],
+            ['foo', 'baz'],
+            {"condition": ul.from_seq([True, False, True], 'bool')},
+        ),
+
         ('get', 'bool', [True, False, True], True, {'index': 2}),
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
         ('get', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
+
+        ("not_equal_scala", 'bool', [False, True, False], [
+         True, False, True], {"elem": True}),
+        ("not_equal_scala", 'float', [1.0, 2.0, 3.0], [
+         True, False, True], {"elem": 2.0}),
+        ("not_equal_scala", 'int', [1, 2, 3],
+         [True, False, True], {"elem": 2}),
+        ("not_equal_scala", 'string', ['foo', 'bar', 'baz'],
+         [True, False, True], {"elem": 'bar'}),
+
+        ('replace', 'bool', [True, False, True], [
+         False, False, False], {'old': True, 'new': False}),
+        ('replace', 'float', [1.0, 0.0, 1.0], [
+         0.0, 0.0, 0.0], {'old': 1.0, 'new': 0.0}),
+        ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
+        ('replace', 'string', ['foo', 'bar', 'foo'], [
+         'bar', 'bar', 'bar'], {'old': 'foo', 'new': 'bar'}),
+
+        (
+            'sort',
+            'bool',
+            [True, False, True],
+            [False, True, True],
+            {'ascending': True}
+        ),
+        (
+            'sort',
+            'bool',
+            [True, False, True],
+            [True, True, False],
+            {'ascending': False}
+        ),
+        (
+            'sort',
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [5.0, 4.0, 3.0, 3.0, 2.0, 1.0],
+            {'ascending': False}
+        ),
+        (
+            'sort',
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [1.0, 2.0, 3.0, 3.0, 4.0, 5.0],
+            {'ascending': True}
+        ),
+        (
+            'sort',
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [5.0, 4.0, 3.0, 3.0, 2.0, 1.0],
+            {'ascending': False}
+        ),
+        (
+            'sort',
+            'int',
+            [5, 3, 2, 4, 1, 3],
+            [1, 2, 3, 3, 4, 5],
+            {'ascending': True}
+        ),
+        (
+            'sort',
+            'int',
+            [5, 3, 2, 4, 1, 3],
+            [5, 4, 3, 3, 2, 1],
+            {'ascending': False}
+        ),
+        (
+            'sort',
+            'string',
+            ['foo', 'bar', 'baz'],
+            ['bar', 'baz', 'foo'],
+            {'ascending': True}
+        ),
+        (
+            'sort',
+            'string',
+            ['foo', 'bar', 'baz'],
+            ['foo', 'baz', 'bar'],
+            {'ascending': False}
+        ),
+
 
         ('union_all', 'bool', [True, False], [True, False, False, True], {
          'other': ul.from_seq([False, True], dtype='bool')}),
@@ -280,3 +424,36 @@ def test_astype(
         arr1 = result.astype(dtype)
         test_method = f"Cast back {dtype}"
         check_test_result(expected_dtype, test_method, arr1, arr.to_list())
+
+
+@pytest.mark.parametrize(
+    "test_method, dtype, nums, expected_value, kwargs",
+    [
+        (op.eq, 'bool', [True, False], [False, True], {"other": False}),
+        (op.eq, 'float', [1.0, 2.0, 3.0], [
+         False, True, False], {"other": 2.0}),
+        (op.eq, 'int', [1, 2, 3], [False, True, False], {"other": 2}),
+        (op.eq, 'string', ['foo', 'bar'], [False, True], {"other": 'bar'}),
+
+        (op.ne, 'bool', [False, True, False],
+         [True, False, True], {"other": True}),
+        (op.ne, 'float', [1.0, 2.0, 3.0], [True, False, True], {"other": 2.0}),
+        (op.ne, 'int', [1, 2, 3], [True, False, True], {"other": 2}),
+        (op.ne, 'string', ['foo', 'bar', 'baz'],
+         [True, False, True], {"other": 'bar'}),
+    ],
+)
+def test_operators(
+    test_method: Callable,
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_value: LIST_TYPE,
+    kwargs: dict,
+) -> None:
+    arr = ul.from_seq(nums, dtype)
+    if isinstance(kwargs["other"], list):
+        other = ul.from_seq(kwargs["other"], dtype)
+    else:
+        other = kwargs["other"]
+    result = test_method(arr, other)
+    check_test_result(dtype, test_method, result, expected_value)

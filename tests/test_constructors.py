@@ -22,6 +22,7 @@ from ulist.utils import check_test_result
         (ul.repeat, (0, 3), {}, [0, 0, 0],),
         (ul.repeat, (1.0, 3), {}, [1.0, 1.0, 1.0],),
         (ul.repeat, (False, 3), {}, [False, False, False],),
+        (ul.repeat, ('foo', 3), {}, ['foo', 'foo', 'foo'],),
 
         (ul.from_seq, (range(3), "int"), {}, [0, 1, 2],),
         (ul.from_seq, (range(3), "float"), {}, [0.0, 1.0, 2.0],),
@@ -37,6 +38,7 @@ from ulist.utils import check_test_result
         (ul.cycle, (range(3), 6, 'int'), {}, [0, 1, 2, 0, 1, 2],),
         (ul.cycle, ([0.0, 1.0], 3, 'float'), {}, [0.0, 1.0, 0.0],),
         (ul.cycle, ((True, False), 3, 'bool'), {}, [True, False, True],),
+        (ul.cycle, (('foo', 'bar'), 3, 'string'), {}, ['foo', 'bar', 'foo'],),
 
     ],
 )
@@ -53,6 +55,8 @@ def test_constructors(
         dtype = "float"
     elif type(expected_value[0]) == bool:
         dtype = "bool"
+    elif type(expected_value[0]) == str:
+        dtype = "string"
     else:
         raise TypeError(f"Unexpected type {type(expected_value[0])}!")
     check_test_result(dtype, test_method, result, expected_value)
