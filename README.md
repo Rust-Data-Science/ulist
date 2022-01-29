@@ -19,7 +19,7 @@ Ulist is an ultra fast list/array data structures written in Rust with Python bi
 
 ### Requirements
 * Python: 3.7+    
-* OS: Linux or MacOS
+* OS: Linux, MacOS and Windows
 
 
 ### Installation
