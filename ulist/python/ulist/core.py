@@ -422,3 +422,30 @@ class UltraFastList:
         numerator = data.sub_scala(mean).pow_scala(2).sum()
         denominator = data.size() - ddof
         return numerator / denominator
+
+    def where(
+        self,
+        fn: Callable[[UltraFastList], UltraFastList]
+    ) -> UltraFastList:
+        """According to the function, return a ulist with elements of self
+        correspondingly.
+
+        Args:
+            fn (Callable[[UltraFastList], UltraFastList]):
+                Function to process self and return a BooleanList.
+
+        Returns:
+            UltraFastList: A ulist object.
+
+        Examples
+        --------
+        >>> import ulist as ul
+        >>> arr = ul.arange(6)
+        >>> arr
+        UltraFastList([0, 1, 2, 3, 4, 5])
+
+        >>> result = arr.where(lambda x: x > 2)
+        >>> result
+        UltraFastList([3, 4, 5])
+        """
+        return self.filter(fn(self))
