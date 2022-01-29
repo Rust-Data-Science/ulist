@@ -286,6 +286,15 @@ def test_methods_no_arg(
         ('var', 'float', [1.0, 2.0, 3.0], 1.0, {"ddof": 1}),
         ('var', 'int', [1, 2, 3, 4], 1.25, {}),
         ('var', 'int', [1, 2, 3], 1.0, {"ddof": 1}),
+
+        ("where", "bool", [True, True, False, False], [
+         False, False], {"fn": lambda x: x == False},),  # noqa: E712
+        ("where", "float", [1.0, 2.0, 3.0, 4.0], [
+         1.0, 2.0], {"fn": lambda x: x < 3.0},),
+        ("where", "int", [1, 2, 3, 4], [
+            3, 4], {"fn": lambda x: x > 2},),
+        ("where", "string", ['foo', 'bar', 'baz'], [
+            'foo', 'baz'], {"fn": lambda x: x != 'bar'},),
     ],
 )
 def test_methods_with_args(
