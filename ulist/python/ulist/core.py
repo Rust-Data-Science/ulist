@@ -161,6 +161,32 @@ class UltraFastList:
         """Adds a new element at the end of the self."""
         self._values.append(elem)
 
+    def apply(
+        self,
+        fn: Callable[[UltraFastList], UltraFastList]
+    ) -> UltraFastList:
+        """Return the result of fn(self).
+
+        Args:
+            fn (Callable[[UltraFastList], UltraFastList]):
+                Function to apply to self.
+
+        Returns:
+            UltraFastList: A ulist object.
+
+        Examples
+        --------
+        >>> import ulist as ul
+        >>> arr = ul.arange(3)
+        >>> arr
+        UltraFastList([0, 1, 2])
+
+        >>> result = arr.apply(lambda x: x * 2)
+        >>> result
+        UltraFastList([0, 2, 4])
+        """
+        return fn(self)
+
     def argmax(self) -> int:
         """Returns the indices of the maximum values of self."""
         assert not isinstance(self._values, (BooleanList, StringList))
@@ -427,8 +453,8 @@ class UltraFastList:
         self,
         fn: Callable[[UltraFastList], UltraFastList]
     ) -> UltraFastList:
-        """According to the function, return a ulist with elements of self
-        correspondingly.
+        """Calculate the condition by fn(self), and return a ulist
+        with elements of self correspondingly.
 
         Args:
             fn (Callable[[UltraFastList], UltraFastList]):

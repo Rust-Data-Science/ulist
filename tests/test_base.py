@@ -133,6 +133,14 @@ def test_methods_no_arg(
         ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
         ('__getitem__', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
 
+        ("apply", "bool", [True, False], [
+         False, True], {"fn": lambda x: x == False},),  # noqa: E712
+        ("apply", "float", [1.0, 2.0], [
+         True, False], {"fn": lambda x: x < 2.0},),
+        ("apply", "int", [1, 2], [3, 5], {"fn": lambda x: x * 2 + 1},),
+        ("apply", "string", ['foo', 'bar'], [
+         True, False], {"fn": lambda x: x != 'bar'},),
+
         ('astype', 'bool', [True, False], [1, 0], {'dtype': 'int'}),
         ('astype', 'bool', [True, False], [1.0, 0.0], {'dtype': 'float'}),
         ('astype', 'bool', [True, False], [True, False], {'dtype': 'bool'}),
