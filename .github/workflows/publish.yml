@@ -2,19 +2,13 @@ name: "publish"
 
 # Controls when the workflow will run
 on:
-  release:
-    types: [published]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-
-jobs:
-  maturin:
+maturin-win:
     strategy:
       matrix:
         python-version: ['3.6']
-        os: [ubuntu-latest, macos-latest]
+        os: [windows-latest]
     runs-on: ${{ matrix.os }}
     shell: bash
     steps:
@@ -36,31 +30,4 @@ jobs:
             PYPI_PW: ${{ secrets.PYPI_PW }}
             PYTHON_VER: python${{ matrix.python-version }}
         run: |
-          maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
-
-  # maturin-win:
-  #   strategy:
-  #     matrix:
-  #       python-version: ['3.7', '3.8', '3.9', '3.10']
-  #       os: [windows-latest]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: Install Rust toolchain
-  #       uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
-  #         profile: minimal
-  #         default: true
-  #     - name: Install Python packages
-  #       run: |
-  #         pip install maturin
-  #     - name: Publish ulist
-  #       env:
-  #           PYPI_PW: ${{ secrets.PYPI_PW }}
-  #           PYTHON_VER: python${{ matrix.python-version }}
-  #       run: |
-  #         maturin publish -m ulist\Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
+          maturin publish -m ulist\Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
