@@ -34,11 +34,11 @@ jobs:
           pip install maturin
       - name: Try Python 3.8
         run: |
-          python3.8 -h
-      - name: Publish ulist
-        env:
-            PYPI_PW: ${{ secrets.PYPI_PW }}
-            PYTHON_VER: python${{ matrix.python-version }}
-        shell: bash
-        run: |
-          maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
+          python -c 'import sys; print(sys.version_info[:])'
+      # - name: Publish ulist
+      #   env:
+      #       PYPI_PW: ${{ secrets.PYPI_PW }}
+      #       PYTHON_VER: python${{ matrix.python-version }}
+      #   shell: bash
+      #   run: |
+      #     maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
