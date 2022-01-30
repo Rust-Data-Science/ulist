@@ -36,4 +36,4 @@ jobs:
               PYTHON_VER: python${{ matrix.python-version }}
           shell: bash
           run: |
-            maturin publish -m ulist\Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
+            maturin publish -m ulist/Cargo.toml -u tushushu -p $PYPI_PW -i $PYTHON_VER
