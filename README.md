@@ -2,8 +2,8 @@
 
 [![PyPI](https://img.shields.io/pypi/v/ulist)](https://pypi.org/project/ulist/)
 [![License](https://img.shields.io/github/license/tushushu/ulist)](https://github.com/tushushu/ulist/blob/main/LICENSE)
-[![CI](https://github.com/tushushu/ulist/workflows/CI/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/main.yml)
-[![doc](https://github.com/tushushu/ulist/workflows/doc/badge.svg)](https://github.com/tushushu/ulist/actions/workflows/sphinx.yml)
+[![CI](https://github.com/tushushu/ulist/actions/workflows/main.yml/badge.svg?branch=0.7.1)](https://github.com/tushushu/ulist/actions/workflows/main.yml)
+[![doc](https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg?branch=0.7.1)](https://github.com/tushushu/ulist/actions/workflows/sphinx.yml)
 [![publish](https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.7.1)](https://github.com/tushushu/ulist/actions/workflows/publish.yml)
 [![code style](https://img.shields.io/badge/style-flake8-blue)](https://github.com/PyCQA/flake8)
 [![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1/raw/metacov.json)](https://github.com/tushushu/ulist/actions/workflows/coverage.yml)  
