@@ -180,7 +180,7 @@ def select_int(
 ) -> IntegerList: ...
 
 
-def select_str(
+def select_string(
     conditions: List[BooleanList],
     choices: LIST_PY,
     default: str,

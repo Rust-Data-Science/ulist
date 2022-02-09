@@ -30,7 +30,7 @@ fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(select_bool, m)?)?;
     m.add_function(wrap_pyfunction!(select_float, m)?)?;
     m.add_function(wrap_pyfunction!(select_int, m)?)?;
-    m.add_function(wrap_pyfunction!(select_str, m)?)?;
+    m.add_function(wrap_pyfunction!(select_string, m)?)?;
 
     Ok(())
 }

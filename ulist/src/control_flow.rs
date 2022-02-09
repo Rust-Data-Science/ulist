@@ -60,7 +60,7 @@ pub unsafe fn select_int(
 }
 
 #[pyfunction]
-pub unsafe fn select_str(
+pub unsafe fn select_string(
     py: Python,
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<String>,

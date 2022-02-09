@@ -6,7 +6,7 @@ from .typedef import ELEM, LIST_PY
 from .ulist import select_bool as _select_bool
 from .ulist import select_float as _select_float
 from .ulist import select_int as _select_int
-from .ulist import select_str as _select_str
+from .ulist import select_string as _select_string
 
 
 if TYPE_CHECKING:  # To avoid circular import.
