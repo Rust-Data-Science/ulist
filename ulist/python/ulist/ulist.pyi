@@ -178,3 +178,10 @@ def select_int(
     choices: LIST_PY,
     default: int,
 ) -> IntegerList: ...
+
+
+def select_str(
+    conditions: List[BooleanList],
+    choices: LIST_PY,
+    default: str,
+) -> IntegerList: ...
