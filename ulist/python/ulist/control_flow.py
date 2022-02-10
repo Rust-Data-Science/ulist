@@ -66,10 +66,11 @@ def select(
     elif type(default) is int:
         fn = _select_int
     elif type(default) is str:
-        fn = _select_str
+        fn = _select_string
     else:
         raise TypeError(
-            "The type of parameter `default` should be bool, float, int or str!"
+            "The type of parameter `default` should be" +
+            " bool, float, int or str!"
         )
 
     _conditions = []
