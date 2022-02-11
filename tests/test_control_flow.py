@@ -5,7 +5,7 @@ import ulist as ul
 import operator as op
 from ulist.utils import check_test_result
 
-LIST_TYPE = Union[List[float], List[int], List[bool]]
+LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
 
 
 @pytest.mark.parametrize(

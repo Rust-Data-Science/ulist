@@ -43,6 +43,11 @@ impl StringList {
         AsIntegerList::as_int(self)
     }
 
+    pub fn contains(&self, elem: &str) -> BooleanList {
+        let vec = self.values().iter().map(|x| x.contains(elem)).collect();
+        BooleanList::new(vec)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
     }
