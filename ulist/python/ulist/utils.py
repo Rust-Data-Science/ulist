@@ -28,6 +28,7 @@ def check_test_result(
         result = result.to_list()
     if isinstance(result, list) and \
             isinstance(expected_value, list):
+        assert len(result) == len(expected_value), msg
         for x, y in zip(result, expected_value):
             assert type(x) == type(y) and x == y, msg
     elif isinstance(result, dict) and \

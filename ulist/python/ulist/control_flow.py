@@ -6,6 +6,7 @@ from .typedef import ELEM, LIST_PY
 from .ulist import select_bool as _select_bool
 from .ulist import select_float as _select_float
 from .ulist import select_int as _select_int
+from .ulist import select_string as _select_string
 
 
 if TYPE_CHECKING:  # To avoid circular import.
@@ -33,7 +34,7 @@ def select(
 
     Raises:
         TypeError:
-            The type of parameter `default` should be bool, float or int!
+            The type of parameter `default` should be bool, float, int or str!
 
     Returns:
         UltraFastList: A ulist object.
@@ -64,9 +65,12 @@ def select(
         fn = _select_float
     elif type(default) is int:
         fn = _select_int
+    elif type(default) is str:
+        fn = _select_string
     else:
         raise TypeError(
-            "The type of parameter `default` should be bool, float or int!"
+            "The type of parameter `default` should be" +
+            " bool, float, int or str!"
         )
 
     _conditions = []
