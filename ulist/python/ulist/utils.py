@@ -1,8 +1,10 @@
-from typing import Callable, Union
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Callable, Union, List
 
 import ulist as ul
 
-from .typedef import ELEM, LIST_PY, COUNTER
+from .typedef import COUNTER, ELEM, LIST_PY
 
 
 def check_test_result(
@@ -41,3 +43,27 @@ def check_test_result(
     else:
         assert type(result) == type(expected_value), msg
         assert result == expected_value, msg
+
+
+@dataclass
+class BenchmarkScore:
+    pass
+
+
+class Benchmarker(ABC):
+    def __init__(self, n_runs: List[int], n_times: List[int]) -> None:
+        super().__init__()
+        assert len(n_runs) == len(n_times)
+        self.n_runs = n_runs
+        self.n_times = n_times
+
+    @abstractmethod
+    def one(self) -> None:
+        pass
+
+    @abstractmethod
+    def the_other(self) -> None:
+        pass
+
+    def run(self) -> BenchmarkScore:
+        pass
