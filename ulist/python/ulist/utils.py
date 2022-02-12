@@ -51,11 +51,15 @@ class BenchmarkScore:
 
 
 class Benchmarker(ABC):
-    def __init__(self, n_runs: List[int], n_times: List[int]) -> None:
+    def __init__(self, n_runs: List[int], sizes: List[int]) -> None:
         super().__init__()
-        assert len(n_runs) == len(n_times)
+        assert len(n_runs) == len(sizes)
         self.n_runs = n_runs
-        self.n_times = n_times
+        self.sizes = sizes
+
+    @abstractmethod
+    def cases(self) -> list:
+        pass
 
     @abstractmethod
     def one(self) -> None:
