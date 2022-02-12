@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Callable, Union, List
+from timeit import timeit
+from typing import Callable, Dict, List, Tuple, Union
 
 import ulist as ul
 
@@ -47,13 +48,24 @@ def check_test_result(
 
 @dataclass
 class BenchmarkScore:
-    pass
+    name: str
+    dtype: str
+    scores: dict
 
 
 class Benchmarker(ABC):
-    def __init__(self, n_runs: List[int], sizes: List[int]) -> None:
+    def __init__(
+        self,
+        n_runs: Union[int, Tuple[int, ...]] = 1000,
+        sizes: Tuple[int, ...] = (1, 10, 100, 1000, 10000, 100000, 1000000)
+    ) -> None:
         super().__init__()
-        assert len(n_runs) == len(sizes)
+        if isinstance(n_runs, int):
+            n_runs = tuple([n_runs] * len(sizes))
+        else:
+            assert len(n_runs) == len(sizes)
+        assert len(n_runs) == len(self.cases())
+        assert all(x == len(y[0]) for x, y in zip(sizes, self.cases()))
         self.n_runs = n_runs
         self.sizes = sizes
 
@@ -62,12 +74,30 @@ class Benchmarker(ABC):
         pass
 
     @abstractmethod
-    def one(self) -> None:
+    def ulist_fn(self, args) -> None:
         pass
 
     @abstractmethod
-    def the_other(self) -> None:
+    def other_fn(self, args) -> None:
+        pass
+
+    @abstractmethod
+    def dtype(self, args) -> str:
         pass
 
     def run(self) -> BenchmarkScore:
-        pass
+        ulist_time_elapsed = self._run(self.ulist_fn)
+        other_time_elapsed = self._run(self.other_fn)
+        scores = {
+            k: other_time_elapsed[k] / v for k, v in ulist_time_elapsed}
+        return BenchmarkScore(
+            name=type(self).__name__,
+            dtype=self.dtype(),
+            scores=scores,
+        )
+
+    def _run(self, fn: Callable) -> Dict[int, float]:
+        result = dict()
+        for n_run, size, args in zip(self.n_runs, self.sizes, self.cases()):
+            result[size] = timeit(fn(args), number=n_run)
+        return result
