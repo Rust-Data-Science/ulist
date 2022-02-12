@@ -261,6 +261,11 @@ class UltraFastList:
         from .control_flow import CaseObject  # To avoid circular import.
         return CaseObject(self, default=default)
 
+    def contains(self, elem: str) -> UltraFastList:
+        """Return whether the element of self contains `elem`."""
+        assert isinstance(self._values, StringList)
+        return UltraFastList(self._values.contains(elem))
+
     def copy(self) -> "UltraFastList":
         """Return a ulist copy of self."""
         return UltraFastList(self._values.copy())
