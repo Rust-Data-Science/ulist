@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from copyreg import constructor
 from dataclasses import dataclass
 from timeit import timeit
-from typing import Callable, Dict, List, Tuple, Union
+from typing import Callable, Dict, Tuple, Union, Sequence, Any
 
 import ulist as ul
 
@@ -54,9 +55,13 @@ class BenchmarkScore:
 
 
 class Benchmarker(ABC):
+    """
+    An abstract class for comparing the performance between `ulist` and other
+    framework such as `numpy`.
+    """
     def __init__(
         self,
-        n_runs: Union[int, Tuple[int, ...]] = 1000,
+        n_runs: Union[int, Tuple[int, ...]] = 10,
         sizes: Tuple[int, ...] = (1, 10, 100, 1000, 10000, 100000, 1000000)
     ) -> None:
         super().__init__()
@@ -74,22 +79,27 @@ class Benchmarker(ABC):
         pass
 
     @abstractmethod
-    def ulist_fn(self, args) -> None:
+    def other_constructor(self, arr: list) -> Any:
         pass
 
     @abstractmethod
-    def other_fn(self, args) -> None:
+    def ulist_fn(self, args: Sequence[Any]) -> None:
         pass
 
     @abstractmethod
-    def dtype(self, args) -> str:
+    def other_fn(self, args: Sequence[Any]) -> None:
+        pass
+
+    @abstractmethod
+    def dtype(self) -> str:
         pass
 
     def run(self) -> BenchmarkScore:
         ulist_time_elapsed = self._run(self.ulist_fn)
         other_time_elapsed = self._run(self.other_fn)
         scores = {
-            k: other_time_elapsed[k] / v for k, v in ulist_time_elapsed}
+            k: round(other_time_elapsed[k] / v, 3) for k, v in ulist_time_elapsed.items()
+            }
         return BenchmarkScore(
             name=type(self).__name__,
             dtype=self.dtype(),
@@ -97,7 +107,21 @@ class Benchmarker(ABC):
         )
 
     def _run(self, fn: Callable) -> Dict[int, float]:
+        if fn == self.ulist_fn:
+            constructor: Callable = lambda x: ul.from_seq(x, dtype = self.dtype())
+        else:
+            constructor = self.other_constructor
         result = dict()
         for n_run, size, args in zip(self.n_runs, self.sizes, self.cases()):
-            result[size] = timeit(fn(args), number=n_run)
+            _args = self._process_args(args, constructor)
+            result[size] = timeit(lambda: fn(_args), number=n_run)
+        return result
+
+    def _process_args(self, args: Sequence[Any], constructor: Callable) -> list:
+        result = []
+        for arg in args:
+            if isinstance(arg, list):
+                result.append(constructor(arg))
+            else:
+                result.append(arg)
         return result
