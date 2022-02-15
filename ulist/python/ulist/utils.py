@@ -8,6 +8,9 @@ import ulist as ul
 
 from .typedef import COUNTER, ELEM, LIST_PY
 
+MAX_ITEM_LEN = 16
+MAX_DTYPE_LEN = 8
+
 
 def check_test_result(
     dtype: str,
@@ -53,12 +56,54 @@ class BenchmarkScore:
     dtype: str
     scores: dict
 
+    def _score(self) -> list:
+        result = [self.name, self.dtype]
+        for v in self.scores.values():
+            result.append(str(v) + 'x')
+        return result
+
+    def _as_markdown(self, text: list, cell_sizes: list) -> str:
+        result = ['|']
+        for t, cell_size in zip(text, cell_sizes):
+            content = [' '] * cell_size
+            for i in range(cell_size):
+                if i == 0:
+                    continue
+                if i - 1 < len(t):
+                    content[i] = t[i - 1]
+            result.append("".join(content))
+            result.append('|')
+        return "".join(result)
+
+    def _line(self, cell_sizes: list) -> list:
+        return ['-' * (x - 2) for x in cell_sizes]
+
+    def _header(self) -> list:
+        result = ['Item', 'Dtype']
+        for v in self.scores.keys():
+            result.append('Size ' + str(v))
+        return result
+
+    def display(self, show_header: bool = True) -> None:
+        if show_header:
+            cell_sizes = [max(6, len(x) + 2) for x in self._header()]
+            cell_sizes[0] = MAX_ITEM_LEN
+            cell_sizes[1] = MAX_DTYPE_LEN
+            header = self._header()
+            print(self._as_markdown(header, cell_sizes))
+            line = self._line(cell_sizes)
+            print(self._as_markdown(line, cell_sizes))
+
+        score = self._score()
+        print((self._as_markdown(score, cell_sizes)))
+
 
 class Benchmarker(ABC):
     """
     An abstract class for comparing the performance between `ulist` and other
     framework such as `numpy`.
     """
+
     def __init__(
         self,
         n_runs: Union[int, Tuple[int, ...]] = 10,
@@ -71,6 +116,8 @@ class Benchmarker(ABC):
             assert len(n_runs) == len(sizes)
         assert len(n_runs) == len(self.cases())
         assert all(x == len(y[0]) for x, y in zip(sizes, self.cases()))
+        assert len(self.dtype()) < MAX_DTYPE_LEN
+        assert len(self.__class__.__name__) < MAX_ITEM_LEN
         self.n_runs = n_runs
         self.sizes = sizes
 
@@ -98,8 +145,8 @@ class Benchmarker(ABC):
         ulist_time_elapsed = self._run(self.ulist_fn)
         other_time_elapsed = self._run(self.other_fn)
         scores = {
-            k: round(other_time_elapsed[k] / v, 3) for k, v in ulist_time_elapsed.items()
-            }
+            k: round(other_time_elapsed[k] / v, 1) for k, v in ulist_time_elapsed.items()
+        }
         return BenchmarkScore(
             name=type(self).__name__,
             dtype=self.dtype(),
@@ -108,7 +155,8 @@ class Benchmarker(ABC):
 
     def _run(self, fn: Callable) -> Dict[int, float]:
         if fn == self.ulist_fn:
-            constructor: Callable = lambda x: ul.from_seq(x, dtype = self.dtype())
+            constructor: Callable = lambda x: ul.from_seq(
+                x, dtype=self.dtype())
         else:
             constructor = self.other_constructor
         result = dict()
