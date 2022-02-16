@@ -62,7 +62,7 @@ class BenchmarkScore:
         result = [self.name, self.dtype]
         for v in self.scores.values():
             result.append(str(v) + 'x')
-        avg = sum(self.scores.values()) / len(self.scores)
+        avg = round(sum(self.scores.values()) / len(self.scores), 1)
         result.append(str(avg) + 'x')
         return result
 
