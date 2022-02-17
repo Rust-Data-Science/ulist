@@ -1,21 +1,12 @@
-from integer import ArraySum
+import integer as I32
+from inspect import isclass
 import platform
 import ulist as ul
 import numpy as np
 from datetime import datetime
 
 
-def main():
-    """
-    Comparing Ulist and Numpy performances, and output the
-    result as Markdown Table.
-        Item - The task to compare the performances.
-        Dtype - The array element type.
-        Sample Vol. - {XS: 100, S: 1k, M: 10k, L: 100k, XL: 1M}.
-    """
-    print("Benchmarking...")
-    print()
-
+def display_info() -> None:
     print("Info:")
     line = "=" * 60
     print(line)
@@ -29,12 +20,37 @@ def main():
     print(line)
     print()
 
+
+def display_result():
     print("Result:")
     print()
-    result = ArraySum().run()
-    result.display()
+    i = 0
+    for cls in I32.__dict__.values():
+        if not isclass(cls):
+            continue
+        if cls is I32.Benchmarker:
+            continue
+        if issubclass(cls, I32.Benchmarker):
+            result = cls().run()
+            if i == 0:
+                result.display()
+            else:
+                result.display(False)
+            i += 1
     print()
 
+
+def main():
+    """
+    Comparing Ulist and Numpy performances, and output the
+    result as Markdown Table.
+        Item - The task to compare the performances.
+        Dtype - The array element type.
+        Sample Vol. - {XS: 100, S: 1k, M: 10k, L: 100k, XL: 1M}.
+    """
+    print("Benchmarking...\n")
+    display_info()
+    display_result()
 
 if __name__ == "__main__":
     main()

@@ -87,10 +87,11 @@ class BenchmarkScore:
         return ['Item', 'Dtype', 'XS', 'S', 'M', 'L', 'XL', 'Average']
 
     def display(self, show_header: bool = True) -> None:
+        cell_sizes = [max(6, len(x) + 2) for x in self._header]
+        cell_sizes[0] = MAX_ITEM_LEN
+        cell_sizes[1] = MAX_DTYPE_LEN
+
         if show_header:
-            cell_sizes = [max(6, len(x) + 2) for x in self._header]
-            cell_sizes[0] = MAX_ITEM_LEN
-            cell_sizes[1] = MAX_DTYPE_LEN
             print(self._as_markdown(self._header, cell_sizes))
             line = self._line(cell_sizes)
             print(self._as_markdown(line, cell_sizes))
