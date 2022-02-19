@@ -22,6 +22,7 @@ jobs:
       - name: Install Python packages
         run: |
           pip install numpy==1.22
+          pip install maturin
       - name: Build ulist
         run: |
           maturin build --release --out dist -m ulist/Cargo.toml
