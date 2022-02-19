@@ -1,9 +1,12 @@
-import integer as I32
-from inspect import isclass
+import gc
 import platform
-import ulist as ul
-import numpy as np
 from datetime import datetime
+from inspect import isclass
+
+import numpy as np
+import ulist as ul
+
+import integer as I32
 
 
 def display_info() -> None:
@@ -48,9 +51,14 @@ def main():
         Dtype - The array element type.
         Sample Vol. - {XS: 100, S: 1k, M: 10k, L: 100k, XL: 1M}.
     """
+    print("GC disabled...")
+    gc.disable()
     print("Benchmarking...\n")
     display_info()
     display_result()
+    print("GC enabled...")
+    gc.enable()
+
 
 if __name__ == "__main__":
     main()
