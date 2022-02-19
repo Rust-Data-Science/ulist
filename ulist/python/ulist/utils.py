@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
-from copyreg import constructor
 from dataclasses import dataclass
 from timeit import timeit
-from typing import Callable, Dict, Union, Sequence, Any, List
+from typing import Any, Callable, Dict, List, Sequence, Union
 
 import ulist as ul
-import numpy as np
 
 from .typedef import COUNTER, ELEM, LIST_PY
 
@@ -119,6 +117,7 @@ class Benchmarker(ABC):
         pass
 
     def other_constructor(self, arr: list):
+        import numpy as np  # type: ignore
         if isinstance(arr[0], int):
             dtype = "int32"
         elif isinstance(arr[0], float):
@@ -151,9 +150,9 @@ class Benchmarker(ABC):
     def run(self) -> BenchmarkScore:
         ulist_time_elapsed = self._run(self.ulist_fn)
         other_time_elapsed = self._run(self.other_fn)
-        scores = {
-            k: round(other_time_elapsed[k] / v, 1) for k, v in ulist_time_elapsed.items()
-        }
+        scores = dict()
+        for k, v in ulist_time_elapsed.items():
+            scores[k] = round(other_time_elapsed[k] / v, 1)
         return BenchmarkScore(
             name=type(self).__name__,
             dtype=self.dtype(),
@@ -172,7 +171,11 @@ class Benchmarker(ABC):
             result[size] = timeit(lambda: fn(_args), number=n_run)
         return result
 
-    def _process_args(self, args: Sequence[Any], constructor: Callable) -> list:
+    def _process_args(
+        self,
+        args: Sequence[Any],
+        constructor: Callable
+    ) -> list:
         result = []
         for arg in args:
             if isinstance(arg, list):
