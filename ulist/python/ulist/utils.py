@@ -107,7 +107,7 @@ class Benchmarker(ABC):
 
     def __init__(self) -> None:
         super().__init__()
-        self.n_runs = (1000, 1000, 1000, 100, 10)
+        self.n_runs = (100000, 100000, 10000, 1000, 100)
         self.sizes = (100, 1000, 10000, 100000, 1000000)
         assert len(self.n_runs) == len(self.cases())
         assert all(x == len(y[0]) for x, y in zip(self.sizes, self.cases()))
