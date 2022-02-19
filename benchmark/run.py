@@ -1,5 +1,6 @@
 import gc
 import platform
+import sys
 from datetime import datetime
 from inspect import isclass
 
@@ -15,6 +16,8 @@ def display_info() -> None:
     print(line)
     print("Date:", datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
     print("System OS:", platform.system())
+    print("Python version:", sys.version.split()[0])
+
     try:
         print("Ulist version:", ul.__version__)
     except:
@@ -55,7 +58,7 @@ def main():
     gc.disable()
     print("Benchmarking...\n")
     display_info()
-    display_result()
+    # display_result()
     print("GC enabled...")
     gc.enable()
 
