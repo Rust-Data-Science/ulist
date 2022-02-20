@@ -122,4 +122,4 @@ class Sort(Benchmarker):
         args[0].sort(ascending=True)
 
     def other_fn(self, args) -> None:
-        args[0].sort()
+        np.sort(args[0])
