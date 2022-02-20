@@ -7,7 +7,6 @@ from itertools import chain
 
 import numpy as np
 import ulist as ul
-from ulist.utils import Benchmarker
 
 import floating as F32
 import integer as I32
@@ -41,9 +40,9 @@ def display_result():
     for cls in iterator:
         if not isclass(cls):
             continue
-        if cls is Benchmarker:
+        if cls is I32.Benchmarker:
             continue
-        if issubclass(cls, Benchmarker):
+        if issubclass(cls, I32.Benchmarker):
             result = cls().run()
             if i == 0:
                 result.display()
