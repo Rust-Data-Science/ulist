@@ -23,12 +23,8 @@ def _get_processor_name() -> str:
         command = "sysctl -n machdep.cpu.brand_string".split()
         return subprocess.check_output(command).strip().decode()
     elif platform.system() == "Linux":
-        command = "cat /proc/cpuinfo".split()
-        all_info = subprocess.check_output(
-            command, shell=True).strip().decode()
-        for line in all_info.split("\n"):
-            if "model name" in line:
-                return re.sub(".*model name.*:", "", line, 1)
+        command = "cat /proc/cpuinfo | grep 'model name' | uniq".split()
+        return subprocess.check_output(command).strip().decode()
     return ""
 
 
@@ -86,7 +82,7 @@ def main():
     gc.disable()
     print("Benchmarking...\n")
     display_info()
-    display_result()
+    # display_result()
     print("GC enabled...")
     gc.enable()
 
