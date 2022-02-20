@@ -39,7 +39,6 @@ def display_result():
         F32.__dict__.values(),
     )
     for cls in iterator:
-        print(cls)
         if not isclass(cls):
             continue
         if cls is Benchmarker:
@@ -67,7 +66,7 @@ def main():
     gc.disable()
     print("Benchmarking...\n")
     display_info()
-    # display_result()
+    display_result()
     print("GC enabled...")
     gc.enable()
 
