@@ -31,7 +31,7 @@ jobs:
           pip install maturin
       - name: Build ulist
         run: |
-          maturin build --release --out dist -m ulist/Cargo.toml
+          maturin build --release --out dist -m ulist/Cargo.toml -i python
       - name: Install ulist
         run: |
           pip install ulist --no-index --find-links dist --force-reinstall 
