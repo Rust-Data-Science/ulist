@@ -20,11 +20,11 @@ def _get_processor_name() -> str:
     if platform.system() == "Windows":
         return platform.processor()
     elif platform.system() == "Darwin":
-        command = "sysctl -n machdep.cpu.brand_string".split()
-        return subprocess.check_output(command).strip().decode()
+        command = "sysctl -n machdep.cpu.brand_string"
+        return subprocess.check_output(command, shell=True).strip().decode()
     elif platform.system() == "Linux":
-        command = "cat /proc/cpuinfo | grep 'model name' | uniq".split()
-        return subprocess.check_output(command).strip().decode()
+        command = "cat /proc/cpuinfo | grep 'model name' | uniq"
+        return subprocess.check_output(command, shell=True).strip().decode()
     return ""
 
 
