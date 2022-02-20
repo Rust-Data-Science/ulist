@@ -24,7 +24,7 @@ def _get_processor_name() -> str:
         return subprocess.check_output(command, shell=True).strip().decode()
     elif platform.system() == "Linux":
         command = "cat /proc/cpuinfo | grep 'model name' | uniq"
-        return subprocess.check_output(command, shell=True).strip().decode()
+        return subprocess.check_output(command, shell=True).strip().decode().split(":")[1]
     return ""
 
 
