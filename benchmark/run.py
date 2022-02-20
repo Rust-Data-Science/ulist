@@ -3,10 +3,13 @@ import platform
 import sys
 from datetime import datetime
 from inspect import isclass
+from itertools import chain
 
 import numpy as np
 import ulist as ul
+from ulist.utils import Benchmarker
 
+import floating as F32
 import integer as I32
 
 
@@ -31,18 +34,23 @@ def display_result():
     print("Result:")
     print()
     i = 0
-    for cls in I32.__dict__.values():
+    iterator = chain(
+        I32.__dict__.values(),
+        F32.__dict__.values(),
+    )
+    for cls in iterator:
         if not isclass(cls):
             continue
-        if cls is I32.Benchmarker:
+        if cls is Benchmarker:
             continue
-        if issubclass(cls, I32.Benchmarker):
+        if issubclass(cls, Benchmarker):
             result = cls().run()
             if i == 0:
                 result.display()
             else:
                 result.display(False)
             i += 1
+        gc.collect()
     print()
 
 
