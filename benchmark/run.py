@@ -1,5 +1,8 @@
 import gc
+import os
 import platform
+import re
+import subprocess
 import sys
 from datetime import datetime
 from inspect import isclass
@@ -13,12 +16,29 @@ import floating as F32
 import integer as I32
 
 
+def _get_processor_name() -> str:
+    if platform.system() == "Windows":
+        return platform.processor()
+    elif platform.system() == "Darwin":
+        command = "sysctl -n machdep.cpu.brand_string".split()
+        return subprocess.check_output(command).strip().decode()
+    elif platform.system() == "Linux":
+        command = "cat /proc/cpuinfo".split()
+        all_info = subprocess.check_output(
+            command, shell=True).strip().decode()
+        for line in all_info.split("\n"):
+            if "model name" in line:
+                return re.sub(".*model name.*:", "", line, 1)
+    return ""
+
+
 def display_info() -> None:
     print("Info:")
     line = "=" * 60
     print(line)
     print("Date:", datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
     print("System OS:", platform.system())
+    print("CPU:", _get_processor_name())
     print("Python version:", sys.version.split()[0])
 
     try:
