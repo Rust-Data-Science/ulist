@@ -26,11 +26,11 @@ class AddOne(Benchmarker):
 class ArraySum(Benchmarker):
     def cases(self) -> list:
         return [
-            ([randint(1, 10) for _ in range(100)],),
-            ([randint(1, 10) for _ in range(1000)],),
-            ([randint(1, 10) for _ in range(10000)],),
-            ([randint(1, 10) for _ in range(100000)],),
-            ([randint(1, 10) for _ in range(1000000)],),
+            ([randint(-1000, 1000) for _ in range(100)],),
+            ([randint(-1000, 1000) for _ in range(1000)],),
+            ([randint(-1000, 1000) for _ in range(10000)],),
+            ([randint(-1000, 1000) for _ in range(100000)],),
+            ([randint(-1000, 1000) for _ in range(1000000)],),
         ]
 
     def ulist_fn(self, args) -> None:
