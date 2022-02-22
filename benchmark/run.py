@@ -82,7 +82,7 @@ def main():
     gc.disable()
     print("Benchmarking...\n")
     display_info()
-    # display_result()
+    display_result()
     print("GC enabled...")
     gc.enable()
 
