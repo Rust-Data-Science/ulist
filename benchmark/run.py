@@ -12,6 +12,7 @@ import numpy as np
 import ulist as ul
 from ulist.utils import Benchmarker
 
+import boolean as BOOL
 import floating as F32
 import integer as I32
 
@@ -53,6 +54,7 @@ def display_result():
     iterator = chain(
         I32.__dict__.values(),
         F32.__dict__.values(),
+        BOOL.__dict__.values(),
     )
     for cls in iterator:
         if not isclass(cls):
