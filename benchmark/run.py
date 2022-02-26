@@ -1,7 +1,5 @@
 import gc
-import os
 import platform
-import re
 import subprocess
 import sys
 from datetime import datetime
@@ -15,6 +13,7 @@ from ulist.utils import Benchmarker
 import boolean as BOOL
 import floating as F32
 import integer as I32
+import strings as STR
 
 
 def _get_processor_name() -> str:
@@ -55,6 +54,7 @@ def display_result():
         I32.__dict__.values(),
         F32.__dict__.values(),
         BOOL.__dict__.values(),
+        STR.__dict__.values(),
     )
     for cls in iterator:
         if not isclass(cls):

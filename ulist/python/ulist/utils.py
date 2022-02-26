@@ -125,7 +125,7 @@ class Benchmarker(ABC):
         elif isinstance(arr[0], bool):
             dtype = "bool"
         elif isinstance(arr[0], str):
-            dtype = "object"
+            dtype = "str"
         else:
             raise TypeError(f"Invalid type {type(arr[0])}!")
         return np.array(arr, dtype=dtype)
