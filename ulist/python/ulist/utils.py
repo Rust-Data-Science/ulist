@@ -100,6 +100,10 @@ class BenchmarkScore:
         | ArraySum       | int    | 4.8x | 6.2x | 7.4x | 6.4x | 7.3x | 6.4x    |
         | EqualOne       | int    | 1.3x | 1.3x | 1.0x | 0.9x | 0.8x | 1.1x    |
 
+        Item - The task to compare the performances.
+        Dtype - The array element type.
+        Sample Vol. - See `Benchmarker`.
+
         Take the 3rd line for example, it means by running the task EqualOne with
         dtype=int, the ulist's speed is 1.1 times of numpy on average.
         """
@@ -120,12 +124,13 @@ class Benchmarker(ABC):
     An abstract class for comparing the performance between `ulist` and other
     framework such as `numpy`.
 
-    There are 5 rounds for the task:
-        XS - array size 100, run 100000 times;
-        S - array size 1000, run 100000 times;
-        M - array size 10000, run 10000 times;
-        L - array size 100000, run 1000 times;
-        XL - array size 1000000, run 100 times.
+    There are 5 rounds for the task with different array sizes and number of
+    runs:
+        XS - array size 100, run 100K times;
+        S - array size 1K, run 100K times;
+        M - array size 10K, run 10K times;
+        L - array size 100K, run 1K times;
+        XL - array size 1M, run 100 times.
 
     and the result of each round and the average result are both recorded.
     """
