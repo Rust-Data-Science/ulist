@@ -52,10 +52,10 @@ def display_result():
     n_wins = 0
     total = 0
     iterator = chain(
-        # I32.__dict__.values(),
-        # F32.__dict__.values(),
+        I32.__dict__.values(),
+        F32.__dict__.values(),
         BOOL.__dict__.values(),
-        # STR.__dict__.values(),
+        STR.__dict__.values(),
     )
     for cls in iterator:
         if not isclass(cls):
@@ -73,16 +73,13 @@ def display_result():
             total += 1
         gc.collect()
     print()
-    print(f"Total {total} tasks, and ulist is faster in {n_wins} of them.")
+    print(f"{n_wins} of {total} tasks are faster!")
 
 
 def main():
     """
-    Comparing Ulist and Numpy performances, and output the
-    result as Markdown Table.
-        Item - The task to compare the performances.
-        Dtype - The array element type.
-        Sample Vol. - {XS: 100, S: 1k, M: 10k, L: 100k, XL: 1M}.
+    Comparing Ulist and Numpy performances, show the server info and output
+    the result as Markdown Table.
     """
     print("GC disabled...")
     gc.disable()
