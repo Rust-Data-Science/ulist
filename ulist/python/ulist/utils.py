@@ -53,15 +53,20 @@ def check_test_result(
 class BenchmarkScore:
     name: str
     dtype: str
-    scores: dict
+    _scores: dict
 
     @property
-    def _score(self) -> List[str]:
+    def scores(self) -> List[str]:
+        """For the score schema please refer to `self._header` method."""
         result = [self.name, self.dtype]
-        for v in self.scores.values():
+        for v in self._scores.values():
             result.append(str(v) + 'x')
-        avg = round(sum(self.scores.values()) / len(self.scores), 1)
+        avg = round(sum(self._scores.values()) / len(self._scores), 1)
         result.append(str(avg) + 'x')
+        if avg > 1:
+            result.append('Y')
+        else:
+            result.append('N')
         return result
 
     def _as_markdown(self, text: List[str], cell_sizes: List[int]) -> str:
@@ -82,9 +87,22 @@ class BenchmarkScore:
 
     @property
     def _header(self) -> list:
-        return ['Item', 'Dtype', 'XS', 'S', 'M', 'L', 'XL', 'Average']
+        return ['Item', 'Dtype', 'XS', 'S', 'M', 'L', 'XL', 'Average', 'Faster']
 
     def display(self, show_header: bool = True) -> None:
+        """
+        Display the benchmark score as a markdown table similar to below:
+
+        --------
+        | Item           | Dtype  | XS   | S    | M    | L    | XL   | Average |
+        | -------------- | ------ | ---- | ---- | ---- | ---- | ---- | ------- |
+        | AddOne         | int    | 0.9x | 1.0x | 1.0x | 1.0x | 1.1x | 1.0x    |
+        | ArraySum       | int    | 4.8x | 6.2x | 7.4x | 6.4x | 7.3x | 6.4x    |
+        | EqualOne       | int    | 1.3x | 1.3x | 1.0x | 0.9x | 0.8x | 1.1x    |
+
+        Take the 3rd line for example, it means by running the task EqualOne with
+        dtype=int, the ulist's speed is 1.1 times of numpy on average.
+        """
         cell_sizes = [max(6, len(x) + 2) for x in self._header]
         cell_sizes[0] = MAX_ITEM_LEN
         cell_sizes[1] = MAX_DTYPE_LEN
@@ -94,13 +112,22 @@ class BenchmarkScore:
             line = self._line(cell_sizes)
             print(self._as_markdown(line, cell_sizes))
 
-        print((self._as_markdown(self._score, cell_sizes)))
+        print((self._as_markdown(self.scores, cell_sizes)))
 
 
 class Benchmarker(ABC):
     """
     An abstract class for comparing the performance between `ulist` and other
     framework such as `numpy`.
+
+    There are 5 rounds for the task:
+        XS - array size 100, run 100000 times;
+        S - array size 1000, run 100000 times;
+        M - array size 10000, run 10000 times;
+        L - array size 100000, run 1000 times;
+        XL - array size 1000000, run 100 times.
+
+    and the result of each round and the average result are both recorded.
     """
 
     def __init__(self) -> None:
@@ -156,7 +183,7 @@ class Benchmarker(ABC):
         return BenchmarkScore(
             name=type(self).__name__,
             dtype=self.dtype(),
-            scores=scores,
+            _scores=scores,
         )
 
     def _run(self, fn: Callable) -> Dict[int, float]:

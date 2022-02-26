@@ -29,19 +29,19 @@ def _get_processor_name() -> str:
 
 
 def display_info() -> None:
-    print("Info:")
-    line = "=" * 60
+    print("Info:  ")
+    line = "*" * 60
     print(line)
-    print("Date:", datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
-    print("System OS:", platform.system())
-    print("CPU:", _get_processor_name())
-    print("Python version:", sys.version.split()[0])
+    print("Date:", datetime.today().strftime("%Y-%m-%d %H:%M:%S"), "  ")
+    print("System OS:", platform.system(), "  ")
+    print("CPU:", _get_processor_name(), "  ")
+    print("Python version:", sys.version.split()[0], "  ")
 
     try:
-        print("Ulist version:", ul.__version__)
+        print("Ulist version:", ul.__version__, "  ")
     except:
         print("Ulist version:", "unknown")
-    print("Numpy version:", np.__version__)
+    print("Numpy version:", np.__version__, "  ")
     print(line)
     print()
 
@@ -49,12 +49,13 @@ def display_info() -> None:
 def display_result():
     print("Result:")
     print()
-    i = 0
+    n_wins = 0
+    total = 0
     iterator = chain(
-        I32.__dict__.values(),
-        F32.__dict__.values(),
+        # I32.__dict__.values(),
+        # F32.__dict__.values(),
         BOOL.__dict__.values(),
-        STR.__dict__.values(),
+        # STR.__dict__.values(),
     )
     for cls in iterator:
         if not isclass(cls):
@@ -63,13 +64,16 @@ def display_result():
             continue
         if issubclass(cls, Benchmarker):
             result = cls().run()
-            if i == 0:
+            if total == 0:
                 result.display()
             else:
                 result.display(False)
-            i += 1
+            if result.scores[-1] == 'Y':
+                n_wins += 1
+            total += 1
         gc.collect()
     print()
+    print(f"Total {total} tasks, and ulist is faster in {n_wins} of them.")
 
 
 def main():
