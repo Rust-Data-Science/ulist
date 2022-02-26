@@ -40,6 +40,24 @@ class ArraySum(Benchmarker):
         args[0].sum()
 
 
+class CountElems(Benchmarker):
+    def cases(self) -> list:
+        return [
+            ([randint(1, 3) for _ in range(100)], ),
+            ([randint(1, 3) for _ in range(1000)], ),
+            ([randint(1, 3) for _ in range(10000)], ),
+            ([randint(1, 3) for _ in range(100000)], ),
+            ([randint(1, 3) for _ in range(1000000)], ),
+        ]
+
+    def ulist_fn(self, args) -> None:
+        args[0].counter()
+
+    def other_fn(self, args) -> None:
+        unique, counts = np.unique(args[0], return_counts=True)
+        dict(zip(unique, counts))
+
+
 class EqualOne(Benchmarker):
     def cases(self) -> list:
         return [
