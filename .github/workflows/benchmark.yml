@@ -1,0 +1,41 @@
+name: "benchmark"
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  timeit:
+    strategy:
+      matrix:
+        python-version: ['3.10']
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - name: Install Python packages
+        run: |
+          pip install numpy==1.22
+          pip install maturin
+      - name: Build ulist
+        run: |
+          maturin build --release --out dist -m ulist/Cargo.toml -i python
+      - name: Install ulist
+        run: |
+          pip install ulist --no-index --find-links dist --force-reinstall 
+      - name: Generate benchmarking report
+        shell: bash
+        run: |
+          cd benchmark/
+          python run.py
