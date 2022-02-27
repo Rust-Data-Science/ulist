@@ -26,6 +26,7 @@ Ulist is extremly fast, and even compared with libraries like Numpy. It is
 * more efficient on the `string` and `boolean` array,  
 * same level efficient on the `integer` array,  
 * and a bit slower on the `floating` array.  
+
 Faster than Numpy is not the target of writing this repo, because they are just two different libraries. Ulist is more focused on general domain rather than just data science/machine learning/AI, for example the Linear Algebra Computation is not provided. But if you are curious about the performance, please see the [benchmarking results](https://github.com/tushushu/ulist/blob/main/benchmark.md).
 
 
