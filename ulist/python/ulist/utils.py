@@ -86,26 +86,37 @@ class BenchmarkScore:
         return ['-' * (x - 2) for x in cell_sizes]
 
     @property
-    def _header(self) -> list:
-        return ['Item', 'Dtype', 'XS', 'S', 'M', 'L', 'XL', 'Average', 'Faster']
+    def _header(self) -> List[str]:
+        return [
+            'Item',
+            'Dtype',
+            'XS',
+            'S',
+            'M',
+            'L',
+            'XL',
+            'Average',
+            'Faster'
+        ]
 
     def display(self, show_header: bool = True) -> None:
         """
         Display the benchmark score as a markdown table similar to below:
 
         --------
-        | Item           | Dtype  | XS   | S    | M    | L    | XL   | Average |
-        | -------------- | ------ | ---- | ---- | ---- | ---- | ---- | ------- |
-        | AddOne         | int    | 0.9x | 1.0x | 1.0x | 1.0x | 1.1x | 1.0x    |
-        | ArraySum       | int    | 4.8x | 6.2x | 7.4x | 6.4x | 7.3x | 6.4x    |
-        | EqualOne       | int    | 1.3x | 1.3x | 1.0x | 0.9x | 0.8x | 1.1x    |
+        | Item     | Dtype | XS   | S    | M    | L    | XL   | Average |
+        | -------  | ------| ---- | ---- | ---- | ---- | ---- | ------- |
+        | AddOne   | int   | 0.9x | 1.0x | 1.0x | 1.0x | 1.1x | 1.0x    |
+        | ArraySum | int   | 4.8x | 6.2x | 7.4x | 6.4x | 7.3x | 6.4x    |
+        | EqualOne | int   | 1.3x | 1.3x | 1.0x | 0.9x | 0.8x | 1.1x    |
 
         Item - The task to compare the performances.
         Dtype - The array element type.
         Sample Vol. - See `Benchmarker`.
 
-        Take the 3rd line for example, it means by running the task EqualOne with
-        dtype=int, the ulist's speed is 1.1 times of numpy on average.
+        Take the 3rd line for example, it means by running the task
+        EqualOne with dtype=int, the ulist's speed is 1.1 times of numpy
+        on average.
         """
         cell_sizes = [max(6, len(x) + 2) for x in self._header]
         cell_sizes[0] = MAX_ITEM_LEN
