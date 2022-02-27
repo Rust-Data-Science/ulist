@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from timeit import timeit
-from typing import Any, Callable, Dict, List, Sequence, Union
+from typing import Any, Callable, Dict, List, Sequence, Tuple, Union
 
 import ulist as ul
 
@@ -133,6 +133,29 @@ class Benchmarker(ABC):
         XL - array size 1M, run 100 times.
 
     and the result of each round and the average result are both recorded.
+
+    The abstract methods need to be overridden by subclass. The tuples in the
+    list returned store the input of each round test. The first element of the
+    tuple should be a list with corresponding size, and the other elements of
+    the tuple should be scalars if needed.
+
+    Examples
+    --------
+    >>> class AllIsTrue(Benchmarker):
+    ...    def cases(self) -> list:
+    ...        return [
+    ...            ([True for _ in range(100)],),
+    ...            ([True for _ in range(1000)],),
+    ...            ([True for _ in range(10000)],),
+    ...            ([True for _ in range(100000)],),
+    ...            ([True for _ in range(1000000)],),
+    ...        ]
+
+    ...    def ulist_fn(self, args) -> None:
+    ...        args[0].all()
+
+    ...    def other_fn(self, args) -> None:
+    ...        args[0].all()
     """
 
     def __init__(self) -> None:
@@ -145,7 +168,8 @@ class Benchmarker(ABC):
         assert len(self.__class__.__name__) < MAX_ITEM_LEN
 
     @abstractmethod
-    def cases(self) -> list:
+    def cases(self) -> List[Tuple[Any, ...]]:
+        """Benchmark cases for each round."""
         pass
 
     def other_constructor(self, arr: list):
@@ -164,13 +188,16 @@ class Benchmarker(ABC):
 
     @abstractmethod
     def ulist_fn(self, args: Sequence[Any]) -> None:
+        """The ulist function to benchmark."""
         pass
 
     @abstractmethod
     def other_fn(self, args: Sequence[Any]) -> None:
+        """The numpy function to benchmark."""
         pass
 
     def dtype(self) -> str:
+        """Return the dtype for the constructors."""
         element_type = str(type(self.cases()[0][0][0]))
         left = element_type.index("'") + 1
         right = element_type.rindex("'")
@@ -180,6 +207,7 @@ class Benchmarker(ABC):
         return result
 
     def run(self) -> BenchmarkScore:
+        """Run the benchmarking task."""
         ulist_time_elapsed = self._run(self.ulist_fn)
         other_time_elapsed = self._run(self.other_fn)
         scores = dict()
