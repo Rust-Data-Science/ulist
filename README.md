@@ -16,9 +16,17 @@
 Ulist is an ultra fast list/array data structure written in Rust with Python bindings. It aims to be the fundamental package for processing and computing 1-D list/array in Python.   
 It provides:  
 
-* an efficient, flexible and expressive 1-D list/array object;
-* broadcasting methods;
-* a SQL-like and method-chaining programming experience;
+* an efficient, flexible and expressive 1-D list/array object;  
+* broadcasting methods;  
+* a SQL-like and method-chaining programming experience;  
+
+
+### Performance
+Ulist is extremly fast, and even compared with libraries like Numpy. It is  
+* more efficient on the `string` and `boolean` array,  
+* same level efficient on the `integer` array,  
+* and a bit slower on the `floating` array.  
+Faster than Numpy is not the target of writing this repo, because they are just two different libraries. Ulist is more focused on general domain rather than just data science/machine learning/AI, for example the Linear Algebra Computation is not provided. But if you are curious about the performance, please see the [benchmarking results](https://github.com/tushushu/ulist/blob/main/benchmark.md).
 
 
 ### Requirements
