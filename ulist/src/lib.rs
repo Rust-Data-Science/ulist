@@ -2,6 +2,7 @@ mod base;
 mod boolean;
 mod control_flow;
 mod float;
+mod index;
 mod integer;
 mod non_float;
 mod numerical;
