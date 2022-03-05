@@ -1,6 +1,5 @@
 from random import choice, seed
 
-import numpy as np
 from ulist.utils import Benchmarker
 
 seed(100)
