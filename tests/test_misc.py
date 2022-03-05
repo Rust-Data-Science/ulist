@@ -1,7 +1,8 @@
-from ulist.utils import Benchmarker, BenchmarkScore, MAX_DTYPE_LEN, MAX_ITEM_LEN
 from typing import Any
 
 import pytest
+from ulist.utils import (MAX_DTYPE_LEN, MAX_ITEM_LEN, Benchmarker,
+                         BenchmarkScore)
 
 
 def test_benchmark_score() -> None:
@@ -71,7 +72,7 @@ def test_benchmark_score() -> None:
     bench.display(False)
 
 
-def _test_bench_marker(bench_marker: Benchmarker):
+def _test_bench_marker(bench_marker):
     bench = bench_marker(debug=True)
     bench.n_runs = (1, 1, 1, 1, 1)
     bench.run()
