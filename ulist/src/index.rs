@@ -15,6 +15,25 @@ impl IndexList {
     }
 
     pub fn back(&self) -> u32 {
-        self._values[self._values.len()]
+        self._values[self._values.len() - 1]
+    }
+
+    // TODO implement __str__ method
+    pub fn display(&self) -> String {
+        let v = &self._values;
+        let n = v.len();
+        if n < 100 {
+            format!("{:?}", self._values)
+        } else {
+            format!(
+                "[{}, {}, {}, ..., {}, {}, {}]",
+                v[0],
+                v[1],
+                v[2],
+                v[n - 3],
+                v[n - 2],
+                v[n - 1]
+            )
+        }
     }
 }
