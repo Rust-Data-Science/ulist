@@ -14,12 +14,11 @@ impl IndexList {
         IndexList { _values: vec }
     }
 
-    pub fn back(&self) -> u32 {
-        self._values[self._values.len() - 1]
+    fn __repr__(&self) -> String {
+        format!("IndexList({})", self.__str__())
     }
 
-    // TODO implement __str__ method
-    pub fn display(&self) -> String {
+    fn __str__(&self) -> String {
         let v = &self._values;
         let n = v.len();
         if n < 100 {
@@ -35,5 +34,13 @@ impl IndexList {
                 v[n - 1]
             )
         }
+    }
+
+    pub fn back(&self) -> u32 {
+        self._values[self._values.len() - 1]
+    }
+
+    pub fn to_list(&self) -> Vec<u32> {
+        self._values.clone()
     }
 }
