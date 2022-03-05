@@ -171,10 +171,11 @@ class Benchmarker(ABC):
 
     def __init__(self, debug: bool = False) -> None:
         super().__init__()
+        self.debug = debug
         self.n_runs = (100000, 100000, 10000, 1000, 100)
         self.sizes = (100, 1000, 10000, 100000, 1000000)
         assert len(self.n_runs) == len(self.cases())
-        if not debug:
+        if not self.debug:
             assert all(x == len(y[0])
                        for x, y in zip(self.sizes, self.cases()))
         assert len(self.dtype()) < MAX_DTYPE_LEN
@@ -185,6 +186,8 @@ class Benchmarker(ABC):
         """Benchmark cases for each round."""
 
     def other_constructor(self, arr: list):
+        if self.debug:
+            return None
         import numpy as np  # type: ignore
         if isinstance(arr[0], int):
             dtype = "int32"
