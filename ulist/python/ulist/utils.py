@@ -169,19 +169,20 @@ class Benchmarker(ABC):
     ...        args[0].all()
     """
 
-    def __init__(self) -> None:
+    def __init__(self, debug: bool = False) -> None:
         super().__init__()
         self.n_runs = (100000, 100000, 10000, 1000, 100)
         self.sizes = (100, 1000, 10000, 100000, 1000000)
         assert len(self.n_runs) == len(self.cases())
-        assert all(x == len(y[0]) for x, y in zip(self.sizes, self.cases()))
+        if not debug:
+            assert all(x == len(y[0])
+                       for x, y in zip(self.sizes, self.cases()))
         assert len(self.dtype()) < MAX_DTYPE_LEN
         assert len(self.__class__.__name__) < MAX_ITEM_LEN
 
     @abstractmethod
     def cases(self) -> List[Tuple[Any, ...]]:
         """Benchmark cases for each round."""
-        pass
 
     def other_constructor(self, arr: list):
         import numpy as np  # type: ignore
@@ -200,12 +201,10 @@ class Benchmarker(ABC):
     @abstractmethod
     def ulist_fn(self, args: Sequence[Any]) -> None:
         """The ulist function to benchmark."""
-        pass
 
     @abstractmethod
     def other_fn(self, args: Sequence[Any]) -> None:
         """The numpy function to benchmark."""
-        pass
 
     def dtype(self) -> str:
         """Return the dtype for the constructors."""
