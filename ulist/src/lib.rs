@@ -2,6 +2,7 @@ mod base;
 mod boolean;
 mod control_flow;
 mod float;
+mod index;
 mod integer;
 mod non_float;
 mod numerical;
@@ -26,6 +27,7 @@ fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<float::FloatList>()?;
     m.add_class::<integer::IntegerList>()?;
     m.add_class::<string::StringList>()?;
+    m.add_class::<index::IndexList>()?;
     m.add_function(wrap_pyfunction!(arange, m)?)?;
     m.add_function(wrap_pyfunction!(select_bool, m)?)?;
     m.add_function(wrap_pyfunction!(select_float, m)?)?;
