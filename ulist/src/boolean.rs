@@ -1,5 +1,6 @@
 use crate::base::List;
 use crate::float::FloatList;
+use crate::index::IndexList;
 use crate::integer::IntegerList;
 use crate::non_float::NonFloatList;
 use crate::string::StringList;
@@ -121,6 +122,17 @@ impl BooleanList {
 
     pub fn sum(&self) -> i32 {
         self.values().iter().map(|&x| if x { 1 } else { 0 }).sum()
+    }
+
+    pub fn to_index(&self) -> IndexList {
+        let vec = self
+            .values()
+            .iter()
+            .enumerate()
+            .filter(|(_, y)| **y)
+            .map(|(x, _)| x.clone())
+            .collect();
+        IndexList::new(vec)
     }
 
     pub fn to_list(&self) -> Vec<bool> {

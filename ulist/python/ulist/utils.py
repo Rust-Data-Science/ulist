@@ -30,8 +30,8 @@ def check_test_result(
         + f" result - {result}"
         + f" expected - {expected_value}"
     )
-    if isinstance(result, ul.UltraFastList):
-        result = result.to_list()
+    if hasattr(result, "to_list"):
+        result = result.to_list()  # type: ignore
     if isinstance(result, list) and \
             isinstance(expected_value, list):
         assert len(result) == len(expected_value), msg

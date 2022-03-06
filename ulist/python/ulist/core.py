@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Callable
 
 
 from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST, COUNTER
-from .ulist import BooleanList, FloatList, IntegerList, StringList
+from .ulist import BooleanList, FloatList, IntegerList, StringList, IndexList
 
 
 if TYPE_CHECKING:  # To avoid circular import.
@@ -413,6 +413,23 @@ class UltraFastList:
         """Return the sum of self."""
         assert not isinstance(self._values, StringList)
         return self._values.sum()
+
+    def to_index(self) -> IndexList:
+        """Convert self from BooleanList to IndexList by filtering the
+        indexes where the element of self is True.
+
+        Returns:
+            IndexList
+
+        Examples
+        --------
+        >>> import ulist as ul
+        >>> arr = ul.from_seq([True, False, True, True], dtype='bool')
+        >>> arr.to_index()
+        IndexList([0, 2, 3])
+        """
+        assert isinstance(self._values, BooleanList)
+        return self._values.to_index()
 
     def to_list(self) -> LIST_PY:
         """Return a list with the elements of self."""
