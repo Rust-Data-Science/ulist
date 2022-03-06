@@ -46,6 +46,12 @@ from ulist.utils import check_test_result
             [True, False],
             [False, True],
         ),
+        (
+            "to_index",
+            [True, False, True],
+            [0, 2],
+        )
+
     ],
 )
 def test_methods(
