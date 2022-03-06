@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 #[pyclass]
 pub struct IndexList {
-    _values: Vec<u32>,
+    _values: Vec<usize>,
 }
 
 #[pymethods]
@@ -10,7 +10,7 @@ impl IndexList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    pub fn new(vec: Vec<u32>) -> Self {
+    pub fn new(vec: Vec<usize>) -> Self {
         IndexList { _values: vec }
     }
 
@@ -36,11 +36,11 @@ impl IndexList {
         }
     }
 
-    pub fn back(&self) -> u32 {
+    pub fn back(&self) -> usize {
         self._values[self._values.len() - 1]
     }
 
-    pub fn to_list(&self) -> Vec<u32> {
+    pub fn to_list(&self) -> Vec<usize> {
         self._values.clone()
     }
 }
