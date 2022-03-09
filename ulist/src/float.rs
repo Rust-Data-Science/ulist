@@ -85,7 +85,7 @@ impl FloatList {
         List::filter(self, condition)
     }
 
-    pub unsafe fn get(&self, index: usize) -> f32 {
+    pub fn get(&self, index: usize) -> f32 {
         List::get(self, index)
     }
 

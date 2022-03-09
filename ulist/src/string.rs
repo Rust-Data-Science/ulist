@@ -69,7 +69,7 @@ impl StringList {
         List::filter(self, condition)
     }
 
-    pub unsafe fn get(&self, index: usize) -> String {
+    pub fn get(&self, index: usize) -> String {
         List::get(self, index)
     }
 

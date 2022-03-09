@@ -91,7 +91,7 @@ impl IntegerList {
         List::filter(self, condition)
     }
 
-    pub unsafe fn get(&self, index: usize) -> i32 {
+    pub fn get(&self, index: usize) -> i32 {
         List::get(self, index)
     }
 

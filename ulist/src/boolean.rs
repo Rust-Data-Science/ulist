@@ -78,7 +78,7 @@ impl BooleanList {
         List::filter(self, condition)
     }
 
-    pub unsafe fn get(&self, index: usize) -> bool {
+    pub fn get(&self, index: usize) -> bool {
         List::get(self, index)
     }
 

@@ -45,9 +45,11 @@ where
         List::_new(vec)
     }
 
-    unsafe fn get(&self, index: usize) -> T {
-        if index < self.size() {
-            self.values().get_unchecked(index).clone()
+    fn get(&self, index: usize) -> T {
+        let vec = self.values();
+        let result = vec.get(index);
+        if let Some(k) = result {
+            return k.clone();
         } else {
             panic!("Index out of range!")
         }
