@@ -47,9 +47,9 @@ where
 
     fn get(&self, index: usize) -> T {
         let vec = self.values();
-        let result = vec.get(index);
-        if let Some(k) = result {
-            return k.clone();
+        let val = vec.get(index);
+        if let Some(result) = val {
+            return result.clone();
         } else {
             panic!("Index out of range!")
         }
