@@ -1,13 +1,15 @@
 from __future__ import annotations  # To avoid circular import.
-from typing import TYPE_CHECKING, Callable
 
+from typing import TYPE_CHECKING, Callable, Union
 
-from .typedef import ELEM, LIST_PY, LIST_RS, NUM, NUM_OR_LIST, COUNTER
-from .ulist import BooleanList, FloatList, IntegerList, StringList, IndexList
-
+from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM
+from .ulist import BooleanList, FloatList, IndexList, IntegerList, StringList
 
 if TYPE_CHECKING:  # To avoid circular import.
     from .control_flow import CaseObject
+
+NUM_OR_LIST = Union[NUM, "UltraFastList"]
+ELEM_OR_LIST = Union[ELEM, "UltraFastList"]
 
 
 class UltraFastList:
@@ -59,9 +61,16 @@ class UltraFastList:
         """Return self == other."""
         return self.equal_scala(other)
 
-    def __getitem__(self, index: int) -> ELEM:
+    def __getitem__(self, index: Union[int, IndexList]) -> ELEM_OR_LIST:
         """Return self[index]."""
-        return self._values.get(index)
+        if isinstance(index, int):
+            return self._values.get(index)
+        elif isinstance(index, IndexList):
+            return UltraFastList(self._values.get_by_indexes(index))
+        else:
+            raise TypeError(
+                "Parameter index should be int or IndexList type!"
+            )
 
     def __ge__(self, other: int) -> "UltraFastList":
         """Return self >= other."""
@@ -304,6 +313,10 @@ class UltraFastList:
     def get(self, index: int) -> ELEM:
         """Return self[index]."""
         return self._values.get(index)
+
+    def get_by_indexes(self, indexes: IndexList) -> UltraFastList:
+        """Return self[indexes]."""
+        return UltraFastList(self._values.get_by_indexes(indexes))
 
     def greater_than_or_equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self >= elem."""

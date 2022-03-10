@@ -1,6 +1,7 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
+use crate::index::IndexList;
 use crate::integer::IntegerList;
 use crate::non_float::NonFloatList;
 use crate::types::AsBooleanList;
@@ -69,8 +70,12 @@ impl StringList {
         List::filter(self, condition)
     }
 
-    pub unsafe fn get(&self, index: usize) -> String {
+    pub fn get(&self, index: usize) -> String {
         List::get(self, index)
+    }
+
+    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        List::get_by_indexes(self, indexes)
     }
 
     pub fn not_equal_scala(&self, elem: String) -> BooleanList {

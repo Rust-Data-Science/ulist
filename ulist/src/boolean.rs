@@ -78,8 +78,12 @@ impl BooleanList {
         List::filter(self, condition)
     }
 
-    pub unsafe fn get(&self, index: usize) -> bool {
+    pub fn get(&self, index: usize) -> bool {
         List::get(self, index)
+    }
+
+    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        List::get_by_indexes(self, indexes)
     }
 
     pub fn not_(&self) -> Self {

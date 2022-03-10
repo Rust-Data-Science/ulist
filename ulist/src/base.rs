@@ -1,4 +1,5 @@
 use crate::boolean::BooleanList;
+use crate::index::IndexList;
 use std::cell::Ref;
 use std::cell::RefMut;
 
@@ -44,12 +45,26 @@ where
         List::_new(vec)
     }
 
-    unsafe fn get(&self, index: usize) -> T {
-        if index < self.size() {
-            self.values().get_unchecked(index).clone()
+    fn get(&self, index: usize) -> T {
+        let vec = self.values();
+        let val = vec.get(index);
+        if let Some(result) = val {
+            return result.clone();
         } else {
             panic!("Index out of range!")
         }
+    }
+
+    unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        if indexes.back() >= self.size() {
+            panic!("Index out of range!")
+        }
+        let vec = indexes
+            .values()
+            .iter()
+            .map(|&x| self.values().get_unchecked(x).clone())
+            .collect();
+        List::_new(vec)
     }
 
     fn not_equal_scala(&self, elem: T) -> BooleanList {

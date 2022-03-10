@@ -5,6 +5,12 @@ pub struct IndexList {
     _values: Vec<usize>,
 }
 
+impl IndexList {
+    pub fn values(&self) -> &Vec<usize> {
+        &self._values
+    }
+}
+
 #[pymethods]
 impl IndexList {
     // Arrange the following methods in alphabetical order.

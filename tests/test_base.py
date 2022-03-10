@@ -133,6 +133,15 @@ def test_methods_no_arg(
         ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
         ('__getitem__', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
 
+        ('__getitem__', 'bool', [True, False, True],
+         [True, True], {'index': ul.IndexList([0, 2])}),
+        ('__getitem__', 'float', [1.0, 2.0, 3.0], [1.0, 3.0],
+         {'index': ul.IndexList([0, 2])}),
+        ('__getitem__', 'int', [1, 2, 3],
+         [1, 3], {'index': ul.IndexList([0, 2])}),
+        ('__getitem__', 'string', ['foo', 'bar', 'baz'],
+         ['foo', 'baz'], {'index': ul.IndexList([0, 2])}),
+
         ("apply", "bool", [True, False], [
          False, True], {"fn": lambda x: x == False},),  # noqa: E712
         ("apply", "float", [1.0, 2.0], [
@@ -196,6 +205,15 @@ def test_methods_no_arg(
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
         ('get', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
+
+        ('get_by_indexes', 'bool', [True, False, True],
+         [True, True], {'indexes': ul.IndexList([0, 2])}),
+        ('get_by_indexes', 'float', [1.0, 2.0, 3.0], [1.0, 3.0],
+         {'indexes': ul.IndexList([0, 2])}),
+        ('get_by_indexes', 'int', [1, 2, 3],
+         [1, 3], {'indexes': ul.IndexList([0, 2])}),
+        ('get_by_indexes', 'string', ['foo', 'bar', 'baz'],
+         ['foo', 'baz'], {'indexes': ul.IndexList([0, 2])}),
 
         ("not_equal_scala", 'bool', [False, True, False], [
          True, False, True], {"elem": True}),
