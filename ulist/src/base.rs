@@ -55,7 +55,7 @@ where
         }
     }
 
-    unsafe fn get_by_indexes(&self, indexes: IndexList) -> Self {
+    unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         if indexes.back() >= self.size() {
             panic!("Index out of range!")
         }

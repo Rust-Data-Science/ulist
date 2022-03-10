@@ -1,5 +1,6 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
+use crate::index::IndexList;
 use crate::integer::IntegerList;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
@@ -87,6 +88,10 @@ impl FloatList {
 
     pub fn get(&self, index: usize) -> f32 {
         List::get(self, index)
+    }
+
+    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        List::get_by_indexes(self, indexes)
     }
 
     pub fn greater_than_or_equal_scala(&self, elem: f32) -> BooleanList {

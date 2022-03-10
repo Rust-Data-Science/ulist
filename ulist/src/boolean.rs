@@ -82,6 +82,10 @@ impl BooleanList {
         List::get(self, index)
     }
 
+    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        List::get_by_indexes(self, indexes)
+    }
+
     pub fn not_(&self) -> Self {
         let vec = self.values().iter().map(|&x| !x).collect();
         BooleanList::new(vec)

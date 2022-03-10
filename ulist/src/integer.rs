@@ -1,6 +1,7 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
+use crate::index::IndexList;
 use crate::non_float::NonFloatList;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
@@ -93,6 +94,10 @@ impl IntegerList {
 
     pub fn get(&self, index: usize) -> i32 {
         List::get(self, index)
+    }
+
+    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        List::get_by_indexes(self, indexes)
     }
 
     pub fn greater_than_or_equal_scala(&self, elem: i32) -> BooleanList {
