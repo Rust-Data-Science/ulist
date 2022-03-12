@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API &#8212; ulist 0.7.1 documentation</title>
+    <title>API &#8212; ulist 0.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ulist 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ulist 0.8.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API</a></li> 
       </ul>
     </div>  
@@ -256,7 +256,7 @@ to False.</p>
 </dl>
 </dd>
 <dt>Raises:</dt><dd><dl class="simple">
-<dt>TypeError:</dt><dd><p>The type of parameter <cite>default</cite> should be bool, float or int!</p>
+<dt>TypeError:</dt><dd><p>The type of parameter <cite>default</cite> should be bool, float, int or str!</p>
 </dd>
 </dl>
 </dd>
@@ -406,6 +406,12 @@ to False.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ulist.core.UltraFastList.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the element of self contains <cite>elem</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a ulist copy of self.</p>
@@ -447,6 +453,12 @@ correspondingly.</p>
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ulist.core.UltraFastList.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self[index].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ulist.core.UltraFastList.get_by_indexes">
+<span class="sig-name descname"><span class="pre">get_by_indexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IndexList</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.get_by_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return self[indexes].</p>
 </dd></dl>
 
 <dl class="py method">
@@ -585,6 +597,23 @@ correspondingly.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ulist.core.UltraFastList.to_index">
+<span class="sig-name descname"><span class="pre">to_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IndexList</span></span></span><a class="headerlink" href="#ulist.core.UltraFastList.to_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert self from BooleanList to IndexList by filtering the
+indexes where the element of self is True.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>IndexList</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_seq</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span><span class="o">.</span><span class="n">to_index</span><span class="p">()</span>
+<span class="go">IndexList([0, 2, 3])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.to_list">
 <span class="sig-name descname"><span class="pre">to_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ulist.core.UltraFastList.to_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list with the elements of self.</p>
@@ -689,7 +718,7 @@ with elements of self correspondingly.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ulist 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ulist 0.8.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API</a></li> 
       </ul>
     </div>
