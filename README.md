@@ -50,14 +50,14 @@ Given an array `arr`, count the number of items in bins [0, 3), [3, 6), [6, 9) a
 >>> arr
 UltraFastList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 
->>> result = arr.case(default=4)\
-...             .when(lambda x: x < 3, then=1)\
-...             .when(lambda x: x < 6, then=2)\
-...             .when(lambda x: x < 9, then=3)\
+>>> result = arr.case(default='[9, +inf)')\
+...             .when(lambda x: x < 3, then='[0, 3)')\
+...             .when(lambda x: x < 6, then='[3, 6)')\
+...             .when(lambda x: x < 9, then='[6, 9)')\
 ...             .end()\
 ...             .counter()
 >>> result
-{4: 3, 2: 3, 3: 3, 1: 3}
+{'[3, 6)': 3, '[9, +inf)': 3, '[6, 9)': 3, '[0, 3)': 3}
 ```
 
 
