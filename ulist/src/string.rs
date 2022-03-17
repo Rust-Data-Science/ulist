@@ -107,6 +107,11 @@ impl StringList {
         NonFloatList::sort(self, ascending)
     }
 
+    pub fn starts_with(&self, elem: &str) -> BooleanList {
+        let vec = self.values().iter().map(|x| x.starts_with(elem)).collect();
+        BooleanList::new(vec)
+    }
+
     pub fn to_list(&self) -> Vec<String> {
         List::to_list(self)
     }

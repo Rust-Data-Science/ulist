@@ -411,6 +411,11 @@ class UltraFastList:
         """
         return UltraFastList(self._values.sort(ascending=ascending))
 
+    def starts_with(self, elem: str) -> UltraFastList:
+        """Return whether the element of self starts with `elem`."""
+        assert isinstance(self._values, StringList)
+        return UltraFastList(self._values.starts_with(elem))
+
     def sub(self, other: "UltraFastList") -> "UltraFastList":
         """Return self - other."""
         assert not isinstance(self._values, (BooleanList, StringList))
