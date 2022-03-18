@@ -62,6 +62,11 @@ impl StringList {
         List::cycle(&vec, size)
     }
 
+    pub fn ends_with(&self, elem: &str) -> BooleanList {
+        let vec = self.values().iter().map(|x| x.ends_with(elem)).collect();
+        BooleanList::new(vec)
+    }
+
     pub fn equal_scala(&self, elem: String) -> BooleanList {
         List::equal_scala(self, elem)
     }
