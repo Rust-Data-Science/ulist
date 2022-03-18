@@ -22,6 +22,12 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
             [True, False, False, True],
             {"elem": "num"},
         ),
+        (
+            "ends_with",
+            ["num", "1num2", "3num", "num1"],
+            [True, False, True, False],
+            {"elem": "num"},
+        ),
     ],
 )
 def test_methods_with_args(

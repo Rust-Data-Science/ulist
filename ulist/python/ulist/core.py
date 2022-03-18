@@ -298,6 +298,11 @@ class UltraFastList:
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.div_scala(elem))
 
+    def ends_with(self, elem: str) -> UltraFastList:
+        """Return whether the element of self ends with `elem`."""
+        assert isinstance(self._values, StringList)
+        return UltraFastList(self._values.ends_with(elem))
+
     def equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self == elem."""
         return UltraFastList(self._values.equal_scala(elem))
