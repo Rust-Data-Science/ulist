@@ -3,21 +3,13 @@ mod boolean;
 mod control_flow;
 mod float;
 mod index;
-mod integer;
-mod integer64;
+mod integers;
 mod non_float;
 mod numerical;
 mod string;
 mod types;
 use control_flow::*;
 use pyo3::prelude::*;
-
-// Cannot find a way to put this function in another file.
-#[pyfunction]
-pub fn arange(start: i32, stop: i32, step: usize) -> integer::IntegerList {
-    let vec = (start..stop).step_by(step).collect();
-    integer::IntegerList::new(vec)
-}
 
 /// A Python module implemented in Rust. The name of this function must match
 /// the `lib.name` setting in the `Cargo.toml`, else Python will not be able to
@@ -26,11 +18,12 @@ pub fn arange(start: i32, stop: i32, step: usize) -> integer::IntegerList {
 fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<boolean::BooleanList>()?;
     m.add_class::<float::FloatList>()?;
-    m.add_class::<integer::IntegerList>()?;
-    m.add_class::<integer64::IntegerList64>()?;
+    m.add_class::<integers::IntegerList32>()?;
+    m.add_class::<integers::IntegerList64>()?;
     m.add_class::<string::StringList>()?;
     m.add_class::<index::IndexList>()?;
-    m.add_function(wrap_pyfunction!(arange, m)?)?;
+    m.add_function(wrap_pyfunction!(integers::arange32, m)?)?;
+    m.add_function(wrap_pyfunction!(integers::arange64, m)?)?;
     m.add_function(wrap_pyfunction!(select_bool, m)?)?;
     m.add_function(wrap_pyfunction!(select_float, m)?)?;
     m.add_function(wrap_pyfunction!(select_int, m)?)?;

@@ -14,18 +14,20 @@ use std::cell::RefCell;
 use std::cell::RefMut;
 use std::collections::HashMap;
 
-/// List with integer type elements.
+/// List with i64 type elements.
+/// TODO: Use macro to generate codes by using IntegerList32's
+/// implementation
 #[pyclass]
-pub struct IntegerList {
-    _values: RefCell<Vec<i32>>,
+pub struct IntegerList64 {
+    _values: RefCell<Vec<i64>>,
 }
 
 #[pymethods]
-impl IntegerList {
+impl IntegerList64 {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    pub fn new(vec: Vec<i32>) -> Self {
+    pub fn new(vec: Vec<i64>) -> Self {
         List::_new(vec)
     }
 
@@ -33,11 +35,11 @@ impl IntegerList {
         NumericalList::add(self, other)
     }
 
-    pub fn add_scala(&self, elem: i32) -> Self {
+    pub fn add_scala(&self, elem: i64) -> Self {
         NumericalList::add_scala(self, elem)
     }
 
-    pub fn append(&self, elem: i32) {
+    pub fn append(&self, elem: i64) {
         List::append(self, elem)
     }
 
@@ -65,12 +67,12 @@ impl IntegerList {
         List::copy(self)
     }
 
-    pub fn counter(&self) -> HashMap<i32, usize> {
+    pub fn counter(&self) -> HashMap<i64, usize> {
         NonFloatList::counter(self)
     }
 
     #[staticmethod]
-    pub fn cycle(vec: Vec<i32>, size: usize) -> Self {
+    pub fn cycle(vec: Vec<i64>, size: usize) -> Self {
         List::cycle(&vec, size)
     }
 
@@ -84,7 +86,7 @@ impl IntegerList {
         FloatList::new(vec)
     }
 
-    pub fn equal_scala(&self, elem: i32) -> BooleanList {
+    pub fn equal_scala(&self, elem: i64) -> BooleanList {
         List::equal_scala(self, elem)
     }
 
@@ -92,7 +94,7 @@ impl IntegerList {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> i32 {
+    pub fn get(&self, index: usize) -> i64 {
         List::get(self, index)
     }
 
@@ -100,27 +102,27 @@ impl IntegerList {
         List::get_by_indexes(self, indexes)
     }
 
-    pub fn greater_than_or_equal_scala(&self, elem: i32) -> BooleanList {
+    pub fn greater_than_or_equal_scala(&self, elem: i64) -> BooleanList {
         NumericalList::greater_than_or_equal_scala(self, elem)
     }
 
-    pub fn greater_than_scala(&self, elem: i32) -> BooleanList {
+    pub fn greater_than_scala(&self, elem: i64) -> BooleanList {
         NumericalList::greater_than_scala(self, elem)
     }
 
-    pub fn less_than_or_equal_scala(&self, elem: i32) -> BooleanList {
+    pub fn less_than_or_equal_scala(&self, elem: i64) -> BooleanList {
         NumericalList::less_than_or_equal_scala(self, elem)
     }
 
-    pub fn less_than_scala(&self, elem: i32) -> BooleanList {
+    pub fn less_than_scala(&self, elem: i64) -> BooleanList {
         NumericalList::less_than_scala(self, elem)
     }
 
-    pub fn max(&self) -> i32 {
+    pub fn max(&self) -> i64 {
         NumericalList::max(self)
     }
 
-    pub fn min(&self) -> i32 {
+    pub fn min(&self) -> i64 {
         NumericalList::min(self)
     }
 
@@ -128,11 +130,11 @@ impl IntegerList {
         NumericalList::mul(self, other)
     }
 
-    pub fn mul_scala(&self, elem: i32) -> Self {
+    pub fn mul_scala(&self, elem: i64) -> Self {
         NumericalList::mul_scala(self, elem)
     }
 
-    pub fn not_equal_scala(&self, elem: i32) -> BooleanList {
+    pub fn not_equal_scala(&self, elem: i64) -> BooleanList {
         List::not_equal_scala(self, elem)
     }
 
@@ -145,15 +147,15 @@ impl IntegerList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: i32, size: usize) -> Self {
+    pub fn repeat(elem: i64, size: usize) -> Self {
         List::repeat(elem, size)
     }
 
-    pub fn replace(&self, old: i32, new: i32) -> Self {
+    pub fn replace(&self, old: i64, new: i64) -> Self {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: i32) {
+    pub unsafe fn set(&self, index: usize, elem: i64) {
         List::set(self, index, elem)
     }
 
@@ -169,15 +171,15 @@ impl IntegerList {
         NumericalList::sub(self, other)
     }
 
-    pub fn sub_scala(&self, elem: i32) -> Self {
+    pub fn sub_scala(&self, elem: i64) -> Self {
         NumericalList::sub_scala(self, elem)
     }
 
-    pub fn sum(&self) -> i32 {
+    pub fn sum(&self) -> i64 {
         NumericalList::sum(self)
     }
 
-    pub fn to_list(&self) -> Vec<i32> {
+    pub fn to_list(&self) -> Vec<i64> {
         List::to_list(self)
     }
 
@@ -190,25 +192,25 @@ impl IntegerList {
     }
 }
 
-impl List<i32> for IntegerList {
-    fn _new(vec: Vec<i32>) -> Self {
+impl List<i64> for IntegerList64 {
+    fn _new(vec: Vec<i64>) -> Self {
         Self {
             _values: RefCell::new(vec),
         }
     }
 
-    fn values(&self) -> Ref<Vec<i32>> {
+    fn values(&self) -> Ref<Vec<i64>> {
         self._values.borrow()
     }
 
-    fn values_mut(&self) -> RefMut<Vec<i32>> {
+    fn values_mut(&self) -> RefMut<Vec<i64>> {
         self._values.borrow_mut()
     }
 }
 
-impl NonFloatList<i32> for IntegerList {}
+impl NonFloatList<i64> for IntegerList64 {}
 
-impl NumericalList<i32, u32> for IntegerList {
+impl NumericalList<i64, u32> for IntegerList64 {
     fn argmax(&self) -> usize {
         self.values()
             .iter()
@@ -239,39 +241,39 @@ impl NumericalList<i32, u32> for IntegerList {
         self.values().iter().map(|x| *x as f32 / elem).collect()
     }
 
-    fn max(&self) -> i32 {
+    fn max(&self) -> i64 {
         *self.values().iter().max().unwrap()
     }
 
-    fn min(&self) -> i32 {
+    fn min(&self) -> i64 {
         *self.values().iter().min().unwrap()
     }
 
     fn pow_scala(&self, elem: u32) -> Self {
         let vec = self.values().iter().map(|&x| x.pow(elem)).collect();
-        IntegerList::new(vec)
+        IntegerList64::new(vec)
     }
 
-    fn sum(&self) -> i32 {
+    fn sum(&self) -> i64 {
         self.values().iter().sum()
     }
 }
 
-impl AsBooleanList for IntegerList {
+impl AsBooleanList for IntegerList64 {
     fn as_bool(&self) -> BooleanList {
         let vec = self.values().iter().map(|&x| x != 0).collect();
         BooleanList::new(vec)
     }
 }
 
-impl AsFloatList for IntegerList {
+impl AsFloatList for IntegerList64 {
     fn as_float(&self) -> FloatList {
         let vec = self.values().iter().map(|&x| x as f32).collect();
         FloatList::new(vec)
     }
 }
 
-impl AsStringList for IntegerList {
+impl AsStringList for IntegerList64 {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| x.to_string()).collect();
         StringList::new(vec)

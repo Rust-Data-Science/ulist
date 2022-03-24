@@ -14,7 +14,7 @@ use std::cell::RefCell;
 use std::cell::RefMut;
 use std::collections::HashMap;
 
-/// List with integer type elements.
+/// List with i32 type elements.
 #[pyclass]
 pub struct IntegerList32 {
     _values: RefCell<Vec<i32>>,
