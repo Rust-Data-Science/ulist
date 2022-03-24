@@ -41,7 +41,7 @@ impl StringList {
     }
 
     pub fn as_int(&self) -> IntegerList32 {
-        AsIntegerList32::as_int(self)
+        AsIntegerList32::as_int32(self)
     }
 
     pub fn contains(&self, elem: &str) -> BooleanList {
@@ -163,7 +163,7 @@ impl AsFloatList for StringList {
 }
 
 impl AsIntegerList32 for StringList {
-    fn as_int(&self) -> IntegerList32 {
+    fn as_int32(&self) -> IntegerList32 {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
         IntegerList32::new(vec)
     }
