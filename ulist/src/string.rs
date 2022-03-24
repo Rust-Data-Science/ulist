@@ -2,11 +2,11 @@ use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::float::FloatList;
 use crate::index::IndexList;
-use crate::integer::IntegerList;
+use crate::integers::IntegerList32;
 use crate::non_float::NonFloatList;
 use crate::types::AsBooleanList;
 use crate::types::AsFloatList;
-use crate::types::AsIntegerList;
+use crate::types::AsIntegerList32;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
@@ -40,8 +40,8 @@ impl StringList {
         AsFloatList::as_float(self)
     }
 
-    pub fn as_int(&self) -> IntegerList {
-        AsIntegerList::as_int(self)
+    pub fn as_int(&self) -> IntegerList32 {
+        AsIntegerList32::as_int(self)
     }
 
     pub fn contains(&self, elem: &str) -> BooleanList {
@@ -162,9 +162,9 @@ impl AsFloatList for StringList {
     }
 }
 
-impl AsIntegerList for StringList {
-    fn as_int(&self) -> IntegerList {
+impl AsIntegerList32 for StringList {
+    fn as_int(&self) -> IntegerList32 {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
-        IntegerList::new(vec)
+        IntegerList32::new(vec)
     }
 }
