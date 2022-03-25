@@ -3,7 +3,7 @@ from typing import Dict, List, Union, Callable
 import operator as op
 import pytest
 import ulist as ul
-from ulist.utils import check_test_result
+from ulist.utils import check_test_result, compare_dtypes
 
 ELEM_TYPE = Union[float, int, bool, str]
 LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
@@ -149,21 +149,6 @@ def test_methods_no_arg(
         ("apply", "int", [1, 2], [3, 5], {"fn": lambda x: x * 2 + 1},),
         ("apply", "string", ['foo', 'bar'], [
          True, False], {"fn": lambda x: x != 'bar'},),
-
-        ('astype', 'bool', [True, False], [1, 0], {'dtype': 'int'}),
-        ('astype', 'bool', [True, False], [1.0, 0.0], {'dtype': 'float'}),
-        ('astype', 'bool', [True, False], [True, False], {'dtype': 'bool'}),
-
-        ('astype', 'float', [1.0, 2.0, 3.0], [1, 2, 3], {'dtype': 'int'}),
-        ('astype', 'float', [1.0, 2.0, 3.0], [
-         1.0, 2.0, 3.0], {'dtype': 'float'}),
-        ('astype', 'float', [-2.0, -1.0, 0.0, 1.0, 2.0],
-         [True, True, False, True, True], {'dtype': 'bool'}),
-
-        ('astype', 'int', [1, 2, 3], [1, 2, 3], {'dtype': 'int'}),
-        ('astype', 'int', [1, 2, 3], [1.0, 2.0, 3.0], {'dtype': 'float'}),
-        ('astype', 'int', [-2, -1, 0, 1, 2],
-         [True, True, False, True, True], {'dtype': 'bool'}),
 
         ("equal_scala", 'bool', [True, False], [False, True], {"elem": False}),
         ("equal_scala", 'float', [1.0, 2.0, 3.0],
@@ -451,7 +436,7 @@ def test_astype(
     result = arr.astype(expected_dtype)
     test_method = f"astype {expected_dtype}"
     check_test_result(dtype, test_method, result, expected_value)
-    assert result.dtype == expected_dtype
+    assert compare_dtypes(result.dtype, expected_dtype)
     assert id(result) != id(arr)
 
     # Cast back to origin type

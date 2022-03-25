@@ -61,6 +61,10 @@ impl IntegerList64 {
         AsFloatList::as_float(self)
     }
 
+    pub fn as_int32(&self) -> IntegerList32 {
+        AsIntegerList32::as_int32(self)
+    }
+
     pub fn as_str(&self) -> StringList {
         AsStringList::as_str(self)
     }

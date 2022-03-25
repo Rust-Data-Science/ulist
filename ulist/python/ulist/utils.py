@@ -11,6 +11,15 @@ MAX_ITEM_LEN = 16
 MAX_DTYPE_LEN = 8
 
 
+def compare_dtypes(dtype1: str, dtype2: str) -> bool:
+    """Compare two dtypes with each other."""
+    if dtype2 == 'int':
+        dtype2, dtype1 = dtype1, dtype2
+    if dtype1 == 'int':
+        return dtype2 in ('int', 'int64')
+    return dtype1 == dtype2
+
+
 def check_test_result(
     dtype: str,
     test_method: Union[Callable, str],
