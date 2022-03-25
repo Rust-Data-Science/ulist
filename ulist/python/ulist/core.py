@@ -220,7 +220,8 @@ class UltraFastList:
 
         Raises:
             ValueError:
-                Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!
+                Parameter dtype should be 'int', 'int32', 'int64',
+                'float', 'bool' or 'string'!
 
         Returns:
             UltraFastList: A ulist object.
@@ -252,7 +253,8 @@ class UltraFastList:
                 result = UltraFastList(self._values.as_str())
         else:
             raise ValueError(
-                "Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!"
+                "Parameter dtype should be 'int', 'int32', 'int64', " +
+                "'float', 'bool' or 'string'!"
             )
         return result
 
