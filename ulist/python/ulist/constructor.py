@@ -2,12 +2,16 @@ from typing import Optional, Sequence
 
 from .core import UltraFastList
 from .ulist import BooleanList, FloatList, IntegerList32, IntegerList64, StringList
-from .ulist import arange as _arange
+from .ulist import arange32, arange64
 from .typedef import ELEM
 
 
-def arange(start: int, stop: Optional[int] = None, step: int = 1
-           ) -> UltraFastList:
+def arange(
+    start: int,
+    stop: Optional[int] = None,
+    step: int = 1,
+    dtype: str = 'int',
+) -> UltraFastList:
     """Return evenly spaced values within a given interval, which is similar
     to the Python built-in range function, but returns an ulist rather than
     a list.
@@ -21,6 +25,8 @@ def arange(start: int, stop: Optional[int] = None, step: int = 1
             Defaults to None.
         step (int, optional):
             Spacing between values. Defaults to 1.
+        dtype (str, optional):
+            The type of the output ulist. 'int', 'int32', 'int64'.
 
     Returns:
         UltraFastList: A ulist object.
@@ -43,7 +49,13 @@ def arange(start: int, stop: Optional[int] = None, step: int = 1
     if stop is None:
         stop = start
         start = 0
-    return UltraFastList(_arange(start=start, stop=stop, step=step))
+    if dtype == "int" or dtype == "int64":
+        return UltraFastList(arange64(start=start, stop=stop, step=step))
+    elif dtype == "int32":
+        return UltraFastList(arange32(start=start, stop=stop, step=step))
+    else:
+        raise ValueError(
+            "Parameter dtype should be 'int', 'int32' or 'int64'!")
 
 
 def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
