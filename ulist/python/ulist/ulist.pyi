@@ -247,11 +247,11 @@ def select_int(
     conditions: List[BooleanList],
     choices: LIST_PY,
     default: int,
-) -> IntegerList32: ...
+) -> IntegerList64: ...
 
 
 def select_string(
     conditions: List[BooleanList],
     choices: LIST_PY,
     default: str,
-) -> IntegerList32: ...
+) -> StringList: ...
