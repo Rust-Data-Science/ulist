@@ -3,7 +3,14 @@ from __future__ import annotations  # To avoid circular import.
 from typing import TYPE_CHECKING, Callable, Union
 
 from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM
-from .ulist import BooleanList, FloatList, IndexList, IntegerList, StringList
+from .ulist import (
+    BooleanList,
+    FloatList,
+    IndexList,
+    IntegerList32,
+    IntegerList64,
+    StringList
+)
 
 if TYPE_CHECKING:  # To avoid circular import.
     from .control_flow import CaseObject
@@ -21,16 +28,18 @@ class UltraFastList:
     def __init__(self, values: LIST_RS) -> None:
         if type(values) is FloatList:
             self.dtype = "float"
-        elif type(values) is IntegerList:
-            self.dtype = "int"
+        elif type(values) is IntegerList32:
+            self.dtype = "int32"
+        elif type(values) is IntegerList64:
+            self.dtype = "int64"
         elif type(values) is BooleanList:
             self.dtype = "bool"
         elif type(values) is StringList:
             self.dtype = "string"
         else:
             raise TypeError(
-                "Parameter values should be FloatList, "
-                + "IntegerList, BooleanList or StringList type!"
+                "Parameter values should be FloatList, IntegerList32, "
+                + "IntegerList64, BooleanList or StringList type!"
             )
         self._values = values
 
@@ -211,16 +220,21 @@ class UltraFastList:
 
         Raises:
             ValueError:
-                Parameter dtype should be 'int', 'float', 'bool' or 'string'!
+                Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!
 
         Returns:
             UltraFastList: A ulist object.
         """
-        if dtype == "int":
-            if isinstance(self._values, IntegerList):
+        if dtype == "int" or dtype == "int64":
+            if isinstance(self._values, IntegerList64):
                 result = self.copy()
             else:
-                result = UltraFastList(self._values.as_int())
+                result = UltraFastList(self._values.as_int64())
+        elif dtype == "int32":
+            if isinstance(self._values, IntegerList32):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_int32())
         elif dtype == "float":
             if isinstance(self._values, FloatList):
                 result = self.copy()
@@ -238,7 +252,7 @@ class UltraFastList:
                 result = UltraFastList(self._values.as_str())
         else:
             raise ValueError(
-                "Parameter dtype should be 'int', 'float', 'bool' or 'string'!"
+                "Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!"
             )
         return result
 
@@ -483,7 +497,7 @@ class UltraFastList:
         """
         if isinstance(self._values, FloatList):
             data = self
-        elif isinstance(self._values, IntegerList):
+        elif isinstance(self._values, (IntegerList32, IntegerList64)):
             data = self.astype('float')
         elif isinstance(self._values, BooleanList):
             data = self.astype('float')

@@ -1,7 +1,7 @@
 from typing import Optional, Sequence
 
 from .core import UltraFastList
-from .ulist import BooleanList, FloatList, IntegerList, StringList
+from .ulist import BooleanList, FloatList, IntegerList32, IntegerList64, StringList
 from .ulist import arange as _arange
 from .typedef import ELEM
 
@@ -55,11 +55,11 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
         size (int):
             size (int): Size of the new ulist.
         dtype (str):
-            The type of the output ulist. 'int', 'float', 'bool' or 'string'.
+            The type of the output ulist. 'int', 'int32', 'int64', 'float', 'bool' or 'string'.
 
     Raises:
         ValueError:
-            Parameter dtype should be 'int', 'float', 'bool' or 'string'!
+            Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -83,8 +83,10 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     >>> arr4
     UltraFastList(['foo', 'foo', 'foo'])
     """
-    if dtype == "int":
-        result = UltraFastList(IntegerList.cycle(obj, size))
+    if dtype == "int" or dtype == "int64":
+        result = UltraFastList(IntegerList64.cycle(obj, size))
+    elif dtype == "int32":
+        result = UltraFastList(IntegerList32.cycle(obj, size))
     elif dtype == "float":
         result = UltraFastList(FloatList.cycle(obj, size))
     elif dtype == "bool":
@@ -93,7 +95,7 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
         result = UltraFastList(StringList.cycle(obj, size))
     else:
         raise ValueError(
-            "Parameter dtype should be 'int', 'float', 'bool' or 'string'!")
+            "Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!")
     return result
 
 
@@ -104,11 +106,11 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         obj (Sequence):
             Sequence object such as list, tuple and range.
         dtype (str):
-            The type of the output ulist. 'int', 'float', 'bool' or 'string'.
+            The type of the output ulist. 'int', 'int32', 'int64', 'float', 'bool' or 'string'.
 
     Raises:
         ValueError:
-            Parameter dtype should be 'int', 'float', 'bool' or 'string'!
+            Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!
 
     Returns:
         UltraFastList: A ulist object.
@@ -132,8 +134,10 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     >>> arr4
     UltraFastList(['foo', 'bar', 'baz'])
     """
-    if dtype == "int":
-        result = UltraFastList(IntegerList(obj))
+    if dtype == "int" or dtype == "int64":
+        result = UltraFastList(IntegerList64(obj))
+    elif dtype == "int32":
+        result = UltraFastList(IntegerList32(obj))
     elif dtype == "float":
         result = UltraFastList(FloatList(obj))
     elif dtype == "bool":
@@ -142,7 +146,7 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         result = UltraFastList(StringList(obj))
     else:
         raise ValueError(
-            "Parameter dtype should be 'int', 'float', 'bool' or 'string'!")
+            "Parameter dtype should be 'int', 'int32', 'int64', 'float', 'bool' or 'string'!")
     return result
 
 
@@ -183,7 +187,7 @@ def repeat(elem: ELEM, size: int) -> UltraFastList:
     elif isinstance(elem, float):
         return UltraFastList(FloatList.repeat(elem, size))
     elif isinstance(elem, int):
-        return UltraFastList(IntegerList.repeat(elem, size))
+        return UltraFastList(IntegerList64.repeat(elem, size))
     elif isinstance(elem, str):
         return UltraFastList(StringList.repeat(elem, size))
     else:
