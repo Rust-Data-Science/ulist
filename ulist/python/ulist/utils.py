@@ -20,12 +20,12 @@ def expand_dtypes(func: Callable) -> Callable:
         return tuple([x if x != s else s for x in arg])
 
     result = []
-    for arg in func.pytestmark[0].args[1]:
+    for arg in func.pytestmark[0].args[1]:  # type: ignore
         if 'int' in arg:
             result.append(_new_arg('int64'))
             result.append(_new_arg('int32'))
     for arg in result:
-        func.pytestmark[0].args[1].append(arg)
+        func.pytestmark[0].args[1].append(arg)  # type: ignore
     return func
 
 
