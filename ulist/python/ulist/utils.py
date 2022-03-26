@@ -22,8 +22,8 @@ def expand_dtypes(func: Callable) -> Callable:
     result = []
     for arg in func.pytestmark[0].args[1]:
         if 'int' in arg:
-            arg_int64 = _new_arg('int64')
-            result.append(arg_int64)
+            result.append(_new_arg('int64'))
+            result.append(_new_arg('int32'))
     for arg in result:
         func.pytestmark[0].args[1].append(arg)
     return func

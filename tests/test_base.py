@@ -3,7 +3,7 @@ from typing import Dict, List, Union, Callable
 import operator as op
 import pytest
 import ulist as ul
-from ulist.utils import check_test_result, compare_dtypes
+from ulist.utils import check_test_result, compare_dtypes, expand_dtypes
 
 ELEM_TYPE = Union[float, int, bool, str]
 LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
@@ -11,6 +11,7 @@ COUNTER = Union[Dict[int, int], Dict[bool, int]]
 RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value",
     [
@@ -125,6 +126,7 @@ def test_methods_no_arg(
     check_test_result(dtype, test_method, result, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
@@ -320,6 +322,7 @@ def test_methods_with_args(
     check_test_result(dtype, test_method, result, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
@@ -361,6 +364,7 @@ def test_multable_methods(
     check_test_result(dtype, test_method, arr, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "dtype, nums, expected_value, kwargs",
     [
@@ -392,6 +396,7 @@ def test_indexing_operations(
     check_test_result(dtype, test_method, result, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "dtype, nums, expected_value, expected_dtype",
     [
@@ -446,6 +451,7 @@ def test_astype(
         check_test_result(expected_dtype, test_method, arr1, arr.to_list())
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [

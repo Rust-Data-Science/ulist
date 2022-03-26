@@ -3,12 +3,13 @@ from typing import Callable, List, Union
 
 import pytest
 import ulist as ul
-from ulist.utils import check_test_result
+from ulist.utils import check_test_result, expand_dtypes
 
 NUM_TYPE = Union[float, int]
 LIST_TYPE = Union[List[float], List[int]]
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value",
     [
@@ -44,6 +45,7 @@ def test_statistics_methods(
     check_test_result(dtype, test_method, result, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
@@ -130,6 +132,7 @@ def test_arithmetic_methods(
     check_test_result(dtype, test_method, result, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [

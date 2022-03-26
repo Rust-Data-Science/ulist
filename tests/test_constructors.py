@@ -9,6 +9,10 @@ from ulist.utils import check_test_result
     "test_method, args, kwargs, expected_value",
     [
         (ul.arange, (3,), {}, [0, 1, 2],),
+        (ul.arange, (3,), {"dtype": "int"}, [0, 1, 2],),
+        (ul.arange, (3,), {"dtype": "int32"}, [0, 1, 2],),
+        (ul.arange, (3,), {"dtype": "int64"}, [0, 1, 2],),
+
         (ul.arange, (0, 3,), {}, [0, 1, 2],),
         (ul.arange, (0, 4, 2,), {}, [0, 2],),
         (ul.arange, (0, 5, 2,), {}, [0, 2, 4],),
@@ -26,6 +30,8 @@ from ulist.utils import check_test_result
 
         (ul.from_seq, (range(3), "float"), {}, [0.0, 1.0, 2.0],),
         (ul.from_seq, (range(3), "int"), {}, [0, 1, 2],),
+        (ul.from_seq, (range(3), "int32"), {}, [0, 1, 2],),
+        (ul.from_seq, (range(3), "int64"), {}, [0, 1, 2],),
 
         (ul.from_seq, ([False, True], "bool"), {}, [False, True],),
         (ul.from_seq, ([0.0, 1.0, 2.0], "float"), {}, [0.0, 1.0, 2.0],),
@@ -38,6 +44,8 @@ from ulist.utils import check_test_result
         (ul.from_seq, (('foo', 'bar'), "string"), {}, ['foo', 'bar'],),
 
         (ul.cycle, (range(3), 1, 'float'), {}, [0.0],),
+        (ul.cycle, (range(3), 1, 'int32'), {}, [0],),
+        (ul.cycle, (range(3), 1, 'int64'), {}, [0],),
         (ul.cycle, (range(3), 1, 'int'), {}, [0],),
         (ul.cycle, (range(3), 2, 'int'), {}, [0, 1],),
         (ul.cycle, (range(3), 3, 'int'), {}, [0, 1, 2],),
