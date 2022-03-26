@@ -11,6 +11,24 @@ MAX_ITEM_LEN = 16
 MAX_DTYPE_LEN = 8
 
 
+def expand_dtypes(func: Callable) -> Callable:
+    """
+    Generate test cases for `int32` and `int64` dtypes by copying the
+    test cases of `int` dtype.
+    """
+    def _new_arg(s: str) -> tuple:
+        return tuple([x if x != s else s for x in arg])
+
+    result = []
+    for arg in func.pytestmark[0].args[1]:
+        if 'int' in arg:
+            arg_int64 = _new_arg('int64')
+            result.append(arg_int64)
+    for arg in result:
+        func.pytestmark[0].args[1].append(arg)
+    return func
+
+
 def compare_dtypes(dtype1: str, dtype2: str) -> bool:
     """Compare two dtypes with each other."""
     if dtype2 == 'int':
