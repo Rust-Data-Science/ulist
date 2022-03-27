@@ -1,11 +1,13 @@
 use crate::base::List;
 use crate::floatings::FloatList32;
+use crate::floatings::FloatList64;
 use crate::index::IndexList;
 use crate::integers::IntegerList32;
 use crate::integers::IntegerList64;
 use crate::non_float::NonFloatList;
 use crate::string::StringList;
-use crate::types::AsFloatList;
+use crate::types::AsFloatList32;
+use crate::types::AsFloatList64;
 use crate::types::AsIntegerList32;
 use crate::types::AsIntegerList64;
 use crate::types::AsStringList;
@@ -47,8 +49,8 @@ impl BooleanList {
         List::append(self, elem)
     }
 
-    pub fn as_float(&self) -> FloatList32 {
-        AsFloatList::as_float(self)
+    pub fn as_float32(&self) -> FloatList32 {
+        AsFloatList32::as_float32(self)
     }
 
     pub fn as_int32(&self) -> IntegerList32 {
@@ -190,14 +192,25 @@ fn _logical_operate(
     BooleanList::new(vec)
 }
 
-impl AsFloatList for BooleanList {
-    fn as_float(&self) -> FloatList32 {
+impl AsFloatList32 for BooleanList {
+    fn as_float32(&self) -> FloatList32 {
         let vec = self
             .values()
             .iter()
             .map(|&x| if x { 1.0 } else { 0.0 })
             .collect();
         FloatList32::new(vec)
+    }
+}
+
+impl AsFloatList64 for BooleanList {
+    fn as_float64(&self) -> FloatList64 {
+        let vec = self
+            .values()
+            .iter()
+            .map(|&x| if x { 1.0 } else { 0.0 })
+            .collect();
+        FloatList64::new(vec)
     }
 }
 

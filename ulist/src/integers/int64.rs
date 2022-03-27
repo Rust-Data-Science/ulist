@@ -8,7 +8,8 @@ use crate::non_float::NonFloatList;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
 use crate::types::AsBooleanList;
-use crate::types::AsFloatList;
+use crate::types::AsFloatList32;
+use crate::types::AsFloatList64;
 use crate::types::AsIntegerList32;
 use crate::types::AsStringList;
 use pyo3::prelude::*;
@@ -58,8 +59,8 @@ impl IntegerList64 {
         AsBooleanList::as_bool(self)
     }
 
-    pub fn as_float(&self) -> FloatList32 {
-        AsFloatList::as_float(self)
+    pub fn as_float32(&self) -> FloatList32 {
+        AsFloatList32::as_float32(self)
     }
 
     pub fn as_int32(&self) -> IntegerList32 {
@@ -273,10 +274,17 @@ impl AsBooleanList for IntegerList64 {
     }
 }
 
-impl AsFloatList for IntegerList64 {
-    fn as_float(&self) -> FloatList32 {
+impl AsFloatList32 for IntegerList64 {
+    fn as_float32(&self) -> FloatList32 {
         let vec = self.values().iter().map(|&x| x as f32).collect();
         FloatList32::new(vec)
+    }
+}
+
+impl AsFloatList64 for IntegerList64 {
+    fn as_float64(&self) -> FloatList64 {
+        let vec = self.values().iter().map(|&x| x as f64).collect();
+        FloatList64::new(vec)
     }
 }
 

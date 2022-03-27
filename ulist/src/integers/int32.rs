@@ -1,13 +1,15 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
 use crate::floatings::FloatList32;
+use crate::floatings::FloatList64;
 use crate::index::IndexList;
 use crate::integers::IntegerList64;
 use crate::non_float::NonFloatList;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
 use crate::types::AsBooleanList;
-use crate::types::AsFloatList;
+use crate::types::AsFloatList32;
+use crate::types::AsFloatList64;
 use crate::types::AsIntegerList64;
 use crate::types::AsStringList;
 use pyo3::prelude::*;
@@ -55,8 +57,8 @@ impl IntegerList32 {
         AsBooleanList::as_bool(self)
     }
 
-    pub fn as_float(&self) -> FloatList32 {
-        AsFloatList::as_float(self)
+    pub fn as_float32(&self) -> FloatList32 {
+        AsFloatList32::as_float32(self)
     }
 
     pub fn as_int64(&self) -> IntegerList64 {
@@ -270,10 +272,17 @@ impl AsBooleanList for IntegerList32 {
     }
 }
 
-impl AsFloatList for IntegerList32 {
-    fn as_float(&self) -> FloatList32 {
+impl AsFloatList32 for IntegerList32 {
+    fn as_float32(&self) -> FloatList32 {
         let vec = self.values().iter().map(|&x| x as f32).collect();
         FloatList32::new(vec)
+    }
+}
+
+impl AsFloatList64 for IntegerList32 {
+    fn as_float64(&self) -> FloatList64 {
+        let vec = self.values().iter().map(|&x| x as f64).collect();
+        FloatList64::new(vec)
     }
 }
 

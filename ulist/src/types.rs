@@ -1,5 +1,6 @@
 use crate::boolean::BooleanList;
 use crate::floatings::FloatList32;
+use crate::floatings::FloatList64;
 use crate::integers::IntegerList32;
 use crate::integers::IntegerList64;
 use crate::string::StringList;
@@ -8,8 +9,12 @@ pub trait AsBooleanList {
     fn as_bool(&self) -> BooleanList;
 }
 
-pub trait AsFloatList {
-    fn as_float(&self) -> FloatList32;
+pub trait AsFloatList32 {
+    fn as_float32(&self) -> FloatList32;
+}
+
+pub trait AsFloatList64 {
+    fn as_float64(&self) -> FloatList64;
 }
 
 pub trait AsIntegerList32 {

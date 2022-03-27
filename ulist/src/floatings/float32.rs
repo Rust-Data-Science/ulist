@@ -1,11 +1,13 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
+use crate::floatings::FloatList64;
 use crate::index::IndexList;
 use crate::integers::IntegerList32;
 use crate::integers::IntegerList64;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
 use crate::types::AsBooleanList;
+use crate::types::AsFloatList64;
 use crate::types::AsIntegerList32;
 use crate::types::AsIntegerList64;
 use crate::types::AsStringList;
@@ -277,6 +279,13 @@ impl AsBooleanList for FloatList32 {
     fn as_bool(&self) -> BooleanList {
         let vec = self.values().iter().map(|&x| x != 0.0).collect();
         BooleanList::new(vec)
+    }
+}
+
+impl AsFloatList64 for FloatList32 {
+    fn as_float64(&self) -> FloatList64 {
+        let vec = self.values().iter().map(|&x| x as f64).collect();
+        FloatList64::new(vec)
     }
 }
 
