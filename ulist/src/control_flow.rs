@@ -1,6 +1,6 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
-use crate::float::FloatList;
+use crate::floatings::FloatList32;
 use crate::integers::IntegerList64;
 use crate::string::StringList;
 use pyo3::prelude::*;
@@ -45,8 +45,8 @@ pub unsafe fn select_float(
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<f32>,
     default: f32,
-) -> FloatList {
-    select::<f32, FloatList>(py, &conditions, &choices, default)
+) -> FloatList32 {
+    select::<f32, FloatList32>(py, &conditions, &choices, default)
 }
 
 #[pyfunction]

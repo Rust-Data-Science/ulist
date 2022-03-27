@@ -1,6 +1,7 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
-use crate::float::FloatList;
+use crate::floatings::FloatList32;
+use crate::floatings::FloatList64;
 use crate::index::IndexList;
 use crate::integers::IntegerList32;
 use crate::non_float::NonFloatList;
@@ -57,7 +58,7 @@ impl IntegerList64 {
         AsBooleanList::as_bool(self)
     }
 
-    pub fn as_float(&self) -> FloatList {
+    pub fn as_float(&self) -> FloatList32 {
         AsFloatList::as_float(self)
     }
 
@@ -82,14 +83,14 @@ impl IntegerList64 {
         List::cycle(&vec, size)
     }
 
-    pub fn div(&self, other: &Self) -> FloatList {
+    pub fn div(&self, other: &Self) -> FloatList64 {
         let vec = NumericalList::div(self, other);
-        FloatList::new(vec)
+        FloatList64::new(vec)
     }
 
-    pub fn div_scala(&self, elem: f32) -> FloatList {
+    pub fn div_scala(&self, elem: f64) -> FloatList64 {
         let vec = NumericalList::div_scala(self, elem);
-        FloatList::new(vec)
+        FloatList64::new(vec)
     }
 
     pub fn equal_scala(&self, elem: i64) -> BooleanList {
@@ -216,7 +217,7 @@ impl List<i64> for IntegerList64 {
 
 impl NonFloatList<i64> for IntegerList64 {}
 
-impl NumericalList<i64, u32> for IntegerList64 {
+impl NumericalList<i64, u32, f64> for IntegerList64 {
     fn argmax(&self) -> usize {
         self.values()
             .iter()
@@ -235,16 +236,16 @@ impl NumericalList<i64, u32> for IntegerList64 {
             .0
     }
 
-    fn div(&self, other: &Self) -> Vec<f32> {
+    fn div(&self, other: &Self) -> Vec<f64> {
         self.values()
             .iter()
             .zip(other.values().iter())
-            .map(|(&x, &y)| x as f32 / y as f32)
+            .map(|(&x, &y)| x as f64 / y as f64)
             .collect()
     }
 
-    fn div_scala(&self, elem: f32) -> Vec<f32> {
-        self.values().iter().map(|x| *x as f32 / elem).collect()
+    fn div_scala(&self, elem: f64) -> Vec<f64> {
+        self.values().iter().map(|x| *x as f64 / elem).collect()
     }
 
     fn max(&self) -> i64 {
@@ -273,9 +274,9 @@ impl AsBooleanList for IntegerList64 {
 }
 
 impl AsFloatList for IntegerList64 {
-    fn as_float(&self) -> FloatList {
+    fn as_float(&self) -> FloatList32 {
         let vec = self.values().iter().map(|&x| x as f32).collect();
-        FloatList::new(vec)
+        FloatList32::new(vec)
     }
 }
 

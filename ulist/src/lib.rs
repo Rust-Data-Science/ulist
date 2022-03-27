@@ -1,7 +1,7 @@
 mod base;
 mod boolean;
 mod control_flow;
-mod float;
+mod floatings;
 mod index;
 mod integers;
 mod non_float;
@@ -17,7 +17,8 @@ use pyo3::prelude::*;
 #[pymodule]
 fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<boolean::BooleanList>()?;
-    m.add_class::<float::FloatList>()?;
+    m.add_class::<floatings::FloatList32>()?;
+    m.add_class::<floatings::FloatList64>()?;
     m.add_class::<integers::IntegerList32>()?;
     m.add_class::<integers::IntegerList64>()?;
     m.add_class::<string::StringList>()?;
