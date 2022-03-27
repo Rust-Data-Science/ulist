@@ -7,12 +7,12 @@ use std::ops::Mul;
 use std::ops::Sub;
 
 /// Abstract List with Numerical type elements.
-pub trait NumericalList<T, V, W>: List<T>
+pub trait NumericalList<T, U, V>: List<T>
 where
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
-    fn _fn_num<U>(&self, func: impl Fn(T) -> U) -> Vec<U> {
+    fn _fn_num<W>(&self, func: impl Fn(T) -> W) -> Vec<W> {
         self.values().iter().map(|&x| func(x)).collect()
     }
 
@@ -38,9 +38,9 @@ where
 
     fn argmin(&self) -> usize;
 
-    fn div(&self, other: &Self) -> Vec<W>;
+    fn div(&self, other: &Self) -> Vec<V>;
 
-    fn div_scala(&self, elem: W) -> Vec<W>;
+    fn div_scala(&self, elem: V) -> Vec<V>;
 
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
         BooleanList::new(self._fn_num(|x| x >= elem))
@@ -70,7 +70,7 @@ where
         List::_new(self._fn_num(|x| x * elem))
     }
 
-    fn pow_scala(&self, elem: V) -> Self;
+    fn pow_scala(&self, elem: U) -> Self;
 
     fn sub(&self, other: &Self) -> Self {
         self._fn(other, |x, y| x - y)
