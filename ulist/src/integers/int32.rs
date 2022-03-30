@@ -82,14 +82,14 @@ impl IntegerList32 {
         List::cycle(&vec, size)
     }
 
-    pub fn div(&self, other: &Self) -> FloatList32 {
+    pub fn div(&self, other: &Self) -> FloatList64 {
         let vec = NumericalList::div(self, other);
-        FloatList32::new(vec)
+        FloatList64::new(vec)
     }
 
-    pub fn div_scala(&self, elem: f32) -> FloatList32 {
+    pub fn div_scala(&self, elem: f64) -> FloatList64 {
         let vec = NumericalList::div_scala(self, elem);
-        FloatList32::new(vec)
+        FloatList64::new(vec)
     }
 
     pub fn equal_scala(&self, elem: i32) -> BooleanList {
@@ -216,7 +216,7 @@ impl List<i32> for IntegerList32 {
 
 impl NonFloatList<i32> for IntegerList32 {}
 
-impl NumericalList<i32, u32, f32> for IntegerList32 {
+impl NumericalList<i32, u32, f64> for IntegerList32 {
     fn argmax(&self) -> usize {
         self.values()
             .iter()
@@ -235,16 +235,16 @@ impl NumericalList<i32, u32, f32> for IntegerList32 {
             .0
     }
 
-    fn div(&self, other: &Self) -> Vec<f32> {
+    fn div(&self, other: &Self) -> Vec<f64> {
         self.values()
             .iter()
             .zip(other.values().iter())
-            .map(|(&x, &y)| x as f32 / y as f32)
+            .map(|(&x, &y)| x as f64 / y as f64)
             .collect()
     }
 
-    fn div_scala(&self, elem: f32) -> Vec<f32> {
-        self.values().iter().map(|x| *x as f32 / elem).collect()
+    fn div_scala(&self, elem: f64) -> Vec<f64> {
+        self.values().iter().map(|x| *x as f64 / elem).collect()
     }
 
     fn max(&self) -> i32 {
