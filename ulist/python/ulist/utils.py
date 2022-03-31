@@ -46,7 +46,8 @@ def check_test_result(
 ):
     """Test if the result is as expected. Both value and type.
     Args:
-        dtype (str): 'int', 'float' or 'bool'.
+        dtype (str): 'int', 'int32', 'int64', 'float', 'float32',
+            'float64', 'bool' or 'string'.
         test_method (Union[Callable, str]): A method name or a function.
         result (Union[ELEM, LIST_PY, ul.UltraFastList])
         expected_value (Union[ELEM, LIST_PY])
