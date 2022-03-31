@@ -3,7 +3,15 @@ from __future__ import annotations  # To avoid circular import.
 from typing import TYPE_CHECKING, Callable, Union
 
 from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM
-from .ulist import BooleanList, FloatList, IndexList, IntegerList, StringList
+from .ulist import (
+    BooleanList,
+    FloatList32,
+    FloatList64,
+    IndexList,
+    IntegerList32,
+    IntegerList64,
+    StringList
+)
 
 if TYPE_CHECKING:  # To avoid circular import.
     from .control_flow import CaseObject
@@ -19,18 +27,23 @@ class UltraFastList:
     """
 
     def __init__(self, values: LIST_RS) -> None:
-        if type(values) is FloatList:
-            self.dtype = "float"
-        elif type(values) is IntegerList:
-            self.dtype = "int"
+        if type(values) is FloatList32:
+            self.dtype = "float32"
+        elif type(values) is FloatList64:
+            self.dtype = "float64"
+        elif type(values) is IntegerList32:
+            self.dtype = "int32"
+        elif type(values) is IntegerList64:
+            self.dtype = "int64"
         elif type(values) is BooleanList:
             self.dtype = "bool"
         elif type(values) is StringList:
             self.dtype = "string"
         else:
             raise TypeError(
-                "Parameter values should be FloatList, "
-                + "IntegerList, BooleanList or StringList type!"
+                "Parameter values should be " +
+                "FloatList32, FloatList64, IntegerList32, " +
+                "IntegerList64, BooleanList or StringList type!"
             )
         self._values = values
 
@@ -211,21 +224,32 @@ class UltraFastList:
 
         Raises:
             ValueError:
-                Parameter dtype should be 'int', 'float', 'bool' or 'string'!
+                Parameter dtype should be 'int', 'int32', 'int64',
+                'float', 'float32', 'float64', 'bool' or 'string'!
 
         Returns:
             UltraFastList: A ulist object.
         """
-        if dtype == "int":
-            if isinstance(self._values, IntegerList):
+        if dtype == "int" or dtype == "int64":
+            if isinstance(self._values, IntegerList64):
                 result = self.copy()
             else:
-                result = UltraFastList(self._values.as_int())
-        elif dtype == "float":
-            if isinstance(self._values, FloatList):
+                result = UltraFastList(self._values.as_int64())
+        elif dtype == "int32":
+            if isinstance(self._values, IntegerList32):
                 result = self.copy()
             else:
-                result = UltraFastList(self._values.as_float())
+                result = UltraFastList(self._values.as_int32())
+        elif dtype == "float" or dtype == "float64":
+            if isinstance(self._values, FloatList64):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_float64())
+        elif dtype == "float32":
+            if isinstance(self._values, FloatList32):
+                result = self.copy()
+            else:
+                result = UltraFastList(self._values.as_float32())
         elif dtype == "bool":
             if isinstance(self._values, BooleanList):
                 result = self.copy()
@@ -238,7 +262,8 @@ class UltraFastList:
                 result = UltraFastList(self._values.as_str())
         else:
             raise ValueError(
-                "Parameter dtype should be 'int', 'float', 'bool' or 'string'!"
+                "Parameter dtype should be 'int', 'int32', 'int64', " +
+                "'float', 'float32', 'float64', 'bool' or 'string'!"
             )
         return result
 
@@ -284,7 +309,7 @@ class UltraFastList:
         Return a dictionary where the elements of self are stored as
         dictionary keys and their counts are stored as dictionary values.
         """
-        assert not isinstance(self._values, FloatList)
+        assert not isinstance(self._values, (FloatList32, FloatList64))
         return self._values.counter()
 
     def div(self, other: "UltraFastList") -> "UltraFastList":
@@ -481,9 +506,9 @@ class UltraFastList:
         Returns:
             float: variance
         """
-        if isinstance(self._values, FloatList):
+        if isinstance(self._values, (FloatList32, FloatList64)):
             data = self
-        elif isinstance(self._values, IntegerList):
+        elif isinstance(self._values, (IntegerList32, IntegerList64)):
             data = self.astype('float')
         elif isinstance(self._values, BooleanList):
             data = self.astype('float')

@@ -3,11 +3,12 @@ from typing import List, Union
 import pytest
 import ulist as ul
 import operator as op
-from ulist.utils import check_test_result
+from ulist.utils import check_test_result, expand_dtypes
 
 LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "dtype, nums, kwargs, expected_value",
     [
@@ -200,6 +201,7 @@ def test_select(
     check_test_result(result_dtype, "ul.select", result, expected_value)
 
 
+@expand_dtypes
 @pytest.mark.parametrize(
     "dtype, nums, kwargs, expected_value",
     [

@@ -11,6 +11,41 @@ MAX_ITEM_LEN = 16
 MAX_DTYPE_LEN = 8
 
 
+def expand_dtypes(func: Callable) -> Callable:
+    """
+    Generate test cases for `int32` and `int64` dtypes by copying the
+    test cases of `int` dtype.
+
+    Generate test cases for `float32` and `float64` dtypes by copying the
+    test cases of `float` dtype.
+    """
+    def _new_arg(s: str) -> tuple:
+        return tuple([x if x != s else s for x in arg])
+
+    result = []
+    for arg in func.pytestmark[0].args[1]:  # type: ignore
+        if 'int' in arg:
+            result.append(_new_arg('int64'))
+            result.append(_new_arg('int32'))
+        elif 'float' in arg:
+            result.append(_new_arg('float64'))
+            result.append(_new_arg('float32'))
+    for arg in result:
+        func.pytestmark[0].args[1].append(arg)  # type: ignore
+    return func
+
+
+def compare_dtypes(dtype1: str, dtype2: str) -> bool:
+    """Compare two dtypes with each other."""
+    if dtype2 == 'int' or dtype2 == 'float':
+        dtype2, dtype1 = dtype1, dtype2
+    if dtype1 == 'int':
+        return dtype2 in ('int', 'int64')
+    if dtype1 == 'float':
+        return dtype2 in ('float', 'float64')
+    return dtype1 == dtype2
+
+
 def check_test_result(
     dtype: str,
     test_method: Union[Callable, str],
@@ -19,7 +54,8 @@ def check_test_result(
 ):
     """Test if the result is as expected. Both value and type.
     Args:
-        dtype (str): 'int', 'float' or 'bool'.
+        dtype (str): 'int', 'int32', 'int64', 'float', 'float32',
+            'float64', 'bool' or 'string'.
         test_method (Union[Callable, str]): A method name or a function.
         result (Union[ELEM, LIST_PY, ul.UltraFastList])
         expected_value (Union[ELEM, LIST_PY])

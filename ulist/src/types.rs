@@ -1,18 +1,28 @@
 use crate::boolean::BooleanList;
-use crate::float::FloatList;
-use crate::integer::IntegerList;
+use crate::floatings::FloatList32;
+use crate::floatings::FloatList64;
+use crate::integers::IntegerList32;
+use crate::integers::IntegerList64;
 use crate::string::StringList;
 
 pub trait AsBooleanList {
     fn as_bool(&self) -> BooleanList;
 }
 
-pub trait AsFloatList {
-    fn as_float(&self) -> FloatList;
+pub trait AsFloatList32 {
+    fn as_float32(&self) -> FloatList32;
 }
 
-pub trait AsIntegerList {
-    fn as_int(&self) -> IntegerList;
+pub trait AsFloatList64 {
+    fn as_float64(&self) -> FloatList64;
+}
+
+pub trait AsIntegerList32 {
+    fn as_int32(&self) -> IntegerList32;
+}
+
+pub trait AsIntegerList64 {
+    fn as_int64(&self) -> IntegerList64;
 }
 
 pub trait AsStringList {

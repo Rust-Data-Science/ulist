@@ -1,25 +1,29 @@
 use crate::base::List;
 use crate::boolean::BooleanList;
+use crate::floatings::FloatList64;
 use crate::index::IndexList;
-use crate::integer::IntegerList;
+use crate::integers::IntegerList32;
+use crate::integers::IntegerList64;
 use crate::numerical::NumericalList;
 use crate::string::StringList;
 use crate::types::AsBooleanList;
-use crate::types::AsIntegerList;
+use crate::types::AsFloatList64;
+use crate::types::AsIntegerList32;
+use crate::types::AsIntegerList64;
 use crate::types::AsStringList;
 use pyo3::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
 
-/// List with float type elements.
+/// List with f32 type elements.
 #[pyclass]
-pub struct FloatList {
+pub struct FloatList32 {
     _values: RefCell<Vec<f32>>,
 }
 
 #[pymethods]
-impl FloatList {
+impl FloatList32 {
     // Arrange the following methods in alphabetical order.
 
     #[new]
@@ -51,8 +55,16 @@ impl FloatList {
         AsBooleanList::as_bool(self)
     }
 
-    pub fn as_int(&self) -> IntegerList {
-        AsIntegerList::as_int(self)
+    pub fn as_float64(&self) -> FloatList64 {
+        AsFloatList64::as_float64(self)
+    }
+
+    pub fn as_int32(&self) -> IntegerList32 {
+        AsIntegerList32::as_int32(self)
+    }
+
+    pub fn as_int64(&self) -> IntegerList64 {
+        AsIntegerList64::as_int64(self)
     }
 
     pub fn as_str(&self) -> StringList {
@@ -70,12 +82,12 @@ impl FloatList {
 
     pub fn div(&self, other: &Self) -> Self {
         let vec = NumericalList::div(self, other);
-        FloatList::new(vec)
+        FloatList32::new(vec)
     }
 
     pub fn div_scala(&self, elem: f32) -> Self {
         let vec = NumericalList::div_scala(self, elem);
-        FloatList::new(vec)
+        FloatList32::new(vec)
     }
 
     pub fn equal_scala(&self, elem: f32) -> BooleanList {
@@ -190,7 +202,7 @@ impl FloatList {
     }
 }
 
-impl List<f32> for FloatList {
+impl List<f32> for FloatList32 {
     fn _new(vec: Vec<f32>) -> Self {
         Self {
             _values: RefCell::new(vec),
@@ -206,7 +218,7 @@ impl List<f32> for FloatList {
     }
 }
 
-impl NumericalList<f32, i32> for FloatList {
+impl NumericalList<f32, i32, f32> for FloatList32 {
     fn argmax(&self) -> usize {
         let mut result = (0, &self.values()[0]);
         let vec = self.values();
@@ -259,7 +271,7 @@ impl NumericalList<f32, i32> for FloatList {
 
     fn pow_scala(&self, elem: i32) -> Self {
         let vec = self.values().iter().map(|&x| x.powi(elem)).collect();
-        FloatList::new(vec)
+        FloatList32::new(vec)
     }
 
     fn sum(&self) -> f32 {
@@ -267,21 +279,35 @@ impl NumericalList<f32, i32> for FloatList {
     }
 }
 
-impl AsBooleanList for FloatList {
+impl AsBooleanList for FloatList32 {
     fn as_bool(&self) -> BooleanList {
         let vec = self.values().iter().map(|&x| x != 0.0).collect();
         BooleanList::new(vec)
     }
 }
 
-impl AsIntegerList for FloatList {
-    fn as_int(&self) -> IntegerList {
-        let vec = self.values().iter().map(|&x| x as i32).collect();
-        IntegerList::new(vec)
+impl AsFloatList64 for FloatList32 {
+    fn as_float64(&self) -> FloatList64 {
+        let vec = self.values().iter().map(|&x| x as f64).collect();
+        FloatList64::new(vec)
     }
 }
 
-impl AsStringList for FloatList {
+impl AsIntegerList32 for FloatList32 {
+    fn as_int32(&self) -> IntegerList32 {
+        let vec = self.values().iter().map(|&x| x as i32).collect();
+        IntegerList32::new(vec)
+    }
+}
+
+impl AsIntegerList64 for FloatList32 {
+    fn as_int64(&self) -> IntegerList64 {
+        let vec = self.values().iter().map(|&x| x as i64).collect();
+        IntegerList64::new(vec)
+    }
+}
+
+impl AsStringList for FloatList32 {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| format!("{:?}", x)).collect();
         StringList::new(vec)
