@@ -55,6 +55,10 @@ impl FloatList64 {
         AsBooleanList::as_bool(self)
     }
 
+    pub fn as_float32(&self) -> FloatList32 {
+        AsFloatList32::as_float32(self)
+    }
+
     pub fn as_int32(&self) -> IntegerList32 {
         AsIntegerList32::as_int32(self)
     }
