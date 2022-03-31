@@ -80,7 +80,7 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
 
     Raises:
         ValueError:
-            Parameter dtype should be 'int', 'int32', 'int64', 
+            Parameter dtype should be 'int', 'int32', 'int64',
             'float', 'float32', 'float64', 'bool' or 'string'!
 
     Returns:
