@@ -15,6 +15,9 @@ def expand_dtypes(func: Callable) -> Callable:
     """
     Generate test cases for `int32` and `int64` dtypes by copying the
     test cases of `int` dtype.
+
+    Generate test cases for `float32` and `float64` dtypes by copying the
+    test cases of `float` dtype.
     """
     def _new_arg(s: str) -> tuple:
         return tuple([x if x != s else s for x in arg])
@@ -24,6 +27,9 @@ def expand_dtypes(func: Callable) -> Callable:
         if 'int' in arg:
             result.append(_new_arg('int64'))
             result.append(_new_arg('int32'))
+        elif 'float' in arg:
+            result.append(_new_arg('float64'))
+            result.append(_new_arg('float32'))
     for arg in result:
         func.pytestmark[0].args[1].append(arg)  # type: ignore
     return func
