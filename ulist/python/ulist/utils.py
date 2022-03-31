@@ -31,10 +31,12 @@ def expand_dtypes(func: Callable) -> Callable:
 
 def compare_dtypes(dtype1: str, dtype2: str) -> bool:
     """Compare two dtypes with each other."""
-    if dtype2 == 'int':
+    if dtype2 == 'int' or dtype2 == 'float':
         dtype2, dtype1 = dtype1, dtype2
     if dtype1 == 'int':
         return dtype2 in ('int', 'int64')
+    if dtype1 == 'float':
+        return dtype2 in ('float', 'float64')
     return dtype1 == dtype2
 
 
