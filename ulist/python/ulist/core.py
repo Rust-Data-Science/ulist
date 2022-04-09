@@ -26,7 +26,7 @@ class UltraFastList:
     which is abbreviated as ulist.
     """
 
-    def __init__(self, values: LIST_RS) -> None:
+    def __init__(self, values: LIST_RS, nullable: bool) -> None:
         if type(values) is FloatList32:
             self.dtype = "float32"
         elif type(values) is FloatList64:
@@ -46,6 +46,7 @@ class UltraFastList:
                 "IntegerList64, BooleanList or StringList type!"
             )
         self._values = values
+        self.nullable = nullable
 
     def __len__(self) -> int:
         """Number of elements of self."""

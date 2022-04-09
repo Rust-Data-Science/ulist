@@ -125,7 +125,7 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     return result
 
 
-def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
+def from_seq(obj: Sequence, dtype: str, has_na: bool = False) -> UltraFastList:
     """Construct a ulist object from a sequence object.
 
     Args:
@@ -134,6 +134,9 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
         dtype (str):
             The type of the output ulist. 'int', 'int32', 'int64',
             'float', 'float32', 'float64', 'bool' or 'string'.
+        has_na (bool, optional):
+            If the sequence object has missing values. Defaults
+            to False.
 
     Raises:
         ValueError:
@@ -163,17 +166,17 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     UltraFastList(['foo', 'bar', 'baz'])
     """
     if dtype == "int" or dtype == "int64":
-        result = UltraFastList(IntegerList64(obj))
+        result = UltraFastList(IntegerList64(obj), has_na)
     elif dtype == "int32":
-        result = UltraFastList(IntegerList32(obj))
+        result = UltraFastList(IntegerList32(obj), has_na)
     elif dtype == "float" or dtype == "float64":
-        result = UltraFastList(FloatList64(obj))
+        result = UltraFastList(FloatList64(obj), has_na)
     elif dtype == "float32":
-        result = UltraFastList(FloatList32(obj))
+        result = UltraFastList(FloatList32(obj), has_na)
     elif dtype == "bool":
-        result = UltraFastList(BooleanList(obj))
+        result = UltraFastList(BooleanList(obj), has_na)
     elif dtype == "string":
-        result = UltraFastList(StringList(obj))
+        result = UltraFastList(StringList(obj), has_na)
     else:
         raise ValueError(
             "Parameter dtype should be 'int', 'int32', 'int64', " +
