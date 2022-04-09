@@ -117,7 +117,7 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     return result
 
 
-def from_seq(obj: Sequence, dtype: str, has_na: bool = False) -> UltraFastList:
+def from_seq(obj: Sequence, dtype: str, has_na: bool = True) -> UltraFastList:
     """Construct a ulist object from a sequence object.
 
     Args:
@@ -128,7 +128,7 @@ def from_seq(obj: Sequence, dtype: str, has_na: bool = False) -> UltraFastList:
             'float', 'float32', 'float64', 'bool' or 'string'.
         has_na (bool, optional):
             If the sequence object has missing values. Defaults
-            to False.
+            to True.
 
     Raises:
         ValueError:
