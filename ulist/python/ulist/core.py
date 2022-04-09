@@ -1,6 +1,6 @@
 from __future__ import annotations  # To avoid circular import.
 
-from typing import TYPE_CHECKING, Callable, Union
+from typing import TYPE_CHECKING, Callable, Union, Set
 
 from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM
 from .ulist import (
@@ -26,7 +26,7 @@ class UltraFastList:
     which is abbreviated as ulist.
     """
 
-    def __init__(self, values: LIST_RS, nullable: bool) -> None:
+    def __init__(self, values: LIST_RS, na_indexes: Set[int]) -> None:
         if type(values) is FloatList32:
             self.dtype = "float32"
         elif type(values) is FloatList64:
@@ -46,7 +46,7 @@ class UltraFastList:
                 "IntegerList64, BooleanList or StringList type!"
             )
         self._values = values
-        self.nullable = nullable
+        self._na_indexes = na_indexes
 
     def __len__(self) -> int:
         """Number of elements of self."""

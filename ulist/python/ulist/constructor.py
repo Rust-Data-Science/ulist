@@ -2,16 +2,8 @@ from typing import Optional, Sequence
 
 from .core import UltraFastList
 from .typedef import ELEM
-from .ulist import (
-    BooleanList,
-    FloatList32,
-    FloatList64,
-    IntegerList32,
-    IntegerList64,
-    StringList,
-    arange32,
-    arange64
-)
+from .ulist import (BooleanList, FloatList32, FloatList64, IntegerList32,
+                    IntegerList64, StringList, arange32, arange64)
 
 
 def arange(
@@ -165,23 +157,36 @@ def from_seq(obj: Sequence, dtype: str, has_na: bool = False) -> UltraFastList:
     >>> arr4
     UltraFastList(['foo', 'bar', 'baz'])
     """
+    if has_na:
+        na_indexes = set([i for i, x in enumerate(obj) if x is None])
+    else:
+        na_indexes = set()
+
     if dtype == "int" or dtype == "int64":
-        result = UltraFastList(IntegerList64(obj), has_na)
+        cls = IntegerList64
+        na_val = 0
     elif dtype == "int32":
-        result = UltraFastList(IntegerList32(obj), has_na)
+        cls = IntegerList32
+        na_val = 0
     elif dtype == "float" or dtype == "float64":
-        result = UltraFastList(FloatList64(obj), has_na)
+        cls = FloatList64
+        na_val = 0.0
     elif dtype == "float32":
-        result = UltraFastList(FloatList32(obj), has_na)
+        cls = FloatList32
+        na_val = 0.0
     elif dtype == "bool":
-        result = UltraFastList(BooleanList(obj), has_na)
+        cls = BooleanList
+        na_val = False
     elif dtype == "string":
-        result = UltraFastList(StringList(obj), has_na)
+        cls = StringList
+        na_val = ''
     else:
         raise ValueError(
             "Parameter dtype should be 'int', 'int32', 'int64', " +
             "'float', 'float32', 'float64', 'bool' or 'string'!"
         )
+    elements = [x if x is not None else na_val for x in obj]
+    result = UltraFastList(cls(elements), na_indexes)
     return result
 
 
