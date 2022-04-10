@@ -15,7 +15,7 @@ where
     fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
 
     unsafe fn _fill_false(&self, vec: &Vec<bool>) {
-        for i in self.missing_values().iter() {
+        for i in self.na_indexes().iter() {
             let elem = vec.get_unchecked_mut(*i);
             *elem = false;
         }
@@ -25,12 +25,17 @@ where
         self.values().iter().map(|x| func(x)).collect()
     }
 
+    // TODO: Use Optional<T>
     fn append(&self, elem: T) {
         self.values_mut().push(elem);
     }
 
     fn copy(&self) -> Self {
-        List::_new(self.to_list(), self.missing_values().clone())
+        List::_new(self.to_list(), self.na_indexes().clone())
+    }
+
+    fn count_na(&self) -> usize {
+        self.na_indexes().len()
     }
 
     fn cycle(vec: &Vec<T>, size: usize) -> Self {
@@ -53,7 +58,7 @@ where
             .map(|(x, _)| x.clone())
             .collect();
         let hset = HashSet::new();
-        for i in self.missing_values().iter() {
+        for i in self.na_indexes().iter() {
             let cond = condition.values().get_unchecked(*i);
             if *cond {
                 hset.insert(i.clone());
@@ -62,6 +67,7 @@ where
         List::_new(vec, hset)
     }
 
+    // TODO: when result is na
     fn get(&self, index: usize) -> T {
         let vec = self.values();
         let val = vec.get(index);
@@ -83,16 +89,22 @@ where
             .collect();
         let hset = HashSet::new();
         for i in indexes.values().iter() {
-            if self.missing_values().contains(i) {
+            if self.na_indexes().contains(i) {
                 hset.insert(i.clone());
             }
         }
         List::_new(vec, hset)
     }
 
-    fn has_missing_values(&self) -> bool {
-        self.missing_values().len() > 0
+    fn has_na(&self) -> bool {
+        self.count_na() > 0
     }
+
+    fn na_indexes(&self) -> Ref<HashSet<usize>>;
+
+    fn na_indexes_mut(&self) -> RefMut<HashSet<usize>>;
+
+    fn na_value(&self) -> T;
 
     unsafe fn not_equal_scala(&self, elem: T) -> BooleanList {
         let vec = self._fn_scala(|x| x != &elem);
@@ -101,9 +113,14 @@ where
     }
 
     fn pop(&self) {
+        let i = self.size() - 1;
+        if self.na_indexes().contains(&i) {
+            self.na_indexes_mut().remove(&i);
+        }
         self.values_mut().pop();
     }
 
+    // TODO: Use Optional<T>
     fn replace(&self, old: T, new: T) -> Self {
         let vec = self
             .values()
@@ -113,6 +130,7 @@ where
         List::_new(vec, HashSet::new())
     }
 
+    // TODO: Use Optional<T>
     unsafe fn set(&self, index: usize, elem: T) {
         if index < self.size() {
             let mut values = self.values_mut();
@@ -123,6 +141,7 @@ where
         }
     }
 
+    // TODO: Use Optional<T>
     fn repeat(elem: T, size: usize) -> Self {
         let vec = vec![elem; size];
         List::_new(vec, HashSet::new())
@@ -132,6 +151,7 @@ where
         self.values().len()
     }
 
+    // TODO: Use Optional<T> here
     fn to_list(&self) -> Vec<T> {
         self.values().clone()
     }
@@ -143,8 +163,8 @@ where
             .cloned()
             .chain(other.values().iter().cloned())
             .collect();
-        let hset = self.missing_values().clone();
-        for i in other.missing_values().iter() {
+        let hset = self.na_indexes().clone();
+        for i in other.na_indexes().iter() {
             hset.insert(i + self.size());
         }
         List::_new(vec, hset)
@@ -153,6 +173,4 @@ where
     fn values(&self) -> Ref<Vec<T>>;
 
     fn values_mut(&self) -> RefMut<Vec<T>>;
-
-    fn missing_values(&self) -> Ref<HashSet<usize>>;
 }

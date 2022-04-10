@@ -23,7 +23,7 @@ use std::ops::Fn;
 #[pyclass]
 pub struct BooleanList {
     _values: RefCell<Vec<bool>>,
-    _missing_values: RefCell<HashSet<usize>>,
+    _na_indexes: RefCell<HashSet<usize>>,
 }
 
 #[pymethods]
@@ -170,12 +170,12 @@ impl List<bool> for BooleanList {
     fn _new(vec: Vec<bool>, hset: HashSet<usize>) -> Self {
         Self {
             _values: RefCell::new(vec),
-            _missing_values: RefCell::new(hset),
+            _na_indexes: RefCell::new(hset),
         }
     }
 
-    fn missing_values(&self) -> Ref<HashSet<usize>> {
-        self._missing_values.borrow()
+    fn na_indexes(&self) -> Ref<HashSet<usize>> {
+        self._na_indexes.borrow()
     }
 
     fn values(&self) -> Ref<Vec<bool>> {

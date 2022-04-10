@@ -331,6 +331,8 @@ class UltraFastList:
 
     def equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self == elem."""
+        if elem is None:
+            return UltraFastList(BooleanList.repeat(False, self.size()))
         return UltraFastList(self._values.equal_scala(elem))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
