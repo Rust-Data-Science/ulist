@@ -102,8 +102,7 @@ impl BooleanList {
 
     pub fn not_(&self) -> Self {
         let vec = self.values().iter().map(|&x| !x).collect();
-        let hset: HashSet<usize> = HashSet::new();
-        BooleanList::new(vec, hset)
+        BooleanList::new(vec, HashSet::new())
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
@@ -201,8 +200,7 @@ fn _logical_operate(
         .zip(other.values().iter())
         .map(|(&x, &y)| func(x, y))
         .collect();
-    let hset: HashSet<usize> = HashSet::new();
-    BooleanList::new(vec, hset)
+    BooleanList::new(vec, HashSet::new())
 }
 
 impl AsFloatList32 for BooleanList {

@@ -14,6 +14,13 @@ where
 
     fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
 
+    unsafe fn _fill_false(&self, vec: &Vec<bool>) {
+        for i in self.missing_values().iter() {
+            let elem = vec.get_unchecked_mut(*i);
+            *elem = false;
+        }
+    }
+
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
         self.values().iter().map(|x| func(x)).collect()
     }
@@ -23,19 +30,21 @@ where
     }
 
     fn copy(&self) -> Self {
-        List::_new(self.to_list())
+        List::_new(self.to_list(), self.missing_values().clone())
     }
 
     fn cycle(vec: &Vec<T>, size: usize) -> Self {
         let v = vec.iter().cycle().take(size).map(|x| x.clone()).collect();
-        List::_new(v)
+        List::_new(v, HashSet::new())
     }
 
-    fn equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_scala(|x| x == &elem))
+    unsafe fn equal_scala(&self, elem: T) -> BooleanList {
+        let vec = self._fn_scala(|x| x == &elem);
+        self._fill_false(&vec);
+        BooleanList::new(vec, HashSet::new())
     }
 
-    fn filter(&self, condition: &BooleanList) -> Self {
+    unsafe fn filter(&self, condition: &BooleanList) -> Self {
         let vec = self
             .values()
             .iter()
@@ -43,7 +52,14 @@ where
             .filter(|(_, y)| **y)
             .map(|(x, _)| x.clone())
             .collect();
-        List::_new(vec)
+        let hset = HashSet::new();
+        for i in self.missing_values().iter() {
+            let cond = condition.values().get_unchecked(*i);
+            if *cond {
+                hset.insert(i.clone());
+            }
+        }
+        List::_new(vec, hset)
     }
 
     fn get(&self, index: usize) -> T {
@@ -65,15 +81,23 @@ where
             .iter()
             .map(|&x| self.values().get_unchecked(x).clone())
             .collect();
-        List::_new(vec)
+        let hset = HashSet::new();
+        for i in indexes.values().iter() {
+            if self.missing_values().contains(i) {
+                hset.insert(i.clone());
+            }
+        }
+        List::_new(vec, hset)
     }
 
     fn has_missing_values(&self) -> bool {
         self.missing_values().len() > 0
     }
 
-    fn not_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_scala(|x| x != &elem))
+    unsafe fn not_equal_scala(&self, elem: T) -> BooleanList {
+        let vec = self._fn_scala(|x| x != &elem);
+        self._fill_false(&vec);
+        BooleanList::new(vec, HashSet::new())
     }
 
     fn pop(&self) {
@@ -86,7 +110,7 @@ where
             .iter()
             .map(|x| if x == &old { new.clone() } else { x.clone() })
             .collect();
-        List::_new(vec)
+        List::_new(vec, HashSet::new())
     }
 
     unsafe fn set(&self, index: usize, elem: T) {
@@ -101,7 +125,7 @@ where
 
     fn repeat(elem: T, size: usize) -> Self {
         let vec = vec![elem; size];
-        List::_new(vec)
+        List::_new(vec, HashSet::new())
     }
 
     fn size(&self) -> usize {
@@ -119,7 +143,11 @@ where
             .cloned()
             .chain(other.values().iter().cloned())
             .collect();
-        List::_new(vec)
+        let hset = self.missing_values().clone();
+        for i in other.missing_values().iter() {
+            hset.insert(i + self.size());
+        }
+        List::_new(vec, hset)
     }
 
     fn values(&self) -> Ref<Vec<T>>;
