@@ -16,12 +16,14 @@ use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use std::ops::Fn;
 
 /// List with boolean type elements.
 #[pyclass]
 pub struct BooleanList {
     _values: RefCell<Vec<bool>>,
+    _missing_values: RefCell<HashSet<usize>>,
 }
 
 #[pymethods]
@@ -29,8 +31,8 @@ impl BooleanList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    pub fn new(vec: Vec<bool>) -> Self {
-        List::_new(vec)
+    pub fn new(vec: Vec<bool>, hset: HashSet<usize>) -> Self {
+        List::_new(vec, hset)
     }
 
     pub fn all(&self) -> bool {
@@ -100,7 +102,8 @@ impl BooleanList {
 
     pub fn not_(&self) -> Self {
         let vec = self.values().iter().map(|&x| !x).collect();
-        BooleanList::new(vec)
+        let hset: HashSet<usize> = HashSet::new();
+        BooleanList::new(vec, hset)
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
@@ -165,10 +168,15 @@ impl BooleanList {
 }
 
 impl List<bool> for BooleanList {
-    fn _new(vec: Vec<bool>) -> Self {
+    fn _new(vec: Vec<bool>, hset: HashSet<usize>) -> Self {
         Self {
             _values: RefCell::new(vec),
+            _missing_values: RefCell::new(hset),
         }
+    }
+
+    fn missing_values(&self) -> Ref<HashSet<usize>> {
+        self._missing_values.borrow()
     }
 
     fn values(&self) -> Ref<Vec<bool>> {
@@ -193,7 +201,8 @@ fn _logical_operate(
         .zip(other.values().iter())
         .map(|(&x, &y)| func(x, y))
         .collect();
-    BooleanList::new(vec)
+    let hset: HashSet<usize> = HashSet::new();
+    BooleanList::new(vec, hset)
 }
 
 impl AsFloatList32 for BooleanList {

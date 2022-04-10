@@ -2,6 +2,7 @@ use crate::boolean::BooleanList;
 use crate::index::IndexList;
 use std::cell::Ref;
 use std::cell::RefMut;
+use std::collections::HashSet;
 
 /// Abstract List with generic type elements.
 pub trait List<T>
@@ -11,7 +12,7 @@ where
 {
     // Arrange the following methods in alphabetical order.
 
-    fn _new(vec: Vec<T>) -> Self;
+    fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
 
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
         self.values().iter().map(|x| func(x)).collect()
@@ -67,6 +68,10 @@ where
         List::_new(vec)
     }
 
+    fn has_missing_values(&self) -> bool {
+        self.missing_values().len() > 0
+    }
+
     fn not_equal_scala(&self, elem: T) -> BooleanList {
         BooleanList::new(self._fn_scala(|x| x != &elem))
     }
@@ -120,4 +125,6 @@ where
     fn values(&self) -> Ref<Vec<T>>;
 
     fn values_mut(&self) -> RefMut<Vec<T>>;
+
+    fn missing_values(&self) -> Ref<HashSet<usize>>;
 }
