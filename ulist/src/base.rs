@@ -3,6 +3,7 @@ use crate::index::IndexList;
 use std::cell::Ref;
 use std::cell::RefMut;
 use std::collections::HashSet;
+use std::iter::FromIterator;
 
 /// Abstract List with generic type elements.
 pub trait List<T>
@@ -25,13 +26,17 @@ where
         self.values().iter().map(|x| func(x)).collect()
     }
 
-    // TODO: Use Optional<T>
-    fn append(&self, elem: T) {
-        self.values_mut().push(elem);
+    fn append(&self, elem: Option<T>) {
+        if let Some(i) = elem {
+            self.values_mut().push(i);
+        } else {
+            self.na_indexes().insert(self.size());
+            self.values_mut().push(self.na_value());
+        }
     }
 
     fn copy(&self) -> Self {
-        List::_new(self.to_list(), self.na_indexes().clone())
+        List::_new(self.values().clone(), self.na_indexes().clone())
     }
 
     fn count_na(&self) -> usize {
@@ -47,6 +52,14 @@ where
         let vec = self._fn_scala(|x| x == &elem);
         self._fill_false(&vec);
         BooleanList::new(vec, HashSet::new())
+    }
+
+    unsafe fn fill_na(&self, new: T) {
+        for i in self.na_indexes().iter() {
+            let elem = self.values_mut().get_unchecked_mut(*i);
+            *elem = new;
+        }
+        self.na_indexes_mut().clear();
     }
 
     unsafe fn filter(&self, condition: &BooleanList) -> Self {
@@ -67,12 +80,14 @@ where
         List::_new(vec, hset)
     }
 
-    // TODO: when result is na
-    fn get(&self, index: usize) -> T {
+    fn get(&self, index: usize) -> Option<T> {
+        if self.na_indexes().contains(&index) {
+            return None;
+        }
         let vec = self.values();
         let val = vec.get(index);
-        if let Some(result) = val {
-            return result.clone();
+        if let Some(i) = val {
+            return Some(*i);
         } else {
             panic!("Index out of range!")
         }
@@ -120,40 +135,62 @@ where
         self.values_mut().pop();
     }
 
-    // TODO: Use Optional<T>
-    fn replace(&self, old: T, new: T) -> Self {
-        let vec = self
-            .values()
-            .iter()
-            .map(|x| if x == &old { new.clone() } else { x.clone() })
-            .collect();
-        List::_new(vec, HashSet::new())
-    }
-
-    // TODO: Use Optional<T>
-    unsafe fn set(&self, index: usize, elem: T) {
-        if index < self.size() {
-            let mut values = self.values_mut();
-            let element = values.get_unchecked_mut(index);
-            *element = elem
-        } else {
-            panic!("Index out of range!")
+    unsafe fn replace(&self, old: T, new: T) {
+        for (i, x) in self.values().iter().enumerate() {
+            if *x == old {
+                let elem = self.values_mut().get_unchecked_mut(i);
+                *elem = new
+            }
         }
     }
 
-    // TODO: Use Optional<T>
-    fn repeat(elem: T, size: usize) -> Self {
-        let vec = vec![elem; size];
-        List::_new(vec, HashSet::new())
+    unsafe fn replace_by_na(&self, old: T) {
+        for (i, x) in self.values().iter().enumerate() {
+            if *x == old {
+                let elem = self.values_mut().get_unchecked_mut(i);
+                *elem = self.na_value();
+                self.na_indexes_mut().insert(i);
+            }
+        }
+    }
+
+    unsafe fn set(&self, index: usize, elem: Option<T>) {
+        if index >= self.size() {
+            panic!("Index out of range!")
+        }
+        let mut values = self.values_mut();
+        let element = values.get_unchecked_mut(index);
+        if let Some(i) = elem {
+            *element = i;
+        } else {
+            *element = self.na_value();
+            self.na_indexes_mut().insert(index);
+        }
+    }
+
+    fn repeat(&self, elem: Option<T>, size: usize) -> Self {
+        let val = self.na_value();
+        let hset = HashSet::new();
+        if let Some(i) = elem {
+            val = i;
+        } else {
+            hset = HashSet::from_iter(0..self.size());
+        }
+        let vec = vec![val; size];
+        List::_new(vec, hset)
     }
 
     fn size(&self) -> usize {
         self.values().len()
     }
 
-    // TODO: Use Optional<T> here
-    fn to_list(&self) -> Vec<T> {
-        self.values().clone()
+    unsafe fn to_list(&self) -> Vec<Option<T>> {
+        let vec: Vec<Option<T>> = self.values().iter().map(|x| Some(x.clone())).collect();
+        for i in self.na_indexes().iter() {
+            let elem = vec.get_unchecked_mut(*i);
+            *elem = None;
+        }
+        vec
     }
 
     fn union_all(&self, other: &Self) -> Self {
