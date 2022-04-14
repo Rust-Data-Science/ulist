@@ -16,11 +16,13 @@ use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 /// List with string type elements.
 #[pyclass]
 pub struct StringList {
     _values: RefCell<Vec<String>>,
+    _na_indexes: RefCell<HashSet<usize>>,
 }
 
 #[pymethods]
@@ -28,11 +30,11 @@ impl StringList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    pub fn new(vec: Vec<String>) -> Self {
-        List::_new(vec)
+    pub fn new(vec: Vec<String>, hset: HashSet<usize>) -> Self {
+        List::_new(vec, hset)
     }
 
-    pub fn append(&self, elem: String) {
+    pub fn append(&self, elem: Option<String>) {
         List::append(self, elem)
     }
 
@@ -58,7 +60,8 @@ impl StringList {
 
     pub fn contains(&self, elem: &str) -> BooleanList {
         let vec = self.values().iter().map(|x| x.contains(elem)).collect();
-        BooleanList::new(vec)
+        self._fill_false(&vec);
+        BooleanList::new(vec, HashSet::new())
     }
 
     pub fn copy(&self) -> Self {
@@ -76,7 +79,8 @@ impl StringList {
 
     pub fn ends_with(&self, elem: &str) -> BooleanList {
         let vec = self.values().iter().map(|x| x.ends_with(elem)).collect();
-        BooleanList::new(vec)
+        self._fill_false(&vec);
+        BooleanList::new(vec, HashSet::new())
     }
 
     pub fn equal_scala(&self, elem: String) -> BooleanList {
@@ -87,7 +91,7 @@ impl StringList {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> String {
+    pub fn get(&self, index: usize) -> Option<String> {
         List::get(self, index)
     }
 
@@ -104,15 +108,15 @@ impl StringList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: String, size: usize) -> Self {
-        List::repeat(elem, size)
+    pub fn repeat(elem: Option<String>, size: usize) -> Self {
+        List::repeat(elem, size, List::na_value())
     }
 
-    pub fn replace(&self, old: String, new: String) -> Self {
+    pub fn replace(&self, old: String, new: String) {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: String) {
+    pub unsafe fn set(&self, index: usize, elem: Option<String>) {
         List::set(self, index, elem)
     }
 
@@ -126,10 +130,11 @@ impl StringList {
 
     pub fn starts_with(&self, elem: &str) -> BooleanList {
         let vec = self.values().iter().map(|x| x.starts_with(elem)).collect();
-        BooleanList::new(vec)
+        self._fill_false(&vec);
+        BooleanList::new(vec, HashSet::new())
     }
 
-    pub fn to_list(&self) -> Vec<String> {
+    pub fn to_list(&self) -> Vec<Option<String>> {
         List::to_list(self)
     }
 
@@ -143,10 +148,23 @@ impl StringList {
 }
 
 impl List<String> for StringList {
-    fn _new(vec: Vec<String>) -> Self {
+    fn _new(vec: Vec<String>, hset: HashSet<usize>) -> Self {
         Self {
             _values: RefCell::new(vec),
+            _na_indexes: RefCell::new(hset),
         }
+    }
+
+    fn na_indexes(&self) -> Ref<HashSet<usize>> {
+        self._na_indexes.borrow()
+    }
+
+    fn na_indexes_mut(&self) -> RefMut<HashSet<usize>> {
+        self._na_indexes.borrow_mut()
+    }
+
+    fn na_value(&self) -> String {
+        "".to_string()
     }
 
     fn values(&self) -> Ref<Vec<String>> {
@@ -163,7 +181,8 @@ impl NonFloatList<String> for StringList {}
 impl AsBooleanList for StringList {
     fn as_bool(&self) -> BooleanList {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
-        BooleanList::new(vec)
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 }
 
