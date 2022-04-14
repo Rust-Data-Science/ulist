@@ -168,13 +168,13 @@ where
         }
     }
 
-    fn repeat(&self, elem: Option<T>, size: usize) -> Self {
-        let val = self.na_value();
+    fn repeat(elem: Option<T>, size: usize, na_value: T) -> Self {
+        let val = na_value;
         let hset = HashSet::new();
         if let Some(i) = elem {
             val = i;
         } else {
-            hset = HashSet::from_iter(0..self.size());
+            hset = HashSet::from_iter(0..size);
         }
         let vec = vec![val; size];
         List::_new(vec, hset)
