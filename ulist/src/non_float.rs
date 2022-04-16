@@ -17,13 +17,36 @@ where
         }
         result
     }
-    // TODO: NA
-    fn sort(&self, ascending: bool) {
+
+    unsafe fn sort(&self, ascending: bool) {
         let vec = self.values_mut();
+        let hset = self.na_indexes();
+        // Put all the na elements to the right side.
+        let mut l = 0;
+        let mut r = self.size() - 1;
+        while l < r {
+            while l < r && !hset.contains(&l) {
+                l += 1;
+            }
+            while l < r && hset.contains(&r) {
+                r -= 1;
+            }
+            let elem1 = vec.get_unchecked_mut(l);
+            let elem2 = vec.get_unchecked_mut(r);
+            *elem1 = *elem2;
+            *elem2 = self.na_value();
+        }
+        // Update na indexes.
+        hset.clear();
+        for i in (self.size() - self.count_na())..self.size() {
+            hset.insert(i);
+        }
+        // Sort non-na elements.
+        let s = &mut vec[0..(self.size() - self.count_na())];
         if ascending {
-            vec.sort();
+            s.sort_unstable();
         } else {
-            vec.sort_by(|a, b| b.cmp(a))
+            s.sort_unstable_by(|a, b| b.cmp(a))
         }
     }
     // TODO: NA
