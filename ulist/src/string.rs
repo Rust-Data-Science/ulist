@@ -125,7 +125,7 @@ impl StringList {
         List::size(self)
     }
 
-    pub fn sort(&self, ascending: bool) -> Self {
+    pub fn sort(&self, ascending: bool) {
         NonFloatList::sort(self, ascending)
     }
 
