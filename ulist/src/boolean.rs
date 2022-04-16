@@ -47,7 +47,7 @@ impl BooleanList {
         self.values().iter().any(|&x| x)
     }
 
-    pub fn append(&self, elem: bool) {
+    pub fn append(&self, elem: Option<bool>) {
         List::append(self, elem)
     }
 
@@ -92,7 +92,7 @@ impl BooleanList {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> bool {
+    pub fn get(&self, index: usize) -> Option<bool> {
         List::get(self, index)
     }
 
@@ -118,15 +118,15 @@ impl BooleanList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: bool, size: usize) -> Self {
-        List::repeat(elem, size)
+    pub fn repeat(elem: Option<bool>, size: usize) -> Self {
+        List::repeat(elem, size, false)
     }
 
-    pub fn replace(&self, old: bool, new: bool) -> Self {
+    pub fn replace(&self, old: bool, new: bool) {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: bool) {
+    pub unsafe fn set(&self, index: usize, elem: Option<bool>) {
         List::set(self, index, elem)
     }
 
@@ -153,7 +153,7 @@ impl BooleanList {
         IndexList::new(vec)
     }
 
-    pub fn to_list(&self) -> Vec<bool> {
+    pub fn to_list(&self) -> Vec<Option<bool>> {
         List::to_list(self)
     }
 
@@ -176,6 +176,14 @@ impl List<bool> for BooleanList {
 
     fn na_indexes(&self) -> Ref<HashSet<usize>> {
         self._na_indexes.borrow()
+    }
+
+    fn na_indexes_mut(&self) -> RefMut<HashSet<usize>> {
+        self._na_indexes.borrow_mut()
+    }
+
+    fn na_value(&self) -> bool {
+        false
     }
 
     fn values(&self) -> Ref<Vec<bool>> {
@@ -250,6 +258,7 @@ impl AsIntegerList64 for BooleanList {
 impl AsStringList for BooleanList {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| x.to_string()).collect();
-        StringList::new(vec)
+        let hset = self.na_indexes().clone();
+        StringList::new(vec, hset)
     }
 }
