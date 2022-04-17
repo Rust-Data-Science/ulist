@@ -19,12 +19,15 @@ where
     }
 
     unsafe fn sort(&self, ascending: bool) {
+        if self.count_na() == self.size() {
+            return;
+        }
         let vec = self.values_mut();
         let hset = self.na_indexes();
         // Put all the na elements to the right side.
         let mut l = 0;
         let mut r = self.size() - 1;
-        while l < r {
+        while l < r && !hset.is_empty() {
             while l < r && !hset.contains(&l) {
                 l += 1;
             }
