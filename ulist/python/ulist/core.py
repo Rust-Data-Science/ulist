@@ -447,7 +447,7 @@ class UltraFastList:
         return UltraFastList(self._values.starts_with(elem))
 
     def str_len(self) -> "UltraFastList":
-        """Return a list on the length of strings"""
+        """Return each element's string length of self."""
         assert isinstance(self._values, StringList)
         return UltraFastList(self._values.str_len())
 

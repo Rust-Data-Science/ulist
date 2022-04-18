@@ -28,6 +28,12 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
             [True, False, True, False],
             {"elem": "num"},
         ),
+        (
+            "str_len",
+            ["num", "1num", "", "*", " ", "sp ace", "ta	b"],
+            [3, 4, 0, 1, 1, 6, 4],
+            {}
+        )
     ],
 )
 def test_methods_with_args(
