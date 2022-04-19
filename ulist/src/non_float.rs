@@ -1,6 +1,8 @@
 use crate::base::List;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use std::hash::Hash;
+use std::iter::FromIterator;
 
 pub trait NonFloatList<T>: List<T>
 where
@@ -56,11 +58,19 @@ where
             s.sort_unstable_by(|a, b| b.cmp(a))
         }
     }
-    // TODO: NA
+    // TODO use HashSet::with_capacity() and Vec::with_capacity()
     fn unique(&self) -> Self {
-        let mut vec = self.to_list();
-        self._sort(&mut vec, true);
-        vec.dedup();
-        List::_new(vec)
+        let dedup = HashSet::new();
+        for (i, &elem) in self.values().iter().enumerate() {
+            if self.na_indexes().contains(&i) {
+                continue;
+            }
+            dedup.insert(elem);
+        }
+        let vec = Vec::from_iter(dedup);
+        vec.push(self.na_value());
+        let hset = HashSet::new();
+        hset.insert(vec.len() - 1);
+        List::_new(vec, hset)
     }
 }
