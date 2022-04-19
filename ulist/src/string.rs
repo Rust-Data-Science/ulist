@@ -129,6 +129,11 @@ impl StringList {
         BooleanList::new(vec)
     }
 
+    pub fn str_len(&self) -> IntegerList64 {
+        let vec = self.values().iter().map(|x| x.len() as i64).collect();
+        IntegerList64::new(vec)
+    }
+
     pub fn to_list(&self) -> Vec<String> {
         List::to_list(self)
     }
