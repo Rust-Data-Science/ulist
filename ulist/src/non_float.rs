@@ -7,13 +7,17 @@ where
     T: Ord + Hash + Sized + Clone,
 {
     // Arrange the following methods in alphabetical order.
-    // TODO: NA
     fn counter(&self) -> HashMap<T, usize> {
         let vec = self.values();
         let mut result: HashMap<T, usize> = HashMap::new();
         for key in vec.iter() {
             let val = result.entry(key.clone()).or_insert(0);
             *val += 1;
+        }
+        // Exclude the count of na values.
+        result[&self.na_value()] -= self.count_na();
+        if result[&self.na_value()] == 0 {
+            result.remove(&self.na_value());
         }
         result
     }
