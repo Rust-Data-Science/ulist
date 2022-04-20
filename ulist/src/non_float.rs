@@ -58,15 +58,16 @@ where
             s.sort_unstable_by(|a, b| b.cmp(a))
         }
     }
-    // TODO use HashSet::with_capacity() and Vec::with_capacity()
+
     fn unique(&self) -> Self {
-        let dedup = HashSet::new();
+        let dedup = HashSet::with_capacity(self.size());
         for (i, &elem) in self.values().iter().enumerate() {
             if self.na_indexes().contains(&i) {
                 continue;
             }
             dedup.insert(elem);
         }
+        //TODO: Capacity of vec?
         let vec = Vec::from_iter(dedup);
         vec.push(self.na_value());
         let hset = HashSet::new();

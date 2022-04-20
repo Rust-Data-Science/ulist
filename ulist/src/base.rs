@@ -70,13 +70,14 @@ where
             .filter(|(_, y)| **y)
             .map(|(x, _)| x.clone())
             .collect();
-        let hset = HashSet::new();
+        let hset = HashSet::with_capacity(self.size());
         for i in self.na_indexes().iter() {
             let cond = condition.values().get_unchecked(*i);
             if *cond {
                 hset.insert(i.clone());
             }
         }
+        hset.shrink_to_fit();
         List::_new(vec, hset)
     }
 
@@ -102,12 +103,13 @@ where
             .iter()
             .map(|&x| self.values().get_unchecked(x).clone())
             .collect();
-        let hset = HashSet::new();
+        let hset = HashSet::with_capacity(self.size());
         for i in indexes.values().iter() {
             if self.na_indexes().contains(i) {
                 hset.insert(i.clone());
             }
         }
+        hset.shrink_to_fit();
         List::_new(vec, hset)
     }
 
