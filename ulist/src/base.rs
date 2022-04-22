@@ -5,6 +5,13 @@ use std::cell::RefMut;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
+unsafe fn _fill_na<T>(vec: &Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
+    for i in na_indexes.iter() {
+        let elem = vec.get_unchecked_mut(*i);
+        *elem = na_value;
+    }
+}
+
 /// Abstract List with generic type elements.
 pub trait List<T>
 where
@@ -14,13 +21,6 @@ where
     // Arrange the following methods in alphabetical order.
 
     fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
-
-    unsafe fn _fill_false(&self, vec: &Vec<bool>) {
-        for i in self.na_indexes().iter() {
-            let elem = vec.get_unchecked_mut(*i);
-            *elem = false;
-        }
-    }
 
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
         self.values().iter().map(|x| func(x)).collect()
@@ -50,16 +50,8 @@ where
 
     unsafe fn equal_scala(&self, elem: T) -> BooleanList {
         let vec = self._fn_scala(|x| x == &elem);
-        self._fill_false(&vec);
+        _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
-    }
-
-    unsafe fn fill_na(&self, new: T) {
-        for i in self.na_indexes().iter() {
-            let elem = self.values_mut().get_unchecked_mut(*i);
-            *elem = new;
-        }
-        self.na_indexes_mut().clear();
     }
 
     unsafe fn filter(&self, condition: &BooleanList) -> Self {
@@ -125,7 +117,7 @@ where
 
     unsafe fn not_equal_scala(&self, elem: T) -> BooleanList {
         let vec = self._fn_scala(|x| x != &elem);
-        self._fill_false(&vec);
+        _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -154,6 +146,14 @@ where
                 self.na_indexes_mut().insert(i);
             }
         }
+    }
+
+    unsafe fn replace_na(&self, new: T) {
+        for i in self.na_indexes().iter() {
+            let elem = self.values_mut().get_unchecked_mut(*i);
+            *elem = new;
+        }
+        self.na_indexes_mut().clear();
     }
 
     unsafe fn set(&self, index: usize, elem: Option<T>) {
