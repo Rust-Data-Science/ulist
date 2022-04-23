@@ -5,6 +5,7 @@ use crate::integers::IntegerList64;
 use crate::string::StringList;
 use pyo3::prelude::*;
 use pyo3::Py;
+use std::collections::HashSet;
 
 unsafe fn select<T, U>(
     py: Python,
@@ -20,13 +21,14 @@ where
     let mut vec = vec![default; cond[0].size()];
     for j in 0..cond[0].size() {
         for i in 0..cond.len() {
-            if cond[i].get(j) {
+            // TODO: Improve the benchmark.
+            if cond[i].get(j).unwrap() {
                 vec[j] = choices[i].clone();
                 break;
             }
         }
     }
-    U::_new(vec)
+    U::_new(vec, HashSet::new())
 }
 
 #[pyfunction]
