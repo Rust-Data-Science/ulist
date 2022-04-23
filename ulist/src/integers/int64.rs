@@ -17,6 +17,7 @@ use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 /// List with i64 type elements.
 /// TODO: Use macro to generate codes by using IntegerList32's
@@ -24,6 +25,7 @@ use std::collections::HashMap;
 #[pyclass]
 pub struct IntegerList64 {
     _values: RefCell<Vec<i64>>,
+    _na_indexes: RefCell<HashSet<usize>>,
 }
 
 #[pymethods]
@@ -31,8 +33,8 @@ impl IntegerList64 {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    pub fn new(vec: Vec<i64>) -> Self {
-        List::_new(vec)
+    pub fn new(vec: Vec<i64>, hset: HashSet<usize>) -> Self {
+        List::_new(vec, hset)
     }
 
     pub fn add(&self, other: &Self) -> Self {
@@ -43,7 +45,7 @@ impl IntegerList64 {
         NumericalList::add_scala(self, elem)
     }
 
-    pub fn append(&self, elem: i64) {
+    pub fn append(&self, elem: Option<i64>) {
         List::append(self, elem)
     }
 
@@ -106,7 +108,7 @@ impl IntegerList64 {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> i64 {
+    pub fn get(&self, index: usize) -> Option<i64> {
         List::get(self, index)
     }
 
@@ -159,15 +161,15 @@ impl IntegerList64 {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: i64, size: usize) -> Self {
-        List::repeat(elem, size)
+    pub fn repeat(elem: Option<i64>, size: usize) -> Self {
+        List::repeat(elem, size, 0)
     }
 
     pub fn replace(&self, old: i64, new: i64) -> Self {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: i64) {
+    pub unsafe fn set(&self, index: usize, elem: Option<i64>) {
         List::set(self, index, elem)
     }
 
@@ -191,7 +193,7 @@ impl IntegerList64 {
         NumericalList::sum(self)
     }
 
-    pub fn to_list(&self) -> Vec<i64> {
+    pub fn to_list(&self) -> Vec<Option<i64>> {
         List::to_list(self)
     }
 
@@ -205,9 +207,10 @@ impl IntegerList64 {
 }
 
 impl List<i64> for IntegerList64 {
-    fn _new(vec: Vec<i64>) -> Self {
+    fn _new(vec: Vec<i64>, hset: HashSet<usize>) -> Self {
         Self {
             _values: RefCell::new(vec),
+            _na_indexes: RefCell::new(hset),
         }
     }
 
@@ -274,34 +277,34 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
 impl AsBooleanList for IntegerList64 {
     fn as_bool(&self) -> BooleanList {
         let vec = self.values().iter().map(|&x| x != 0).collect();
-        BooleanList::new(vec)
+        BooleanList::new(vec, self.na_indexes().clone())
     }
 }
 
 impl AsFloatList32 for IntegerList64 {
     fn as_float32(&self) -> FloatList32 {
         let vec = self.values().iter().map(|&x| x as f32).collect();
-        FloatList32::new(vec)
+        FloatList32::new(vec, self.na_indexes().clone())
     }
 }
 
 impl AsFloatList64 for IntegerList64 {
     fn as_float64(&self) -> FloatList64 {
         let vec = self.values().iter().map(|&x| x as f64).collect();
-        FloatList64::new(vec)
+        FloatList64::new(vec, self.na_indexes().clone())
     }
 }
 
 impl AsIntegerList32 for IntegerList64 {
     fn as_int32(&self) -> IntegerList32 {
         let vec = self.values().iter().map(|&x| x as i32).collect();
-        IntegerList32::new(vec)
+        IntegerList32::new(vec, self.na_indexes().clone())
     }
 }
 
 impl AsStringList for IntegerList64 {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| x.to_string()).collect();
-        StringList::new(vec)
+        StringList::new(vec, self.na_indexes().clone())
     }
 }
