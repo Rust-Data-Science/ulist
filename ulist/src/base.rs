@@ -5,7 +5,7 @@ use std::cell::RefMut;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
-unsafe fn _fill_na<T>(vec: &Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
+pub unsafe fn _fill_na<T>(vec: &Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
         let elem = vec.get_unchecked_mut(*i);
         *elem = na_value;
