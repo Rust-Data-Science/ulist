@@ -1,4 +1,5 @@
 use crate::base::List;
+use crate::base::_fill_na;
 use crate::boolean::BooleanList;
 use crate::floatings::FloatList32;
 use crate::floatings::FloatList64;
@@ -60,7 +61,7 @@ impl StringList {
 
     pub fn contains(&self, elem: &str) -> BooleanList {
         let vec = self.values().iter().map(|x| x.contains(elem)).collect();
-        self._fill_false(&vec);
+        _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -79,7 +80,7 @@ impl StringList {
 
     pub fn ends_with(&self, elem: &str) -> BooleanList {
         let vec = self.values().iter().map(|x| x.ends_with(elem)).collect();
-        self._fill_false(&vec);
+        _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -131,7 +132,7 @@ impl StringList {
 
     pub fn starts_with(&self, elem: &str) -> BooleanList {
         let vec = self.values().iter().map(|x| x.starts_with(elem)).collect();
-        self._fill_false(&vec);
+        _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
