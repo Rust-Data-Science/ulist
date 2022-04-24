@@ -122,7 +122,7 @@ impl BooleanList {
         List::repeat(elem, size, false)
     }
 
-    pub fn replace(&self, old: bool, new: bool) {
+    pub fn replace(&self, old: Option<bool>, new: Option<bool>) {
         List::replace(self, old, new)
     }
 
@@ -218,7 +218,8 @@ impl AsFloatList32 for BooleanList {
             .iter()
             .map(|&x| if x { 1.0 } else { 0.0 })
             .collect();
-        FloatList32::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList32::new(vec, hset)
     }
 }
 
@@ -229,7 +230,8 @@ impl AsFloatList64 for BooleanList {
             .iter()
             .map(|&x| if x { 1.0 } else { 0.0 })
             .collect();
-        FloatList64::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList64::new(vec, hset)
     }
 }
 
@@ -240,7 +242,8 @@ impl AsIntegerList32 for BooleanList {
             .iter()
             .map(|&x| if x { 1 } else { 0 })
             .collect();
-        IntegerList32::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList32::new(vec, hset)
     }
 }
 
@@ -251,7 +254,8 @@ impl AsIntegerList64 for BooleanList {
             .iter()
             .map(|&x| if x { 1 } else { 0 })
             .collect();
-        IntegerList64::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList64::new(vec, hset)
     }
 }
 

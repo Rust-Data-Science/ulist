@@ -114,7 +114,7 @@ impl StringList {
         List::repeat(elem, size, na_value)
     }
 
-    pub fn replace(&self, old: String, new: String) {
+    pub fn replace(&self, old: Option<String>, new: Option<String>) {
         List::replace(self, old, new)
     }
 
@@ -191,27 +191,31 @@ impl AsBooleanList for StringList {
 impl AsFloatList32 for StringList {
     fn as_float32(&self) -> FloatList32 {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
-        FloatList32::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList32::new(vec, hset)
     }
 }
 
 impl AsFloatList64 for StringList {
     fn as_float64(&self) -> FloatList64 {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
-        FloatList64::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList64::new(vec, hset)
     }
 }
 
 impl AsIntegerList32 for StringList {
     fn as_int32(&self) -> IntegerList32 {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
-        IntegerList32::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList32::new(vec, hset)
     }
 }
 
 impl AsIntegerList64 for StringList {
     fn as_int64(&self) -> IntegerList64 {
         let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
-        IntegerList64::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList64::new(vec, hset)
     }
 }

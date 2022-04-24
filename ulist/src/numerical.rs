@@ -27,7 +27,8 @@ where
             .map(|(&x, &y)| func(x, y))
             .collect();
         _fill_na(&vec, self.na_indexes(), self.na_value());
-        List::_new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        List::_new(vec, hset)
     }
 
     fn add(&self, other: &Self) -> Self {
@@ -35,10 +36,8 @@ where
     }
 
     fn add_scala(&self, elem: T) -> Self {
-        List::_new(
-            self._fn_num(|x| x + elem, self.na_value()),
-            self.na_indexes().clone(),
-        )
+        let hset = self.na_indexes().clone();
+        List::_new(self._fn_num(|x| x + elem, self.na_value()), hset)
     }
 
     fn argmax(&self) -> usize;
@@ -50,25 +49,23 @@ where
     fn div_scala(&self, elem: V) -> Vec<V>;
 
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(
-            self._fn_num(|x| x >= elem, false),
-            self.na_indexes().clone(),
-        )
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x >= elem, false), hset)
     }
 
     fn greater_than_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_num(|x| x > elem, false), self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x > elem, false), hset)
     }
 
     fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(
-            self._fn_num(|x| x <= elem, false),
-            self.na_indexes().clone(),
-        )
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x <= elem, false), hset)
     }
 
     fn less_than_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_num(|x| x < elem, false), self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x < elem, false), hset)
     }
 
     fn max(&self) -> T;
@@ -80,10 +77,8 @@ where
     }
 
     fn mul_scala(&self, elem: T) -> Self {
-        List::_new(
-            self._fn_num(|x| x * elem, self.na_value()),
-            self.na_indexes().clone(),
-        )
+        let hset = self.na_indexes().clone();
+        List::_new(self._fn_num(|x| x * elem, self.na_value()), hset)
     }
 
     fn pow_scala(&self, elem: U) -> Self;
@@ -93,10 +88,8 @@ where
     }
 
     fn sub_scala(&self, elem: T) -> Self {
-        List::_new(
-            self._fn_num(|x| x - elem, self.na_value()),
-            self.na_indexes().clone(),
-        )
+        let hset = self.na_indexes().clone();
+        List::_new(self._fn_num(|x| x - elem, self.na_value()), hset)
     }
 
     // There is no elegant way to implement the sum method here, and have to

@@ -5,7 +5,7 @@ use std::cell::RefMut;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
-pub unsafe fn _fill_na<T>(vec: &Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
+pub fn _fill_na<T>(vec: &Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
         let elem = vec.get_unchecked_mut(*i);
         *elem = na_value;
@@ -36,7 +36,8 @@ where
     }
 
     fn copy(&self) -> Self {
-        List::_new(self.values().clone(), self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        List::_new(self.values().clone(), hset)
     }
 
     fn count_na(&self) -> usize {
@@ -48,13 +49,13 @@ where
         List::_new(v, HashSet::new())
     }
 
-    unsafe fn equal_scala(&self, elem: T) -> BooleanList {
+    fn equal_scala(&self, elem: T) -> BooleanList {
         let vec = self._fn_scala(|x| x == &elem);
         _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
-    unsafe fn filter(&self, condition: &BooleanList) -> Self {
+    fn filter(&self, condition: &BooleanList) -> Self {
         let vec = self
             .values()
             .iter()
@@ -86,7 +87,7 @@ where
         }
     }
 
-    unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         if indexes.back() >= self.size() {
             panic!("Index out of range!")
         }
@@ -115,7 +116,7 @@ where
 
     fn na_value(&self) -> T;
 
-    unsafe fn not_equal_scala(&self, elem: T) -> BooleanList {
+    fn not_equal_scala(&self, elem: T) -> BooleanList {
         let vec = self._fn_scala(|x| x != &elem);
         _fill_na(&vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
@@ -129,16 +130,21 @@ where
         self.values_mut().pop();
     }
 
-    unsafe fn replace(&self, old: T, new: T) {
-        for (i, x) in self.values().iter().enumerate() {
-            if *x == old {
-                let elem = self.values_mut().get_unchecked_mut(i);
-                *elem = new
+    fn replace(&self, old: Option<T>, new: Option<T>) {
+        if let Some(_old) = old {
+            if let Some(_new) = new {
+                self.replace_elem(_old, _new)
+            } else {
+                self.replace_by_na(_old)
+            }
+        } else {
+            if let Some(_new) = new {
+                self.replace_na(_new)
             }
         }
     }
 
-    unsafe fn replace_by_na(&self, old: T) {
+    fn replace_by_na(&self, old: T) {
         for (i, x) in self.values().iter().enumerate() {
             if *x == old {
                 let elem = self.values_mut().get_unchecked_mut(i);
@@ -148,7 +154,16 @@ where
         }
     }
 
-    unsafe fn replace_na(&self, new: T) {
+    fn replace_elem(&self, old: T, new: T) {
+        for (i, x) in self.values().iter().enumerate() {
+            if *x == old {
+                let elem = self.values_mut().get_unchecked_mut(i);
+                *elem = new
+            }
+        }
+    }
+
+    fn replace_na(&self, new: T) {
         for i in self.na_indexes().iter() {
             let elem = self.values_mut().get_unchecked_mut(*i);
             *elem = new;
@@ -156,7 +171,7 @@ where
         self.na_indexes_mut().clear();
     }
 
-    unsafe fn set(&self, index: usize, elem: Option<T>) {
+    fn set(&self, index: usize, elem: Option<T>) {
         if index >= self.size() {
             panic!("Index out of range!")
         }
@@ -186,7 +201,7 @@ where
         self.values().len()
     }
 
-    unsafe fn to_list(&self) -> Vec<Option<T>> {
+    fn to_list(&self) -> Vec<Option<T>> {
         let vec: Vec<Option<T>> = self.values().iter().map(|x| Some(x.clone())).collect();
         for i in self.na_indexes().iter() {
             let elem = vec.get_unchecked_mut(*i);

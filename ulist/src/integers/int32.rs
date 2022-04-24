@@ -89,13 +89,13 @@ impl IntegerList32 {
     }
 
     pub fn div(&self, other: &Self) -> FloatList64 {
-        let vec = NumericalList::div(self, other);
-        FloatList64::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList64::new(NumericalList::div(self, other), hset)
     }
 
     pub fn div_scala(&self, elem: f64) -> FloatList64 {
-        let vec = NumericalList::div_scala(self, elem);
-        FloatList64::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList64::new(NumericalList::div_scala(self, elem), hset)
     }
 
     pub fn equal_scala(&self, elem: i32) -> BooleanList {
@@ -163,7 +163,7 @@ impl IntegerList32 {
         List::repeat(elem, size, 0)
     }
 
-    pub fn replace(&self, old: i32, new: i32) -> Self {
+    pub fn replace(&self, old: Option<i32>, new: Option<i32>) {
         List::replace(self, old, new)
     }
 
@@ -210,6 +210,18 @@ impl List<i32> for IntegerList32 {
             _values: RefCell::new(vec),
             _na_indexes: RefCell::new(hset),
         }
+    }
+
+    fn na_indexes(&self) -> Ref<HashSet<usize>> {
+        self._na_indexes.borrow()
+    }
+
+    fn na_indexes_mut(&self) -> RefMut<HashSet<usize>> {
+        self._na_indexes.borrow_mut()
+    }
+
+    fn na_value(&self) -> i32 {
+        0
     }
 
     fn values(&self) -> Ref<Vec<i32>> {
@@ -264,7 +276,8 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
 
     fn pow_scala(&self, elem: u32) -> Self {
         let vec = self.values().iter().map(|&x| x.pow(elem)).collect();
-        IntegerList32::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList32::new(vec, hset)
     }
 
     fn sum(&self) -> i32 {
@@ -275,34 +288,39 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
 impl AsBooleanList for IntegerList32 {
     fn as_bool(&self) -> BooleanList {
         let vec = self.values().iter().map(|&x| x != 0).collect();
-        BooleanList::new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 }
 
 impl AsFloatList32 for IntegerList32 {
     fn as_float32(&self) -> FloatList32 {
         let vec = self.values().iter().map(|&x| x as f32).collect();
-        FloatList32::new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        FloatList32::new(vec, hset)
     }
 }
 
 impl AsFloatList64 for IntegerList32 {
     fn as_float64(&self) -> FloatList64 {
         let vec = self.values().iter().map(|&x| x as f64).collect();
-        FloatList64::new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        FloatList64::new(vec, hset)
     }
 }
 
 impl AsIntegerList64 for IntegerList32 {
     fn as_int64(&self) -> IntegerList64 {
         let vec = self.values().iter().map(|&x| x as i64).collect();
-        IntegerList64::new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        IntegerList64::new(vec, hset)
     }
 }
 
 impl AsStringList for IntegerList32 {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| x.to_string()).collect();
-        StringList::new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        StringList::new(vec, hset)
     }
 }
