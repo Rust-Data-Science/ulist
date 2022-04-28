@@ -60,8 +60,8 @@ impl StringList {
     }
 
     pub fn contains(&self, elem: &str) -> BooleanList {
-        let vec = self.values().iter().map(|x| x.contains(elem)).collect();
-        _fill_na(&vec, self.na_indexes(), false);
+        let mut vec = self.values().iter().map(|x| x.contains(elem)).collect();
+        _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -79,8 +79,8 @@ impl StringList {
     }
 
     pub fn ends_with(&self, elem: &str) -> BooleanList {
-        let vec = self.values().iter().map(|x| x.ends_with(elem)).collect();
-        _fill_na(&vec, self.na_indexes(), false);
+        let mut vec = self.values().iter().map(|x| x.ends_with(elem)).collect();
+        _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -96,7 +96,7 @@ impl StringList {
         List::get(self, index)
     }
 
-    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         List::get_by_indexes(self, indexes)
     }
 
@@ -118,7 +118,7 @@ impl StringList {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: Option<String>) {
+    pub fn set(&self, index: usize, elem: Option<String>) {
         List::set(self, index, elem)
     }
 
@@ -131,8 +131,8 @@ impl StringList {
     }
 
     pub fn starts_with(&self, elem: &str) -> BooleanList {
-        let vec = self.values().iter().map(|x| x.starts_with(elem)).collect();
-        _fill_na(&vec, self.na_indexes(), false);
+        let mut vec = self.values().iter().map(|x| x.starts_with(elem)).collect();
+        _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 

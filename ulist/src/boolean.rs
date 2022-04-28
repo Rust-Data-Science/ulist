@@ -96,7 +96,7 @@ impl BooleanList {
         List::get(self, index)
     }
 
-    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         List::get_by_indexes(self, indexes)
     }
 
@@ -126,7 +126,7 @@ impl BooleanList {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: Option<bool>) {
+    pub fn set(&self, index: usize, elem: Option<bool>) {
         List::set(self, index, elem)
     }
 

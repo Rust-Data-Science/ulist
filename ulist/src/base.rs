@@ -5,10 +5,10 @@ use std::cell::RefMut;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
-pub fn _fill_na<T>(vec: &Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
+pub fn _fill_na<T: Clone>(vec: &mut Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
-        let elem = vec.get_unchecked_mut(*i);
-        *elem = na_value;
+        let ptr = unsafe { vec.get_unchecked_mut(*i) };
+        *ptr = na_value.clone();
     }
 }
 
@@ -26,11 +26,36 @@ where
         self.values().iter().map(|x| func(x)).collect()
     }
 
+    fn _sort(&self) {
+        if self.count_na() == self.size() {
+            return;
+        }
+        let mut vec = self.values_mut();
+        let mut hset = self.na_indexes_mut();
+        // Put all the na elements to the right side.
+        let mut l = 0;
+        let mut r = self.size() - 1;
+        while l < r && !hset.is_empty() {
+            while l < r && !hset.contains(&l) {
+                l += 1;
+            }
+            while l < r && hset.contains(&r) {
+                r -= 1;
+            }
+            vec.swap(l, r);
+        }
+        // Update na indexes.
+        hset.clear();
+        for i in (self.size() - self.count_na())..self.size() {
+            hset.insert(i);
+        }
+    }
+
     fn append(&self, elem: Option<T>) {
         if let Some(i) = elem {
             self.values_mut().push(i);
         } else {
-            self.na_indexes().insert(self.size());
+            self.na_indexes_mut().insert(self.size());
             self.values_mut().push(self.na_value());
         }
     }
@@ -50,8 +75,8 @@ where
     }
 
     fn equal_scala(&self, elem: T) -> BooleanList {
-        let vec = self._fn_scala(|x| x == &elem);
-        _fill_na(&vec, self.na_indexes(), false);
+        let mut vec = self._fn_scala(|x| x == &elem);
+        _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -63,13 +88,16 @@ where
             .filter(|(_, y)| **y)
             .map(|(x, _)| x.clone())
             .collect();
-        let hset = HashSet::with_capacity(self.size());
-        for i in self.na_indexes().iter() {
-            let cond = condition.values().get_unchecked(*i);
-            if *cond {
-                hset.insert(i.clone());
+        let mut hset = HashSet::with_capacity(self.size());
+        let cond = condition.values();
+        unsafe {
+            for i in self.na_indexes().iter() {
+                let _cond = cond.get_unchecked(*i);
+                if *_cond {
+                    hset.insert(i.clone());
+                }
             }
-        }
+        };
         hset.shrink_to_fit();
         List::_new(vec, hset)
     }
@@ -81,7 +109,7 @@ where
         let vec = self.values();
         let val = vec.get(index);
         if let Some(i) = val {
-            return Some(*i);
+            return Some(i.clone());
         } else {
             panic!("Index out of range!")
         }
@@ -91,12 +119,14 @@ where
         if indexes.back() >= self.size() {
             panic!("Index out of range!")
         }
-        let vec = indexes
-            .values()
-            .iter()
-            .map(|&x| self.values().get_unchecked(x).clone())
-            .collect();
-        let hset = HashSet::with_capacity(self.size());
+        let vec = unsafe {
+            indexes
+                .values()
+                .iter()
+                .map(|&x| self.values().get_unchecked(x).clone())
+                .collect()
+        };
+        let mut hset = HashSet::with_capacity(self.size());
         for i in indexes.values().iter() {
             if self.na_indexes().contains(i) {
                 hset.insert(i.clone());
@@ -117,8 +147,8 @@ where
     fn na_value(&self) -> T;
 
     fn not_equal_scala(&self, elem: T) -> BooleanList {
-        let vec = self._fn_scala(|x| x != &elem);
-        _fill_na(&vec, self.na_indexes(), false);
+        let mut vec = self._fn_scala(|x| x != &elem);
+        _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
@@ -145,28 +175,31 @@ where
     }
 
     fn replace_by_na(&self, old: T) {
+        let mut vec = self.values_mut();
         for (i, x) in self.values().iter().enumerate() {
             if *x == old {
-                let elem = self.values_mut().get_unchecked_mut(i);
-                *elem = self.na_value();
+                let ptr = unsafe { vec.get_unchecked_mut(i) };
+                *ptr = self.na_value();
                 self.na_indexes_mut().insert(i);
             }
         }
     }
 
     fn replace_elem(&self, old: T, new: T) {
+        let mut vec = self.values_mut();
         for (i, x) in self.values().iter().enumerate() {
             if *x == old {
-                let elem = self.values_mut().get_unchecked_mut(i);
-                *elem = new
+                let ptr = unsafe { vec.get_unchecked_mut(i) };
+                *ptr = new.clone();
             }
         }
     }
 
     fn replace_na(&self, new: T) {
+        let mut vec = self.values_mut();
         for i in self.na_indexes().iter() {
-            let elem = self.values_mut().get_unchecked_mut(*i);
-            *elem = new;
+            let ptr = unsafe { vec.get_unchecked_mut(*i) };
+            *ptr = new.clone();
         }
         self.na_indexes_mut().clear();
     }
@@ -176,18 +209,18 @@ where
             panic!("Index out of range!")
         }
         let mut values = self.values_mut();
-        let element = values.get_unchecked_mut(index);
+        let ptr = unsafe { values.get_unchecked_mut(index) };
         if let Some(i) = elem {
-            *element = i;
+            *ptr = i;
         } else {
-            *element = self.na_value();
+            *ptr = self.na_value();
             self.na_indexes_mut().insert(index);
         }
     }
 
     fn repeat(elem: Option<T>, size: usize, na_value: T) -> Self {
-        let val = na_value;
-        let hset = HashSet::new();
+        let mut val = na_value;
+        let mut hset = HashSet::new();
         if let Some(i) = elem {
             val = i;
         } else {
@@ -202,10 +235,10 @@ where
     }
 
     fn to_list(&self) -> Vec<Option<T>> {
-        let vec: Vec<Option<T>> = self.values().iter().map(|x| Some(x.clone())).collect();
+        let mut vec: Vec<Option<T>> = self.values().iter().map(|x| Some(x.clone())).collect();
         for i in self.na_indexes().iter() {
-            let elem = vec.get_unchecked_mut(*i);
-            *elem = None;
+            let ptr = unsafe { vec.get_unchecked_mut(*i) };
+            *ptr = None;
         }
         vec
     }
@@ -217,7 +250,7 @@ where
             .cloned()
             .chain(other.values().iter().cloned())
             .collect();
-        let hset = self.na_indexes().clone();
+        let mut hset = self.na_indexes().clone();
         for i in other.na_indexes().iter() {
             hset.insert(i + self.size());
         }

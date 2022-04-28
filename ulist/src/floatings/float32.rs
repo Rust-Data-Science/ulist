@@ -104,7 +104,7 @@ impl FloatList32 {
         List::get(self, index)
     }
 
-    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         List::get_by_indexes(self, indexes)
     }
 
@@ -161,7 +161,7 @@ impl FloatList32 {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: Option<f32>) {
+    pub fn set(&self, index: usize, elem: Option<f32>) {
         List::set(self, index, elem)
     }
 
@@ -169,11 +169,17 @@ impl FloatList32 {
         List::size(self)
     }
 
-    pub fn sort(&self, ascending: bool) -> Self {
-        let mut vec = self.to_list();
-        let mut _vec = &mut vec;
-        _sort(_vec, ascending);
-        List::_new(vec)
+    pub fn sort(&self, ascending: bool) {
+        // Handle na elements.
+        self._sort();
+        // Sort non-na elements.
+        let mut vec = self.values_mut();
+        let slice = &mut vec[0..(self.size() - self.count_na())];
+        if ascending {
+            slice.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        } else {
+            slice.sort_by(|a, b| b.partial_cmp(a).unwrap());
+        }
     }
 
     pub fn sub(&self, other: &Self) -> Self {
@@ -197,10 +203,27 @@ impl FloatList32 {
     }
 
     pub fn unique(&self) -> Self {
-        let mut vec = self.to_list();
-        _sort(&mut vec, true);
+        // Get the unique values.
+        let mut vec = Vec::with_capacity(self.size());
+        for (i, &val) in self.values().iter().enumerate() {
+            if self.na_indexes().contains(&i) {
+                continue;
+            }
+            vec.push(val);
+        }
+        // Remove duplicates.
+        vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
         vec.dedup();
-        List::_new(vec)
+        // Copy the unique and na values to the vec.
+        if self.count_na() > 0 {
+            vec.push(self.na_value());
+        }
+        // Construct List.
+        let mut hset = HashSet::new();
+        if self.count_na() > 0 {
+            hset.insert(vec.len() - 1);
+        }
+        List::_new(vec, hset)
     }
 }
 
@@ -332,13 +355,5 @@ impl AsStringList for FloatList32 {
         let vec = self.values().iter().map(|&x| format!("{:?}", x)).collect();
         let hset = self.na_indexes().clone();
         StringList::new(vec, hset)
-    }
-}
-
-fn _sort(vec: &mut Vec<f32>, ascending: bool) {
-    if ascending {
-        vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
-    } else {
-        vec.sort_by(|a, b| b.partial_cmp(a).unwrap());
     }
 }

@@ -13,20 +13,20 @@ where
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
-    fn _fn_num<W>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
-        let vec = self.values().iter().map(|&x| func(x)).collect();
-        _fill_na(&vec, self.na_indexes(), default);
+    fn _fn_num<W: Clone>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
+        let mut vec = self.values().iter().map(|&x| func(x)).collect();
+        _fill_na(&mut vec, self.na_indexes(), default);
         vec
     }
 
     fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
-        let vec = self
+        let mut vec = self
             .values()
             .iter()
             .zip(other.values().iter())
             .map(|(&x, &y)| func(x, y))
             .collect();
-        _fill_na(&vec, self.na_indexes(), self.na_value());
+        _fill_na(&mut vec, self.na_indexes(), self.na_value());
         let hset = self.na_indexes().clone();
         List::_new(vec, hset)
     }

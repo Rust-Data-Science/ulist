@@ -110,7 +110,7 @@ impl IntegerList32 {
         List::get(self, index)
     }
 
-    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         List::get_by_indexes(self, indexes)
     }
 
@@ -167,7 +167,7 @@ impl IntegerList32 {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: Option<i32>) {
+    pub fn set(&self, index: usize, elem: Option<i32>) {
         List::set(self, index, elem)
     }
 
