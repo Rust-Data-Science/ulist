@@ -1,7 +1,7 @@
 from typing import Optional, Sequence
 
 from .core import UltraFastList
-from .typedef import ELEM
+from .typedef import ELEM, ELEM_OPT
 from .ulist import (BooleanList, FloatList32, FloatList64, IntegerList32,
                     IntegerList64, StringList, arange32, arange64)
 
@@ -117,7 +117,7 @@ def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     return result
 
 
-def from_seq(obj: Sequence, dtype: str, has_na: bool = True) -> UltraFastList:
+def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     """Construct a ulist object from a sequence object.
 
     Args:
@@ -126,9 +126,6 @@ def from_seq(obj: Sequence, dtype: str, has_na: bool = True) -> UltraFastList:
         dtype (str):
             The type of the output ulist. 'int', 'int32', 'int64',
             'float', 'float32', 'float64', 'bool' or 'string'.
-        has_na (bool, optional):
-            If the sequence object has missing values. Defaults
-            to True.
 
     Raises:
         ValueError:
@@ -157,11 +154,7 @@ def from_seq(obj: Sequence, dtype: str, has_na: bool = True) -> UltraFastList:
     >>> arr4
     UltraFastList(['foo', 'bar', 'baz'])
     """
-    if has_na:
-        na_indexes = set([i for i, x in enumerate(obj) if x is None])
-    else:
-        na_indexes = set()
-
+    na_indexes = set([i for i, x in enumerate(obj) if x is None])
     if dtype == "int" or dtype == "int64":
         cls = IntegerList64
         na_val = 0
@@ -186,15 +179,15 @@ def from_seq(obj: Sequence, dtype: str, has_na: bool = True) -> UltraFastList:
             "'float', 'float32', 'float64', 'bool' or 'string'!"
         )
     elements = [x if x is not None else na_val for x in obj]
-    result = UltraFastList(cls(elements), na_indexes)
+    result = UltraFastList(cls(elements, na_indexes))
     return result
 
 
-def repeat(elem: ELEM, size: int) -> UltraFastList:
+def repeat(elem: ELEM_OPT, size: int) -> UltraFastList:
     """Return a new ulist of given size, filled with elem.
 
     Args:
-        elem (ELEM): Element to repeat.
+        elem (ELEM_OPT): Element to repeat.
         size (int): Size of the new ulist.
 
     Raises:
