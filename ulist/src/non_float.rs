@@ -26,11 +26,13 @@ where
     }
 
     fn sort(&self, ascending: bool) {
+        let n = self.size();
+        let m = self.count_na();
         // Handle na elements.
         self._sort();
         // Sort non-na elements.
         let mut vec = self.values_mut();
-        let s = &mut vec[0..(self.size() - self.count_na())];
+        let s = &mut vec[0..(n - m)];
         if ascending {
             s.sort_unstable();
         } else {

@@ -431,8 +431,8 @@ class UltraFastList:
         """Number of elements of self."""
         return self._values.size()
 
-    def sort(self, ascending: bool) -> "UltraFastList":
-        """Return a sorted copy of self.
+    def sort(self, ascending: bool) -> None:
+        """Sort self.
 
         Args:
             ascending (bool):
@@ -441,7 +441,7 @@ class UltraFastList:
         Returns:
             UltraFastList: The sorted ulist.
         """
-        return UltraFastList(self._values.sort(ascending=ascending))
+        self._values.sort(ascending=ascending)
 
     def starts_with(self, elem: str) -> UltraFastList:
         """Return whether the element of self starts with `elem`."""

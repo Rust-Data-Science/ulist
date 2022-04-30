@@ -27,14 +27,16 @@ where
     }
 
     fn _sort(&self) {
-        if self.count_na() == self.size() {
+        let n = self.size();
+        let m = self.count_na();
+        if m == n {
             return;
         }
         let mut vec = self.values_mut();
         let mut hset = self.na_indexes_mut();
         // Put all the na elements to the right side.
         let mut l = 0;
-        let mut r = self.size() - 1;
+        let mut r = n - 1;
         while l < r && !hset.is_empty() {
             while l < r && !hset.contains(&l) {
                 l += 1;
@@ -46,7 +48,7 @@ where
         }
         // Update na indexes.
         hset.clear();
-        for i in (self.size() - self.count_na())..self.size() {
+        for i in (n - m)..n {
             hset.insert(i);
         }
     }
