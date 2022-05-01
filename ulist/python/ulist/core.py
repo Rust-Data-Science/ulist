@@ -419,9 +419,9 @@ class UltraFastList:
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.pow_scala(elem))
 
-    def replace(self, old: ELEM, new: ELEM) -> "UltraFastList":
+    def replace(self, old: ELEM, new: ELEM) -> None:
         """Replace the old elements of self with the new one."""
-        return UltraFastList(self._values.replace(old, new))
+        self._values.replace(old, new)
 
     def set(self, index: int, elem: ELEM) -> None:
         """Set self[index] to elem."""

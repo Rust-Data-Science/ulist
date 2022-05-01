@@ -177,10 +177,11 @@ where
     }
 
     fn replace_by_na(&self, old: T) {
+        let n = self.size();
         let mut vec = self.values_mut();
-        for (i, x) in self.values().iter().enumerate() {
-            if *x == old {
-                let ptr = unsafe { vec.get_unchecked_mut(i) };
+        for i in 0..n {
+            let ptr = unsafe { vec.get_unchecked_mut(i) };
+            if *ptr == old {
                 *ptr = self.na_value();
                 self.na_indexes_mut().insert(i);
             }
@@ -188,10 +189,11 @@ where
     }
 
     fn replace_elem(&self, old: T, new: T) {
+        let n = self.size();
         let mut vec = self.values_mut();
-        for (i, x) in self.values().iter().enumerate() {
-            if *x == old {
-                let ptr = unsafe { vec.get_unchecked_mut(i) };
+        for i in 0..n {
+            let ptr = unsafe { vec.get_unchecked_mut(i) };
+            if *ptr == old {
                 *ptr = new.clone();
             }
         }
