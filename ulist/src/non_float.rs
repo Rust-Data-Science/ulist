@@ -2,6 +2,7 @@ use crate::base::List;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::hash::Hash;
+use std::iter;
 
 pub trait NonFloatList<T>: List<T>
 where
@@ -51,19 +52,18 @@ where
             dedup.insert(val);
         }
         // Copy the unique and na values to the vec.
-        let mut l = dedup.len();
-        if self.count_na() > 0 {
-            l += 1;
-        }
-        let mut vec_dedup = Vec::with_capacity(l);
-        unsafe { vec_dedup.set_len(l) };
-        for (i, &val) in dedup.iter().enumerate() {
-            let elem = unsafe { vec_dedup.get_unchecked_mut(i) };
-            *elem = val.clone();
-        }
-        if self.count_na() > 0 {
-            vec_dedup.push(self.na_value());
-        }
+        let na = &self.na_value();
+        let vec_dedup: Vec<T> = {
+            if self.count_na() > 0 {
+                dedup
+                    .iter()
+                    .chain(iter::once(&na))
+                    .map(|&x| x.clone())
+                    .collect()
+            } else {
+                dedup.iter().map(|&x| x.clone()).collect()
+            }
+        };
         // Construct List.
         let mut hset = HashSet::new();
         if self.count_na() > 0 {

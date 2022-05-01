@@ -88,31 +88,6 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('to_list', 'int', [1, 2], [1, 2]),
         ('to_list', 'string', ['foo', 'bar'], ['foo', 'bar']),
-
-        # (
-        #     'unique',
-        #     'bool',
-        #     [True, False, True, False, True],
-        #     [False, True],
-        # ),
-        # (
-        #     'unique',
-        #     'float',
-        #     [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-        #     [1.0, 2.0, 3.0, 4.0, 5.0],
-        # ),
-        # (
-        #     'unique',
-        #     'int',
-        #     [5, 3, 2, 4, 1, 3],
-        #     [1, 2, 3, 4, 5],
-        # ),
-        # (
-        #     'unique',
-        #     'string',
-        #     ['foo', 'bar', 'foo'],
-        #     ['bar', 'foo'],
-        # ),
     ],
 )
 def test_methods_no_arg(
@@ -482,4 +457,42 @@ def test_operators(
     else:
         other = kwargs["other"]
     result = test_method(arr, other)
+    check_test_result(dtype, test_method, result, expected_value)
+
+
+@expand_dtypes
+@pytest.mark.parametrize(
+    "dtype, nums, expected_value",
+    [
+        (
+            'bool',
+            [True, False, True, False, True],
+            [False, True],
+        ),
+        (
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+        ),
+        (
+            'int',
+            [5, 3, 2, 4, 1, 3],
+            [1, 2, 3, 4, 5],
+        ),
+        (
+            'string',
+            ['foo', 'bar', 'foo'],
+            ['bar', 'foo'],
+        ),
+    ],
+)
+def test_unique(
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_value: RESULT,
+) -> None:
+    test_method = "unique"
+    arr = ul.from_seq(nums, dtype)
+    result = getattr(arr, test_method)()
+    result.sort(True)
     check_test_result(dtype, test_method, result, expected_value)
