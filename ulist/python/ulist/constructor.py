@@ -1,17 +1,18 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Union, Type
 
 from .core import UltraFastList
-from .typedef import ELEM
-from .ulist import (
-    BooleanList,
-    FloatList32,
-    FloatList64,
-    IntegerList32,
-    IntegerList64,
-    StringList,
-    arange32,
-    arange64
-)
+from .typedef import ELEM_OPT, ELEM
+from .ulist import (BooleanList, FloatList32, FloatList64, IntegerList32,
+                    IntegerList64, StringList, arange32, arange64)
+
+T = Union[
+    Type[BooleanList],
+    Type[FloatList32],
+    Type[FloatList64],
+    Type[IntegerList32],
+    Type[IntegerList64],
+    Type[StringList],
+]
 
 
 def arange(
@@ -162,31 +163,40 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     >>> arr4
     UltraFastList(['foo', 'bar', 'baz'])
     """
+    na_indexes = set([i for i, x in enumerate(obj) if x is None])
     if dtype == "int" or dtype == "int64":
-        result = UltraFastList(IntegerList64(obj))
+        cls: T = IntegerList64
+        na_val: ELEM = 0
     elif dtype == "int32":
-        result = UltraFastList(IntegerList32(obj))
+        cls = IntegerList32
+        na_val = 0
     elif dtype == "float" or dtype == "float64":
-        result = UltraFastList(FloatList64(obj))
+        cls = FloatList64
+        na_val = 0.0
     elif dtype == "float32":
-        result = UltraFastList(FloatList32(obj))
+        cls = FloatList32
+        na_val = 0.0
     elif dtype == "bool":
-        result = UltraFastList(BooleanList(obj))
+        cls = BooleanList
+        na_val = False
     elif dtype == "string":
-        result = UltraFastList(StringList(obj))
+        cls = StringList
+        na_val = ''
     else:
         raise ValueError(
             "Parameter dtype should be 'int', 'int32', 'int64', " +
             "'float', 'float32', 'float64', 'bool' or 'string'!"
         )
+    elements = [x if x is not None else na_val for x in obj]
+    result = UltraFastList(cls(elements, na_indexes))
     return result
 
 
-def repeat(elem: ELEM, size: int) -> UltraFastList:
+def repeat(elem: ELEM_OPT, size: int) -> UltraFastList:
     """Return a new ulist of given size, filled with elem.
 
     Args:
-        elem (ELEM): Element to repeat.
+        elem (ELEM_OPT): Element to repeat.
         size (int): Size of the new ulist.
 
     Raises:

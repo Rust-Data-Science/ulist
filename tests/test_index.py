@@ -1,5 +1,5 @@
 
-from typing import List, Sequence, Union
+from typing import List, Sequence, Union, Optional
 
 import pytest
 import ulist as ul
@@ -23,7 +23,7 @@ from ulist.utils import check_test_result
 def test_methods(
     test_method: str,
     nums: Sequence[int],
-    expected_value: Union[int, List[int]],
+    expected_value: Union[Optional[int], List[Optional[int]]],
 ) -> None:
     dtype = 'IndexList'
     arr = ul.IndexList(nums)

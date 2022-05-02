@@ -57,7 +57,7 @@ from ulist.utils import check_test_result
 def test_methods(
     test_method: str,
     nums: List[bool],
-    expected_value: Union[bool, List[bool]],
+    expected_value: Union[Optional[bool], List[Optional[bool]]],
 ) -> None:
     dtype = "bool"
     arr = ul.from_seq(nums, dtype=dtype)
@@ -65,7 +65,7 @@ def test_methods(
     check_test_result(dtype, test_method, result, expected_value)
 
 
-@pytest.mark.parametrize(
+@ pytest.mark.parametrize(
     "test_method, nums, other, expected_value",
     [
         (
@@ -86,7 +86,7 @@ def test_methods_with_args(
     test_method: str,
     nums: List[bool],
     other: List[bool],
-    expected_value: List[bool],
+    expected_value: List[Optional[bool]],
 ) -> None:
     dtype = "bool"
     arr1 = ul.from_seq(nums, dtype=dtype)
@@ -95,7 +95,7 @@ def test_methods_with_args(
     check_test_result(dtype, test_method, result, expected_value)
 
 
-@pytest.mark.parametrize(
+@ pytest.mark.parametrize(
     "test_method, nums, other, expected_value",
     [
         (
@@ -122,7 +122,7 @@ def test_operators(
     test_method: Callable,
     nums: List[bool],
     other: Optional[List[bool]],
-    expected_value: List[bool],
+    expected_value: List[Optional[bool]],
 ) -> None:
     dtype = "bool"
     arr1 = ul.from_seq(nums, dtype)

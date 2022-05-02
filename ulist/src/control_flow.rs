@@ -5,13 +5,9 @@ use crate::integers::IntegerList64;
 use crate::string::StringList;
 use pyo3::prelude::*;
 use pyo3::Py;
+use std::collections::HashSet;
 
-unsafe fn select<T, U>(
-    py: Python,
-    conditions: &Vec<Py<BooleanList>>,
-    choices: &Vec<T>,
-    default: T,
-) -> U
+fn select<T, U>(py: Python, conditions: &Vec<Py<BooleanList>>, choices: &Vec<T>, default: T) -> U
 where
     T: PartialEq + Clone,
     U: List<T>,
@@ -20,17 +16,18 @@ where
     let mut vec = vec![default; cond[0].size()];
     for j in 0..cond[0].size() {
         for i in 0..cond.len() {
-            if cond[i].get(j) {
+            // TODO: Improve the benchmark.
+            if cond[i].get(j).unwrap() {
                 vec[j] = choices[i].clone();
                 break;
             }
         }
     }
-    U::_new(vec)
+    U::_new(vec, HashSet::new())
 }
 
 #[pyfunction]
-pub unsafe fn select_bool(
+pub fn select_bool(
     py: Python,
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<bool>,
@@ -40,7 +37,7 @@ pub unsafe fn select_bool(
 }
 
 #[pyfunction]
-pub unsafe fn select_float(
+pub fn select_float(
     py: Python,
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<f64>,
@@ -50,7 +47,7 @@ pub unsafe fn select_float(
 }
 
 #[pyfunction]
-pub unsafe fn select_int(
+pub fn select_int(
     py: Python,
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<i64>,
@@ -60,7 +57,7 @@ pub unsafe fn select_int(
 }
 
 #[pyfunction]
-pub unsafe fn select_string(
+pub fn select_string(
     py: Python,
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<String>,

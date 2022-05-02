@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, List, Sequence, Tuple, Union
 
 import ulist as ul
 
-from .typedef import COUNTER, ELEM, LIST_PY
+from .typedef import COUNTER, LIST_PY, ELEM_OPT
 
 MAX_ITEM_LEN = 16
 MAX_DTYPE_LEN = 8
@@ -49,8 +49,8 @@ def compare_dtypes(dtype1: str, dtype2: str) -> bool:
 def check_test_result(
     dtype: str,
     test_method: Union[Callable, str],
-    result: Union[ELEM, LIST_PY, ul.UltraFastList],
-    expected_value: Union[ELEM, LIST_PY, COUNTER],
+    result: Union[ELEM_OPT, LIST_PY, ul.UltraFastList],
+    expected_value: Union[ELEM_OPT, LIST_PY, COUNTER],
 ):
     """Test if the result is as expected. Both value and type.
     Args:
@@ -82,7 +82,7 @@ def check_test_result(
         assert len(result) == len(expected_value)
     else:
         assert type(result) == type(expected_value), msg
-        assert result == expected_value, msg
+        assert result == expected_value, msg  # type: ignore
 
 
 @dataclass

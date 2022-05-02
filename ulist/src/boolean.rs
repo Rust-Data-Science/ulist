@@ -16,12 +16,14 @@ use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use std::ops::Fn;
 
 /// List with boolean type elements.
 #[pyclass]
 pub struct BooleanList {
     _values: RefCell<Vec<bool>>,
+    _na_indexes: RefCell<HashSet<usize>>,
 }
 
 #[pymethods]
@@ -29,8 +31,8 @@ impl BooleanList {
     // Arrange the following methods in alphabetical order.
 
     #[new]
-    pub fn new(vec: Vec<bool>) -> Self {
-        List::_new(vec)
+    pub fn new(vec: Vec<bool>, hset: HashSet<usize>) -> Self {
+        List::_new(vec, hset)
     }
 
     pub fn all(&self) -> bool {
@@ -45,7 +47,7 @@ impl BooleanList {
         self.values().iter().any(|&x| x)
     }
 
-    pub fn append(&self, elem: bool) {
+    pub fn append(&self, elem: Option<bool>) {
         List::append(self, elem)
     }
 
@@ -90,17 +92,17 @@ impl BooleanList {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> bool {
+    pub fn get(&self, index: usize) -> Option<bool> {
         List::get(self, index)
     }
 
-    pub unsafe fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
         List::get_by_indexes(self, indexes)
     }
 
     pub fn not_(&self) -> Self {
         let vec = self.values().iter().map(|&x| !x).collect();
-        BooleanList::new(vec)
+        BooleanList::new(vec, HashSet::new())
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
@@ -116,15 +118,15 @@ impl BooleanList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: bool, size: usize) -> Self {
-        List::repeat(elem, size)
+    pub fn repeat(elem: Option<bool>, size: usize) -> Self {
+        List::repeat(elem, size, false)
     }
 
-    pub fn replace(&self, old: bool, new: bool) -> Self {
+    pub fn replace(&self, old: Option<bool>, new: Option<bool>) {
         List::replace(self, old, new)
     }
 
-    pub unsafe fn set(&self, index: usize, elem: bool) {
+    pub fn set(&self, index: usize, elem: Option<bool>) {
         List::set(self, index, elem)
     }
 
@@ -132,7 +134,7 @@ impl BooleanList {
         List::size(self)
     }
 
-    pub fn sort(&self, ascending: bool) -> Self {
+    pub fn sort(&self, ascending: bool) {
         NonFloatList::sort(self, ascending)
     }
 
@@ -151,7 +153,7 @@ impl BooleanList {
         IndexList::new(vec)
     }
 
-    pub fn to_list(&self) -> Vec<bool> {
+    pub fn to_list(&self) -> Vec<Option<bool>> {
         List::to_list(self)
     }
 
@@ -165,10 +167,23 @@ impl BooleanList {
 }
 
 impl List<bool> for BooleanList {
-    fn _new(vec: Vec<bool>) -> Self {
+    fn _new(vec: Vec<bool>, hset: HashSet<usize>) -> Self {
         Self {
             _values: RefCell::new(vec),
+            _na_indexes: RefCell::new(hset),
         }
+    }
+
+    fn na_indexes(&self) -> Ref<HashSet<usize>> {
+        self._na_indexes.borrow()
+    }
+
+    fn na_indexes_mut(&self) -> RefMut<HashSet<usize>> {
+        self._na_indexes.borrow_mut()
+    }
+
+    fn na_value(&self) -> bool {
+        false
     }
 
     fn values(&self) -> Ref<Vec<bool>> {
@@ -193,7 +208,7 @@ fn _logical_operate(
         .zip(other.values().iter())
         .map(|(&x, &y)| func(x, y))
         .collect();
-    BooleanList::new(vec)
+    BooleanList::new(vec, HashSet::new())
 }
 
 impl AsFloatList32 for BooleanList {
@@ -203,7 +218,8 @@ impl AsFloatList32 for BooleanList {
             .iter()
             .map(|&x| if x { 1.0 } else { 0.0 })
             .collect();
-        FloatList32::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList32::new(vec, hset)
     }
 }
 
@@ -214,7 +230,8 @@ impl AsFloatList64 for BooleanList {
             .iter()
             .map(|&x| if x { 1.0 } else { 0.0 })
             .collect();
-        FloatList64::new(vec)
+        let hset = self.na_indexes().clone();
+        FloatList64::new(vec, hset)
     }
 }
 
@@ -225,7 +242,8 @@ impl AsIntegerList32 for BooleanList {
             .iter()
             .map(|&x| if x { 1 } else { 0 })
             .collect();
-        IntegerList32::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList32::new(vec, hset)
     }
 }
 
@@ -236,13 +254,15 @@ impl AsIntegerList64 for BooleanList {
             .iter()
             .map(|&x| if x { 1 } else { 0 })
             .collect();
-        IntegerList64::new(vec)
+        let hset = self.na_indexes().clone();
+        IntegerList64::new(vec, hset)
     }
 }
 
 impl AsStringList for BooleanList {
     fn as_str(&self) -> StringList {
         let vec = self.values().iter().map(|&x| x.to_string()).collect();
-        StringList::new(vec)
+        let hset = self.na_indexes().clone();
+        StringList::new(vec, hset)
     }
 }

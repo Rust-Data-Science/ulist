@@ -1,12 +1,14 @@
-from typing import Dict, List, Union, Callable
+from typing import Dict, List, Union, Callable, Optional
 
 import operator as op
 import pytest
 import ulist as ul
 from ulist.utils import check_test_result, compare_dtypes, expand_dtypes
 
-ELEM_TYPE = Union[float, int, bool, str]
-LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
+ELEM_TYPE = Union[Optional[float],
+                  Optional[int], Optional[bool], Optional[str]]
+LIST_TYPE = Union[List[Optional[float]], List[Optional[int]],
+                  List[Optional[bool]], List[Optional[str]]]
 COUNTER = Union[Dict[int, int], Dict[bool, int]]
 RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
@@ -88,31 +90,6 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('to_list', 'int', [1, 2], [1, 2]),
         ('to_list', 'string', ['foo', 'bar'], ['foo', 'bar']),
-
-        (
-            'unique',
-            'bool',
-            [True, False, True, False, True],
-            [False, True],
-        ),
-        (
-            'unique',
-            'float',
-            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
-            [1.0, 2.0, 3.0, 4.0, 5.0],
-        ),
-        (
-            'unique',
-            'int',
-            [5, 3, 2, 4, 1, 3],
-            [1, 2, 3, 4, 5],
-        ),
-        (
-            'unique',
-            'string',
-            ['foo', 'bar', 'foo'],
-            ['bar', 'foo'],
-        ),
     ],
 )
 def test_methods_no_arg(
@@ -211,6 +188,73 @@ def test_methods_no_arg(
         ("not_equal_scala", 'string', ['foo', 'bar', 'baz'],
          [True, False, True], {"elem": 'bar'}),
 
+        ('union_all', 'bool', [True, False], [True, False, False, True], {
+         'other': ul.from_seq([False, True], dtype='bool')}),
+        ('union_all', 'float', [1.0, 2.0], [1.0, 2.0, 3.0, 4.0], {
+         'other': ul.from_seq([3.0, 4.0], dtype='float')}),
+        ('union_all', 'int', [1, 2], [1, 2, 3, 4], {
+         'other': ul.from_seq([3, 4], dtype='int')}),
+        ('union_all', 'string', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
+         'other': ul.from_seq(['baz', 'zoo'], dtype='string')}),
+
+        ('var', 'bool', [True, False], 0.25, {}),
+        ('var', 'bool', [True, True, True, False], 0.25, {"ddof": 1}),
+        ('var', 'float', [1.0, 2.0, 3.0, 4.0], 1.25, {}),
+        ('var', 'float', [1.0, 2.0, 3.0], 1.0, {"ddof": 1}),
+        ('var', 'int', [1, 2, 3, 4], 1.25, {}),
+        ('var', 'int', [1, 2, 3], 1.0, {"ddof": 1}),
+
+        ("where", "bool", [True, True, False, False], [
+         False, False], {"fn": lambda x: x == False},),  # noqa: E712
+        ("where", "float", [1.0, 2.0, 3.0, 4.0], [
+         1.0, 2.0], {"fn": lambda x: x < 3.0},),
+        ("where", "int", [1, 2, 3, 4], [
+            3, 4], {"fn": lambda x: x > 2},),
+        ("where", "string", ['foo', 'bar', 'baz'], [
+            'foo', 'baz'], {"fn": lambda x: x != 'bar'},),
+    ],
+)
+def test_methods_with_args(
+    test_method: str,
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_value: RESULT,
+    kwargs: dict,
+) -> None:
+    arr = ul.from_seq(nums, dtype)
+    result = getattr(arr, test_method)(**kwargs)
+    check_test_result(dtype, test_method, result, expected_value)
+
+
+@expand_dtypes
+@pytest.mark.parametrize(
+    "test_method, dtype, nums, expected_value, kwargs",
+    [
+        ('__setitem__', 'bool', [True, False], [
+            True, True], {'index': 1, 'elem': True}),
+        ('__setitem__', 'float', [1.0, 2.0], [
+         1.0, 3.0], {'index': 1, 'elem': 3.0}),
+        ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
+        ('__setitem__', 'string', ['foo', 'bar'], [
+         'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
+
+        ('append', 'bool', [True], [True, False], {'elem': False}),
+        ('append', 'float', [1.0], [1.0, 2.0], {'elem': 2.0}),
+        ('append', 'int', [1], [1, 2], {'elem': 2}),
+        ('append', 'string', ['foo'], ['foo', 'bar'], {'elem': 'bar'}),
+
+        ('pop', 'bool', [True, False], [True], {}),
+        ('pop', 'float', [1.0, 2.0], [1.0], {}),
+        ('pop', 'int', [1, 2], [1], {}),
+        ('pop', 'string', ['foo', 'bar'], ['foo'], {}),
+
+        ('set', 'bool', [True, False], [
+         True, True], {'index': 1, 'elem': True}),
+        ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
+        ('set', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
+        ('set', 'string', ['foo', 'bar'], [
+         'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
+
         ('replace', 'bool', [True, False, True], [
          False, False, False], {'old': True, 'new': False}),
         ('replace', 'float', [1.0, 0.0, 1.0], [
@@ -283,73 +327,6 @@ def test_methods_no_arg(
             {'ascending': False}
         ),
 
-
-        ('union_all', 'bool', [True, False], [True, False, False, True], {
-         'other': ul.from_seq([False, True], dtype='bool')}),
-        ('union_all', 'float', [1.0, 2.0], [1.0, 2.0, 3.0, 4.0], {
-         'other': ul.from_seq([3.0, 4.0], dtype='float')}),
-        ('union_all', 'int', [1, 2], [1, 2, 3, 4], {
-         'other': ul.from_seq([3, 4], dtype='int')}),
-        ('union_all', 'string', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
-         'other': ul.from_seq(['baz', 'zoo'], dtype='string')}),
-
-        ('var', 'bool', [True, False], 0.25, {}),
-        ('var', 'bool', [True, True, True, False], 0.25, {"ddof": 1}),
-        ('var', 'float', [1.0, 2.0, 3.0, 4.0], 1.25, {}),
-        ('var', 'float', [1.0, 2.0, 3.0], 1.0, {"ddof": 1}),
-        ('var', 'int', [1, 2, 3, 4], 1.25, {}),
-        ('var', 'int', [1, 2, 3], 1.0, {"ddof": 1}),
-
-        ("where", "bool", [True, True, False, False], [
-         False, False], {"fn": lambda x: x == False},),  # noqa: E712
-        ("where", "float", [1.0, 2.0, 3.0, 4.0], [
-         1.0, 2.0], {"fn": lambda x: x < 3.0},),
-        ("where", "int", [1, 2, 3, 4], [
-            3, 4], {"fn": lambda x: x > 2},),
-        ("where", "string", ['foo', 'bar', 'baz'], [
-            'foo', 'baz'], {"fn": lambda x: x != 'bar'},),
-    ],
-)
-def test_methods_with_args(
-    test_method: str,
-    dtype: str,
-    nums: LIST_TYPE,
-    expected_value: RESULT,
-    kwargs: dict,
-) -> None:
-    arr = ul.from_seq(nums, dtype)
-    result = getattr(arr, test_method)(**kwargs)
-    check_test_result(dtype, test_method, result, expected_value)
-
-
-@expand_dtypes
-@pytest.mark.parametrize(
-    "test_method, dtype, nums, expected_value, kwargs",
-    [
-        ('__setitem__', 'bool', [True, False], [
-            True, True], {'index': 1, 'elem': True}),
-        ('__setitem__', 'float', [1.0, 2.0], [
-         1.0, 3.0], {'index': 1, 'elem': 3.0}),
-        ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
-        ('__setitem__', 'string', ['foo', 'bar'], [
-         'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
-
-        ('append', 'bool', [True], [True, False], {'elem': False}),
-        ('append', 'float', [1.0], [1.0, 2.0], {'elem': 2.0}),
-        ('append', 'int', [1], [1, 2], {'elem': 2}),
-        ('append', 'string', ['foo'], ['foo', 'bar'], {'elem': 'bar'}),
-
-        ('pop', 'bool', [True, False], [True], {}),
-        ('pop', 'float', [1.0, 2.0], [1.0], {}),
-        ('pop', 'int', [1, 2], [1], {}),
-        ('pop', 'string', ['foo', 'bar'], ['foo'], {}),
-
-        ('set', 'bool', [True, False], [
-         True, True], {'index': 1, 'elem': True}),
-        ('set', 'float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
-        ('set', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
-        ('set', 'string', ['foo', 'bar'], [
-         'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
     ],
 )
 def test_multable_methods(
@@ -482,4 +459,42 @@ def test_operators(
     else:
         other = kwargs["other"]
     result = test_method(arr, other)
+    check_test_result(dtype, test_method, result, expected_value)
+
+
+@expand_dtypes
+@pytest.mark.parametrize(
+    "dtype, nums, expected_value",
+    [
+        (
+            'bool',
+            [True, False, True, False, True],
+            [False, True],
+        ),
+        (
+            'float',
+            [5.0, 3.0, 2.0, 4.0, 1.0, 3.0],
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+        ),
+        (
+            'int',
+            [5, 3, 2, 4, 1, 3],
+            [1, 2, 3, 4, 5],
+        ),
+        (
+            'string',
+            ['foo', 'bar', 'foo'],
+            ['bar', 'foo'],
+        ),
+    ],
+)
+def test_unique(
+    dtype: str,
+    nums: LIST_TYPE,
+    expected_value: RESULT,
+) -> None:
+    test_method = "unique"
+    arr = ul.from_seq(nums, dtype)
+    result = getattr(arr, test_method)()
+    result.sort(True)
     check_test_result(dtype, test_method, result, expected_value)

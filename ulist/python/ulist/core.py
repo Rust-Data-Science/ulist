@@ -2,7 +2,7 @@ from __future__ import annotations  # To avoid circular import.
 
 from typing import TYPE_CHECKING, Callable, Union
 
-from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM
+from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM, ELEM_OPT
 from .ulist import (
     BooleanList,
     FloatList32,
@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # To avoid circular import.
     from .control_flow import CaseObject
 
 NUM_OR_LIST = Union[NUM, "UltraFastList"]
-ELEM_OR_LIST = Union[ELEM, "UltraFastList"]
+ELEM_OR_LIST = Union[ELEM_OPT, "UltraFastList"]
 
 
 class UltraFastList:
@@ -179,7 +179,7 @@ class UltraFastList:
         assert isinstance(self._values, BooleanList)
         return self._values.any()
 
-    def append(self, elem: ELEM) -> None:
+    def append(self, elem: ELEM_OPT) -> None:
         """Adds a new element at the end of the self."""
         self._values.append(elem)
 
@@ -330,6 +330,8 @@ class UltraFastList:
 
     def equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self == elem."""
+        if elem is None:
+            return UltraFastList(BooleanList.repeat(False, self.size()))
         return UltraFastList(self._values.equal_scala(elem))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
@@ -340,7 +342,7 @@ class UltraFastList:
         assert isinstance(condition._values, BooleanList)
         return UltraFastList(self._values.filter(condition._values))
 
-    def get(self, index: int) -> ELEM:
+    def get(self, index: int) -> ELEM_OPT:
         """Return self[index]."""
         return self._values.get(index)
 
@@ -417,11 +419,11 @@ class UltraFastList:
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.pow_scala(elem))
 
-    def replace(self, old: ELEM, new: ELEM) -> "UltraFastList":
+    def replace(self, old: ELEM_OPT, new: ELEM_OPT) -> None:
         """Replace the old elements of self with the new one."""
-        return UltraFastList(self._values.replace(old, new))
+        self._values.replace(old, new)
 
-    def set(self, index: int, elem: ELEM) -> None:
+    def set(self, index: int, elem: ELEM_OPT) -> None:
         """Set self[index] to elem."""
         self._values.set(index, elem)
 
@@ -429,8 +431,8 @@ class UltraFastList:
         """Number of elements of self."""
         return self._values.size()
 
-    def sort(self, ascending: bool) -> "UltraFastList":
-        """Return a sorted copy of self.
+    def sort(self, ascending: bool) -> None:
+        """Sort self.
 
         Args:
             ascending (bool):
@@ -439,7 +441,7 @@ class UltraFastList:
         Returns:
             UltraFastList: The sorted ulist.
         """
-        return UltraFastList(self._values.sort(ascending=ascending))
+        self._values.sort(ascending=ascending)
 
     def starts_with(self, elem: str) -> UltraFastList:
         """Return whether the element of self starts with `elem`."""

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 
 import pytest
 import ulist as ul
@@ -39,7 +39,7 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
 def test_methods_with_args(
     test_method: str,
     nums: List[str],
-    expected_value: List[str],
+    expected_value: List[Optional[str]],
     kwargs: dict,
 ) -> None:
     dtype = "string"
