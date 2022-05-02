@@ -107,11 +107,11 @@ All contributions are welcome. See `Developer Guide <https://github.com/tushushu
    :target: https://pypi.org/project/ulist/
 .. |License| image:: https://img.shields.io/github/license/tushushu/ulist
    :target: https://github.com/tushushu/ulist/blob/main/LICENSE
-.. |CI| image:: https://github.com/tushushu/ulist/actions/workflows/main.yml/badge.svg?branch=0.9.0
+.. |CI| image:: https://github.com/tushushu/ulist/actions/workflows/main.yml/badge.svg
    :target: https://github.com/tushushu/ulist/actions/workflows/main.yml
-.. |doc| image:: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg?branch=0.9.0
+.. |doc| image:: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg
    :target: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml
-.. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.9.0
+.. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg
    :target: https://github.com/tushushu/ulist/actions/workflows/publish.yml
 .. |code style| image:: https://img.shields.io/badge/style-flake8-blue
    :target: https://github.com/PyCQA/flake8
