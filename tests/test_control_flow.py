@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 
 import pytest
 import ulist as ul
@@ -181,7 +181,7 @@ def test_select(
     dtype: str,
     nums: LIST_TYPE,
     kwargs: dict,
-    expected_value: List[bool],
+    expected_value: List[Optional[bool]],
 ) -> None:
     arr = ul.from_seq(nums, dtype)
     choices = kwargs["choices"]
@@ -406,7 +406,7 @@ def test_case_when(
     dtype: str,
     nums: LIST_TYPE,
     kwargs: dict,
-    expected_value: List[bool],
+    expected_value: List[Optional[bool]],
 ) -> None:
     arr = ul.from_seq(nums, dtype)
     default = kwargs["default"]

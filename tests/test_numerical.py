@@ -1,12 +1,12 @@
 import operator as op
-from typing import Callable, List, Union
+from typing import Callable, List, Union, Optional
 
 import pytest
 import ulist as ul
 from ulist.utils import check_test_result, expand_dtypes
 
 NUM_TYPE = Union[float, int]
-LIST_TYPE = Union[List[float], List[int]]
+LIST_TYPE = Union[List[Optional[float]], List[Optional[int]]]
 
 
 @expand_dtypes

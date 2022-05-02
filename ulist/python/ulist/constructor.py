@@ -1,9 +1,18 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Union, Type
 
 from .core import UltraFastList
-from .typedef import ELEM, ELEM_OPT
+from .typedef import ELEM_OPT, ELEM
 from .ulist import (BooleanList, FloatList32, FloatList64, IntegerList32,
                     IntegerList64, StringList, arange32, arange64)
+
+T = Union[
+    Type[BooleanList],
+    Type[FloatList32],
+    Type[FloatList64],
+    Type[IntegerList32],
+    Type[IntegerList64],
+    Type[StringList],
+]
 
 
 def arange(
@@ -156,8 +165,8 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     """
     na_indexes = set([i for i, x in enumerate(obj) if x is None])
     if dtype == "int" or dtype == "int64":
-        cls = IntegerList64
-        na_val = 0
+        cls: T = IntegerList64
+        na_val: ELEM = 0
     elif dtype == "int32":
         cls = IntegerList32
         na_val = 0

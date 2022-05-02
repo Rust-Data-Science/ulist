@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 import pytest
 import ulist as ul
@@ -68,7 +68,7 @@ def test_constructors(
     test_method: Callable,
     args: tuple,
     kwargs: dict,
-    expected_value: List[bool],
+    expected_value: List[Optional[bool]],
 ) -> None:
     result = test_method(*args, **kwargs)
     if type(expected_value[0]) == int:

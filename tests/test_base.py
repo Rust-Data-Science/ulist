@@ -1,12 +1,14 @@
-from typing import Dict, List, Union, Callable
+from typing import Dict, List, Union, Callable, Optional
 
 import operator as op
 import pytest
 import ulist as ul
 from ulist.utils import check_test_result, compare_dtypes, expand_dtypes
 
-ELEM_TYPE = Union[float, int, bool, str]
-LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
+ELEM_TYPE = Union[Optional[float],
+                  Optional[int], Optional[bool], Optional[str]]
+LIST_TYPE = Union[List[Optional[float]], List[Optional[int]],
+                  List[Optional[bool]], List[Optional[str]]]
 COUNTER = Union[Dict[int, int], Dict[bool, int]]
 RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
