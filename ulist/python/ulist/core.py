@@ -448,6 +448,11 @@ class UltraFastList:
         assert isinstance(self._values, StringList)
         return UltraFastList(self._values.starts_with(elem))
 
+    def str_len(self) -> "UltraFastList":
+        """Return each element's string length of self."""
+        assert isinstance(self._values, StringList)
+        return UltraFastList(self._values.str_len())
+
     def sub(self, other: "UltraFastList") -> "UltraFastList":
         """Return self - other."""
         assert not isinstance(self._values, (BooleanList, StringList))
