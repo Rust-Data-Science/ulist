@@ -136,6 +136,12 @@ impl StringList {
         BooleanList::new(vec, HashSet::new())
     }
 
+    pub fn str_len(&self) -> IntegerList64 {
+        let mut vec = self.values().iter().map(|x| x.len() as i64).collect();
+        _fill_na(&mut vec, self.na_indexes(), 0);
+        IntegerList64::new(vec, self.na_indexes().clone())
+    }
+
     pub fn to_list(&self) -> Vec<Option<String>> {
         List::to_list(self)
     }
