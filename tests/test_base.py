@@ -17,10 +17,11 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value",
     [
+        ('__len__', 'bool', [True, False, True], 3),
         ('__len__', 'float', [1.0, 2.0, 3.0], 3),
         ('__len__', 'int', [1, 2, 3], 3),
-        ('__len__', 'bool', [True, False, True], 3),
         ('__len__', 'string', ['foo', 'bar', 'baz'], 3),
+        ('__len__', 'string', ['foo', 'bar', None], 3),
 
         (
             "__repr__",
@@ -43,6 +44,14 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ),
         ('__repr__', 'string', ['foo', 'bar'],
          "UltraFastList(['foo', 'bar'])"),
+        (
+            "__repr__",
+            "string",
+            ['foo', None] * 50,
+            "UltraFastList(['foo', None, 'foo', ..., None, 'foo', None])",
+        ),
+        ('__repr__', 'string', ['foo', None],
+         "UltraFastList(['foo', None])"),
 
         (
             "__str__",
@@ -63,33 +72,46 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
             "['foo', 'bar', 'foo', ..., 'bar', 'foo', 'bar']",
         ),
         ('__str__', 'string', ['foo', 'bar'], "['foo', 'bar']"),
+        (
+            "__str__",
+            "string",
+            ['foo', None] * 50,
+            "['foo', None, 'foo', ..., None, 'foo', None]",
+        ),
+        ('__str__', 'string', ['foo', None], "['foo', None]"),
 
         ('copy', 'bool', [True, False], [True, False]),
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('copy', 'int', [1, 2], [1, 2]),
         ('copy', 'string', ['foo', 'bar'], ['foo', 'bar']),
+        ('copy', 'string', ['foo', None], ['foo', None]),
 
         ('counter', 'bool', [True, False, True], {True: 2, False: 1}),
         ('counter', 'int', [1, 0, 1], {1: 2, 0: 1}),
         ('counter', 'string', ['foo', 'bar', 'foo'], {'foo': 2, 'bar': 1}),
+        ('counter', 'string', ['foo', None, 'foo'], {'foo': 2, None: 1}),
 
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
         ('mean', 'bool', [True, False, True, False], 0.5),
+        ('mean', 'bool', [True, False, True, None], 0.5),
 
         ('size', 'bool', [True, False], 2),
         ('size', 'float', [1.0, 2.0], 2),
         ('size', 'int', [1, 2], 2),
         ('size', 'string', ['foo', 'bar'], 2),
+        ('size', 'string', ['foo', None], 2),
 
         ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
         ('sum', 'int', [1, 2, 3, 4, 5], 15),
         ('sum', 'bool', [True, False, True], 2,),
+        ('sum', 'bool', [True, None, True], 2,),
 
         ('to_list', 'bool', [True, False], [True, False]),
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('to_list', 'int', [1, 2], [1, 2]),
         ('to_list', 'string', ['foo', 'bar'], ['foo', 'bar']),
+        ('to_list', 'string', ['foo', None], ['foo', None]),
     ],
 )
 def test_methods_no_arg(

@@ -134,14 +134,15 @@ class UltraFastList:
         n = self.size()
         if n < 100:
             return str(self.to_list())
-        if self.dtype == 'string':
-            return (
-                f"['{self[0]}', '{self[1]}', '{self[2]}', ..., "
-                + f"'{self[n-3]}', '{self[n-2]}', '{self[n-1]}']"
-            )
+
+        def fmt(x) -> str:
+            if isinstance(x, str):
+                return f"'{x}'"
+            return f"{x}"
+
         return (
-            f"[{self[0]}, {self[1]}, {self[2]}, ..., "
-            + f"{self[n-3]}, {self[n-2]}, {self[n-1]}]"
+            f"[{fmt(self[0])}, {fmt(self[1])}, {fmt(self[2])}, ..., "
+            + f"{fmt(self[n-3])}, {fmt(self[n-2])}, {fmt(self[n-1])}]"
         )
 
     def __sub__(self, other: NUM_OR_LIST) -> "UltraFastList":
