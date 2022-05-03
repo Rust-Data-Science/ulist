@@ -305,6 +305,10 @@ class UltraFastList:
         """Return a ulist copy of self."""
         return UltraFastList(self._values.copy())
 
+    def count_na(self) -> int:
+        """Count of missing values."""
+        return self._values.count_na()
+
     def counter(self) -> COUNTER:
         """
         Return a dictionary where the elements of self are stored as

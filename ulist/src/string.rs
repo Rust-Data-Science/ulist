@@ -69,6 +69,10 @@ impl StringList {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     pub fn counter(&self) -> HashMap<String, usize> {
         NonFloatList::counter(self)
     }

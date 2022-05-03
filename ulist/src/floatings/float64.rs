@@ -77,6 +77,10 @@ impl FloatList64 {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     #[staticmethod]
     pub fn cycle(vec: Vec<f64>, size: usize) -> Self {
         List::cycle(&vec, size)

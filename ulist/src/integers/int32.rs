@@ -79,6 +79,10 @@ impl IntegerList32 {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     pub fn counter(&self) -> HashMap<i32, usize> {
         NonFloatList::counter(self)
     }

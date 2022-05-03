@@ -86,6 +86,11 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('copy', 'string', ['foo', 'bar'], ['foo', 'bar']),
         ('copy', 'string', ['foo', None], ['foo', None]),
 
+        ('count_na', 'bool', [True, False, True], 0),
+        ('count_na', 'int', [1, 0, 1], 0),
+        ('count_na', 'string', ['foo', 'bar', 'foo'], 0),
+        ('count_na', 'string', ['foo', None, 'foo'], 1),
+
         ('counter', 'bool', [True, False, True], {True: 2, False: 1}),
         ('counter', 'int', [1, 0, 1], {1: 2, 0: 1}),
         ('counter', 'string', ['foo', 'bar', 'foo'], {'foo': 2, 'bar': 1}),

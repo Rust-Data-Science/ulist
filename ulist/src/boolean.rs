@@ -75,6 +75,10 @@ impl BooleanList {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     pub fn counter(&self) -> HashMap<bool, usize> {
         NonFloatList::counter(self)
     }
