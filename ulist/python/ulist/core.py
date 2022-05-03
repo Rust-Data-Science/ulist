@@ -315,7 +315,11 @@ class UltraFastList:
         dictionary keys and their counts are stored as dictionary values.
         """
         assert not isinstance(self._values, (FloatList32, FloatList64))
-        return self._values.counter()
+        result = self._values.counter()
+        m = self.count_na()
+        if m > 0:
+            result[None] = m
+        return result
 
     def div(self, other: "UltraFastList") -> "UltraFastList":
         """Return self / other."""
