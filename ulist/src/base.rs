@@ -90,17 +90,14 @@ where
             .filter(|(_, y)| **y)
             .map(|(x, _)| x.clone())
             .collect();
-        let mut hset = HashSet::with_capacity(self.size());
+        // TODO: Report bug of below codes.
         let cond = condition.values();
-        unsafe {
-            for i in self.na_indexes().iter() {
-                let _cond = cond.get_unchecked(*i);
-                if *_cond {
-                    hset.insert(i.clone());
-                }
-            }
-        };
-        hset.shrink_to_fit();
+        let hset = self
+            .na_indexes()
+            .iter()
+            .filter(|&x| cond[*x])
+            .map(|x| x.clone())
+            .collect();
         List::_new(vec, hset)
     }
 
