@@ -163,8 +163,8 @@ impl IntegerList32 {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<i32>, size: usize) -> Self {
-        List::repeat(elem, size, 0)
+    pub fn repeat(elem: i32, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<i32>, new: Option<i32>) {

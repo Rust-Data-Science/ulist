@@ -165,8 +165,8 @@ impl IntegerList64 {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<i64>, size: usize) -> Self {
-        List::repeat(elem, size, 0)
+    pub fn repeat(elem: i64, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<i64>, new: Option<i64>) {

@@ -157,8 +157,8 @@ impl FloatList64 {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<f64>, size: usize) -> Self {
-        List::repeat(elem, size, 0.0)
+    pub fn repeat(elem: f64, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<f64>, new: Option<f64>) {

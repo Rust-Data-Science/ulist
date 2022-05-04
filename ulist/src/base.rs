@@ -3,7 +3,6 @@ use crate::index::IndexList;
 use std::cell::Ref;
 use std::cell::RefMut;
 use std::collections::HashSet;
-use std::iter::FromIterator;
 
 pub fn _fill_na<T: Clone>(vec: &mut Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
@@ -257,15 +256,9 @@ where
         }
     }
 
-    fn repeat(elem: Option<T>, size: usize, na_value: T) -> Self {
-        let mut val = na_value;
-        let mut hset = HashSet::new();
-        if let Some(i) = elem {
-            val = i;
-        } else {
-            hset = HashSet::from_iter(0..size);
-        }
-        let vec = vec![val; size];
+    fn repeat(elem: T, size: usize) -> Self {
+        let vec = vec![elem; size];
+        let hset = HashSet::new();
         List::_new(vec, hset)
     }
 

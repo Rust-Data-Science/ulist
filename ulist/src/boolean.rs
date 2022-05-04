@@ -125,8 +125,8 @@ impl BooleanList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<bool>, size: usize) -> Self {
-        List::repeat(elem, size, false)
+    pub fn repeat(elem: bool, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<bool>, new: Option<bool>) {
