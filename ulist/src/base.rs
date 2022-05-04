@@ -85,6 +85,9 @@ where
     }
 
     fn filter(&self, condition: &BooleanList) -> Self {
+        if condition.count_na() > 0 {
+            panic!("Parameter `condition` should not contain missing values!")
+        }
         let n = self.size();
         let m = self.count_na();
         let mut vec: Vec<T> = Vec::with_capacity(n);

@@ -1,4 +1,5 @@
 use crate::base::List;
+use crate::base::_fill_na;
 use crate::floatings::FloatList32;
 use crate::floatings::FloatList64;
 use crate::index::IndexList;
@@ -105,8 +106,10 @@ impl BooleanList {
     }
 
     pub fn not_(&self) -> Self {
-        let vec = self.values().iter().map(|&x| !x).collect();
-        BooleanList::new(vec, HashSet::new())
+        let mut vec = self.values().iter().map(|&x| !x).collect();
+        _fill_na(&mut vec, self.na_indexes(), false);
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
