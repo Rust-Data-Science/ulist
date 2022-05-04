@@ -7,8 +7,10 @@ use std::iter::FromIterator;
 
 pub fn _fill_na<T: Clone>(vec: &mut Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
-        let ptr = unsafe { vec.get_unchecked_mut(*i) };
-        *ptr = na_value.clone();
+        // TODO: Use get_unchecked_mut instead.
+        // let ptr = unsafe { vec.get_unchecked_mut(*i) };
+        // *ptr = na_value.clone();
+        vec[*i] = na_value.clone();
     }
 }
 
@@ -83,21 +85,26 @@ where
     }
 
     fn filter(&self, condition: &BooleanList) -> Self {
-        let vec = self
-            .values()
-            .iter()
-            .zip(condition.values().iter())
-            .filter(|(_, y)| **y)
-            .map(|(x, _)| x.clone())
-            .collect();
-        // TODO: Report bug of below codes.
+        let n = self.size();
+        let m = self.count_na();
+        let mut vec: Vec<T> = Vec::with_capacity(n);
+        let mut hset: HashSet<usize> = HashSet::with_capacity(m);
         let cond = condition.values();
-        let hset = self
-            .na_indexes()
-            .iter()
-            .filter(|&x| cond[*x])
-            .map(|x| x.clone())
-            .collect();
+        let mut i = 0;
+        for ((j, x), cond) in self.values().iter().enumerate().zip(cond.iter()) {
+            if *cond {
+                // TODO: Use get_unchecked_mut instead
+                // let ptr = unsafe { vec.get_unchecked_mut(i) };
+                // *ptr = x.clone();
+                vec.push(x.clone());
+                if self.na_indexes().contains(&j) {
+                    hset.insert(i);
+                }
+                i += 1;
+            }
+        }
+        vec.shrink_to_fit();
+        hset.shrink_to_fit();
         List::_new(vec, hset)
     }
 
@@ -118,13 +125,19 @@ where
         if indexes.back() >= self.size() {
             panic!("Index out of range!")
         }
-        let vec = unsafe {
-            indexes
-                .values()
-                .iter()
-                .map(|&x| self.values().get_unchecked(x).clone())
-                .collect()
-        };
+        // TODO: use get_unchecked instead.
+        // let vec = unsafe {
+        //     indexes
+        //         .values()
+        //         .iter()
+        //         .map(|&x| self.values().get_unchecked(x).clone())
+        //         .collect()
+        // };
+        let vec = indexes
+            .values()
+            .iter()
+            .map(|&x| self.values()[x].clone())
+            .collect();
         let mut hset = HashSet::with_capacity(self.size());
         for i in indexes.values().iter() {
             if self.na_indexes().contains(i) {
@@ -177,9 +190,14 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            let ptr = unsafe { vec.get_unchecked_mut(i) };
-            if *ptr == old {
-                *ptr = self.na_value();
+            // TODO: Use get_unchecked_mut instead.
+            // let ptr = unsafe { vec.get_unchecked_mut(i) };
+            // if *ptr == old {
+            //     *ptr = self.na_value();
+            //     self.na_indexes_mut().insert(i);
+            // }
+            if vec[i] == old {
+                vec[i] = self.na_value();
                 self.na_indexes_mut().insert(i);
             }
         }
@@ -189,9 +207,13 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            let ptr = unsafe { vec.get_unchecked_mut(i) };
-            if *ptr == old {
-                *ptr = new.clone();
+            // TODO: Use get_unchecked_mut instead.
+            // let ptr = unsafe { vec.get_unchecked_mut(i) };
+            // if *ptr == old {
+            //     *ptr = new.clone();
+            // }
+            if vec[i] == old {
+                vec[i] = new.clone();
             }
         }
     }
@@ -199,8 +221,10 @@ where
     fn replace_na(&self, new: T) {
         let mut vec = self.values_mut();
         for i in self.na_indexes().iter() {
-            let ptr = unsafe { vec.get_unchecked_mut(*i) };
-            *ptr = new.clone();
+            // TODO: Use get_unchecked_mut instead.
+            // let ptr = unsafe { vec.get_unchecked_mut(*i) };
+            // *ptr = new.clone();
+            vec[*i] = new.clone();
         }
         self.na_indexes_mut().clear();
     }
@@ -209,12 +233,19 @@ where
         if index >= self.size() {
             panic!("Index out of range!")
         }
-        let mut values = self.values_mut();
-        let ptr = unsafe { values.get_unchecked_mut(index) };
+        let mut vec = self.values_mut();
+        // TODO: Use get_unchecked_mut instead.
+        // let ptr = unsafe { vec.get_unchecked_mut(index) };
+        // if let Some(i) = elem {
+        //     *ptr = i;
+        // } else {
+        //     *ptr = self.na_value();
+        //     self.na_indexes_mut().insert(index);
+        // }
         if let Some(i) = elem {
-            *ptr = i;
+            vec[index] = i;
         } else {
-            *ptr = self.na_value();
+            vec[index] = self.na_value();
             self.na_indexes_mut().insert(index);
         }
     }
@@ -238,8 +269,9 @@ where
     fn to_list(&self) -> Vec<Option<T>> {
         let mut vec: Vec<Option<T>> = self.values().iter().map(|x| Some(x.clone())).collect();
         for i in self.na_indexes().iter() {
-            let ptr = unsafe { vec.get_unchecked_mut(*i) };
-            *ptr = None;
+            // let ptr = unsafe { vec.get_unchecked_mut(*i) };
+            // *ptr = None;
+            vec[*i] = None;
         }
         vec
     }
