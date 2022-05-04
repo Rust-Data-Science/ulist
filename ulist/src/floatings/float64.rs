@@ -286,6 +286,7 @@ impl NumericalList<f64, i32, f64> for FloatList64 {
     }
 
     fn div(&self, other: &Self) -> Vec<f64> {
+        self._check_len_eq(other);
         self.values()
             .iter()
             .zip(other.values().iter())

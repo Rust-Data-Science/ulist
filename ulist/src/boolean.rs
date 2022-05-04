@@ -209,6 +209,7 @@ fn _logical_operate(
     other: &BooleanList,
     func: impl Fn(bool, bool) -> bool,
 ) -> BooleanList {
+    this._check_len_eq(other);
     let vec = this
         .values()
         .iter()

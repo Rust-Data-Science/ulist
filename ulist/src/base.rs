@@ -24,6 +24,12 @@ where
 
     fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
 
+    fn _check_len_eq(&self, other: &Self) {
+        if self.size() != other.size() {
+            panic!("The sizes of `self` and `other` should be equal!")
+        }
+    }
+
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
         self.values().iter().map(|x| func(x)).collect()
     }
@@ -85,9 +91,14 @@ where
     }
 
     fn filter(&self, condition: &BooleanList) -> Self {
+        if self.size() != condition.size() {
+            panic!("The sizes of `self` and `other` should be equal!");
+        }
+
         if condition.count_na() > 0 {
             panic!("Parameter `condition` should not contain missing values!")
         }
+
         let n = self.size();
         let m = self.count_na();
         let mut vec: Vec<T> = Vec::with_capacity(n);

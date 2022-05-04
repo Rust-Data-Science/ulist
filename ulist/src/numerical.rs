@@ -20,6 +20,7 @@ where
     }
 
     fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
+        self._check_len_eq(other);
         let mut vec = self
             .values()
             .iter()

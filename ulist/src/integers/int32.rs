@@ -259,6 +259,7 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
     }
 
     fn div(&self, other: &Self) -> Vec<f64> {
+        self._check_len_eq(other);
         self.values()
             .iter()
             .zip(other.values().iter())
