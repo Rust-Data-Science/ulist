@@ -122,29 +122,22 @@ where
     }
 
     fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+        // TODO: Put this kind of check
+        // where there is unsafe block.
         if indexes.back() >= self.size() {
             panic!("Index out of range!")
         }
         // TODO: use get_unchecked instead.
-        // let vec = unsafe {
-        //     indexes
-        //         .values()
-        //         .iter()
-        //         .map(|&x| self.values().get_unchecked(x).clone())
-        //         .collect()
-        // };
-        let vec = indexes
-            .values()
-            .iter()
-            .map(|&x| self.values()[x].clone())
-            .collect();
-        let mut hset = HashSet::with_capacity(self.size());
-        for i in indexes.values().iter() {
-            if self.na_indexes().contains(i) {
-                hset.insert(i.clone());
+        let mut vec: Vec<T> = Vec::new();
+        let mut hset: HashSet<usize> = HashSet::new();
+        let mut i: usize = 0;
+        for j in indexes.values().iter() {
+            vec.push(self.values()[*j].clone());
+            if self.na_indexes().contains(j) {
+                hset.insert(i);
             }
+            i += 1;
         }
-        hset.shrink_to_fit();
         List::_new(vec, hset)
     }
 
@@ -160,7 +153,7 @@ where
 
     fn not_equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x != &elem);
-        _fill_na(&mut vec, self.na_indexes(), false);
+        _fill_na(&mut vec, self.na_indexes(), true);
         BooleanList::new(vec, HashSet::new())
     }
 

@@ -386,7 +386,7 @@ class UltraFastList:
 
     def mean(self) -> float:
         """Return the mean of self."""
-        return self.sum() / self.size()
+        return self.sum() / (self.size() - self.count_na())
 
     def min(self) -> NUM:
         """Return the minimum of self."""
@@ -532,7 +532,7 @@ class UltraFastList:
             raise TypeError(f"Var method does not support dtype {self.dtype}!")
         mean = data.mean()
         numerator = data.sub_scala(mean).pow_scala(2).sum()
-        denominator = data.size() - ddof
+        denominator = data.size() - ddof - self.count_na()
         return numerator / denominator
 
     def where(

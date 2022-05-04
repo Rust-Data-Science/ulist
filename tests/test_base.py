@@ -99,7 +99,7 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
         ('mean', 'bool', [True, False, True, False], 0.5),
-        ('mean', 'bool', [True, False, True, None], 0.5),
+        ('mean', 'bool', [True, False, True, False, None], 0.5),
 
         ('size', 'bool', [True, False], 2),
         ('size', 'float', [1.0, 2.0], 2),
