@@ -25,7 +25,7 @@ where
 
     fn _check_len_eq(&self, other: &Self) {
         if self.size() != other.size() {
-            panic!("The sizes of `self` and `other` should be equal!")
+            panic!("The sizes of `self` and `other` should be equal!");
         }
     }
 
@@ -95,7 +95,7 @@ where
         }
 
         if condition.count_na() > 0 {
-            panic!("Parameter `condition` should not contain missing values!")
+            panic!("Parameter `condition` should not contain missing values!");
         }
 
         let n = self.size();
@@ -130,7 +130,7 @@ where
         if let Some(i) = val {
             return Some(i.clone());
         } else {
-            panic!("Index out of range!")
+            panic!("Index out of range!");
         }
     }
 
@@ -237,7 +237,7 @@ where
 
     fn set(&self, index: usize, elem: Option<T>) {
         if index >= self.size() {
-            panic!("Index out of range!")
+            panic!("Index out of range!");
         }
         let mut vec = self.values_mut();
         // TODO: Use get_unchecked_mut instead.
