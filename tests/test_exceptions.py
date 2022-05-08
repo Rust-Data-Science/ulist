@@ -11,12 +11,6 @@ class _Foo:
     pass
 
 
-_ARR2 = ul.from_seq([1, 2, 3], dtype='int')
-_WHEN1 = _ARR2.case(default='foo').when
-_ARR3 = ul.from_seq([1, 2, 3], dtype='int')
-_WHEN2 = _ARR3.case(default='foo').when
-
-
 @pytest.mark.parametrize(
     "test_method, kwargs, expected_error",
     [
@@ -27,10 +21,31 @@ _WHEN2 = _ARR3.case(default='foo').when
             },
             TypeError
         ),
-        (_ARR1.astype, {"dtype": "foo"}, ValueError),
-        (ul.cycle, {"obj": [1, 2], "size": 3, "dtype": "foo"}, ValueError),
-        (ul.from_seq, {"obj": [1, 2], "dtype": "foo"}, ValueError),
-        (ul.repeat, {"elem": dict(), "size": 3}, TypeError),
+
+        (
+            _ARR1.astype,
+            {"dtype": "foo"},
+            ValueError
+        ),
+
+        (
+            ul.cycle,
+            {"obj": [1, 2], "size": 3, "dtype": "foo"},
+            ValueError
+        ),
+
+        (
+            ul.from_seq,
+            {"obj": [1, 2], "dtype": "foo"},
+            ValueError
+        ),
+
+        (
+            ul.repeat,
+            {"elem": dict(), "size": 3},
+            TypeError
+        ),
+
         (
             ul.select,
             {
@@ -43,10 +58,29 @@ _WHEN2 = _ARR3.case(default='foo').when
             },
             TypeError
         ),
-        (ul.UltraFastList, {"values": [1, 2]}, TypeError),
-        (_ARR1.var, {}, TypeError),
-        (_WHEN1, {"fn": lambda x: x + 1, "then": "bar"}, TypeError),
-        (_WHEN2, {"fn": lambda x: x < 2, "then": 1.0}, TypeError),
+
+        (
+            ul.UltraFastList,
+            {"values": [1, 2]},
+            TypeError
+        ),
+
+        (
+            _ARR1.var,
+            {},
+            TypeError
+        ),
+
+        (
+            ul.from_seq([1, 2, 3], dtype='int').case(default='foo').when,
+            {"fn": lambda x: x + 1, "then": "bar"},
+            TypeError
+        ),
+        (
+            ul.from_seq([1, 2, 3], dtype='int').case(default='foo').when,
+            {"fn": lambda x: x < 2, "then": 1.0},
+            TypeError
+        ),
     ],
 )
 def test_exceptions(
