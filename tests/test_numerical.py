@@ -292,35 +292,146 @@ def test_statistics_methods(
         (
             'mul',
             'int',
-            [1, 2, 3, 4, 5],
-            [1, 4, 9, 16, 25],
+            [1, 2, None, 4, 5],
+            [1, 4, None, 16, 25],
             {'other': [1, 2, 3, 4, 5]},
         ),
+        (
+            'mul',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1, 4, None, 16, 25],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            'mul',
+            'int',
+            [1, 2, None, 4, 5],
+            [1, 4, None, 16, 25],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            'mul',
+            'int',
+            [1, None, 3, 4, 5],
+            [1, None, 9, None, 25],
+            {'other': [1, 2, 3, None, 5]},
+        ),
 
-        ('mul_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         2.0, 4.0, 6.0, 8.0, 10.0], {'elem': 2}),
-        ('mul_scala', 'int', [1, 2, 3, 4, 5], [2, 4, 6, 8, 10], {'elem': 2}),
+        (
+            'mul_scala',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [2.0, 4.0, 6.0, 8.0, 10.0],
+            {'elem': 2},
+        ),
+        (
+            'mul_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [2, 4, 6, 8, 10],
+            {'elem': 2},
+        ),
+        (
+            'mul_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [2, 4, None, 8, 10],
+            {'elem': 2},
+        ),
 
-        ('pow_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         1.0, 4.0, 9.0, 16.0, 25.0], {'elem': 2}),
-        ('pow_scala', 'int', [1, 2, 3, 4, 5], [1, 4, 9, 16, 25], {'elem': 2}),
+        (
+            'pow_scala',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [1.0, 4.0, 9.0, 16.0, 25.0],
+            {'elem': 2},
+        ),
+        (
+            'pow_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1, 4, 9, 16, 25],
+            {'elem': 2},
+        ),
+        (
+            'pow_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [1, 4, None, 16, 25],
+            {'elem': 2},
+        ),
 
-        ('sub', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         0.0, 0.0, 0.0, 0.0, 0.0], {'other': [1, 2, 3, 4, 5]}),
-        ('sub', 'int', [1, 2, 3, 4, 5], [
-         0, 0, 0, 0, 0], {'other': [1, 2, 3, 4, 5]}),
+        (
+            'sub',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            'sub',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0, 0, 0, 0, 0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            'sub',
+            'int',
+            [1, 2, None, 4, 5],
+            [0, 0, None, 0, 0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            'sub',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0, 0, None, 0, 0],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            'sub',
+            'int',
+            [1, 2, None, 4, 5],
+            [0, 0, None, 0, 0],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            'sub',
+            'int',
+            [1, None, 3, 4, 5],
+            [0, None, 0, None, 0],
+            {'other': [1, 2, 3, None, 5]},
+        ),
 
-        ('sub_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         0.0, 1.0, 2.0, 3.0, 4.0], {'elem': 1}),
-        ('sub_scala', 'int', [1, 2, 3, 4, 5], [0, 1, 2, 3, 4], {'elem': 1}),
+        (
+            'sub_scala',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [0.0, 1.0, 2.0, 3.0, 4.0],
+            {'elem': 1},
+        ),
+        (
+            'sub_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0, 1, 2, 3, 4],
+            {'elem': 1},
+        ),
+        (
+            'sub_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [0, 1, None, 3, 4],
+            {'elem': 1},
+        ),
     ],
-
-
 )
 def test_arithmetic_methods(
     test_method: str,
     dtype: str,
-    nums: List[NUM_TYPE],
+    nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ) -> None:
@@ -396,7 +507,7 @@ def test_arithmetic_methods(
 def test_operators(
     test_method: Callable,
     dtype: str,
-    nums: List[NUM_TYPE],
+    nums: LIST_TYPE,
     expected_value: LIST_TYPE,
     kwargs: dict,
 ) -> None:
