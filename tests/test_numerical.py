@@ -75,8 +75,8 @@ def test_statistics_methods(
             'add',
             'int',
             [1, 2, None, 4, 5],
-            [2, 4, 6, 8, 10],
-            {'other': [1, 2, None, 4, 5]},
+            [2, 4, None, 8, 10],
+            {'other': [1, 2, 3, 4, 5]},
         ),
         (
             'add',
@@ -96,8 +96,8 @@ def test_statistics_methods(
             'add',
             'int',
             [1, None, 3, 4, 5],
-            [2, 4, 6, None, 10],
-            {'other': [1, None, 3, None, 5]},
+            [2, None, 6, None, 10],
+            {'other': [1, 2, 3, None, 5]},
         ),
 
         (
@@ -140,8 +140,8 @@ def test_statistics_methods(
             'div',
             'int',
             [1, 2, None, 4, 5],
-            [1.0, 1.0, 1.0, 1.0, 1.0],
-            {'other': [1, 2, None, 4, 5]},
+            [1.0, 1.0, None, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5]},
         ),
         (
             'div',
@@ -161,39 +161,141 @@ def test_statistics_methods(
             'div',
             'int',
             [1, None, 3, 4, 5],
-            [1.0, 1.0, 1.0, None, 1.0],
-            {'other': [1, None, 3, None, 5]},
+            [1.0, None, 1.0, None, 1.0],
+            {'other': [1, 2, 3, None, 5]},
         ),
 
-        ('div_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         0.5, 1.0, 1.5, 2.0, 2.5], {'elem': 2}),
-        ('div_scala', 'int', [1, 2, 3, 4, 5], [
-         0.5, 1.0, 1.5, 2.0, 2.5], {'elem': 2}),
+        (
+            'div_scala',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'elem': 2}
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'elem': 2}
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [0.5, 1.0, None, 2.0, 2.5],
+            {'elem': 2}
+        ),
 
-        ("greater_than_or_equal_scala", 'float', [
-         1.0, 2.0, 3.0], [False, True, True], {"elem": 2.0}),
-        ("greater_than_or_equal_scala", 'int', [
-         1, 2, 3], [False, True, True], {"elem": 2}),
+        (
+            "greater_than_or_equal_scala",
+            'float',
+            [1.0, 2.0, 3.0],
+            [False, True, True],
+            {"elem": 2.0}
+        ),
+        (
+            "greater_than_or_equal_scala",
+            'int',
+            [1, 2, 3],
+            [False, True, True],
+            {"elem": 2}
+        ),
+        (
+            "greater_than_or_equal_scala",
+            'int',
+            [1, 2, None],
+            [False, True, False],
+            {"elem": 2}
+        ),
 
-        ('greater_than_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         False, False, True, True, True], {'elem': 2}),
-        ('greater_than_scala', 'int', [1, 2, 3, 4, 5], [
-         False, False, True, True, True], {'elem': 2}),
+        (
+            'greater_than_scala',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [False, False, True, True, True],
+            {'elem': 2},
+        ),
+        (
+            'greater_than_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [False, False, True, True, True],
+            {'elem': 2},
+        ),
+        (
+            'greater_than_scala',
+            'int',
+            [1, 2, 3, 4, None],
+            [False, False, True, True, False],
+            {'elem': 2},
+        ),
 
-        ("less_than_or_equal_scala", 'float', [
-         1.0, 2.0, 3.0], [True, True, False], {"elem": 2.0}),
-        ("less_than_or_equal_scala", 'int', [
-         1, 2, 3], [True, True, False], {"elem": 2}),
+        (
+            "less_than_or_equal_scala",
+            'float',
+            [1.0, 2.0, 3.0],
+            [True, True, False],
+            {"elem": 2.0},
+        ),
+        (
+            "less_than_or_equal_scala",
+            'int',
+            [1, 2, 3],
+            [True, True, False],
+            {"elem": 2},
+        ),
+        (
+            "less_than_or_equal_scala",
+            'int',
+            [None, 2, 3],
+            [False, True, False],
+            {"elem": 2},
+        ),
 
-        ('less_than_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         True, False, False, False, False], {'elem': 2}),
-        ('less_than_scala', 'int', [1, 2, 3, 4, 5], [
-         True, False, False, False, False], {'elem': 2}),
+        (
+            'less_than_scala',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [True, False, False, False, False],
+            {'elem': 2},
+        ),
+        (
+            'less_than_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [True, False, False, False, False],
+            {'elem': 2},
+        ),
+        (
+            'less_than_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [True, False, False, False, False],
+            {'elem': 2},
+        ),
 
-        ('mul', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         1.0, 4.0, 9.0, 16.0, 25.0], {'other': [1, 2, 3, 4, 5]}),
-        ('mul', 'int', [1, 2, 3, 4, 5], [
-         1, 4, 9, 16, 25], {'other': [1, 2, 3, 4, 5]}),
+        (
+            'mul',
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [1.0, 4.0, 9.0, 16.0, 25.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            'mul',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1, 4, 9, 16, 25],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            'mul',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1, 4, 9, 16, 25],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
 
         ('mul_scala', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          2.0, 4.0, 6.0, 8.0, 10.0], {'elem': 2}),
