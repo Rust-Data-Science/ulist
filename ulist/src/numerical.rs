@@ -1,6 +1,7 @@
 use crate::base::List;
 use crate::base::_fill_na;
 use crate::boolean::BooleanList;
+use std::collections::HashSet;
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Fn;
@@ -21,15 +22,25 @@ where
 
     fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
         self._check_len_eq(other);
-        let mut vec = self
+        let vec = self
             .values()
             .iter()
             .zip(other.values().iter())
             .map(|(&x, &y)| func(x, y))
             .collect();
-        _fill_na(&mut vec, self.na_indexes(), self.na_value());
-        let hset = self.na_indexes().clone();
-        List::_new(vec, hset)
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .map(|x| x.clone())
+            .collect();
+        let result: Self = List::_new(vec, hset);
+        _fill_na(
+            &mut result.values_mut(),
+            result.na_indexes(),
+            self.na_value(),
+        );
+        result
     }
 
     fn add(&self, other: &Self) -> Self {
