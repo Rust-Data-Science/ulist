@@ -61,23 +61,19 @@ where
     fn div_scala(&self, elem: V) -> Vec<V>;
 
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x >= elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x >= elem, false), HashSet::new())
     }
 
     fn greater_than_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x > elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x > elem, false), HashSet::new())
     }
 
     fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x <= elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x <= elem, false), HashSet::new())
     }
 
     fn less_than_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x < elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x < elem, false), HashSet::new())
     }
 
     fn max(&self) -> T;
