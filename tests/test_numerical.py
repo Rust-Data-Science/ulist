@@ -21,6 +21,8 @@ LIST_TYPE = Union[List[Optional[float]], List[Optional[int]]]
         ('argmax', 'int', [1, 2, 5, 3, 4], 2),
         ('argmax', 'int', [1, 2, 5, None, 4], 2),
         ('argmax', 'int', [1, 2, None, 3, 4], 4),
+        ('argmax', 'float', [1.0, 2.0, 5.0, None, 4.0], 2),
+        ('argmax', 'float', [1.0, 2.0, None, 3.0, 4.0], 4),
 
         ('argmin', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 0),
         ('argmin', 'float', [2.0, 3.0, 4.0, 5.0, 1.0], 4),
@@ -30,16 +32,22 @@ LIST_TYPE = Union[List[Optional[float]], List[Optional[int]]]
         ('argmin', 'int', [2, 5, 1, 3, 4], 2),
         ('argmin', 'int', [None, 5, 1, 3, 4], 2),
         ('argmin', 'int', [2, 5, None, 3, 4], 0),
+        ('argmin', 'float', [None, 5.0, 1.0, 3.0, 4.0], 2),
+        ('argmin', 'float', [2.0, 5.0, None, 3.0, 4.0], 0),
 
         ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
         ('max', 'int', [1, 2, 3, 4, 5], 5),
         ('max', 'int', [1, 2, 3, 4, None], 4),
         ('max', 'int', [1, 2, None, 4, 5], 5),
+        ('max', 'float', [1.0, 2.0, 3.0, 4.0, None], 4.0),
+        ('max', 'float', [1.0, 2.0, None, 4.0, 5.0], 5.0),
 
         ('min', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 1.0),
         ('min', 'int', [1, 2, 3, 4, 5], 1),
         ('min', 'int', [None, 2, 3, 4, 5], 2),
         ('min', 'int', [1, 2, None, 4, 5], 1),
+        ('min', 'float', [None, 2.0, 3.0, 4.0, 5.0], 2.0),
+        ('min', 'float', [1.0, 2.0, None, 4.0, 5.0], 1.0),
     ],
 )
 def test_statistics_methods(
