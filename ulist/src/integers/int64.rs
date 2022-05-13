@@ -95,7 +95,12 @@ impl IntegerList64 {
     }
 
     pub fn div(&self, other: &Self) -> FloatList64 {
-        let hset = self.na_indexes().clone();
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .map(|x| x.clone())
+            .collect();
         FloatList64::new(NumericalList::div(self, other), hset)
     }
 
@@ -264,10 +269,19 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
 
     fn div(&self, other: &Self) -> Vec<f64> {
         self._check_len_eq(other);
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
         self.values()
             .iter()
+            .enumerate()
             .zip(other.values().iter())
-            .map(|(&x, &y)| x as f64 / y as f64)
+            .map(|((i, &x), &y)| {
+                if hset1.contains(&i) | hset2.contains(&i) {
+                    0.0
+                } else {
+                    x as f64 / y as f64
+                }
+            })
             .collect()
     }
 
