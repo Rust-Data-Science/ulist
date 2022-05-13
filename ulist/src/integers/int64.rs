@@ -280,7 +280,15 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn min(&self) -> i64 {
-        *self.values().iter().min().unwrap()
+        let hset = self.na_indexes();
+        *self
+            .values()
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
+            .min()
+            .unwrap()
     }
 
     fn pow_scala(&self, elem: u32) -> Self {
