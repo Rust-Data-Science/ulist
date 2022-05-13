@@ -52,8 +52,10 @@ where
         List::_new(self._fn_num(|x| x + elem, self.na_value()), hset)
     }
 
+    // TODO: Panic when all values are NA.
     fn argmax(&self) -> usize;
 
+    // TODO: Panic when all values are NA.
     fn argmin(&self) -> usize;
 
     fn div(&self, other: &Self) -> Vec<V>;
@@ -76,8 +78,10 @@ where
         BooleanList::new(self._fn_num(|x| x < elem, false), HashSet::new())
     }
 
+    // TODO: Panic when all values are NA.
     fn max(&self) -> T;
 
+    // TODO: Panic when all values are NA.
     fn min(&self) -> T;
 
     fn mul(&self, other: &Self) -> Self {
