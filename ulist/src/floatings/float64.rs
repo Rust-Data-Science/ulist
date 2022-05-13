@@ -277,7 +277,7 @@ impl NumericalList<f64, i32, f64> for FloatList64 {
     fn argmin(&self) -> usize {
         let vec = self.values();
         let hset = self.na_indexes();
-        let val_0 = &self.values()[0];
+        let val_0 = &f64::INFINITY;
         let result = vec
             .iter()
             .enumerate()
