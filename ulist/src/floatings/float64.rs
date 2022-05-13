@@ -308,9 +308,13 @@ impl NumericalList<f64, i32, f64> for FloatList64 {
     }
 
     fn min(&self) -> f64 {
+        let hset = self.na_indexes();
         *self
             .values()
             .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
             .min_by(|&x, &y| x.partial_cmp(y).unwrap())
             .unwrap()
     }
