@@ -252,9 +252,11 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn argmin(&self) -> usize {
+        let hset = self.na_indexes();
         self.values()
             .iter()
             .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
             .min_by_key(|x| x.1)
             .unwrap()
             .0
