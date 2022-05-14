@@ -17,4 +17,8 @@ LIST_PY = Union[List[Optional[float]], List[Optional[int]],
 LIST_RS = Union[FloatList32, FloatList64, IntegerList32,
                 IntegerList64, BooleanList, StringList]
 NUM_LIST_RS = Union[FloatList32, FloatList64, IntegerList32, IntegerList64]
-COUNTER = Union[Dict[int, int], Dict[bool, int], Dict[str, int]]
+COUNTER = Union[
+    Dict[Optional[int], int],
+    Dict[Optional[bool], int],
+    Dict[Optional[str], int],
+]
