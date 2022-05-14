@@ -246,6 +246,7 @@ impl NonFloatList<i32> for IntegerList32 {}
 
 impl NumericalList<i32, u32, f64> for IntegerList32 {
     fn argmax(&self) -> usize {
+        self._check_all_na();
         let hset = self.na_indexes();
         self.values()
             .iter()
@@ -257,6 +258,7 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
     }
 
     fn argmin(&self) -> usize {
+        self._check_all_na();
         let hset = self.na_indexes();
         self.values()
             .iter()
@@ -290,6 +292,7 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
     }
 
     fn max(&self) -> i32 {
+        self._check_all_na();
         let hset = self.na_indexes();
         *self
             .values()
@@ -302,6 +305,7 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
     }
 
     fn min(&self) -> i32 {
+        self._check_all_na();
         let hset = self.na_indexes();
         *self
             .values()

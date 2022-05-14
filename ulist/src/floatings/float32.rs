@@ -264,6 +264,7 @@ impl List<f32> for FloatList32 {
 
 impl NumericalList<f32, i32, f32> for FloatList32 {
     fn argmax(&self) -> usize {
+        self._check_all_na();
         let vec = self.values();
         let hset = self.na_indexes();
         let val_0 = &f32::NEG_INFINITY;
@@ -276,6 +277,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn argmin(&self) -> usize {
+        self._check_all_na();
         let vec = self.values();
         let hset = self.na_indexes();
         let val_0 = &f32::INFINITY;
@@ -301,6 +303,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn max(&self) -> f32 {
+        self._check_all_na();
         let hset = self.na_indexes();
         *self
             .values()
@@ -313,6 +316,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn min(&self) -> f32 {
+        self._check_all_na();
         let hset = self.na_indexes();
         *self
             .values()

@@ -248,6 +248,7 @@ impl NonFloatList<i64> for IntegerList64 {}
 
 impl NumericalList<i64, u32, f64> for IntegerList64 {
     fn argmax(&self) -> usize {
+        self._check_all_na();
         let hset = self.na_indexes();
         self.values()
             .iter()
@@ -259,6 +260,7 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn argmin(&self) -> usize {
+        self._check_all_na();
         let hset = self.na_indexes();
         self.values()
             .iter()
@@ -292,6 +294,7 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn max(&self) -> i64 {
+        self._check_all_na();
         let hset = self.na_indexes();
         *self
             .values()
@@ -304,6 +307,7 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn min(&self) -> i64 {
+        self._check_all_na();
         let hset = self.na_indexes();
         *self
             .values()

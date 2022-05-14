@@ -14,6 +14,12 @@ where
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
+    fn _check_all_na(&self) {
+        if self.count_na() == self.size() {
+            panic!("All the elements are missing values!")
+        }
+    }
+
     fn _fn_num<W: Clone>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
         let mut vec = self.values().iter().map(|&x| func(x)).collect();
         _fill_na(&mut vec, self.na_indexes(), default);
@@ -52,10 +58,8 @@ where
         List::_new(self._fn_num(|x| x + elem, self.na_value()), hset)
     }
 
-    // TODO: Panic when all values are NA.
     fn argmax(&self) -> usize;
 
-    // TODO: Panic when all values are NA.
     fn argmin(&self) -> usize;
 
     fn div(&self, other: &Self) -> Vec<V>;
@@ -78,10 +82,8 @@ where
         BooleanList::new(self._fn_num(|x| x < elem, false), HashSet::new())
     }
 
-    // TODO: Panic when all values are NA.
     fn max(&self) -> T;
 
-    // TODO: Panic when all values are NA.
     fn min(&self) -> T;
 
     fn mul(&self, other: &Self) -> Self {
