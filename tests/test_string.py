@@ -17,9 +17,21 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
             {"elem": "num"},
         ),
         (
+            "contains",
+            ["num1", "num2", "element1", None],
+            [True, True, False, False],
+            {"elem": "num"},
+        ),
+        (
             "starts_with",
             ["num", "1num2", "3num", "num1"],
             [True, False, False, True],
+            {"elem": "num"},
+        ),
+        (
+            "starts_with",
+            ["num", "1num2", "3num", "num1", None],
+            [True, False, False, True, False],
             {"elem": "num"},
         ),
         (
@@ -29,11 +41,23 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
             {"elem": "num"},
         ),
         (
+            "ends_with",
+            ["num", "1num2", "3num", "num1", None],
+            [True, False, True, False, False],
+            {"elem": "num"},
+        ),
+        (
             "str_len",
             ["num", "1num", "", "*", " ", "sp ace", "ta	b"],
             [3, 4, 0, 1, 1, 6, 4],
             {}
-        )
+        ),
+        (
+            "str_len",
+            ["num", "1num", "", "*", " ", "sp ace", "ta	b", None],
+            [3, 4, 0, 1, 1, 6, 4, None],
+            {}
+        ),
     ],
 )
 def test_methods_with_args(
