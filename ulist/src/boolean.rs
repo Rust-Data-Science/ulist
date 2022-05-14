@@ -1,4 +1,5 @@
 use crate::base::List;
+use crate::base::_fill_na;
 use crate::floatings::FloatList32;
 use crate::floatings::FloatList64;
 use crate::index::IndexList;
@@ -75,6 +76,10 @@ impl BooleanList {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     pub fn counter(&self) -> HashMap<bool, usize> {
         NonFloatList::counter(self)
     }
@@ -101,8 +106,10 @@ impl BooleanList {
     }
 
     pub fn not_(&self) -> Self {
-        let vec = self.values().iter().map(|&x| !x).collect();
-        BooleanList::new(vec, HashSet::new())
+        let mut vec = self.values().iter().map(|&x| !x).collect();
+        _fill_na(&mut vec, self.na_indexes(), false);
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
@@ -118,8 +125,8 @@ impl BooleanList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<bool>, size: usize) -> Self {
-        List::repeat(elem, size, false)
+    pub fn repeat(elem: bool, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<bool>, new: Option<bool>) {
@@ -202,6 +209,7 @@ fn _logical_operate(
     other: &BooleanList,
     func: impl Fn(bool, bool) -> bool,
 ) -> BooleanList {
+    this._check_len_eq(other);
     let vec = this
         .values()
         .iter()

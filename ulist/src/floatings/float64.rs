@@ -77,6 +77,10 @@ impl FloatList64 {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     #[staticmethod]
     pub fn cycle(vec: Vec<f64>, size: usize) -> Self {
         List::cycle(&vec, size)
@@ -153,8 +157,8 @@ impl FloatList64 {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<f64>, size: usize) -> Self {
-        List::repeat(elem, size, 0.0)
+    pub fn repeat(elem: f64, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<f64>, new: Option<f64>) {
@@ -260,28 +264,33 @@ impl List<f64> for FloatList64 {
 
 impl NumericalList<f64, i32, f64> for FloatList64 {
     fn argmax(&self) -> usize {
-        let mut result = (0, &self.values()[0]);
+        self._check_all_na();
         let vec = self.values();
-        for cur in vec.iter().enumerate() {
-            if cur.1 > result.1 {
-                result = cur;
-            }
-        }
+        let hset = self.na_indexes();
+        let val_0 = &f64::NEG_INFINITY;
+        let result = vec
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .fold((0, val_0), |acc, x| if x.1 > acc.1 { x } else { acc });
         result.0
     }
 
     fn argmin(&self) -> usize {
-        let mut result = (0, &self.values()[0]);
+        self._check_all_na();
         let vec = self.values();
-        for cur in vec.iter().enumerate() {
-            if cur.1 < result.1 {
-                result = cur;
-            }
-        }
+        let hset = self.na_indexes();
+        let val_0 = &f64::INFINITY;
+        let result = vec
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .fold((0, val_0), |acc, x| if x.1 < acc.1 { x } else { acc });
         result.0
     }
 
     fn div(&self, other: &Self) -> Vec<f64> {
+        self._check_len_eq(other);
         self.values()
             .iter()
             .zip(other.values().iter())
@@ -294,17 +303,27 @@ impl NumericalList<f64, i32, f64> for FloatList64 {
     }
 
     fn max(&self) -> f64 {
+        self._check_all_na();
+        let hset = self.na_indexes();
         *self
             .values()
             .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
             .max_by(|&x, &y| x.partial_cmp(y).unwrap())
             .unwrap()
     }
 
     fn min(&self) -> f64 {
+        self._check_all_na();
+        let hset = self.na_indexes();
         *self
             .values()
             .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
             .min_by(|&x, &y| x.partial_cmp(y).unwrap())
             .unwrap()
     }

@@ -14,7 +14,7 @@ name = "ulist"
 crate-type = ["cdylib"]
 
 [dependencies.pyo3]
-version = "0.16.1"
+version = "0.16.4"
 features = ["extension-module"]
 
 [package.metadata.maturin]

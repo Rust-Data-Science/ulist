@@ -1,6 +1,7 @@
 use crate::base::List;
 use crate::base::_fill_na;
 use crate::boolean::BooleanList;
+use std::collections::HashSet;
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Fn;
@@ -13,6 +14,12 @@ where
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
+    fn _check_all_na(&self) {
+        if self.count_na() == self.size() {
+            panic!("All the elements are missing values!")
+        }
+    }
+
     fn _fn_num<W: Clone>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
         let mut vec = self.values().iter().map(|&x| func(x)).collect();
         _fill_na(&mut vec, self.na_indexes(), default);
@@ -20,15 +27,26 @@ where
     }
 
     fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
-        let mut vec = self
+        self._check_len_eq(other);
+        let vec = self
             .values()
             .iter()
             .zip(other.values().iter())
             .map(|(&x, &y)| func(x, y))
             .collect();
-        _fill_na(&mut vec, self.na_indexes(), self.na_value());
-        let hset = self.na_indexes().clone();
-        List::_new(vec, hset)
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .map(|x| x.clone())
+            .collect();
+        let result: Self = List::_new(vec, hset);
+        _fill_na(
+            &mut result.values_mut(),
+            result.na_indexes(),
+            self.na_value(),
+        );
+        result
     }
 
     fn add(&self, other: &Self) -> Self {
@@ -49,23 +67,19 @@ where
     fn div_scala(&self, elem: V) -> Vec<V>;
 
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x >= elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x >= elem, false), HashSet::new())
     }
 
     fn greater_than_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x > elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x > elem, false), HashSet::new())
     }
 
     fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x <= elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x <= elem, false), HashSet::new())
     }
 
     fn less_than_scala(&self, elem: T) -> BooleanList {
-        let hset = self.na_indexes().clone();
-        BooleanList::new(self._fn_num(|x| x < elem, false), hset)
+        BooleanList::new(self._fn_num(|x| x < elem, false), HashSet::new())
     }
 
     fn max(&self) -> T;

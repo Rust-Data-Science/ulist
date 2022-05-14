@@ -69,6 +69,10 @@ impl StringList {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     pub fn counter(&self) -> HashMap<String, usize> {
         NonFloatList::counter(self)
     }
@@ -109,9 +113,8 @@ impl StringList {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<String>, size: usize) -> Self {
-        let na_value = "".to_string();
-        List::repeat(elem, size, na_value)
+    pub fn repeat(elem: String, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<String>, new: Option<String>) {

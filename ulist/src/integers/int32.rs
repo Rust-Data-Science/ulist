@@ -79,6 +79,10 @@ impl IntegerList32 {
         List::copy(self)
     }
 
+    pub fn count_na(&self) -> usize {
+        List::count_na(self)
+    }
+
     pub fn counter(&self) -> HashMap<i32, usize> {
         NonFloatList::counter(self)
     }
@@ -89,7 +93,12 @@ impl IntegerList32 {
     }
 
     pub fn div(&self, other: &Self) -> FloatList64 {
-        let hset = self.na_indexes().clone();
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .map(|x| x.clone())
+            .collect();
         FloatList64::new(NumericalList::div(self, other), hset)
     }
 
@@ -159,8 +168,8 @@ impl IntegerList32 {
     }
 
     #[staticmethod]
-    pub fn repeat(elem: Option<i32>, size: usize) -> Self {
-        List::repeat(elem, size, 0)
+    pub fn repeat(elem: i32, size: usize) -> Self {
+        List::repeat(elem, size)
     }
 
     pub fn replace(&self, old: Option<i32>, new: Option<i32>) {
@@ -237,28 +246,44 @@ impl NonFloatList<i32> for IntegerList32 {}
 
 impl NumericalList<i32, u32, f64> for IntegerList32 {
     fn argmax(&self) -> usize {
+        self._check_all_na();
+        let hset = self.na_indexes();
         self.values()
             .iter()
             .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
             .max_by_key(|x| x.1)
             .unwrap()
             .0
     }
 
     fn argmin(&self) -> usize {
+        self._check_all_na();
+        let hset = self.na_indexes();
         self.values()
             .iter()
             .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
             .min_by_key(|x| x.1)
             .unwrap()
             .0
     }
 
     fn div(&self, other: &Self) -> Vec<f64> {
+        self._check_len_eq(other);
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
         self.values()
             .iter()
+            .enumerate()
             .zip(other.values().iter())
-            .map(|(&x, &y)| x as f64 / y as f64)
+            .map(|((i, &x), &y)| {
+                if hset1.contains(&i) | hset2.contains(&i) {
+                    0.0
+                } else {
+                    x as f64 / y as f64
+                }
+            })
             .collect()
     }
 
@@ -267,11 +292,29 @@ impl NumericalList<i32, u32, f64> for IntegerList32 {
     }
 
     fn max(&self) -> i32 {
-        *self.values().iter().max().unwrap()
+        self._check_all_na();
+        let hset = self.na_indexes();
+        *self
+            .values()
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
+            .max()
+            .unwrap()
     }
 
     fn min(&self) -> i32 {
-        *self.values().iter().min().unwrap()
+        self._check_all_na();
+        let hset = self.na_indexes();
+        *self
+            .values()
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
+            .min()
+            .unwrap()
     }
 
     fn pow_scala(&self, elem: u32) -> Self {

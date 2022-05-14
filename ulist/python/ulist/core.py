@@ -134,14 +134,15 @@ class UltraFastList:
         n = self.size()
         if n < 100:
             return str(self.to_list())
-        if self.dtype == 'string':
-            return (
-                f"['{self[0]}', '{self[1]}', '{self[2]}', ..., "
-                + f"'{self[n-3]}', '{self[n-2]}', '{self[n-1]}']"
-            )
+
+        def fmt(x) -> str:
+            if isinstance(x, str):
+                return f"'{x}'"
+            return f"{x}"
+
         return (
-            f"[{self[0]}, {self[1]}, {self[2]}, ..., "
-            + f"{self[n-3]}, {self[n-2]}, {self[n-1]}]"
+            f"[{fmt(self[0])}, {fmt(self[1])}, {fmt(self[2])}, ..., "
+            + f"{fmt(self[n-3])}, {fmt(self[n-2])}, {fmt(self[n-1])}]"
         )
 
     def __sub__(self, other: NUM_OR_LIST) -> "UltraFastList":
@@ -304,13 +305,21 @@ class UltraFastList:
         """Return a ulist copy of self."""
         return UltraFastList(self._values.copy())
 
+    def count_na(self) -> int:
+        """Count of missing values."""
+        return self._values.count_na()
+
     def counter(self) -> COUNTER:
         """
         Return a dictionary where the elements of self are stored as
         dictionary keys and their counts are stored as dictionary values.
         """
         assert not isinstance(self._values, (FloatList32, FloatList64))
-        return self._values.counter()
+        result = self._values.counter()
+        m = self.count_na()
+        if m > 0:
+            result[None] = m
+        return result
 
     def div(self, other: "UltraFastList") -> "UltraFastList":
         """Return self / other."""
@@ -377,7 +386,7 @@ class UltraFastList:
 
     def mean(self) -> float:
         """Return the mean of self."""
-        return self.sum() / self.size()
+        return self.sum() / (self.size() - self.count_na())
 
     def min(self) -> NUM:
         """Return the minimum of self."""
@@ -523,7 +532,7 @@ class UltraFastList:
             raise TypeError(f"Var method does not support dtype {self.dtype}!")
         mean = data.mean()
         numerator = data.sub_scala(mean).pow_scala(2).sum()
-        denominator = data.size() - ddof
+        denominator = data.size() - ddof - self.count_na()
         return numerator / denominator
 
     def where(

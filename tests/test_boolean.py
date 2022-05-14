@@ -24,6 +24,21 @@ from ulist.utils import check_test_result
             [True, True, True],
             True,
         ),
+        (
+            "all",
+            [True, True, None],
+            False,
+        ),
+        (
+            "all",
+            [True, False, None],
+            False,
+        ),
+        (
+            "all",
+            [False, False, None],
+            False,
+        ),
 
         (
             "any",
@@ -40,6 +55,21 @@ from ulist.utils import check_test_result
             [True, True, True],
             True,
         ),
+        (
+            "any",
+            [True, True, None],
+            True,
+        ),
+        (
+            "any",
+            [True, False, None],
+            True,
+        ),
+        (
+            "any",
+            [False, False, None],
+            False,
+        ),
 
         (
             "not_",
@@ -47,11 +77,21 @@ from ulist.utils import check_test_result
             [False, True],
         ),
         (
+            "not_",
+            [True, False, None],
+            [False, True, None],
+        ),
+
+        (
             "to_index",
             [True, False, True],
             [0, 2],
-        )
-
+        ),
+        (
+            "to_index",
+            [True, False, True, None],
+            [0, 2],
+        ),
     ],
 )
 def test_methods(
@@ -75,10 +115,23 @@ def test_methods(
             [False, False, False, True],
         ),
         (
+            "and_",
+            [False, False, True, True, None, None],
+            [False, True, False, True, True, False],
+            [False, False, False, True, False, False],
+        ),
+
+        (
             "or_",
             [False, False, True, True],
             [False, True, False, True],
             [False, True, True, True],
+        ),
+        (
+            "or_",
+            [False, False, True, True, None, None],
+            [False, True, False, True, True, False],
+            [False, True, True, True, True, False],
         ),
     ],
 )
@@ -105,16 +158,36 @@ def test_methods_with_args(
             [True, False, False, False],
         ),
         (
+            op.and_,
+            [False, False, True, True, None, None],
+            [False, True, False, True, True, False],
+            [False, False, False, True, False, False],
+        ),
+
+        (
             op.invert,
             [True, False],
             None,
             [False, True],
         ),
         (
+            op.invert,
+            [True, False, None],
+            None,
+            [False, True, None],
+        ),
+
+        (
             op.or_,
             [True, True, False, False],
             [True, False, True, False],
             [True, True, True, False],
+        ),
+        (
+            op.or_,
+            [False, False, True, True, None, None],
+            [False, True, False, True, True, False],
+            [False, True, True, True, True, False],
         ),
     ],
 )

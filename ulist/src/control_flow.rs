@@ -13,6 +13,16 @@ where
     U: List<T>,
 {
     let cond: Vec<PyRef<BooleanList>> = conditions.iter().map(|x| x.borrow(py)).collect();
+    let n = cond[0].size();
+    for c in cond.iter() {
+        if c.size() != n {
+            panic!("BooleanList sizes in conditions should be equal!");
+        }
+        if c.count_na() > 0 {
+            panic!("Parameter `condition` should not contain missing values!");
+        }
+    }
+
     let mut vec = vec![default; cond[0].size()];
     for j in 0..cond[0].size() {
         for i in 0..cond.len() {

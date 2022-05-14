@@ -9,7 +9,7 @@ ELEM_TYPE = Union[Optional[float],
                   Optional[int], Optional[bool], Optional[str]]
 LIST_TYPE = Union[List[Optional[float]], List[Optional[int]],
                   List[Optional[bool]], List[Optional[str]]]
-COUNTER = Union[Dict[int, int], Dict[bool, int]]
+COUNTER = Union[Dict[Optional[int], int], Dict[Optional[bool], int]]
 RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
 
@@ -17,10 +17,11 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value",
     [
+        ('__len__', 'bool', [True, False, True], 3),
         ('__len__', 'float', [1.0, 2.0, 3.0], 3),
         ('__len__', 'int', [1, 2, 3], 3),
-        ('__len__', 'bool', [True, False, True], 3),
         ('__len__', 'string', ['foo', 'bar', 'baz'], 3),
+        ('__len__', 'string', ['foo', 'bar', None], 3),
 
         (
             "__repr__",
@@ -43,6 +44,14 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ),
         ('__repr__', 'string', ['foo', 'bar'],
          "UltraFastList(['foo', 'bar'])"),
+        (
+            "__repr__",
+            "string",
+            ['foo', None] * 50,
+            "UltraFastList(['foo', None, 'foo', ..., None, 'foo', None])",
+        ),
+        ('__repr__', 'string', ['foo', None],
+         "UltraFastList(['foo', None])"),
 
         (
             "__str__",
@@ -63,33 +72,51 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
             "['foo', 'bar', 'foo', ..., 'bar', 'foo', 'bar']",
         ),
         ('__str__', 'string', ['foo', 'bar'], "['foo', 'bar']"),
+        (
+            "__str__",
+            "string",
+            ['foo', None] * 50,
+            "['foo', None, 'foo', ..., None, 'foo', None]",
+        ),
+        ('__str__', 'string', ['foo', None], "['foo', None]"),
 
         ('copy', 'bool', [True, False], [True, False]),
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('copy', 'int', [1, 2], [1, 2]),
         ('copy', 'string', ['foo', 'bar'], ['foo', 'bar']),
+        ('copy', 'string', ['foo', None], ['foo', None]),
+
+        ('count_na', 'bool', [True, False, True], 0),
+        ('count_na', 'int', [1, 0, 1], 0),
+        ('count_na', 'string', ['foo', 'bar', 'foo'], 0),
+        ('count_na', 'string', ['foo', None, 'foo'], 1),
 
         ('counter', 'bool', [True, False, True], {True: 2, False: 1}),
         ('counter', 'int', [1, 0, 1], {1: 2, 0: 1}),
         ('counter', 'string', ['foo', 'bar', 'foo'], {'foo': 2, 'bar': 1}),
+        ('counter', 'string', ['foo', None, 'foo'], {'foo': 2, None: 1}),
 
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
         ('mean', 'bool', [True, False, True, False], 0.5),
+        ('mean', 'bool', [True, False, True, False, None], 0.5),
 
         ('size', 'bool', [True, False], 2),
         ('size', 'float', [1.0, 2.0], 2),
         ('size', 'int', [1, 2], 2),
         ('size', 'string', ['foo', 'bar'], 2),
+        ('size', 'string', ['foo', None], 2),
 
         ('sum', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 15.0),
         ('sum', 'int', [1, 2, 3, 4, 5], 15),
         ('sum', 'bool', [True, False, True], 2,),
+        ('sum', 'bool', [True, None, True], 2,),
 
         ('to_list', 'bool', [True, False], [True, False]),
         ('to_list', 'float', [1.0, 2.0], [1.0, 2.0]),
         ('to_list', 'int', [1, 2], [1, 2]),
         ('to_list', 'string', ['foo', 'bar'], ['foo', 'bar']),
+        ('to_list', 'string', ['foo', None], ['foo', None]),
     ],
 )
 def test_methods_no_arg(
@@ -111,6 +138,8 @@ def test_methods_no_arg(
         ('__getitem__', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('__getitem__', 'int', [1, 2, 3], 1, {'index': 0}),
         ('__getitem__', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
+        ('__getitem__', 'string', ['foo', None, 'baz'], 'foo', {'index': 0}),
+        ('__getitem__', 'string', ['foo', None, 'baz'], None, {'index': 1}),
 
         ('__getitem__', 'bool', [True, False, True],
          [True, True], {'index': ul.IndexList([0, 2])}),
@@ -128,6 +157,9 @@ def test_methods_no_arg(
         ("apply", "int", [1, 2], [3, 5], {"fn": lambda x: x * 2 + 1},),
         ("apply", "string", ['foo', 'bar'], [
          True, False], {"fn": lambda x: x != 'bar'},),
+        ("apply", "string", ['foo', 'bar', None], [
+         True, False, True], {"fn": lambda x: x != 'bar'},),
+
 
         ("equal_scala", 'bool', [True, False], [False, True], {"elem": False}),
         ("equal_scala", 'float', [1.0, 2.0, 3.0],
@@ -135,6 +167,8 @@ def test_methods_no_arg(
         ("equal_scala", 'int', [1, 2, 3], [False, True, False], {"elem": 2}),
         ("equal_scala", 'string', ['foo', 'bar'],
          [False, True], {"elem": 'bar'}),
+        ("equal_scala", 'string', ['foo', 'bar', None],
+         [False, True, False], {"elem": 'bar'}),
 
         (
             "filter",
@@ -164,11 +198,20 @@ def test_methods_no_arg(
             ['foo', 'baz'],
             {"condition": ul.from_seq([True, False, True], 'bool')},
         ),
+        (
+            "filter",
+            "string",
+            ['foo', 'bar', None, None],
+            ['foo', None],
+            {"condition": ul.from_seq([True, False, True, False], 'bool')},
+        ),
 
         ('get', 'bool', [True, False, True], True, {'index': 2}),
         ('get', 'float', [1.0, 2.0, 3.0], 2.0, {'index': 1}),
         ('get', 'int', [1, 2, 3], 1, {'index': 0}),
         ('get', 'string', ['foo', 'bar', 'baz'], 'foo', {'index': 0}),
+        ('get', 'string', ['foo', 'bar', None], 'foo', {'index': 0}),
+        ('get', 'string', ['foo', 'bar', None], None, {'index': 2}),
 
         ('get_by_indexes', 'bool', [True, False, True],
          [True, True], {'indexes': ul.IndexList([0, 2])}),
@@ -178,6 +221,8 @@ def test_methods_no_arg(
          [1, 3], {'indexes': ul.IndexList([0, 2])}),
         ('get_by_indexes', 'string', ['foo', 'bar', 'baz'],
          ['foo', 'baz'], {'indexes': ul.IndexList([0, 2])}),
+        ('get_by_indexes', 'string', ['foo', 'bar', None],
+         ['foo', None], {'indexes': ul.IndexList([0, 2])}),
 
         ("not_equal_scala", 'bool', [False, True, False], [
          True, False, True], {"elem": True}),
@@ -186,6 +231,8 @@ def test_methods_no_arg(
         ("not_equal_scala", 'int', [1, 2, 3],
          [True, False, True], {"elem": 2}),
         ("not_equal_scala", 'string', ['foo', 'bar', 'baz'],
+         [True, False, True], {"elem": 'bar'}),
+        ("not_equal_scala", 'string', ['foo', 'bar', None],
          [True, False, True], {"elem": 'bar'}),
 
         ('union_all', 'bool', [True, False], [True, False, False, True], {
@@ -196,6 +243,8 @@ def test_methods_no_arg(
          'other': ul.from_seq([3, 4], dtype='int')}),
         ('union_all', 'string', ['foo', 'bar'], ['foo', 'bar', 'baz', 'zoo'], {
          'other': ul.from_seq(['baz', 'zoo'], dtype='string')}),
+        ('union_all', 'string', ['foo', 'bar'], ['foo', 'bar', 'baz', None], {
+         'other': ul.from_seq(['baz', None], dtype='string')}),
 
         ('var', 'bool', [True, False], 0.25, {}),
         ('var', 'bool', [True, True, True, False], 0.25, {"ddof": 1}),
@@ -203,6 +252,7 @@ def test_methods_no_arg(
         ('var', 'float', [1.0, 2.0, 3.0], 1.0, {"ddof": 1}),
         ('var', 'int', [1, 2, 3, 4], 1.25, {}),
         ('var', 'int', [1, 2, 3], 1.0, {"ddof": 1}),
+        ('var', 'int', [1, 2, 3, None], 1.0, {"ddof": 1}),
 
         ("where", "bool", [True, True, False, False], [
          False, False], {"fn": lambda x: x == False},),  # noqa: E712
@@ -212,6 +262,8 @@ def test_methods_no_arg(
             3, 4], {"fn": lambda x: x > 2},),
         ("where", "string", ['foo', 'bar', 'baz'], [
             'foo', 'baz'], {"fn": lambda x: x != 'bar'},),
+        ("where", "string", ['foo', 'bar', 'baz', None], [
+            'foo', 'baz', None], {"fn": lambda x: x != 'bar'},),
     ],
 )
 def test_methods_with_args(

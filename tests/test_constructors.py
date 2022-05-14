@@ -42,6 +42,8 @@ from ulist.utils import check_test_result
         (ul.from_seq, ((0.0, 1.0, 2.0), "float"), {}, [0.0, 1.0, 2.0],),
         (ul.from_seq, ((0, 1, 2), "int"), {}, [0, 1, 2],),
         (ul.from_seq, (('foo', 'bar'), "string"), {}, ['foo', 'bar'],),
+        (ul.from_seq, (('foo', 'bar', None), "string"),
+         {}, ['foo', 'bar', None],),
 
         (ul.cycle, (range(3), 1, 'float'), {}, [0.0],),
         (ul.cycle, (range(3), 1, 'int32'), {}, [0],),
