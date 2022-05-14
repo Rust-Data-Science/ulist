@@ -111,7 +111,7 @@ All contributions are welcome. See `Developer Guide <https://github.com/tushushu
    :target: https://github.com/tushushu/ulist/actions/workflows/main.yml
 .. |doc| image:: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg
    :target: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml
-.. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg
+.. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.10.0
    :target: https://github.com/tushushu/ulist/actions/workflows/publish.yml
 .. |code style| image:: https://img.shields.io/badge/style-flake8-blue
    :target: https://github.com/PyCQA/flake8
