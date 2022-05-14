@@ -248,9 +248,11 @@ impl NonFloatList<i64> for IntegerList64 {}
 
 impl NumericalList<i64, u32, f64> for IntegerList64 {
     fn argmax(&self) -> usize {
+        let hset = self.na_indexes();
         self.values()
             .iter()
             .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
             .max_by_key(|x| x.1)
             .unwrap()
             .0

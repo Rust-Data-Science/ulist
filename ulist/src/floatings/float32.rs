@@ -264,13 +264,14 @@ impl List<f32> for FloatList32 {
 
 impl NumericalList<f32, i32, f32> for FloatList32 {
     fn argmax(&self) -> usize {
-        let mut result = (0, &self.values()[0]);
         let vec = self.values();
-        for cur in vec.iter().enumerate() {
-            if cur.1 > result.1 {
-                result = cur;
-            }
-        }
+        let hset = self.na_indexes();
+        let val_0 = &f32::NEG_INFINITY;
+        let result = vec
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .fold((0, val_0), |acc, x| if x.1 > acc.1 { x } else { acc });
         result.0
     }
 
