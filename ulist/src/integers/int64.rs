@@ -292,7 +292,15 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn max(&self) -> i64 {
-        *self.values().iter().max().unwrap()
+        let hset = self.na_indexes();
+        *self
+            .values()
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| !hset.contains(i))
+            .map(|(_, x)| x)
+            .max()
+            .unwrap()
     }
 
     fn min(&self) -> i64 {
