@@ -293,6 +293,9 @@ def arange32(start: int, stop: int, step: int) -> IntegerList32: ...
 def arange64(start: int, stop: int, step: int) -> IntegerList64: ...
 
 
+def read_csv() -> list: ...
+
+
 def select_bool(
     conditions: List[BooleanList],
     choices: LIST_PY,
