@@ -4,6 +4,7 @@ mod control_flow;
 mod floatings;
 mod index;
 mod integers;
+mod io;
 mod non_float;
 mod numerical;
 mod string;
@@ -29,6 +30,7 @@ fn ulist(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(select_float, m)?)?;
     m.add_function(wrap_pyfunction!(select_int, m)?)?;
     m.add_function(wrap_pyfunction!(select_string, m)?)?;
+    m.add_function(wrap_pyfunction!(io::read_csv, m)?)?;
 
     Ok(())
 }
