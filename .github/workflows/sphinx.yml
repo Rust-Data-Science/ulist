@@ -26,7 +26,7 @@ jobs:
           default: true
       - name: Install Python packages
         run: |
-          pip install maturin sphinx myst-parser[sphinx]
+          pip install maturin sphinx
       - name: Build ulist
         run: |
           maturin build --out dist -m ulist/Cargo.toml

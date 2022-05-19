@@ -23,6 +23,7 @@ Performance
 
 | Ulist is extremly fast, and even compared with libraries like Numpy.
   It is
+
 - more efficient on the ``string`` and ``boolean`` array,
 - same level efficient on the ``integer`` array,
 - and a bit slower on the ``floating`` array.
