@@ -7,6 +7,9 @@ on:
   workflow_dispatch:
 
 
+permissions: read-all|write-all
+
+
 jobs:
   sphinx:
     runs-on: macos-latest
