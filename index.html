@@ -44,6 +44,106 @@
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
 </section>
+<section id="ulist">
+<h1>ulist<a class="headerlink" href="#ulist" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://pypi.org/project/ulist/"><img alt="PyPI" src="https://badge.fury.io/py/ulist.svg" /></a> <a class="reference external" href="https://github.com/tushushu/ulist/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/tushushu/ulist" /></a> <a class="reference external" href="https://github.com/tushushu/ulist/actions/workflows/main.yml"><img alt="CI" src="https://github.com/tushushu/ulist/actions/workflows/main.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/tushushu/ulist/actions/workflows/sphinx.yml"><img alt="doc" src="https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/tushushu/ulist/actions/workflows/publish.yml"><img alt="publish" src="https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.10.0" /></a> <a class="reference external" href="https://github.com/PyCQA/flake8"><img alt="code style" src="https://img.shields.io/badge/style-flake8-blue" /></a> <a class="reference external" href="https://github.com/tushushu/ulist/actions/workflows/coverage.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1/raw/metacov.json" /></a></p>
+<p><a class="reference external" href="https://tushushu.github.io/ulist/">Documentation</a> | <a class="reference external" href="https://github.com/tushushu/ulist">Source
+Code</a></p>
+<section id="what">
+<h2>What<a class="headerlink" href="#what" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Ulist is an ultra fast list/array data structure written in Rust with
+Python bindings. It aims to be the fundamental package for processing
+and computing 1-D list/array in Python.</div>
+<div class="line">It provides:</div>
+</div>
+<ul class="simple">
+<li><p>an efficient, flexible and expressive 1-D list/array object;</p></li>
+<li><p>broadcasting methods;</p></li>
+<li><p>a SQL-like and method-chaining programming experience;</p></li>
+</ul>
+</section>
+<section id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Ulist is extremly fast, and even compared with libraries like Numpy.
+It is</div>
+</div>
+<ul class="simple">
+<li><p>more efficient on the <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">boolean</span></code> array,</p></li>
+<li><p>same level efficient on the <code class="docutils literal notranslate"><span class="pre">integer</span></code> array,</p></li>
+<li><p>and a bit slower on the <code class="docutils literal notranslate"><span class="pre">floating</span></code> array.</p></li>
+</ul>
+<p>Faster than Numpy is not the target of writing this repo, because they are just two different libraries. Ulist is more focused on general domain rather than just data science/machine learning/AI, for example the Linear Algebra Computation is not provided. But if you are curious about the performance, please see the <a class="reference external" href="https://github.com/tushushu/ulist/blob/main/benchmark.rst">benchmarking results</a>.</p>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Python: 3.7+</p></li>
+<li><p>OS: Linux, MacOS and Windows</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ulist</span></code></p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<section id="count-the-number-of-items-in-bins">
+<h3>Count the number of items in bins.<a class="headerlink" href="#count-the-number-of-items-in-bins" title="Permalink to this headline">¶</a></h3>
+<p>Given an array <code class="docutils literal notranslate"><span class="pre">arr</span></code>, count the number of items in bins [0, 3), [3, 6), [6, 9) and [9, +inf). The <code class="docutils literal notranslate"><span class="pre">result</span></code> is a Python dictionary with bin names as keys and numbers as values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span>
+<span class="go">UltraFastList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">case</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;[9, +inf)&#39;</span><span class="p">)</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s1">&#39;[0, 3)&#39;</span><span class="p">)</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s1">&#39;[3, 6)&#39;</span><span class="p">)</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s1">&#39;[6, 9)&#39;</span><span class="p">)</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">end</span><span class="p">()</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">counter</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">{&#39;[3, 6)&#39;: 3, &#39;[9, +inf)&#39;: 3, &#39;[6, 9)&#39;: 3, &#39;[0, 3)&#39;: 3}</span>
+</pre></div>
+</div>
+</section>
+<section id="dot-product">
+<h3>Dot product.<a class="headerlink" href="#dot-product" title="Permalink to this headline">¶</a></h3>
+<p>Given two 1-D arrays and calculate the dot product result of those arrays.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_seq</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span>
+<span class="go">UltraFastList([1.0, 2.0, 3.0])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">14.0</span>
+</pre></div>
+</div>
+</section>
+<section id="rate-of-adults">
+<h3>Rate of adults.<a class="headerlink" href="#rate-of-adults" title="Permalink to this headline">¶</a></h3>
+<p>Given the ages of people as <code class="docutils literal notranslate"><span class="pre">arr</span></code>, and suppose the adults are equal or above 18. Clean the data by removing abnormal values and then calculate the rate of adults.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ulist</span> <span class="k">as</span> <span class="nn">ul</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">from_seq</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">120</span><span class="p">))</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">18</span><span class="p">)</span>\
+<span class="gp">... </span>            <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="contribute">
+<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h2>
+<p>All contributions are welcome. See <a class="reference external" href="https://github.com/tushushu/ulist/blob/main/develop.md">Developer Guide</a></p>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -52,6 +152,27 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Welcome to ulist’s documentation!</a></li>
+<li><a class="reference internal" href="#ulist">ulist</a><ul>
+<li><a class="reference internal" href="#what">What</a></li>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#count-the-number-of-items-in-bins">Count the number of items in bins.</a></li>
+<li><a class="reference internal" href="#dot-product">Dot product.</a></li>
+<li><a class="reference internal" href="#rate-of-adults">Rate of adults.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contribute">Contribute</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
