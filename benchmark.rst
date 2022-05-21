@@ -39,11 +39,11 @@ Benchmark score
 
 ----
 
-| Date: 2022-05-21 07:58:18
+| Date: 2022-02-26 10:38:31
 | System OS: Linux
-| CPU:  Intel(R) Xeon(R) CPU E5-2673 v4 @ 2.30GHz
-| Python version: 3.10.4
-| Ulist version: 0.10.0
+| CPU: Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz
+| Python version: 3.10.2
+| Ulist version: 0.8.0
 | Numpy version: 1.22.0
 
 ----
@@ -53,28 +53,28 @@ Result:
 ============ ====== ===== ===== ===== ===== ===== ======= ======
 Item         Dtype  XS    S     M     L     XL    Average Faster
 ============ ====== ===== ===== ===== ===== ===== ======= ======
-AddOne       int    0.9x  0.9x  0.6x  0.5x  0.5x  0.7x    N
-ArraySum     int    4.1x  4.8x  4.7x  3.8x  3.8x  4.2x    Y
-CountElems   int    7.1x  1.4x  0.9x  0.8x  0.9x  2.2x    Y
-EqualOne     int    1.1x  0.9x  0.4x  0.4x  0.3x  0.6x    N
-Max          int    2.3x  1.7x  1.0x  0.8x  0.9x  1.3x    Y
-MulTwo       int    0.9x  0.9x  0.6x  0.5x  0.5x  0.7x    N
-UniqueElem   int    2.2x  0.6x  1.0x  1.1x  1.1x  1.2x    Y
-Sort         int    3.6x  18.2x 81.0x 107x  80.7x 58.1x   Y
-AddOne       float  0.9x  0.9x  0.6x  0.5x  0.5x  0.7x    N
-ArraySum     float  2.6x  1.4x  0.6x  0.4x  0.4x  1.1x    Y
-LessThanOne  float  1.1x  0.9x  0.4x  0.3x  0.3x  0.6x    N
-Max          float  1.4x  0.3x  0.1x  0.0x  0.0x  0.4x    N
-MulTwo       float  0.9x  0.9x  0.7x  0.5x  0.5x  0.7x    N
-Sort         float  3.0x  13.7x 32.1x 38.9x 29.6x 23.5x   Y
-AllIsTrue    bool   3.5x  2.4x  1.0x  0.8x  0.6x  1.7x    Y
-AndOp        bool   0.5x  0.7x  1.1x  3.2x  3.7x  1.8x    Y
-AnyIsTrue    bool   3.6x  2.2x  1.0x  0.7x  0.6x  1.6x    Y
-NotOp        bool   0.5x  0.7x  1.3x  4.6x  4.1x  2.2x    Y
-OrOp         bool   0.5x  0.7x  1.3x  4.0x  3.6x  2.0x    Y
-ContainsElem string 15.6x 19.3x 20.0x 20.0x 19.8x 18.9x   Y
-CountElems   string 4.1x  1.5x  1.6x  1.9x  2.2x  2.3x    Y
+AddOne       int    0.9x  1.0x  1.0x  1.0x  1.1x  1.0x    N
+ArraySum     int    6.0x  7.0x  8.4x  5.5x  7.0x  6.8x    Y
+CountElems   int    9.7x  1.7x  0.9x  0.8x  0.9x  2.8x    Y
+EqualOne     int    1.4x  1.4x  1.4x  0.9x  0.8x  1.2x    Y
+Max          int    4.4x  3.7x  3.2x  3.0x  3.2x  3.5x    Y
+MulTwo       int    1.0x  1.0x  0.8x  0.8x  0.8x  0.9x    N
+UniqueElem   int    2.7x  0.5x  0.4x  0.3x  0.3x  0.8x    N
+Sort         int    0.8x  0.6x  0.9x  0.9x  0.9x  0.8x    N
+AddOne       float  1.0x  1.2x  1.2x  1.1x  1.1x  1.1x    Y
+ArraySum     float  4.0x  2.0x  0.7x  0.4x  0.4x  1.5x    Y
+LessThanOne  float  1.2x  1.2x  0.9x  0.8x  1.0x  1.0x    N
+Max          float  2.9x  1.1x  0.2x  0.1x  0.1x  0.9x    N
+MulTwo       float  1.0x  1.0x  1.1x  1.0x  1.0x  1.0x    N
+Sort         float  0.9x  0.6x  0.7x  0.7x  0.7x  0.7x    N
+AllIsTrue    bool   5.5x  3.4x  1.2x  0.7x  0.6x  2.3x    Y
+AndOp        bool   0.5x  0.8x  1.3x  4.3x  3.8x  2.1x    Y
+AnyIsTrue    bool   5.4x  3.4x  1.2x  0.7x  0.6x  2.3x    Y
+NotOp        bool   0.6x  0.9x  1.5x  4.9x  4.5x  2.5x    Y
+OrOp         bool   0.5x  0.8x  1.4x  3.6x  3.4x  1.9x    Y
+ContainsElem string 16.4x 20.1x 20.6x 20.7x 20.3x 19.6x   Y
+CountElems   string 4.7x  1.7x  1.5x  1.9x  2.1x  2.4x    Y
 EqualFoo     string 1.2x  2.8x  3.6x  3.9x  2.5x  2.8x    Y
 ============ ====== ===== ===== ===== ===== ===== ======= ======
 
-15 of 22 tasks are faster!
+14 of 22 tasks are faster!
