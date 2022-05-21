@@ -27,7 +27,7 @@ jobs:
           conda create -n py38 python=3.8
           eval "$(conda shell.bash hook)"
           conda activate py38
-          pip install mypy pytest flake8 maturin pytest-cov
+          pip install -r ./requirements/cov.txt
       - name: Build and install ulist
         run: |
           eval "$(conda shell.bash hook)"

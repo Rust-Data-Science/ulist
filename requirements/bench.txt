@@ -1,0 +1,3 @@
+-r common.txt
+# A-Z
+numpy==1.22.0
