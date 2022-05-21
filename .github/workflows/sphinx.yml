@@ -27,7 +27,7 @@ jobs:
           default: true
       - name: Install Python packages
         run: |
-          pip install maturin sphinx
+          pip install -r ./requirements/doc.txt
       - name: Build ulist
         run: |
           maturin build --out dist -m ulist/Cargo.toml

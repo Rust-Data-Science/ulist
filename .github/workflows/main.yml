@@ -32,7 +32,7 @@ jobs:
           default: true
       - name: Install Python packages
         run: |
-          pip install mypy pytest flake8 maturin
+          pip install -r ./requirements/dev.txt
       - name: Build ulist
         run: |
           maturin build --out dist -m ulist/Cargo.toml
