@@ -5,9 +5,7 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-
-permissions: read-all|write-all
+permissions: write-all
 
 
 jobs:
@@ -47,7 +45,7 @@ jobs:
           path: docs/html/
       - name: Commit documentation changes
         run: |
-          git clone https://github.com/tushushu/ulist.git --branch gh-pages --single-branch gh-pages
+          git clone https://github.com/Rust-Data-Science/ulist.git --branch gh-pages --single-branch gh-pages
           cp -r docs/html/* gh-pages/
           cd gh-pages
           git config --local user.email "action@github.com"

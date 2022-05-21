@@ -3,7 +3,7 @@ ulist
 
 |PyPI| |License| |CI| |doc| |publish| |code style| |Coverage|
 
-`Documentation <https://tushushu.github.io/ulist/>`__ \| `Source
+`Documentation <https://rust-data-science.github.io/ulist/>`__ \| `Source
 Code <https://github.com/tushushu/ulist>`__
 
 What
