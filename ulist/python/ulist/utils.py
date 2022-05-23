@@ -4,6 +4,7 @@ from timeit import timeit
 from typing import Any, Callable, Dict, List, Sequence, Tuple, Union
 
 import ulist as ul
+from ulist import UltraFastList
 
 from .typedef import COUNTER, LIST_PY, ELEM_OPT
 
@@ -49,8 +50,8 @@ def compare_dtypes(dtype1: str, dtype2: str) -> bool:
 def check_test_result(
     dtype: str,
     test_method: Union[Callable, str],
-    result: Union[ELEM_OPT, LIST_PY, ul.UltraFastList],
-    expected_value: Union[ELEM_OPT, LIST_PY, COUNTER],
+    result: Union[ELEM_OPT, LIST_PY, UltraFastList, Dict[str, UltraFastList]],
+    expected_value: Union[ELEM_OPT, LIST_PY, COUNTER, Dict[str, List]],
 ):
     """Test if the result is as expected. Both value and type.
     Args:
@@ -76,9 +77,15 @@ def check_test_result(
     elif isinstance(result, dict) and \
             isinstance(expected_value, dict):
         for key in result.keys():
-            x = result[key]
-            y = result[key]
-            assert type(x) == type(y) and x == y
+            x = result[key]  # type: ignore
+            y = expected_value[key]  # type: ignore
+            if isinstance(x, UltraFastList):
+                assert len(x) == len(y), msg
+                for a, b in zip(x, y):
+                    print(a, b)
+                    assert type(a) == type(b) and a == b, msg
+            else:
+                assert type(x) == type(y) and x == y
         assert len(result) == len(expected_value)
     else:
         assert type(result) == type(expected_value), msg

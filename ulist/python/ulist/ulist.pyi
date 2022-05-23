@@ -1,5 +1,5 @@
 from lib2to3.pgen2.token import OP
-from typing import List, Sequence, Dict, Set, Optional
+from typing import List, Sequence, Dict, Set, Optional, Tuple
 
 from .typedef import ELEM, LIST_PY, NUM, NUM_LIST_RS, LIST_RS, ELEM_OPT
 
@@ -299,7 +299,7 @@ def arange32(start: int, stop: int, step: int) -> IntegerList32: ...
 def arange64(start: int, stop: int, step: int) -> IntegerList64: ...
 
 
-def read_csv() -> list: ...
+def read_csv(path: str, schema: Sequence[Tuple[str, str]]) -> list: ...
 
 
 def select_bool(
