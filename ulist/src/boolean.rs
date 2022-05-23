@@ -40,6 +40,10 @@ impl BooleanList {
         self.values().iter().all(|&x| x)
     }
 
+    pub fn all_equal(&self, other: &Self) -> bool {
+        List::all_equal(self, other)
+    }
+
     pub fn and_(&self, other: &Self) -> Self {
         _logical_operate(&self, &other, |x, y| x && y)
     }
