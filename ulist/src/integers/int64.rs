@@ -117,7 +117,7 @@ impl IntegerList64 {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> Option<i64> {
+    pub fn get(&self, index: usize) -> PyResult<Option<i64>> {
         List::get(self, index)
     }
 

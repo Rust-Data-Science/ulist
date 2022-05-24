@@ -104,7 +104,7 @@ impl FloatList32 {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> Option<f32> {
+    pub fn get(&self, index: usize) -> PyResult<Option<f32>> {
         List::get(self, index)
     }
 

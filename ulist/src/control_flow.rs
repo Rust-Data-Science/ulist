@@ -27,7 +27,7 @@ where
     for j in 0..cond[0].size() {
         for i in 0..cond.len() {
             // TODO: Improve the benchmark.
-            if cond[i].get(j).unwrap() {
+            if cond[i].get(j).unwrap().unwrap() {
                 vec[j] = choices[i].clone();
                 break;
             }
