@@ -221,6 +221,7 @@ def test_methods_no_arg(
         ("all_equal", 'bool', [True, False], False, {"other": [False, False]}),
         ("all_equal", 'bool', [True, False], False, {"other": [True, None]}),
         ("all_equal", 'bool', [True, None], False, {"other": [True, None]}),
+        ("all_equal", 'bool', [True, None], False, {"other": [True, False]}),
         ("all_equal", 'bool', [True, False], False, {"other": [True]}),
         ("all_equal", 'bool', [True, False], False, {"other": [None]}),
         ("all_equal", 'float', [1.0, 0.0], True, {"other": [1.0, 0.0]}),
