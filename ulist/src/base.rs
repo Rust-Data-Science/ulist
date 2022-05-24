@@ -1,5 +1,7 @@
 use crate::boolean::BooleanList;
 use crate::index::IndexList;
+use pyo3::exceptions::PyIndexError;
+use pyo3::PyResult;
 use std::cell::Ref;
 use std::cell::RefMut;
 use std::collections::HashSet;
@@ -121,16 +123,16 @@ where
         List::_new(vec, hset)
     }
 
-    fn get(&self, index: usize) -> Option<T> {
+    fn get(&self, index: usize) -> PyResult<Option<T>> {
         if self.na_indexes().contains(&index) {
-            return None;
+            return Ok(None);
         }
         let vec = self.values();
         let val = vec.get(index);
         if let Some(i) = val {
-            return Some(i.clone());
+            Ok(Some(i.clone()))
         } else {
-            panic!("Index out of range!");
+            Err(PyIndexError::new_err("Index out of range!"))
         }
     }
 

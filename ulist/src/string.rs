@@ -96,7 +96,7 @@ impl StringList {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> Option<String> {
+    pub fn get(&self, index: usize) -> PyResult<Option<String>> {
         List::get(self, index)
     }
 

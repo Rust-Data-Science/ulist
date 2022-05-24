@@ -97,7 +97,7 @@ impl BooleanList {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> Option<bool> {
+    pub fn get(&self, index: usize) -> PyResult<Option<bool>> {
         List::get(self, index)
     }
 

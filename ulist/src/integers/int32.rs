@@ -115,7 +115,7 @@ impl IntegerList32 {
         List::filter(self, condition)
     }
 
-    pub fn get(&self, index: usize) -> Option<i32> {
+    pub fn get(&self, index: usize) -> PyResult<Option<i32>> {
         List::get(self, index)
     }
 
