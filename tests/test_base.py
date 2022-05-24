@@ -29,29 +29,60 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
             [True, False] * 50,
             "UltraFastList([True, False, True, ..., False, True, False])",
         ),
-        ('__repr__', 'bool', [True, False], 'UltraFastList([True, False])'),
-        ('__repr__', 'float', [1.0, 2.0], 'UltraFastList([1.0, 2.0])'),
-        ('__repr__', 'float', range(0, 100),
-         'UltraFastList([0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0])'),
-        ('__repr__', 'int', [1, 2], 'UltraFastList([1, 2])'),
-        ('__repr__', 'int', range(0, 100),
-         'UltraFastList([0, 1, 2, ..., 97, 98, 99])'),
+        (
+            '__repr__',
+            'bool',
+            [True, False],
+            'UltraFastList([True, False])',
+        ),
+        (
+            '__repr__',
+            'float',
+            [1.0, 2.0],
+            'UltraFastList([1.0, 2.0])',
+        ),
+        (
+            '__repr__',
+            'float',
+            range(0, 100),
+            'UltraFastList([0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0])',
+        ),
+        (
+            '__repr__',
+            'int',
+            [1, 2],
+            'UltraFastList([1, 2])',
+        ),
+        (
+            '__repr__',
+            'int',
+            range(0, 100),
+            'UltraFastList([0, 1, 2, ..., 97, 98, 99])',
+        ),
         (
             "__repr__",
             "string",
             ['foo', 'bar'] * 50,
             "UltraFastList(['foo', 'bar', 'foo', ..., 'bar', 'foo', 'bar'])",
         ),
-        ('__repr__', 'string', ['foo', 'bar'],
-         "UltraFastList(['foo', 'bar'])"),
+        (
+            '__repr__',
+            'string',
+            ['foo', 'bar'],
+            "UltraFastList(['foo', 'bar'])",
+        ),
         (
             "__repr__",
             "string",
             ['foo', None] * 50,
             "UltraFastList(['foo', None, 'foo', ..., None, 'foo', None])",
         ),
-        ('__repr__', 'string', ['foo', None],
-         "UltraFastList(['foo', None])"),
+        (
+            '__repr__',
+            'string',
+            ['foo', None],
+            "UltraFastList(['foo', None])",
+        ),
 
         (
             "__str__",
@@ -59,26 +90,60 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
             [True, False] * 50,
             "[True, False, True, ..., False, True, False]",
         ),
-        ('__str__', 'bool', [True, False], '[True, False]'),
-        ('__str__', 'float', [1.0, 2.0], '[1.0, 2.0]'),
-        ('__str__', 'float', range(0, 100),
-         '[0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0]'),
-        ('__str__', 'int', [1, 2], '[1, 2]'),
-        ('__str__', 'int', range(0, 100), '[0, 1, 2, ..., 97, 98, 99]'),
+        (
+            '__str__',
+            'bool',
+            [True, False],
+            '[True, False]',
+        ),
+        (
+            '__str__',
+            'float',
+            [1.0, 2.0],
+            '[1.0, 2.0]',
+        ),
+        (
+            '__str__',
+            'float',
+            range(0, 100),
+            '[0.0, 1.0, 2.0, ..., 97.0, 98.0, 99.0]',
+        ),
+        (
+            '__str__',
+            'int',
+            [1, 2],
+            '[1, 2]',
+        ),
+        (
+            '__str__',
+            'int',
+            range(0, 100),
+            '[0, 1, 2, ..., 97, 98, 99]',
+        ),
         (
             "__str__",
             "string",
             ['foo', 'bar'] * 50,
             "['foo', 'bar', 'foo', ..., 'bar', 'foo', 'bar']",
         ),
-        ('__str__', 'string', ['foo', 'bar'], "['foo', 'bar']"),
+        (
+            '__str__',
+            'string',
+            ['foo', 'bar'],
+            "['foo', 'bar']",
+        ),
         (
             "__str__",
             "string",
             ['foo', None] * 50,
             "['foo', None, 'foo', ..., None, 'foo', None]",
         ),
-        ('__str__', 'string', ['foo', None], "['foo', None]"),
+        (
+            '__str__',
+            'string',
+            ['foo', None],
+            "['foo', None]",
+        ),
 
         ('copy', 'bool', [True, False], [True, False]),
         ('copy', 'float', [1.0, 2.0], [1.0, 2.0]),
@@ -150,6 +215,23 @@ def test_methods_no_arg(
         ('__getitem__', 'string', ['foo', 'bar', 'baz'],
          ['foo', 'baz'], {'index': ul.IndexList([0, 2])}),
 
+        ("all_equal", 'bool', [True, False], True, {"other": [True, False]}),
+        ("all_equal", 'bool', [True, False], False, {"other": [True, True]}),
+        ("all_equal", 'bool', [True, False], False, {"other": [False, True]}),
+        ("all_equal", 'bool', [True, False], False, {"other": [False, False]}),
+        ("all_equal", 'bool', [True, False], False, {"other": [True, None]}),
+        ("all_equal", 'bool', [True, None], False, {"other": [True, None]}),
+        ("all_equal", 'bool', [True, False], False, {"other": [True]}),
+        ("all_equal", 'bool', [True, False], False, {"other": [None]}),
+        ("all_equal", 'float', [1.0, 0.0], True, {"other": [1.0, 0.0]}),
+        ("all_equal", 'float', [1.0, 0.0], False, {"other": [1.0, 1.0]}),
+        ("all_equal", 'int', [1, 0], True, {"other": [1, 0]}),
+        ("all_equal", 'int', [1, 0], False, {"other": [1, 1]}),
+        ("all_equal", 'string', ['foo', 'bar'],
+         True, {"other": ['foo', 'bar']}),
+        ("all_equal", 'string', ['foo', 'bar'],
+         False, {"other": ['foo', 'foo']}),
+
         ("apply", "bool", [True, False], [
          False, True], {"fn": lambda x: x == False},),  # noqa: E712
         ("apply", "float", [1.0, 2.0], [
@@ -159,7 +241,6 @@ def test_methods_no_arg(
          True, False], {"fn": lambda x: x != 'bar'},),
         ("apply", "string", ['foo', 'bar', None], [
          True, False, True], {"fn": lambda x: x != 'bar'},),
-
 
         ("equal_scala", 'bool', [True, False], [False, True], {"elem": False}),
         ("equal_scala", 'float', [1.0, 2.0, 3.0],
@@ -274,7 +355,11 @@ def test_methods_with_args(
     kwargs: dict,
 ) -> None:
     arr = ul.from_seq(nums, dtype)
-    result = getattr(arr, test_method)(**kwargs)
+    fn = getattr(arr, test_method)
+    if kwargs.get("other") and isinstance(kwargs["other"], list):
+        result = fn(ul.from_seq(kwargs["other"], dtype))
+    else:
+        result = fn(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
 
