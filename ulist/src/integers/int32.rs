@@ -43,6 +43,10 @@ impl IntegerList32 {
         NumericalList::add_scala(self, elem)
     }
 
+    pub fn all_equal(&self, other: &Self) -> bool {
+        List::all_equal(self, other)
+    }
+
     pub fn append(&self, elem: Option<i32>) {
         List::append(self, elem)
     }

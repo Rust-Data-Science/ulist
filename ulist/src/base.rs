@@ -62,6 +62,18 @@ where
         }
     }
 
+    fn all_equal(&self, other: &Self) -> bool {
+        if self.size() != other.size() || self.count_na() > 0 || other.count_na() > 0 {
+            return false;
+        };
+        for (x, y) in self.values().iter().zip(other.values().iter()) {
+            if x != y {
+                return false;
+            }
+        }
+        return true;
+    }
+
     fn append(&self, elem: Option<T>) {
         if let Some(i) = elem {
             self.values_mut().push(i);

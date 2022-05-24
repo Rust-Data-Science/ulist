@@ -169,6 +169,13 @@ class UltraFastList:
         assert isinstance(self._values, BooleanList)
         return self._values.all()
 
+    def all_equal(self, other: "UltraFastList") -> bool:
+        """
+        Whether all elements in the same position of self and other
+        are equal.
+        """
+        return self._values.all_equal(other._values)
+
     def and_(self, other: "UltraFastList") -> "UltraFastList":
         """Return self & other."""
         assert isinstance(self._values, BooleanList)
