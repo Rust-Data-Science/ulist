@@ -405,6 +405,13 @@ def test_statistics_methods(
             [1, 4, None, 16, 25],
             {'elem': 2},
         ),
+        (
+            'pow_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [1, 1, 1, 1, 1],
+            {'elem': 0},
+        ),
 
         (
             'sub',

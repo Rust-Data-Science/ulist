@@ -10,7 +10,7 @@ from .ulist import (
     IndexList,
     IntegerList32,
     IntegerList64,
-    StringList
+    StringList,
 )
 
 if TYPE_CHECKING:  # To avoid circular import.
@@ -433,6 +433,8 @@ class UltraFastList:
     def pow_scala(self, elem: int) -> "UltraFastList":
         """Return self ** elem."""
         assert not isinstance(self._values, (BooleanList, StringList))
+        if elem == 0:
+            return UltraFastList(self._values.repeat(1, self.size()))
         return UltraFastList(self._values.pow_scala(elem))
 
     def replace(self, old: ELEM_OPT, new: ELEM_OPT) -> None:
