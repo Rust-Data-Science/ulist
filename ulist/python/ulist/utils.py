@@ -82,7 +82,6 @@ def check_test_result(
             if isinstance(x, UltraFastList):
                 assert len(x) == len(y), msg
                 for a, b in zip(x, y):
-                    print(a, b)
                     assert type(a) == type(b) and a == b, msg
             else:
                 assert type(x) == type(y) and x == y

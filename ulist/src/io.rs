@@ -31,7 +31,7 @@ pub fn read_csv(
             Err(e) => return Err(PyIOError::new_err(e.to_string())),
             Ok(record) => {
                 for (idx, entry) in record.into_iter().enumerate() {
-                    let entry = entry.trim();
+                    let entry = &entry.trim().replace("\r\n", "\n");
                     records
                         .entry(&headers[idx])
                         .and_modify(|v| v.push(entry.into()))
