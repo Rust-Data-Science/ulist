@@ -1,6 +1,8 @@
 use crate::base::List;
 use crate::base::_fill_na;
 use crate::boolean::BooleanList;
+use pyo3::exceptions::PyRuntimeError;
+use pyo3::PyResult;
 use std::collections::HashSet;
 use std::ops::Add;
 use std::ops::Div;
@@ -14,9 +16,13 @@ where
     T: Copy + PartialOrd + Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
 {
     // Arrange the following methods in alphabetical order.
-    fn _check_all_na(&self) {
+    fn _check_all_na(&self) -> PyResult<()> {
         if self.count_na() == self.size() {
-            panic!("All the elements are missing values!")
+            Err(PyRuntimeError::new_err(
+                "All the elements are missing values!",
+            ))
+        } else {
+            Ok(())
         }
     }
 
@@ -26,8 +32,8 @@ where
         vec
     }
 
-    fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> Self {
-        self._check_len_eq(other);
+    fn _fn(&self, other: &Self, func: impl Fn(T, T) -> T) -> PyResult<Self> {
+        self._check_len_eq(other)?;
         let vec = self
             .values()
             .iter()
@@ -46,10 +52,10 @@ where
             result.na_indexes(),
             self.na_value(),
         );
-        result
+        Ok(result)
     }
 
-    fn add(&self, other: &Self) -> Self {
+    fn add(&self, other: &Self) -> PyResult<Self> {
         self._fn(other, |x, y| x + y)
     }
 
@@ -58,11 +64,11 @@ where
         List::_new(self._fn_num(|x| x + elem, self.na_value()), hset)
     }
 
-    fn argmax(&self) -> usize;
+    fn argmax(&self) -> PyResult<usize>;
 
-    fn argmin(&self) -> usize;
+    fn argmin(&self) -> PyResult<usize>;
 
-    fn div(&self, other: &Self) -> Vec<V>;
+    fn div(&self, other: &Self) -> PyResult<Vec<V>>;
 
     fn div_scala(&self, elem: V) -> Vec<V>;
 
@@ -82,11 +88,11 @@ where
         BooleanList::new(self._fn_num(|x| x < elem, false), HashSet::new())
     }
 
-    fn max(&self) -> T;
+    fn max(&self) -> PyResult<T>;
 
-    fn min(&self) -> T;
+    fn min(&self) -> PyResult<T>;
 
-    fn mul(&self, other: &Self) -> Self {
+    fn mul(&self, other: &Self) -> PyResult<Self> {
         self._fn(other, |x, y| x * y)
     }
 
@@ -97,7 +103,7 @@ where
 
     fn pow_scala(&self, elem: U) -> Self;
 
-    fn sub(&self, other: &Self) -> Self {
+    fn sub(&self, other: &Self) -> PyResult<Self> {
         self._fn(other, |x, y| x - y)
     }
 

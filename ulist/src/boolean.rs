@@ -44,7 +44,7 @@ impl BooleanList {
         List::all_equal(self, other)
     }
 
-    pub fn and_(&self, other: &Self) -> Self {
+    pub fn and_(&self, other: &Self) -> PyResult<Self> {
         _logical_operate(&self, &other, |x, y| x && y)
     }
 
@@ -97,7 +97,7 @@ impl BooleanList {
         List::equal_scala(self, elem)
     }
 
-    pub fn filter(&self, condition: &BooleanList) -> Self {
+    pub fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         List::filter(self, condition)
     }
 
@@ -105,7 +105,7 @@ impl BooleanList {
         List::get(self, index)
     }
 
-    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         List::get_by_indexes(self, indexes)
     }
 
@@ -120,7 +120,7 @@ impl BooleanList {
         List::not_equal_scala(self, elem)
     }
 
-    pub fn or_(&self, other: &Self) -> Self {
+    pub fn or_(&self, other: &Self) -> PyResult<Self> {
         _logical_operate(&self, &other, |x, y| x || y)
     }
 
@@ -137,7 +137,7 @@ impl BooleanList {
         List::replace(self, old, new)
     }
 
-    pub fn set(&self, index: usize, elem: Option<bool>) {
+    pub fn set(&self, index: usize, elem: Option<bool>) -> PyResult<()> {
         List::set(self, index, elem)
     }
 
@@ -212,15 +212,15 @@ fn _logical_operate(
     this: &BooleanList,
     other: &BooleanList,
     func: impl Fn(bool, bool) -> bool,
-) -> BooleanList {
-    this._check_len_eq(other);
+) -> PyResult<BooleanList> {
+    this._check_len_eq(other)?;
     let vec = this
         .values()
         .iter()
         .zip(other.values().iter())
         .map(|(&x, &y)| func(x, y))
         .collect();
-    BooleanList::new(vec, HashSet::new())
+    Ok(BooleanList::new(vec, HashSet::new()))
 }
 
 impl AsFloatList32 for BooleanList {

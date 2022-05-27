@@ -1,6 +1,8 @@
 use crate::boolean::BooleanList;
 use crate::index::IndexList;
 use pyo3::exceptions::PyIndexError;
+use pyo3::exceptions::PyRuntimeError;
+use pyo3::exceptions::PyValueError;
 use pyo3::PyResult;
 use std::cell::Ref;
 use std::cell::RefMut;
@@ -25,9 +27,13 @@ where
 
     fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
 
-    fn _check_len_eq(&self, other: &Self) {
+    fn _check_len_eq(&self, other: &Self) -> PyResult<()> {
         if self.size() != other.size() {
-            panic!("The sizes of `self` and `other` should be equal!");
+            Err(PyRuntimeError::new_err(
+                "The sizes of `self` and `other` should be equal!",
+            ))
+        } else {
+            Ok(())
         }
     }
 
@@ -103,13 +109,15 @@ where
         BooleanList::new(vec, HashSet::new())
     }
 
-    fn filter(&self, condition: &BooleanList) -> Self {
+    fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         if self.size() != condition.size() {
-            panic!("The sizes of `self` and `other` should be equal!");
-        }
-
-        if condition.count_na() > 0 {
-            panic!("Parameter `condition` should not contain missing values!");
+            return Err(PyRuntimeError::new_err(
+                "The sizes of `self` and `other` should be equal!",
+            ));
+        } else if condition.count_na() > 0 {
+            return Err(PyValueError::new_err(
+                "Parameter `condition` should not contain missing values!",
+            ));
         }
 
         let n = self.size();
@@ -132,7 +140,7 @@ where
         }
         vec.shrink_to_fit();
         hset.shrink_to_fit();
-        List::_new(vec, hset)
+        Ok(List::_new(vec, hset))
     }
 
     fn get(&self, index: usize) -> PyResult<Option<T>> {
@@ -148,11 +156,11 @@ where
         }
     }
 
-    fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         // TODO: Put this kind of check
         // where there is unsafe block.
         if indexes.back() >= self.size() {
-            panic!("Index out of range!")
+            return Err(PyIndexError::new_err("Index out of range!"));
         }
         // TODO: use get_unchecked instead.
         let mut vec: Vec<T> = Vec::new();
@@ -165,7 +173,7 @@ where
             }
             i += 1;
         }
-        List::_new(vec, hset)
+        Ok(List::_new(vec, hset))
     }
 
     fn has_na(&self) -> bool {
@@ -249,9 +257,9 @@ where
         self.na_indexes_mut().clear();
     }
 
-    fn set(&self, index: usize, elem: Option<T>) {
+    fn set(&self, index: usize, elem: Option<T>) -> PyResult<()> {
         if index >= self.size() {
-            panic!("Index out of range!");
+            return Err(PyIndexError::new_err("Index out of range!"));
         }
         let mut vec = self.values_mut();
         // TODO: Use get_unchecked_mut instead.
@@ -268,6 +276,7 @@ where
             vec[index] = self.na_value();
             self.na_indexes_mut().insert(index);
         }
+        Ok(())
     }
 
     fn repeat(elem: T, size: usize) -> Self {
