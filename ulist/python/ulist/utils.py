@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from timeit import timeit
 from typing import Any, Callable, Dict, List, Sequence, Tuple, Union
+import math
 
 import ulist as ul
 from ulist import UltraFastList
@@ -67,13 +68,21 @@ def check_test_result(
         + f" result - {result}"
         + f" expected - {expected_value}"
     )
+
+    def assert_eq(x, y):
+        assert type(x) == type(y), msg
+        if type(x) == float:
+            assert math.isclose(x, y, rel_tol=1e-7), msg
+        else:
+            assert x == y, msg
+
     if hasattr(result, "to_list"):
         result = result.to_list()  # type: ignore
     if isinstance(result, list) and \
             isinstance(expected_value, list):
         assert len(result) == len(expected_value), msg
         for x, y in zip(result, expected_value):
-            assert type(x) == type(y) and x == y, msg
+            assert_eq(x, y)
     elif isinstance(result, dict) and \
             isinstance(expected_value, dict):
         for key in result.keys():
@@ -82,9 +91,9 @@ def check_test_result(
             if isinstance(x, UltraFastList):
                 assert len(x) == len(y), msg
                 for a, b in zip(x, y):
-                    assert type(a) == type(b) and a == b, msg
+                    assert_eq(a, b)
             else:
-                assert type(x) == type(y) and x == y
+                assert_eq(x, y)
         assert len(result) == len(expected_value)
     else:
         assert type(result) == type(expected_value), msg

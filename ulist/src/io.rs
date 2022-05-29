@@ -2,7 +2,7 @@ use crate::boolean::BooleanList;
 use crate::floatings::{FloatList32, FloatList64};
 use crate::integers::{IntegerList32, IntegerList64};
 use crate::string::StringList;
-use pyo3::exceptions::{PyIOError, PyValueError};
+use pyo3::exceptions::{PyIOError, PyTypeError, PyValueError};
 use pyo3::prelude::*;
 use std::collections::{HashMap, HashSet};
 use std::str::FromStr;
@@ -77,6 +77,7 @@ fn get_pylist(t: &str, list: Vec<String>, py: Python) -> PyResult<PyObject> {
             FloatList32::new(vec, hset).into_py(py)
         }
         "bool" => {
+            // `to_ascii_lowercase` maps `True` to `true`
             let (vec, hset) = parse_vec(list, |e| e.to_ascii_lowercase().parse())?;
             BooleanList::new(vec, hset).into_py(py)
         }
@@ -113,7 +114,7 @@ where
         }
         match parse(item) {
             Ok(s) => vec.push(s),
-            Err(e) => return Err(PyIOError::new_err(e.to_string())),
+            Err(e) => return Err(PyTypeError::new_err(e.to_string())),
         }
     }
     Ok((vec, hset))
