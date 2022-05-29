@@ -116,7 +116,8 @@ where
     fn equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x == &elem);
         _fill_na(&mut vec, self.na_indexes(), false);
-        BooleanList::new(vec, HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     fn filter(&self, condition: &BooleanList) -> Self {
