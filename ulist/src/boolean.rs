@@ -40,7 +40,7 @@ impl BooleanList {
         self.values().iter().all(|&x| x)
     }
 
-    pub fn all_equal(&self, other: &Self) -> bool {
+    pub fn all_equal(&self, other: &Self) -> Option<bool> {
         List::all_equal(self, other)
     }
 

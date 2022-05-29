@@ -43,7 +43,7 @@ impl IntegerList32 {
         NumericalList::add_scala(self, elem)
     }
 
-    pub fn all_equal(&self, other: &Self) -> bool {
+    pub fn all_equal(&self, other: &Self) -> Option<bool> {
         List::all_equal(self, other)
     }
 

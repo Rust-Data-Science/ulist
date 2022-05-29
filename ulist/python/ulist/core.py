@@ -1,6 +1,6 @@
 from __future__ import annotations  # To avoid circular import.
 
-from typing import TYPE_CHECKING, Callable, Union
+from typing import TYPE_CHECKING, Callable, Union, Optional
 
 from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM, ELEM_OPT
 from .ulist import (
@@ -169,7 +169,7 @@ class UltraFastList:
         assert isinstance(self._values, BooleanList)
         return self._values.all()
 
-    def all_equal(self, other: "UltraFastList") -> bool:
+    def all_equal(self, other: "UltraFastList") -> Optional[bool]:
         """
         Whether all elements in the same position of self and other
         are equal.

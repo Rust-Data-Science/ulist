@@ -62,16 +62,32 @@ where
         }
     }
 
-    fn all_equal(&self, other: &Self) -> bool {
-        if self.size() != other.size() || self.count_na() > 0 || other.count_na() > 0 {
-            return false;
+    fn all_equal(&self, other: &Self) -> Option<bool> {
+        if self.size() != other.size() {
+            return Some(false);
         };
-        for (x, y) in self.values().iter().zip(other.values().iter()) {
-            if x != y {
-                return false;
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
+        let mut result = Some(true);
+        for ((i1, x1), (i2, x2)) in self
+            .values()
+            .iter()
+            .enumerate()
+            .zip(other.values().iter().enumerate())
+        {
+            if hset1.contains(&i1) {
+                result = None;
+            } else {
+                if hset2.contains(&i2) {
+                    result = None;
+                } else {
+                    if x1 != x2 {
+                        return Some(false);
+                    }
+                }
             }
         }
-        return true;
+        return result;
     }
 
     fn append(&self, elem: Option<T>) {

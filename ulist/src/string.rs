@@ -35,7 +35,7 @@ impl StringList {
         List::_new(vec, hset)
     }
 
-    pub fn all_equal(&self, other: &Self) -> bool {
+    pub fn all_equal(&self, other: &Self) -> Option<bool> {
         List::all_equal(self, other)
     }
 
