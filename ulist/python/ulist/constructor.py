@@ -192,11 +192,11 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     return result
 
 
-def repeat(elem: ELEM_OPT, size: int) -> UltraFastList:
+def repeat(elem: ELEM, size: int) -> UltraFastList:
     """Return a new ulist of given size, filled with elem.
 
     Args:
-        elem (ELEM_OPT): Element to repeat.
+        elem (ELEM): Element to repeat.
         size (int): Size of the new ulist.
 
     Raises:
