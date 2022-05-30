@@ -344,10 +344,10 @@ class UltraFastList:
         assert isinstance(self._values, StringList)
         return UltraFastList(self._values.ends_with(elem))
 
-    def equal_scala(self, elem: NUM) -> "UltraFastList":
+    def equal_scala(self, elem: ELEM) -> "UltraFastList":
         """Return self == elem."""
         if elem is None:
-            return UltraFastList(BooleanList.repeat(False, self.size()))
+            raise TypeError("Parameter `elem` cannot be None!")
         return UltraFastList(self._values.equal_scala(elem))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":
