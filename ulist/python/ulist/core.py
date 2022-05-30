@@ -70,7 +70,7 @@ class UltraFastList:
         """Return self & other."""
         return self.and_(other)
 
-    def __eq__(self, other: int) -> "UltraFastList":  # type: ignore
+    def __eq__(self, other: ELEM) -> "UltraFastList":  # type: ignore
         """Return self == other."""
         return self.equal_scala(other)
 
