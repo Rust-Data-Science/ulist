@@ -249,7 +249,7 @@ def test_statistics_methods(
             "greater_than_or_equal_scala",
             'int',
             [1, 2, None],
-            [False, True, False],
+            [False, True, None],
             {"elem": 2}
         ),
 
@@ -271,7 +271,7 @@ def test_statistics_methods(
             'greater_than_scala',
             'int',
             [1, 2, 3, 4, None],
-            [False, False, True, True, False],
+            [False, False, True, True, None],
             {'elem': 2},
         ),
 
@@ -293,7 +293,7 @@ def test_statistics_methods(
             "less_than_or_equal_scala",
             'int',
             [None, 2, 3],
-            [False, True, False],
+            [None, True, False],
             {"elem": 2},
         ),
 
@@ -315,7 +315,7 @@ def test_statistics_methods(
             'less_than_scala',
             'int',
             [1, 2, None, 4, 5],
-            [True, False, False, False, False],
+            [True, False, None, False, False],
             {'elem': 2},
         ),
 
