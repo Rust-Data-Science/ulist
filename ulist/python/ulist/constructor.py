@@ -1,7 +1,7 @@
 from typing import Optional, Sequence, Union, Type
 
 from .core import UltraFastList
-from .typedef import ELEM_OPT, ELEM
+from .typedef import ELEM
 from .ulist import (BooleanList, FloatList32, FloatList64, IntegerList32,
                     IntegerList64, StringList, arange32, arange64)
 
