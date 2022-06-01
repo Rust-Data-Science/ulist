@@ -102,7 +102,7 @@ Given the ages of people as ``arr``, and suppose the adults are equal or above 1
 Contribute
 ~~~~~~~~~~
 
-All contributions are welcome. See `Developer Guide <https://github.com/tushushu/ulist/blob/main/develop.md>`__
+All contributions are welcome. See `Developer Guide <https://github.com/tushushu/ulist/blob/main/develop.rst>`__
 
 .. |PyPI| image:: https://badge.fury.io/py/ulist.svg
    :target: https://pypi.org/project/ulist/
