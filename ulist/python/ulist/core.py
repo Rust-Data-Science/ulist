@@ -346,8 +346,6 @@ class UltraFastList:
 
     def equal_scala(self, elem: ELEM) -> "UltraFastList":
         """Return self == elem."""
-        if elem is None:
-            raise TypeError("Parameter `elem` cannot be None!")
         return UltraFastList(self._values.equal_scala(elem))
 
     def filter(self, condition: "UltraFastList") -> "UltraFastList":

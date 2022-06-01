@@ -397,16 +397,41 @@ def test_methods_no_arg(
         ('get_by_indexes', 'string', ['foo', 'bar', None],
          ['foo', None], {'indexes': ul.IndexList([0, 2])}),
 
-        ('not_equal_scala', 'bool', [False, True, False], [
-         True, False, True], {'elem': True}),
-        ('not_equal_scala', 'float', [1.0, 2.0, 3.0], [
-         True, False, True], {'elem': 2.0}),
-        ('not_equal_scala', 'int', [1, 2, 3],
-         [True, False, True], {'elem': 2}),
-        ('not_equal_scala', 'string', ['foo', 'bar', 'baz'],
-         [True, False, True], {'elem': 'bar'}),
-        ('not_equal_scala', 'string', ['foo', 'bar', None],
-         [True, False, True], {'elem': 'bar'}),
+        (
+            'not_equal_scala',
+            'bool',
+            [False, True, False],
+            [True, False, True],
+            {'elem': True},
+        ),
+        (
+            'not_equal_scala',
+            'float',
+            [1.0, 2.0, 3.0],
+            [True, False, True],
+            {'elem': 2.0},
+        ),
+        (
+            'not_equal_scala',
+            'int',
+            [1, 2, 3],
+            [True, False, True],
+            {'elem': 2},
+        ),
+        (
+            'not_equal_scala',
+            'string',
+            ['foo', 'bar', 'baz'],
+            [True, False, True],
+            {'elem': 'bar'},
+        ),
+        (
+            'not_equal_scala',
+            'string',
+            ['foo', 'bar', None],
+            [True, False, None],
+            {'elem': 'bar'},
+        ),
 
         ('union_all', 'bool', [True, False], [True, False, False, True], {
          'other': ul.from_seq([False, True], dtype='bool')}),

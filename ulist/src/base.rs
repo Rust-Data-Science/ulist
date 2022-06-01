@@ -197,8 +197,9 @@ where
 
     fn not_equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x != &elem);
-        _fill_na(&mut vec, self.na_indexes(), true);
-        BooleanList::new(vec, HashSet::new())
+        _fill_na(&mut vec, self.na_indexes(), false);
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     fn pop(&self) {
