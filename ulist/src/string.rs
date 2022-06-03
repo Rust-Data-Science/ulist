@@ -96,7 +96,7 @@ impl StringList {
         List::equal_scala(self, elem)
     }
 
-    pub fn filter(&self, condition: &BooleanList) -> Self {
+    pub fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         List::filter(self, condition)
     }
 
@@ -104,7 +104,7 @@ impl StringList {
         List::get(self, index)
     }
 
-    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         List::get_by_indexes(self, indexes)
     }
 
@@ -125,7 +125,7 @@ impl StringList {
         List::replace(self, old, new)
     }
 
-    pub fn set(&self, index: usize, elem: Option<String>) {
+    pub fn set(&self, index: usize, elem: Option<String>) -> PyResult<()> {
         List::set(self, index, elem)
     }
 

@@ -33,7 +33,7 @@ impl FloatList64 {
         List::_new(vec, hset)
     }
 
-    pub fn add(&self, other: &Self) -> Self {
+    pub fn add(&self, other: &Self) -> PyResult<Self> {
         NumericalList::add(self, other)
     }
 
@@ -49,11 +49,11 @@ impl FloatList64 {
         List::append(self, elem)
     }
 
-    pub fn argmax(&self) -> usize {
+    pub fn argmax(&self) -> PyResult<usize> {
         NumericalList::argmax(self)
     }
 
-    pub fn argmin(&self) -> usize {
+    pub fn argmin(&self) -> PyResult<usize> {
         NumericalList::argmin(self)
     }
 
@@ -90,9 +90,9 @@ impl FloatList64 {
         List::cycle(&vec, size)
     }
 
-    pub fn div(&self, other: &Self) -> Self {
+    pub fn div(&self, other: &Self) -> PyResult<Self> {
         let hset = self.na_indexes().clone();
-        FloatList64::new(NumericalList::div(self, other), hset)
+        Ok(FloatList64::new(NumericalList::div(self, other)?, hset))
     }
 
     pub fn div_scala(&self, elem: f64) -> Self {
@@ -104,7 +104,7 @@ impl FloatList64 {
         List::equal_scala(self, elem)
     }
 
-    pub fn filter(&self, condition: &BooleanList) -> Self {
+    pub fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         List::filter(self, condition)
     }
 
@@ -112,7 +112,7 @@ impl FloatList64 {
         List::get(self, index)
     }
 
-    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         List::get_by_indexes(self, indexes)
     }
 
@@ -132,15 +132,15 @@ impl FloatList64 {
         NumericalList::less_than_scala(self, elem)
     }
 
-    pub fn max(&self) -> f64 {
+    pub fn max(&self) -> PyResult<f64> {
         NumericalList::max(self)
     }
 
-    pub fn min(&self) -> f64 {
+    pub fn min(&self) -> PyResult<f64> {
         NumericalList::min(self)
     }
 
-    pub fn mul(&self, other: &Self) -> Self {
+    pub fn mul(&self, other: &Self) -> PyResult<Self> {
         NumericalList::mul(self, other)
     }
 
@@ -169,7 +169,7 @@ impl FloatList64 {
         List::replace(self, old, new)
     }
 
-    pub fn set(&self, index: usize, elem: Option<f64>) {
+    pub fn set(&self, index: usize, elem: Option<f64>) -> PyResult<()> {
         List::set(self, index, elem)
     }
 
@@ -192,7 +192,7 @@ impl FloatList64 {
         }
     }
 
-    pub fn sub(&self, other: &Self) -> Self {
+    pub fn sub(&self, other: &Self) -> PyResult<Self> {
         NumericalList::sub(self, other)
     }
 
@@ -267,8 +267,8 @@ impl List<f64> for FloatList64 {
 }
 
 impl NumericalList<f64, i32, f64> for FloatList64 {
-    fn argmax(&self) -> usize {
-        self._check_all_na();
+    fn argmax(&self) -> PyResult<usize> {
+        self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
         let val_0 = &f64::NEG_INFINITY;
@@ -277,11 +277,11 @@ impl NumericalList<f64, i32, f64> for FloatList64 {
             .enumerate()
             .filter(|(i, _)| !hset.contains(i))
             .fold((0, val_0), |acc, x| if x.1 > acc.1 { x } else { acc });
-        result.0
+        Ok(result.0)
     }
 
-    fn argmin(&self) -> usize {
-        self._check_all_na();
+    fn argmin(&self) -> PyResult<usize> {
+        self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
         let val_0 = &f64::INFINITY;
@@ -290,46 +290,47 @@ impl NumericalList<f64, i32, f64> for FloatList64 {
             .enumerate()
             .filter(|(i, _)| !hset.contains(i))
             .fold((0, val_0), |acc, x| if x.1 < acc.1 { x } else { acc });
-        result.0
+        Ok(result.0)
     }
 
-    fn div(&self, other: &Self) -> Vec<f64> {
-        self._check_len_eq(other);
-        self.values()
+    fn div(&self, other: &Self) -> PyResult<Vec<f64>> {
+        self._check_len_eq(other)?;
+        Ok(self
+            .values()
             .iter()
             .zip(other.values().iter())
             .map(|(x, y)| x / y)
-            .collect()
+            .collect())
     }
 
     fn div_scala(&self, elem: f64) -> Vec<f64> {
         self.values().iter().map(|x| *x / elem).collect()
     }
 
-    fn max(&self) -> f64 {
-        self._check_all_na();
+    fn max(&self) -> PyResult<f64> {
+        self._check_all_na()?;
         let hset = self.na_indexes();
-        *self
+        Ok(*self
             .values()
             .iter()
             .enumerate()
             .filter(|(i, _)| !hset.contains(i))
             .map(|(_, x)| x)
             .max_by(|&x, &y| x.partial_cmp(y).unwrap())
-            .unwrap()
+            .unwrap())
     }
 
-    fn min(&self) -> f64 {
-        self._check_all_na();
+    fn min(&self) -> PyResult<f64> {
+        self._check_all_na()?;
         let hset = self.na_indexes();
-        *self
+        Ok(*self
             .values()
             .iter()
             .enumerate()
             .filter(|(i, _)| !hset.contains(i))
             .map(|(_, x)| x)
             .min_by(|&x, &y| x.partial_cmp(y).unwrap())
-            .unwrap()
+            .unwrap())
     }
 
     fn pow_scala(&self, elem: i32) -> Self {
