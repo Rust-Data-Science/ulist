@@ -297,15 +297,41 @@ def test_methods_no_arg(
         ('all_equal', 'bool', [None, None], None, {'other': [None, False]}),
         ('all_equal', 'bool', [None, None], None, {'other': [None, None]}),
 
-        ('apply', 'bool', [True, False], [
-         False, True], {'fn': lambda x: x == False},),  # noqa: E712
-        ('apply', 'float', [1.0, 2.0], [
-         True, False], {'fn': lambda x: x < 2.0},),
-        ('apply', 'int', [1, 2], [3, 5], {'fn': lambda x: x * 2 + 1},),
-        ('apply', 'string', ['foo', 'bar'], [
-         True, False], {'fn': lambda x: x != 'bar'},),
-        ('apply', 'string', ['foo', 'bar', None], [
-         True, False, True], {'fn': lambda x: x != 'bar'},),
+        (
+            'apply',
+            'bool',
+            [True, False],
+            [False, True],
+            {'fn': lambda x: x == False},  # noqa: E712
+        ),
+        (
+            'apply',
+            'float',
+            [1.0, 2.0],
+            [True, False],
+            {'fn': lambda x: x < 2.0},
+        ),
+        (
+            'apply',
+            'int',
+            [1, 2],
+            [3, 5],
+            {'fn': lambda x: x * 2 + 1},
+        ),
+        (
+            'apply',
+            'string',
+            ['foo', 'bar'],
+            [True, False],
+            {'fn': lambda x: x != 'bar'},
+        ),
+        (
+            'apply',
+            'string',
+            ['foo', 'bar', None],
+            [True, False, None],
+            {'fn': lambda x: x != 'bar'},
+        ),
 
         (
             'equal_scala',
@@ -452,16 +478,41 @@ def test_methods_no_arg(
         ('var', 'int', [1, 2, 3], 1.0, {'ddof': 1}),
         ('var', 'int', [1, 2, 3, None], 1.0, {'ddof': 1}),
 
-        ('where', 'bool', [True, True, False, False], [
-         False, False], {'fn': lambda x: x == False},),  # noqa: E712
-        ('where', 'float', [1.0, 2.0, 3.0, 4.0], [
-         1.0, 2.0], {'fn': lambda x: x < 3.0},),
-        ('where', 'int', [1, 2, 3, 4], [
-            3, 4], {'fn': lambda x: x > 2},),
-        ('where', 'string', ['foo', 'bar', 'baz'], [
-            'foo', 'baz'], {'fn': lambda x: x != 'bar'},),
-        ('where', 'string', ['foo', 'bar', 'baz', None], [
-            'foo', 'baz', None], {'fn': lambda x: x != 'bar'},),
+        (
+            'where',
+            'bool',
+            [True, True, False, False],
+            [False, False],
+            {'fn': lambda x: x == False},  # noqa: E712
+        ),
+        (
+            'where',
+            'float',
+            [1.0, 2.0, 3.0, 4.0],
+            [1.0, 2.0],
+            {'fn': lambda x: x < 3.0},
+        ),
+        (
+            'where',
+            'int',
+            [1, 2, 3, 4],
+            [3, 4],
+            {'fn': lambda x: x > 2},
+        ),
+        (
+            'where',
+            'string',
+            ['foo', 'bar', 'baz'],
+            ['foo', 'baz'],
+            {'fn': lambda x: x != 'bar'},
+        ),
+        (
+            'where',
+            'string',
+            ['foo', 'bar', 'baz', None],
+            ['foo', 'baz'],
+            {'fn': lambda x: x != 'bar'},
+        ),
     ],
 )
 def test_methods_with_args(

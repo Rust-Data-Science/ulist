@@ -2,7 +2,6 @@ use crate::boolean::BooleanList;
 use crate::index::IndexList;
 use pyo3::exceptions::PyIndexError;
 use pyo3::exceptions::PyRuntimeError;
-use pyo3::exceptions::PyValueError;
 use pyo3::PyResult;
 use std::cell::Ref;
 use std::cell::RefMut;
@@ -130,10 +129,6 @@ where
         if self.size() != condition.size() {
             return Err(PyRuntimeError::new_err(
                 "The sizes of `self` and `other` should be equal!",
-            ));
-        } else if condition.count_na() > 0 {
-            return Err(PyValueError::new_err(
-                "Parameter `condition` should not contain missing values!",
             ));
         }
 
