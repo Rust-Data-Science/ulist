@@ -33,6 +33,10 @@ jobs:
       - name: Install Python packages
         run: |
           pip install -r ./requirements/dev.txt
+      - name: Cargo clippy
+        run: |
+          cd ulist
+          cargo clippy
       - name: Build ulist
         run: |
           maturin build --out dist -m ulist/Cargo.toml

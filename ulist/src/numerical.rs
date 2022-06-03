@@ -27,7 +27,7 @@ where
     }
 
     fn _fn_num<W: Clone>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
-        let mut vec = self.values().iter().map(|&x| func(x)).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|&x| func(x)).collect();
         _fill_na(&mut vec, self.na_indexes(), default);
         vec
     }
@@ -44,7 +44,7 @@ where
             .na_indexes()
             .iter()
             .chain(other.na_indexes().iter())
-            .map(|x| x.clone())
+            .copied()
             .collect();
         let result: Self = List::_new(vec, hset);
         _fill_na(

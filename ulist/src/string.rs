@@ -64,7 +64,7 @@ impl StringList {
     }
 
     pub fn contains(&self, elem: &str) -> BooleanList {
-        let mut vec = self.values().iter().map(|x| x.contains(elem)).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.contains(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
@@ -87,7 +87,7 @@ impl StringList {
     }
 
     pub fn ends_with(&self, elem: &str) -> BooleanList {
-        let mut vec = self.values().iter().map(|x| x.ends_with(elem)).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.ends_with(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
@@ -138,13 +138,13 @@ impl StringList {
     }
 
     pub fn starts_with(&self, elem: &str) -> BooleanList {
-        let mut vec = self.values().iter().map(|x| x.starts_with(elem)).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.starts_with(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         BooleanList::new(vec, HashSet::new())
     }
 
     pub fn str_len(&self) -> IntegerList64 {
-        let mut vec = self.values().iter().map(|x| x.len() as i64).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.len() as i64).collect();
         _fill_na(&mut vec, self.na_indexes(), 0);
         IntegerList64::new(vec, self.na_indexes().clone())
     }
