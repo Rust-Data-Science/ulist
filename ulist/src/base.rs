@@ -36,6 +36,26 @@ where
         }
     }
 
+    // TODO: Better abstraction for List::_cmp and NumericalList::_fn methods.
+    fn _cmp(&self, other: &Self, func: impl Fn(T, T) -> bool) -> PyResult<BooleanList> {
+        self._check_len_eq(other)?;
+        let vec = self
+            .values()
+            .iter()
+            .zip(other.values().iter())
+            .map(|(x, y)| func(x.clone(), y.clone()))
+            .collect();
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .map(|x| x.clone())
+            .collect();
+        let result = BooleanList::_new(vec, hset);
+        _fill_na(&mut result.values_mut(), result.na_indexes(), false);
+        Ok(result)
+    }
+
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
         self.values().iter().map(|x| func(x)).collect()
     }
@@ -116,6 +136,10 @@ where
     fn cycle(vec: &Vec<T>, size: usize) -> Self {
         let v = vec.iter().cycle().take(size).map(|x| x.clone()).collect();
         List::_new(v, HashSet::new())
+    }
+
+    fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x == y)
     }
 
     fn equal_scala(&self, elem: T) -> BooleanList {
