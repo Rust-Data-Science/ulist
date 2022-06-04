@@ -215,6 +215,10 @@ def test_methods_no_arg(
         ('__getitem__', 'string', ['foo', 'bar', 'baz'],
          ['foo', 'baz'], {'index': ul.IndexList([0, 2])}),
 
+        ('all_equal', 'float', [0.0, 1.0], True, {'other': [0.0, 1.0]}),
+        ('all_equal', 'int', [0, 1], True, {'other': [0, 1]}),
+        ('all_equal', 'string', ['foo', 'bar'],
+         True, {'other': ['foo', 'bar']}),
         ('all_equal', 'bool', [True, True], True, {'other': [True, True]}),
         ('all_equal', 'bool', [True, True], False, {'other': [True, False]}),
         ('all_equal', 'bool', [True, True], None, {'other': [True, None]}),
