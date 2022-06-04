@@ -338,6 +338,43 @@ def test_methods_no_arg(
         ),
 
         (
+            'equal',
+            'bool',
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': [True, False, None, True, False, None, True, False, None]
+            },
+        ),
+        (
+            'equal',
+            'float',
+            [1.0, 1.0, 1.0, 0.0, 0.0, 0.0, None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': [1.0, 0.0, None, 1.0, 0.0, None, 1.0, 0.0, None]
+            },
+        ),
+        (
+            'equal',
+            'int',
+            [1, 1, 1, 0, 0, 0, None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': [1, 0, None, 1, 0, None, 1, 0, None]
+            },
+        ),
+        (
+            'equal',
+            'string',
+            ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]
+            },
+        ),
+
+        (
             'equal_scala',
             'bool',
             [True, False],
@@ -426,6 +463,43 @@ def test_methods_no_arg(
          ['foo', 'baz'], {'indexes': ul.IndexList([0, 2])}),
         ('get_by_indexes', 'string', ['foo', 'bar', None],
          ['foo', None], {'indexes': ul.IndexList([0, 2])}),
+
+        (
+            'not_equal',
+            'bool',
+            [True, True, True, False, False, False, None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': [True, False, None, True, False, None, True, False, None]
+            },
+        ),
+        (
+            'not_equal',
+            'float',
+            [1.0, 1.0, 1.0, 0.0, 0.0, 0.0, None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': [1.0, 0.0, None, 1.0, 0.0, None, 1.0, 0.0, None]
+            },
+        ),
+        (
+            'not_equal',
+            'int',
+            [1, 1, 1, 0, 0, 0, None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': [1, 0, None, 1, 0, None, 1, 0, None]
+            },
+        ),
+        (
+            'not_equal',
+            'string',
+            ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]
+            },
+        ),
 
         (
             'not_equal_scala',

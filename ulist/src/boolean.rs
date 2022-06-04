@@ -93,6 +93,10 @@ impl BooleanList {
         List::cycle(&vec, size)
     }
 
+    pub fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::equal(self, other)
+    }
+
     pub fn equal_scala(&self, elem: bool) -> BooleanList {
         List::equal_scala(self, elem)
     }
@@ -114,6 +118,10 @@ impl BooleanList {
         _fill_na(&mut vec, self.na_indexes(), false);
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
+    }
+
+    pub fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::not_equal(self, other)
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {

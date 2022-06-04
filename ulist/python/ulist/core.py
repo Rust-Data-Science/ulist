@@ -62,6 +62,18 @@ class UltraFastList:
             "Parameter other should be int, " + "float or UltraFastList type!"
         )
 
+    def _cmp_method(
+        self, other: ELEM_OR_LIST, fn: Callable, fn_scala: Callable
+    ) -> "UltraFastList":
+        if isinstance(other, (int, float, bool, str)):
+            return fn_scala(other)
+        if type(other) is type(self):
+            return fn(other)
+        raise TypeError(
+            "Parameter other should be int, float" +
+            "bool, str or UltraFastList type!"
+        )
+
     def __add__(self, other: NUM_OR_LIST) -> "UltraFastList":
         """Return self + other."""
         return self._arithmetic_method(other, self.add, self.add_scala)
@@ -70,9 +82,9 @@ class UltraFastList:
         """Return self & other."""
         return self.and_(other)
 
-    def __eq__(self, other: ELEM) -> "UltraFastList":  # type: ignore
+    def __eq__(self, other: ELEM_OR_LIST) -> "UltraFastList":
         """Return self == other."""
-        return self.equal_scala(other)
+        return self._cmp_method(other, self.equal, self.equal_scala)
 
     def __getitem__(self, index: Union[int, IndexList]) -> ELEM_OR_LIST:
         """Return self[index]."""
@@ -109,9 +121,9 @@ class UltraFastList:
         """Return self * other."""
         return self._arithmetic_method(other, self.mul, self.mul_scala)
 
-    def __ne__(self, other: int) -> "UltraFastList":  # type: ignore
+    def __ne__(self, other: ELEM_OR_LIST) -> "UltraFastList":
         """Return self != other."""
-        return self.not_equal_scala(other)
+        return self._cmp_method(other, self.not_equal, self.not_equal_scala)
 
     def __or__(self, other: "UltraFastList") -> "UltraFastList":
         """Return self | other."""
@@ -344,6 +356,10 @@ class UltraFastList:
         assert isinstance(self._values, StringList)
         return UltraFastList(self._values.ends_with(elem))
 
+    def equal(self, other: "UltraFastList") -> "UltraFastList":
+        """Return self == other."""
+        return UltraFastList(self._values.equal(other._values))
+
     def equal_scala(self, elem: ELEM) -> "UltraFastList":
         """Return self == elem."""
         return UltraFastList(self._values.equal_scala(elem))
@@ -413,6 +429,10 @@ class UltraFastList:
         """Return ~self."""
         assert isinstance(self._values, BooleanList)
         return UltraFastList(self._values.not_())
+
+    def not_equal(self, other: "UltraFastList") -> "UltraFastList":
+        """Return self != other."""
+        return UltraFastList(self._values.not_equal(other._values))
 
     def not_equal_scala(self, elem: NUM) -> "UltraFastList":
         """Return self != elem."""

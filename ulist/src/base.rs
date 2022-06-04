@@ -222,6 +222,10 @@ where
 
     fn na_value(&self) -> T;
 
+    fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x != y)
+    }
+
     fn not_equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x != &elem);
         _fill_na(&mut vec, self.na_indexes(), false);

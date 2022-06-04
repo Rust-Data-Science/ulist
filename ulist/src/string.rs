@@ -92,6 +92,10 @@ impl StringList {
         BooleanList::new(vec, HashSet::new())
     }
 
+    pub fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::equal(self, other)
+    }
+
     pub fn equal_scala(&self, elem: String) -> BooleanList {
         List::equal_scala(self, elem)
     }
@@ -106,6 +110,10 @@ impl StringList {
 
     pub fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         List::get_by_indexes(self, indexes)
+    }
+
+    pub fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::not_equal(self, other)
     }
 
     pub fn not_equal_scala(&self, elem: String) -> BooleanList {

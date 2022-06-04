@@ -113,6 +113,10 @@ impl IntegerList64 {
         FloatList64::new(NumericalList::div_scala(self, elem), hset)
     }
 
+    pub fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::equal(self, other)
+    }
+
     pub fn equal_scala(&self, elem: i64) -> BooleanList {
         List::equal_scala(self, elem)
     }
@@ -159,6 +163,10 @@ impl IntegerList64 {
 
     pub fn mul_scala(&self, elem: i64) -> Self {
         NumericalList::mul_scala(self, elem)
+    }
+
+    pub fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::not_equal(self, other)
     }
 
     pub fn not_equal_scala(&self, elem: i64) -> BooleanList {
