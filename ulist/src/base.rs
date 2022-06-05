@@ -102,10 +102,8 @@ where
         {
             if hset1.contains(&i1) || hset2.contains(&i2) {
                 result = None;
-            } else {
-                if x1 != x2 {
-                    return Some(false);
-                }
+            } else if x1 != x2 {
+                return Some(false);
             }
         }
         result
