@@ -408,7 +408,7 @@ impl AsStringList for FloatList64 {
     }
 }
 
-fn _sort(vec: &mut Vec<f64>, ascending: bool) {
+fn _sort(vec: &mut [f64], ascending: bool) {
     if ascending {
         vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
     } else {

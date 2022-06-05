@@ -7,7 +7,7 @@ use std::cell::Ref;
 use std::cell::RefMut;
 use std::collections::HashSet;
 
-pub fn _fill_na<T: Clone>(vec: &mut Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
+pub fn _fill_na<T: Clone>(vec: &mut [T], na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
         // TODO: Use get_unchecked_mut instead.
         // let ptr = unsafe { vec.get_unchecked_mut(*i) };
@@ -57,7 +57,7 @@ where
     }
 
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
-        self.values().iter().map(|x| func(x)).collect()
+        self.values().iter().map(func).collect()
     }
 
     fn _sort(&self) {
@@ -112,7 +112,7 @@ where
                 }
             }
         }
-        return result;
+        result
     }
 
     fn append(&self, elem: Option<T>) {
@@ -133,8 +133,8 @@ where
         self.na_indexes().len()
     }
 
-    fn cycle(vec: &Vec<T>, size: usize) -> Self {
-        let v = vec.iter().cycle().take(size).map(|x| x.clone()).collect();
+    fn cycle(vec: &[T], size: usize) -> Self {
+        let v: Vec<_> = vec.iter().cycle().take(size).cloned().collect();
         List::_new(v, HashSet::new())
     }
 
@@ -201,13 +201,11 @@ where
         // TODO: use get_unchecked instead.
         let mut vec: Vec<T> = Vec::new();
         let mut hset: HashSet<usize> = HashSet::new();
-        let mut i: usize = 0;
-        for j in indexes.values().iter() {
+        for (i, j) in indexes.values().iter().enumerate() {
             vec.push(self.values()[*j].clone());
             if self.na_indexes().contains(j) {
                 hset.insert(i);
             }
-            i += 1;
         }
         Ok(List::_new(vec, hset))
     }
@@ -248,10 +246,8 @@ where
             } else {
                 self.replace_by_na(_old)
             }
-        } else {
-            if let Some(_new) = new {
-                self.replace_na(_new)
-            }
+        } else if let Some(_new) = new {
+            self.replace_na(_new)
         }
     }
 

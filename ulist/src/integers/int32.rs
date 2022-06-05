@@ -101,7 +101,7 @@ impl IntegerList32 {
             .na_indexes()
             .iter()
             .chain(other.na_indexes().iter())
-            .map(|x| x.clone())
+            .copied()
             .collect();
         Ok(FloatList64::new(NumericalList::div(self, other)?, hset))
     }

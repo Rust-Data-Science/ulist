@@ -11,8 +11,8 @@ use std::collections::HashSet;
 
 fn select<T, U>(
     py: Python,
-    conditions: &Vec<Py<BooleanList>>,
-    choices: &Vec<T>,
+    conditions: &[Py<BooleanList>],
+    choices: &[T],
     default: T,
 ) -> PyResult<U>
 where
@@ -34,11 +34,12 @@ where
     }
 
     let mut vec = vec![default; cond[0].size()];
-    for j in 0..cond[0].size() {
+    // for j in 0..cond[0].size() {
+    for (j, item) in vec.iter_mut().enumerate().take(cond[0].size()) {
         for i in 0..cond.len() {
             // TODO: Improve the benchmark.
             if cond[i].get(j).unwrap().unwrap() {
-                vec[j] = choices[i].clone();
+                *item = choices[i].clone();
                 break;
             }
         }
