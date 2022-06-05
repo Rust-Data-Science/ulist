@@ -45,7 +45,7 @@ impl BooleanList {
     }
 
     pub fn and_(&self, other: &Self) -> PyResult<Self> {
-        _logical_operate(&self, &other, |x, y| x && y)
+        _logical_operate(self, other, |x, y| x && y)
     }
 
     pub fn any(&self) -> bool {
@@ -110,7 +110,7 @@ impl BooleanList {
     }
 
     pub fn not_(&self) -> Self {
-        let mut vec = self.values().iter().map(|&x| !x).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|&x| !x).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
@@ -121,7 +121,7 @@ impl BooleanList {
     }
 
     pub fn or_(&self, other: &Self) -> PyResult<Self> {
-        _logical_operate(&self, &other, |x, y| x || y)
+        _logical_operate(self, other, |x, y| x || y)
     }
 
     pub fn pop(&self) {
@@ -159,7 +159,7 @@ impl BooleanList {
             .iter()
             .enumerate()
             .filter(|(_, y)| **y)
-            .map(|(x, _)| x.clone())
+            .map(|(x, _)| x)
             .collect();
         IndexList::new(vec)
     }
