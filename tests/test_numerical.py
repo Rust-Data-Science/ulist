@@ -232,8 +232,27 @@ def test_statistics_methods(
         ),
 
         (
-            "greater_than_or_equal",
+            "greater_than",
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            "greater_than",
             'int',
+            [1, 2, 3, None, 4, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+
+        (
+            "greater_than_or_equal",
+            'float',
             [1.0, 2.0, 3.0, None, 4.0, None],
             [False, True, True, None, None, None],
             {
@@ -273,25 +292,6 @@ def test_statistics_methods(
         ),
 
         (
-            "greater_than",
-            'int',
-            [1.0, 2.0, 3.0, None, 4.0, None],
-            [False, False, True, None, None, None],
-            {
-                "other": [2.0, 2.0, 2.0, 2.0, None, None]
-            }
-        ),
-        (
-            "greater_than",
-            'int',
-            [1, 2, 3, None, 4, None],
-            [False, False, True, None, None, None],
-            {
-                "other": [2, 2, 2, 2, None, None]
-            }
-        ),
-
-        (
             'greater_than_scala',
             'float',
             [1.0, 2.0, 3.0, 4.0, 5.0],
@@ -314,8 +314,27 @@ def test_statistics_methods(
         ),
 
         (
-            "less_than_or_equal",
+            "less_than",
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            "less_than",
             'int',
+            [1, 2, 3, None, 4, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+
+        (
+            "less_than_or_equal",
+            'float',
             [1.0, 2.0, 3.0, None, 4.0, None],
             [True, True, False, None, None, None],
             {
@@ -352,25 +371,6 @@ def test_statistics_methods(
             [None, 2, 3],
             [None, True, False],
             {"elem": 2},
-        ),
-
-        (
-            "less_than",
-            'int',
-            [1.0, 2.0, 3.0, None, 4.0, None],
-            [True, False, False, None, None, None],
-            {
-                "other": [2.0, 2.0, 2.0, 2.0, None, None]
-            }
-        ),
-        (
-            "less_than",
-            'int',
-            [1, 2, 3, None, 4, None],
-            [True, False, False, None, None, None],
-            {
-                "other": [2, 2, 2, 2, None, None]
-            }
         ),
 
         (

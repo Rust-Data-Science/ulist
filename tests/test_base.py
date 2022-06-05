@@ -343,7 +343,7 @@ def test_methods_no_arg(
             [True, True, True, False, False, False, None, None, None],
             [True, False, None, False, True, None, None, None, None],
             {
-                'other': [True, False, None, True, False, None, True, False, None]
+                'other': [True, False, None, True, False, None, True, False, None]  # noqa: E501
             },
         ),
         (
@@ -370,7 +370,7 @@ def test_methods_no_arg(
             ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', None, None, None],
             [True, False, None, False, True, None, None, None, None],
             {
-                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]
+                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]  # noqa: E501
             },
         ),
 
@@ -470,7 +470,7 @@ def test_methods_no_arg(
             [True, True, True, False, False, False, None, None, None],
             [False, True, None, True, False, None, None, None, None],
             {
-                'other': [True, False, None, True, False, None, True, False, None]
+                'other': [True, False, None, True, False, None, True, False, None]  # noqa: E501
             },
         ),
         (
@@ -497,7 +497,7 @@ def test_methods_no_arg(
             ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', None, None, None],
             [False, True, None, True, False, None, None, None, None],
             {
-                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]
+                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]  # noqa: E501
             },
         ),
 
