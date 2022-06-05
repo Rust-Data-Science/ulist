@@ -36,7 +36,7 @@ jobs:
       - name: Rust Lints
         run: |
           cd ulist
-          cargo clippy
+          cargo clippy -- -D warnings
       - name: Build ulist
         run: |
           maturin build --out dist -m ulist/Cargo.toml
