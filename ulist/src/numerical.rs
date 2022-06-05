@@ -72,9 +72,17 @@ where
 
     fn div_scala(&self, elem: V) -> Vec<V>;
 
+    fn greater_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x >= y)
+    }
+
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
         let hset = self.na_indexes().clone();
         BooleanList::new(self._fn_num(|x| x >= elem, false), hset)
+    }
+
+    fn greater_than(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x > y)
     }
 
     fn greater_than_scala(&self, elem: T) -> BooleanList {
@@ -82,9 +90,17 @@ where
         BooleanList::new(self._fn_num(|x| x > elem, false), hset)
     }
 
+    fn less_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x <= y)
+    }
+
     fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
         let hset = self.na_indexes().clone();
         BooleanList::new(self._fn_num(|x| x <= elem, false), hset)
+    }
+
+    fn less_than(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x < y)
     }
 
     fn less_than_scala(&self, elem: T) -> BooleanList {

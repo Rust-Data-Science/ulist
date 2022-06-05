@@ -133,16 +133,32 @@ impl IntegerList64 {
         List::get_by_indexes(self, indexes)
     }
 
+    pub fn greater_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::greater_than_or_equal(self, other)
+    }
+
     pub fn greater_than_or_equal_scala(&self, elem: i64) -> BooleanList {
         NumericalList::greater_than_or_equal_scala(self, elem)
+    }
+
+    pub fn greater_than(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::greater_than(self, other)
     }
 
     pub fn greater_than_scala(&self, elem: i64) -> BooleanList {
         NumericalList::greater_than_scala(self, elem)
     }
 
+    pub fn less_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::less_than_or_equal(self, other)
+    }
+
     pub fn less_than_or_equal_scala(&self, elem: i64) -> BooleanList {
         NumericalList::less_than_or_equal_scala(self, elem)
+    }
+
+    pub fn less_than(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::less_than(self, other)
     }
 
     pub fn less_than_scala(&self, elem: i64) -> BooleanList {
