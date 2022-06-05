@@ -48,8 +48,7 @@ where
         let hset: HashSet<usize> = self
             .na_indexes()
             .iter()
-            .chain(other.na_indexes().iter())
-            .map(|x| x.clone())
+            .chain(other.na_indexes().iter()).copied()
             .collect();
         let result = BooleanList::_new(vec, hset);
         _fill_na(&mut result.values_mut(), result.na_indexes(), false);
@@ -102,14 +101,10 @@ where
         {
             if hset1.contains(&i1) {
                 result = None;
-            } else {
-                if hset2.contains(&i2) {
-                    result = None;
-                } else {
-                    if x1 != x2 {
-                        return Some(false);
-                    }
-                }
+            } else if hset2.contains(&i2) {
+                result = None;
+            } else if x1 != x2 {
+                return Some(false);
             }
         }
         result
