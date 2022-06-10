@@ -10,85 +10,61 @@ from ulist.utils import check_test_result
     "test_method, nums, expected_value",
     [
         (
-            "all",
+            'all',
+            [False, False, False],
+            False,
+        ),
+        # TODO: Add tests cases for 'all'
+
+        (
+            'any',
             [False, False, False],
             False,
         ),
         (
-            "all",
+            'any',
             [True, False, True],
-            False,
+            True,
         ),
         (
-            "all",
+            'any',
             [True, True, True],
             True,
         ),
         (
-            "all",
+            'any',
             [True, True, None],
-            False,
+            True,
         ),
         (
-            "all",
+            'any',
             [True, False, None],
-            False,
+            True,
         ),
         (
-            "all",
+            'any',
             [False, False, None],
             False,
         ),
 
         (
-            "any",
-            [False, False, False],
-            False,
-        ),
-        (
-            "any",
-            [True, False, True],
-            True,
-        ),
-        (
-            "any",
-            [True, True, True],
-            True,
-        ),
-        (
-            "any",
-            [True, True, None],
-            True,
-        ),
-        (
-            "any",
-            [True, False, None],
-            True,
-        ),
-        (
-            "any",
-            [False, False, None],
-            False,
-        ),
-
-        (
-            "not_",
+            'not_',
             [True, False],
             [False, True],
         ),
         (
-            "not_",
+            'not_',
             [True, False, None],
             [False, True, None],
         ),
 
         (
-            "to_index",
+            'to_index',
             [True, False, True],
             [0, 2],
         ),
         (
-            "to_index",
+            'to_index',
             [True, False, True, None],
             [0, 2],
         ),
@@ -109,26 +85,26 @@ def test_methods(
     "test_method, nums, other, expected_value",
     [
         (
-            "and_",
+            'and_',
             [False, False, True, True],
             [False, True, False, True],
             [False, False, False, True],
         ),
         (
-            "and_",
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, False, False, True, False, False],
+            'and_',
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, False, None, False, False, False, None, False, None],
         ),
 
         (
-            "or_",
+            'or_',
             [False, False, True, True],
             [False, True, False, True],
             [False, True, True, True],
         ),
         (
-            "or_",
+            'or_',
             [False, False, True, True, None, None],
             [False, True, False, True, True, False],
             [False, True, True, True, True, False],
