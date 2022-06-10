@@ -68,25 +68,21 @@ impl BooleanList {
                     if hset2.contains(&i) {
                         hset.insert(i);
                         false
+                    } else if *x2 {
+                        hset.insert(i);
+                        false
                     } else {
-                        if *x2 {
-                            hset.insert(i);
-                            false
-                        } else {
-                            false
-                        }
+                        false
+                    }
+                } else if hset2.contains(&i) {
+                    if *x1 {
+                        hset.insert(i);
+                        false
+                    } else {
+                        false
                     }
                 } else {
-                    if hset2.contains(&i) {
-                        if *x1 {
-                            hset.insert(i);
-                            false
-                        } else {
-                            false
-                        }
-                    } else {
-                        *x1 & *x2
-                    }
+                    *x1 & *x2
                 }
             })
             .collect();
