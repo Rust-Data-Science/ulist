@@ -36,8 +36,17 @@ impl BooleanList {
         List::_new(vec, hset)
     }
 
-    pub fn all(&self) -> bool {
-        self.values().iter().all(|&x| x)
+    pub fn all(&self) -> Option<bool> {
+        let hset = self.na_indexes();
+        let mut result = Some(true);
+        for (i, x) in self.values().iter().enumerate() {
+            if hset.contains(&i) {
+                result = None;
+            } else if !x {
+                return Some(false);
+            }
+        }
+        result
     }
 
     pub fn all_equal(&self, other: &Self) -> Option<bool> {

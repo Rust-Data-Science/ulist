@@ -11,10 +11,139 @@ from ulist.utils import check_test_result
     [
         (
             'all',
+            [True, True, True],
+            True,
+        ),
+        (
+            'all',
+            [True, True, False],
+            False,
+        ),
+        (
+            'all',
+            [True, True, None],
+            None,
+        ),
+        (
+            'all',
+            [True, False, True],
+            False,
+        ),
+        (
+            'all',
+            [True, False, False],
+            False,
+        ),
+        (
+            'all',
+            [True, False, None],
+            False,
+        ),
+        (
+            'all',
+            [True, None, True],
+            None,
+        ),
+        (
+            'all',
+            [True, None, False],
+            False,
+        ),
+        (
+            'all',
+            [True, None, None],
+            None,
+        ),
+        (
+            'all',
+            [False, True, True],
+            False,
+        ),
+        (
+            'all',
+            [False, True, False],
+            False,
+        ),
+        (
+            'all',
+            [False, True, None],
+            False,
+        ),
+        (
+            'all',
+            [False, False, True],
+            False,
+        ),
+        (
+            'all',
             [False, False, False],
             False,
         ),
-        # TODO: Add tests cases for 'all'
+        (
+            'all',
+            [False, False, None],
+            False,
+        ),
+        (
+            'all',
+            [False, None, True],
+            False,
+        ),
+        (
+            'all',
+            [False, None, False],
+            False,
+        ),
+        (
+            'all',
+            [False, None, None],
+            False,
+        ),
+        (
+            'all',
+            [None, True, True],
+            None,
+        ),
+        (
+            'all',
+            [None, True, False],
+            False,
+        ),
+        (
+            'all',
+            [None, True, None],
+            None,
+        ),
+        (
+            'all',
+            [None, False, True],
+            False,
+        ),
+        (
+            'all',
+            [None, False, False],
+            False,
+        ),
+        (
+            'all',
+            [None, False, None],
+            False,
+        ),
+        (
+            'all',
+            [None, None, True],
+            None,
+        ),
+        (
+            'all',
+            [None, None, False],
+            False,
+        ),
+        (
+            'all',
+            [None, None, None],
+            None,
+        ),
 
         (
             'any',

@@ -94,13 +94,8 @@ where
         let hset1 = self.na_indexes();
         let hset2 = other.na_indexes();
         let mut result = Some(true);
-        for ((i1, x1), (i2, x2)) in self
-            .values()
-            .iter()
-            .enumerate()
-            .zip(other.values().iter().enumerate())
-        {
-            if hset1.contains(&i1) || hset2.contains(&i2) {
+        for (i, (x1, x2)) in self.values().iter().zip(other.values().iter()).enumerate() {
+            if hset1.contains(&i) || hset2.contains(&i) {
                 result = None;
             } else if x1 != x2 {
                 return Some(false);

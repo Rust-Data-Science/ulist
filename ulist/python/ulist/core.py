@@ -192,7 +192,7 @@ class UltraFastList:
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.add_scala(elem))
 
-    def all(self) -> bool:
+    def all(self) -> Optional[bool]:
         """Whether all the elements of self are True."""
         assert isinstance(self._values, BooleanList)
         return self._values.all()
@@ -210,7 +210,7 @@ class UltraFastList:
         assert isinstance(other._values, BooleanList)
         return UltraFastList(self._values.and_(other._values))
 
-    def any(self) -> bool:
+    def any(self) -> Optional[bool]:
         """Whether any element of self is True."""
         assert isinstance(self._values, BooleanList)
         return self._values.any()
