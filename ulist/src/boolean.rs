@@ -54,7 +54,43 @@ impl BooleanList {
     }
 
     pub fn and_(&self, other: &Self) -> PyResult<Self> {
-        _logical_operate(self, other, |x, y| x && y)
+        self._check_len_eq(other)?;
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
+        let mut hset: HashSet<usize> = HashSet::new();
+        let vec = self
+            .values()
+            .iter()
+            .zip(other.values().iter())
+            .enumerate()
+            .map(|(i, (x1, x2))| {
+                if hset1.contains(&i) {
+                    if hset2.contains(&i) {
+                        hset.insert(i);
+                        false
+                    } else {
+                        if *x2 {
+                            hset.insert(i);
+                            false
+                        } else {
+                            false
+                        }
+                    }
+                } else {
+                    if hset2.contains(&i) {
+                        if *x1 {
+                            hset.insert(i);
+                            false
+                        } else {
+                            false
+                        }
+                    } else {
+                        *x1 & *x2
+                    }
+                }
+            })
+            .collect();
+        Ok(BooleanList::new(vec, hset))
     }
 
     pub fn any(&self) -> bool {

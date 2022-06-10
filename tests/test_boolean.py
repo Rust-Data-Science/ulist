@@ -253,20 +253,20 @@ def test_methods_with_args(
     check_test_result(dtype, test_method, result, expected_value)
 
 
-@ pytest.mark.parametrize(
+@pytest.mark.parametrize(
     "test_method, nums, other, expected_value",
     [
         (
             op.and_,
-            [True, True, False, False],
-            [True, False, True, False],
-            [True, False, False, False],
+            [False, False, True, True],
+            [False, True, False, True],
+            [False, False, False, True],
         ),
         (
             op.and_,
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, False, False, True, False, False],
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, False, None, False, False, False, None, False, None],
         ),
 
         (
