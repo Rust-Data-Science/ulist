@@ -1,5 +1,9 @@
 EXIT_STATUS=0
 
+echo "Running clippy..."
+cargo clippy --manifest-path ../ulist/Cargo.toml -- -D warnings|| EXIT_STATUS=$?
+echo "\n"
+
 echo "Running unit tests..."
 pytest ../tests|| EXIT_STATUS=$?
 echo "\n"
