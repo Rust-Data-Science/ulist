@@ -65,10 +65,7 @@ impl BooleanList {
             .enumerate()
             .map(|(i, (x1, x2))| {
                 if hset1.contains(&i) {
-                    if hset2.contains(&i) {
-                        hset.insert(i);
-                        false
-                    } else if *x2 {
+                    if hset2.contains(&i) | *x2 {
                         hset.insert(i);
                         false
                     } else {
