@@ -147,17 +147,12 @@ from ulist.utils import check_test_result
 
         (
             'any',
-            [False, False, False],
-            False,
-        ),
-        (
-            'any',
-            [True, False, True],
+            [True, True, True],
             True,
         ),
         (
             'any',
-            [True, True, True],
+            [True, True, False],
             True,
         ),
         (
@@ -167,13 +162,123 @@ from ulist.utils import check_test_result
         ),
         (
             'any',
+            [True, False, True],
+            True,
+        ),
+        (
+            'any',
+            [True, False, False],
+            True,
+        ),
+        (
+            'any',
             [True, False, None],
             True,
         ),
         (
             'any',
-            [False, False, None],
+            [True, None, True],
+            True,
+        ),
+        (
+            'any',
+            [True, None, False],
+            True,
+        ),
+        (
+            'any',
+            [True, None, None],
+            True,
+        ),
+        (
+            'any',
+            [False, True, True],
+            True,
+        ),
+        (
+            'any',
+            [False, True, False],
+            True,
+        ),
+        (
+            'any',
+            [False, True, None],
+            True,
+        ),
+        (
+            'any',
+            [False, False, True],
+            True,
+        ),
+        (
+            'any',
+            [False, False, False],
             False,
+        ),
+        (
+            'any',
+            [False, False, None],
+            None,
+        ),
+        (
+            'any',
+            [False, None, True],
+            True,
+        ),
+        (
+            'any',
+            [False, None, False],
+            None,
+        ),
+        (
+            'any',
+            [False, None, None],
+            None,
+        ),
+        (
+            'any',
+            [None, True, True],
+            True,
+        ),
+        (
+            'any',
+            [None, True, False],
+            True,
+        ),
+        (
+            'any',
+            [None, True, None],
+            True,
+        ),
+        (
+            'any',
+            [None, False, True],
+            True,
+        ),
+        (
+            'any',
+            [None, False, False],
+            None,
+        ),
+        (
+            'any',
+            [None, False, None],
+            None,
+        ),
+        (
+            'any',
+            [None, None, True],
+            True,
+        ),
+        (
+            'any',
+            [None, None, False],
+            None,
+        ),
+        (
+            'any',
+            [None, None, None],
+            None,
         ),
 
         (

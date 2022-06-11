@@ -86,8 +86,17 @@ impl BooleanList {
         Ok(BooleanList::new(vec, hset))
     }
 
-    pub fn any(&self) -> bool {
-        self.values().iter().any(|&x| x)
+    pub fn any(&self) -> Option<bool> {
+        let hset = self.na_indexes();
+        let mut result = Some(false);
+        for (i, x) in self.values().iter().enumerate() {
+            if hset.contains(&i) {
+                result = None;
+            } else if *x {
+                return Some(true);
+            }
+        }
+        result
     }
 
     pub fn append(&self, elem: Option<bool>) {
