@@ -234,9 +234,9 @@ def test_methods(
         ),
         (
             'or_',
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, True, True, True, True, False],
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, True, True, True, False, None, True, None, None],
         ),
     ],
 )
@@ -284,15 +284,15 @@ def test_methods_with_args(
 
         (
             op.or_,
-            [True, True, False, False],
-            [True, False, True, False],
-            [True, True, True, False],
+            [False, False, True, True],
+            [False, True, False, True],
+            [False, True, True, True],
         ),
         (
             op.or_,
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, True, True, True, True, False],
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, True, True, True, False, None, True, None, None],
         ),
     ],
 )
