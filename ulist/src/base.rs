@@ -228,6 +228,7 @@ where
         self.values_mut().pop();
     }
 
+    // TODO: Test if old does not exist in self.
     fn replace(&self, old: Option<T>, new: Option<T>) {
         if let Some(_old) = old {
             if let Some(_new) = new {

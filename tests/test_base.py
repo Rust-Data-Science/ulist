@@ -547,6 +547,10 @@ def test_methods_no_arg(
          'other': ul.from_seq(['baz', 'zoo'], dtype='string')}),
         ('union_all', 'string', ['foo', 'bar'], ['foo', 'bar', 'baz', None], {
          'other': ul.from_seq(['baz', None], dtype='string')}),
+        ('union_all', 'string', ['foo', None], ['foo', None, 'baz', None], {
+         'other': ul.from_seq(['baz', None], dtype='string')}),
+        ('union_all', 'string', ['foo', None], ['foo', None, 'baz', 'zoo'], {
+         'other': ul.from_seq(['baz', 'zoo'], dtype='string')}),
 
         ('var', 'bool', [True, False], 0.25, {}),
         ('var', 'bool', [True, True, True, False], 0.25, {'ddof': 1}),
@@ -620,16 +624,21 @@ def test_methods_with_args(
         ('__setitem__', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
         ('__setitem__', 'string', ['foo', 'bar'], [
          'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
+        ('__setitem__', 'string', ['foo', 'bar'], [
+         'foo', None], {'index': 1, 'elem': None}),
 
         ('append', 'bool', [True], [True, False], {'elem': False}),
         ('append', 'float', [1.0], [1.0, 2.0], {'elem': 2.0}),
         ('append', 'int', [1], [1, 2], {'elem': 2}),
         ('append', 'string', ['foo'], ['foo', 'bar'], {'elem': 'bar'}),
+        ('append', 'string', ['foo'], ['foo', None], {'elem': None}),
 
         ('pop', 'bool', [True, False], [True], {}),
         ('pop', 'float', [1.0, 2.0], [1.0], {}),
         ('pop', 'int', [1, 2], [1], {}),
         ('pop', 'string', ['foo', 'bar'], ['foo'], {}),
+        ('pop', 'string', ['foo', None], ['foo'], {}),
+        ('pop', 'string', [None, 'bar'], [None], {}),
 
         ('set', 'bool', [True, False], [
          True, True], {'index': 1, 'elem': True}),
@@ -637,6 +646,8 @@ def test_methods_with_args(
         ('set', 'int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
         ('set', 'string', ['foo', 'bar'], [
          'foo', 'baz'], {'index': 1, 'elem': 'baz'}),
+        ('set', 'string', ['foo', 'bar'], [
+         'foo', None], {'index': 1, 'elem': None}),
 
         ('replace', 'bool', [True, False, True], [
          False, False, False], {'old': True, 'new': False}),
@@ -645,6 +656,14 @@ def test_methods_with_args(
         ('replace', 'int', [1, 0, 1], [0, 0, 0], {'old': 1, 'new': 0}),
         ('replace', 'string', ['foo', 'bar', 'foo'], [
          'bar', 'bar', 'bar'], {'old': 'foo', 'new': 'bar'}),
+        ('replace', 'string', [None, 'bar', None], [
+         'bar', 'bar', 'bar'], {'old': None, 'new': 'bar'}),
+        ('replace', 'string', [None, 'bar', None], [
+         None, 'foo', None], {'old': 'bar', 'new': 'foo'}),
+        ('replace', 'string', ['foo', 'bar', 'foo'], [
+         None, 'bar', None], {'old': 'foo', 'new': None}),
+        ('replace', 'string', [None, 'bar', None], [
+         None, None, None], {'old': 'bar', 'new': None}),
 
         (
             'sort',
@@ -709,6 +728,20 @@ def test_methods_with_args(
             ['foo', 'baz', 'bar'],
             {'ascending': False}
         ),
+        # (
+        #     'sort',
+        #     'string',
+        #     ['foo', None, 'bar', 'baz'],
+        #     ['bar', 'baz', 'foo', None],
+        #     {'ascending': True}
+        # ),
+        # (
+        #     'sort',
+        #     'string',
+        #     ['foo', None, 'bar', 'baz'],
+        #     ['foo', 'baz', 'bar', None],
+        #     {'ascending': False}
+        # ),
 
     ],
 )
@@ -728,11 +761,57 @@ def test_multable_methods(
 @pytest.mark.parametrize(
     'dtype, nums, expected_value, kwargs',
     [
-        ('bool', [True, False], [True, True], {'index': 1, 'elem': True}),
-        ('float', [1.0, 2.0], [1.0, 3.0], {'index': 1, 'elem': 3.0}),
-        ('int', [1, 2], [1, 3], {'index': 1, 'elem': 3}),
-        ('string', ['foo', 'bar'], ['foo', 'baz'],
-         {'index': 1, 'elem': 'baz'}),
+        (
+            'bool',
+            [True, False],
+            [True, True],
+            {'index': 1, 'elem': True}
+        ),
+
+        (
+            'float',
+            [1.0, 2.0],
+            [1.0, 3.0],
+            {'index': 1, 'elem': 3.0}
+        ),
+
+        (
+            'int',
+            [1, 2],
+            [1, 3],
+            {'index': 1, 'elem': 3}
+        ),
+
+        (
+            'string',
+            ['foo', 'bar'],
+            ['foo', 'baz'],
+            {'index': 1, 'elem': 'baz'}
+        ),
+        (
+            'string',
+            ['foo', 'bar', None],
+            ['foo', 'baz', None],
+            {'index': 1, 'elem': 'baz'}
+        ),
+        (
+            'string',
+            ['foo', 'bar', None],
+            ['foo', None, None],
+            {'index': 1, 'elem': None}
+        ),
+        (
+            'string',
+            ['foo', 'bar', None],
+            ['foo', 'bar', 'baz'],
+            {'index': 2, 'elem': 'baz'}
+        ),
+        (
+            'string',
+            ['foo', 'bar', None],
+            ['foo', 'bar', None],
+            {'index': 2, 'elem': None}
+        ),
     ],
 )
 def test_indexing_operations(
@@ -761,24 +840,41 @@ def test_indexing_operations(
     'dtype, nums, expected_value, expected_dtype',
     [
         ('bool', [True, False], [1, 0], 'int'),
+        ('bool', [True, False, None], [1, 0, None], 'int'),
         ('bool', [True, False], [1.0, 0.0], 'float'),
+        ('bool', [True, False, None], [1.0, 0.0, None], 'float'),
         ('bool', [True, False], [True, False], 'bool'),
+        ('bool', [True, False, None], [True, False, None], 'bool'),
         ('bool', [True, False], ['true', 'false'], 'string'),
+        ('bool', [True, False, None], ['true', 'false', None], 'string'),
 
         ('float', [1.0, 2.0], [1, 2], 'int'),
+        ('float', [1.0, 2.0, None], [1, 2, None], 'int'),
         ('float', [1.0, 2.0], [1.0, 2.0], 'float'),
+        ('float', [1.0, 2.0, None], [1.0, 2.0, None], 'float'),
         ('float', [-1.0, 0.0, 1.0, 2.0], [True, False, True, True], 'bool'),
+        ('float', [-1.0, 0.0, 1.0, 2.0, None],
+         [True, False, True, True, None], 'bool'),
         ('float', [1.0, 1.1], ['1.0', '1.1'], 'string'),
+        ('float', [1.0, 1.1, None], ['1.0', '1.1', None], 'string'),
 
         ('int', [1, 2], [1, 2], 'int'),
+        ('int', [1, 2, None], [1, 2, None], 'int'),
         ('int', [1, 2], [1.0, 2.0], 'float'),
+        ('int', [1, 2, None], [1.0, 2.0, None], 'float'),
         ('int', [-1, 0, 1, 2], [True, False, True, True], 'bool'),
+        ('int', [-1, 0, 1, 2, None], [True, False, True, True, None], 'bool'),
         ('int', [1, 2], ['1', '2'], 'string'),
+        ('int', [1, 2, None], ['1', '2', None], 'string'),
 
         ('string', ['1', '2'], [1, 2], 'int'),
+        ('string', ['1', '2', None], [1, 2, None], 'int'),
         ('string', ['1.0', '2.0'], [1.0, 2.0], 'float'),
+        ('string', ['1.0', '2.0', None], [1.0, 2.0, None], 'float'),
         ('string', ['true', 'false'], [True, False], 'bool'),
+        ('string', ['true', 'false', None], [True, False, None], 'bool'),
         ('string', ['foo', 'bar'], ['foo', 'bar'], 'string'),
+        ('string', ['foo', 'bar', None], ['foo', 'bar', None], 'string'),
     ],
 )
 def test_astype(
@@ -868,6 +964,21 @@ def test_operators(
             'string',
             ['foo', 'bar', 'foo'],
             ['bar', 'foo'],
+        ),
+        (
+            'string',
+            ['foo', 'bar', 'foo', None],
+            ['bar', 'foo', None],
+        ),
+        (
+            'string',
+            ['foo', 'bar', 'foo', None, None],
+            ['bar', 'foo', None],
+        ),
+        (
+            'string',
+            [None, None],
+            [None],
         ),
     ],
 )
