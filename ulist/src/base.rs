@@ -299,6 +299,7 @@ where
         // }
         if let Some(i) = elem {
             vec[index] = i;
+            self.na_indexes_mut().remove(&index);
         } else {
             vec[index] = self.na_value();
             self.na_indexes_mut().insert(index);
