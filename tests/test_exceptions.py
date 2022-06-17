@@ -58,6 +58,30 @@ class _Foo:
             },
             TypeError
         ),
+        (
+            ul.select,
+            {
+                "conditions": [
+                    ul.from_seq([True], dtype='bool'),
+                    ul.from_seq([False, False], dtype='bool')
+                ],
+                "choices": [1, 2],
+                "default": 0,
+            },
+            RuntimeError
+        ),
+        (
+            ul.select,
+            {
+                "conditions": [
+                    ul.from_seq([True, None], dtype='bool'),
+                    ul.from_seq([False, False], dtype='bool')
+                ],
+                "choices": [1, 2],
+                "default": 0,
+            },
+            ValueError
+        ),
 
         (
             ul.UltraFastList,
