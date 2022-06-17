@@ -911,11 +911,77 @@ def test_astype(
 @pytest.mark.parametrize(
     'test_method, dtype, nums, expected_value, kwargs',
     [
-        (op.eq, 'bool', [True, False], [False, True], {'other': False}),
-        (op.eq, 'float', [1.0, 2.0, 3.0], [
-         False, True, False], {'other': 2.0}),
-        (op.eq, 'int', [1, 2, 3], [False, True, False], {'other': 2}),
-        (op.eq, 'string', ['foo', 'bar'], [False, True], {'other': 'bar'}),
+        (
+            op.eq,
+            'bool',
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': [True, False, None, True, False, None, True, False, None]  # noqa: E501
+            },
+        ),
+        (
+            op.eq,
+            'float',
+            [1.0, 1.0, 1.0, 0.0, 0.0, 0.0, None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': [1.0, 0.0, None, 1.0, 0.0, None, 1.0, 0.0, None]
+            },
+        ),
+        (
+            op.eq,
+            'int',
+            [1, 1, 1, 0, 0, 0, None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': [1, 0, None, 1, 0, None, 1, 0, None]
+            },
+        ),
+        (
+            op.eq,
+            'string',
+            ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', None, None, None],
+            [True, False, None, False, True, None, None, None, None],
+            {
+                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]  # noqa: E501
+            },
+        ),
+        (
+            op.eq,
+            'bool',
+            [True, False],
+            [False, True],
+            {'other': False},
+        ),
+        (
+            op.eq,
+            'float',
+            [1.0, 2.0, 3.0],
+            [False, True, False],
+            {'other': 2.0},
+        ),
+        (
+            op.eq,
+            'int',
+            [1, 2, 3],
+            [False, True, False],
+            {'other': 2},
+        ),
+        (
+            op.eq,
+            'string',
+            ['foo', 'bar'],
+            [False, True],
+            {'other': 'bar'},
+        ),
+        (
+            op.eq,
+            'string',
+            ['foo', 'bar', None],
+            [False, True, None],
+            {'other': 'bar'},
+        ),
 
         (op.ne, 'bool', [False, True, False],
          [True, False, True], {'other': True}),
