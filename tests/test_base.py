@@ -983,12 +983,77 @@ def test_astype(
             {'other': 'bar'},
         ),
 
-        (op.ne, 'bool', [False, True, False],
-         [True, False, True], {'other': True}),
-        (op.ne, 'float', [1.0, 2.0, 3.0], [True, False, True], {'other': 2.0}),
-        (op.ne, 'int', [1, 2, 3], [True, False, True], {'other': 2}),
-        (op.ne, 'string', ['foo', 'bar', 'baz'],
-         [True, False, True], {'other': 'bar'}),
+        (
+            op.ne,
+            'bool',
+            [True, True, True, False, False, False, None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': [True, False, None, True, False, None, True, False, None]  # noqa: E501
+            },
+        ),
+        (
+            op.ne,
+            'float',
+            [1.0, 1.0, 1.0, 0.0, 0.0, 0.0, None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': [1.0, 0.0, None, 1.0, 0.0, None, 1.0, 0.0, None]
+            },
+        ),
+        (
+            op.ne,
+            'int',
+            [1, 1, 1, 0, 0, 0, None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': [1, 0, None, 1, 0, None, 1, 0, None]
+            },
+        ),
+        (
+            op.ne,
+            'string',
+            ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', None, None, None],
+            [False, True, None, True, False, None, None, None, None],
+            {
+                'other': ['foo', 'bar', None, 'foo', 'bar', None, 'foo', 'bar', None]  # noqa: E501
+            },
+        ),
+        (
+            op.ne,
+            'bool',
+            [False, True, False],
+            [True, False, True],
+            {'other': True},
+        ),
+        (
+            op.ne,
+            'float',
+            [1.0, 2.0, 3.0],
+            [True, False, True],
+            {'other': 2.0},
+        ),
+        (
+            op.ne,
+            'int',
+            [1, 2, 3],
+            [True, False, True],
+            {'other': 2},
+        ),
+        (
+            op.ne,
+            'string',
+            ['foo', 'bar', 'baz'],
+            [True, False, True],
+            {'other': 'bar'},
+        ),
+        (
+            op.ne,
+            'string',
+            ['foo', 'bar', None],
+            [True, False, None],
+            {'other': 'bar'},
+        ),
     ],
 )
 def test_operators(
