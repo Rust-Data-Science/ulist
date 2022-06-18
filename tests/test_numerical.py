@@ -597,10 +597,45 @@ def test_arithmetic_methods(
         (op.le, 'float', [1.0, 2.0, 3.0], [True, True, False], {"other": 2.0}),
         (op.le, 'int', [1, 2, 3], [True, True, False], {"other": 2}),
 
-        (op.lt, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         True, False, False, False, False], {'other': 2}),
-        (op.lt, 'int', [1, 2, 3, 4, 5], [
-         True, False, False, False, False], {'other': 2}),
+        (
+            op.lt,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.lt,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.lt,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [True, False, False, False, False],
+            {'other': 2},
+        ),
+        (
+            op.lt,
+            'int',
+            [1, 2, 3, 4, 5],
+            [True, False, False, False, False],
+            {'other': 2},
+        ),
+        (
+            op.lt,
+            'int',
+            [1, 2, None, 4, 5],
+            [True, False, None, False, False],
+            {'other': 2},
+        ),
 
         (op.mul, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
          1.0, 4.0, 9.0, 16.0, 25.0], {'other': [1, 2, 3, 4, 5]}),
