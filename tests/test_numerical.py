@@ -594,8 +594,45 @@ def test_arithmetic_methods(
         (op.gt, 'int', [1, 2, 3, 4, 5], [
          False, False, True, True, True], {'other': 2}),
 
-        (op.le, 'float', [1.0, 2.0, 3.0], [True, True, False], {"other": 2.0}),
-        (op.le, 'int', [1, 2, 3], [True, True, False], {"other": 2}),
+        (
+            op.le,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, True, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.le,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [True, True, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.le,
+            'float',
+            [1.0, 2.0, 3.0],
+            [True, True, False],
+            {"other": 2.0},
+        ),
+        (
+            op.le,
+            'int',
+            [1, 2, 3],
+            [True, True, False],
+            {"other": 2},
+        ),
+        (
+            op.le,
+            'int',
+            [None, 2, 3],
+            [None, True, False],
+            {"other": 2},
+        ),
 
         (
             op.lt,
