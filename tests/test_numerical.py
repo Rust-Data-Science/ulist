@@ -586,13 +586,85 @@ def test_arithmetic_methods(
          2, 4, 6, 8, 10], {'other': [1, 2, 3, 4, 5]}),
         (op.add, 'int', [1, 2, 3, 4, 5], [2, 3, 4, 5, 6], {'other': 1}),
 
-        (op.ge, 'float', [1.0, 2.0, 3.0], [False, True, True], {"other": 2.0}),
-        (op.ge, 'int', [1, 2, 3], [False, True, True], {"other": 2}),
+        (
+            op.ge,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, True, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.ge,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [False, True, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.ge,
+            'float',
+            [1.0, 2.0, 3.0],
+            [False, True, True],
+            {"other": 2.0}
+        ),
+        (
+            op.ge,
+            'int',
+            [1, 2, 3],
+            [False, True, True],
+            {"other": 2}
+        ),
+        (
+            op.ge,
+            'int',
+            [1, 2, None],
+            [False, True, None],
+            {"other": 2}
+        ),
 
-        (op.gt, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         False, False, True, True, True], {'other': 2}),
-        (op.gt, 'int', [1, 2, 3, 4, 5], [
-         False, False, True, True, True], {'other': 2}),
+        (
+            op.gt,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.gt,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.gt,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [False, False, True, True, True],
+            {'other': 2},
+        ),
+        (
+            op.gt,
+            'int',
+            [1, 2, 3, 4, 5],
+            [False, False, True, True, True],
+            {'other': 2},
+        ),
+        (
+            op.gt,
+            'int',
+            [1, 2, 3, 4, None],
+            [False, False, True, True, None],
+            {'other': 2},
+        ),
 
         (
             op.le,
