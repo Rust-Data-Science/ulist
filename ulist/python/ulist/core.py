@@ -328,6 +328,7 @@ class UltraFastList:
         >>> result
         UltraFastList([0, 0, 1, 1, 2, 2])
         """
+        assert self.count_na() == 0
         from .control_flow import CaseObject  # To avoid circular import.
         return CaseObject(self, default=default)
 
