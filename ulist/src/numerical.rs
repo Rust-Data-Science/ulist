@@ -26,6 +26,14 @@ where
         }
     }
 
+    fn _check_empty(&self) -> PyResult<()> {
+        if self.size() == 0 {
+            Err(PyRuntimeError::new_err("Current list is empty!"))
+        } else {
+            Ok(())
+        }
+    }
+
     fn _fn_num<W: Clone>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
         let mut vec: Vec<_> = self.values().iter().map(|&x| func(x)).collect();
         _fill_na(&mut vec, self.na_indexes(), default);

@@ -292,6 +292,7 @@ impl List<f32> for FloatList32 {
 
 impl NumericalList<f32, i32, f32> for FloatList32 {
     fn argmax(&self) -> PyResult<usize> {
+        self._check_empty()?;
         self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
@@ -305,6 +306,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn argmin(&self) -> PyResult<usize> {
+        self._check_empty()?;
         self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
@@ -332,6 +334,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn max(&self) -> PyResult<f32> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self
@@ -345,6 +348,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn min(&self) -> PyResult<f32> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self

@@ -5,6 +5,8 @@ import ulist as ul
 
 _ARR1 = ul.from_seq(range(3), dtype='int')
 _ARR1._values = [0, 1, 2]  # type: ignore
+_ARR2 = ul.from_seq([], dtype='int')
+_ARR3 = ul.from_seq([None, None], dtype='int')
 
 
 class _Foo:
@@ -14,6 +16,28 @@ class _Foo:
 @pytest.mark.parametrize(
     "test_method, kwargs, expected_error",
     [
+        (
+            _ARR2.argmax,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.argmax,
+            {},
+            RuntimeError
+        ),
+
+        (
+            _ARR2.argmin,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.argmin,
+            {},
+            RuntimeError
+        ),
+
         (
             _ARR1._arithmetic_method,
             {
@@ -38,6 +62,28 @@ class _Foo:
             ul.from_seq,
             {"obj": [1, 2], "dtype": "foo"},
             ValueError
+        ),
+
+        (
+            _ARR2.max,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.max,
+            {},
+            RuntimeError
+        ),
+
+        (
+            _ARR2.min,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.min,
+            {},
+            RuntimeError
         ),
 
         (

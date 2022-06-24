@@ -276,6 +276,7 @@ impl NonFloatList<i64> for IntegerList64 {}
 
 impl NumericalList<i64, u32, f64> for IntegerList64 {
     fn argmax(&self) -> PyResult<usize> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(self
@@ -289,6 +290,7 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn argmin(&self) -> PyResult<usize> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(self
@@ -325,6 +327,7 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn max(&self) -> PyResult<i64> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self
@@ -338,6 +341,7 @@ impl NumericalList<i64, u32, f64> for IntegerList64 {
     }
 
     fn min(&self) -> PyResult<i64> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self
