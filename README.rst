@@ -108,9 +108,9 @@ All contributions are welcome. See `Developer Guide <https://github.com/tushushu
    :target: https://pypi.org/project/ulist/
 .. |License| image:: https://img.shields.io/github/license/tushushu/ulist
    :target: https://github.com/tushushu/ulist/blob/main/LICENSE
-.. |CI| image:: https://github.com/tushushu/ulist/actions/workflows/main.yml/badge.svg
+.. |CI| image:: https://github.com/Rust-Data-Science/ulist/actions/workflows/main.yml/badge.svg?branch=0.11.0
    :target: https://github.com/tushushu/ulist/actions/workflows/main.yml
-.. |doc| image:: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg
+.. |doc| image:: https://github.com/Rust-Data-Science/ulist/actions/workflows/sphinx.yml/badge.svg?branch=0.11.0
    :target: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml
 .. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.11.0
    :target: https://github.com/tushushu/ulist/actions/workflows/publish.yml
