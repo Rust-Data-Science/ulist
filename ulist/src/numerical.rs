@@ -28,7 +28,7 @@ where
 
     fn _check_empty(&self) -> PyResult<()> {
         if self.size() == 0 {
-            Err(PyRuntimeError::new_err("Current list is empty!"))
+            Err(PyRuntimeError::new_err("Current ulist object is empty!"))
         } else {
             Ok(())
         }
