@@ -2,7 +2,6 @@ use crate::boolean::BooleanList;
 use crate::index::IndexList;
 use pyo3::exceptions::PyIndexError;
 use pyo3::exceptions::PyRuntimeError;
-use pyo3::exceptions::PyValueError;
 use pyo3::PyResult;
 use std::cell::Ref;
 use std::cell::RefMut;
@@ -37,6 +36,26 @@ where
         }
     }
 
+    // TODO: Better abstraction for List::_cmp and NumericalList::_fn methods.
+    fn _cmp(&self, other: &Self, func: impl Fn(T, T) -> bool) -> PyResult<BooleanList> {
+        self._check_len_eq(other)?;
+        let vec = self
+            .values()
+            .iter()
+            .zip(other.values().iter())
+            .map(|(x, y)| func(x.clone(), y.clone()))
+            .collect();
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .copied()
+            .collect();
+        let result = BooleanList::_new(vec, hset);
+        _fill_na(&mut result.values_mut(), result.na_indexes(), false);
+        Ok(result)
+    }
+
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
         self.values().iter().map(func).collect()
     }
@@ -60,24 +79,26 @@ where
                 r -= 1;
             }
             vec.swap(l, r);
-        }
-        // Update na indexes.
-        hset.clear();
-        for i in (n - m)..n {
-            hset.insert(i);
+            hset.remove(&l);
+            hset.insert(r);
         }
     }
 
-    fn all_equal(&self, other: &Self) -> bool {
-        if self.size() != other.size() || self.count_na() > 0 || other.count_na() > 0 {
-            return false;
+    fn all_equal(&self, other: &Self) -> Option<bool> {
+        if self.size() != other.size() {
+            return Some(false);
         };
-        for (x, y) in self.values().iter().zip(other.values().iter()) {
-            if x != y {
-                return false;
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
+        let mut result = Some(true);
+        for (i, (x1, x2)) in self.values().iter().zip(other.values().iter()).enumerate() {
+            if hset1.contains(&i) || hset2.contains(&i) {
+                result = None;
+            } else if x1 != x2 {
+                return Some(false);
             }
         }
-        true
+        result
     }
 
     fn append(&self, elem: Option<T>) {
@@ -103,20 +124,21 @@ where
         List::_new(v, HashSet::new())
     }
 
+    fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x == y)
+    }
+
     fn equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x == &elem);
         _fill_na(&mut vec, self.na_indexes(), false);
-        BooleanList::new(vec, HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         if self.size() != condition.size() {
             return Err(PyRuntimeError::new_err(
                 "The sizes of `self` and `other` should be equal!",
-            ));
-        } else if condition.count_na() > 0 {
-            return Err(PyValueError::new_err(
-                "Parameter `condition` should not contain missing values!",
             ));
         }
 
@@ -184,10 +206,15 @@ where
 
     fn na_value(&self) -> T;
 
+    fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x != y)
+    }
+
     fn not_equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x != &elem);
-        _fill_na(&mut vec, self.na_indexes(), true);
-        BooleanList::new(vec, HashSet::new())
+        _fill_na(&mut vec, self.na_indexes(), false);
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     fn pop(&self) {
@@ -198,6 +225,7 @@ where
         self.values_mut().pop();
     }
 
+    // TODO: Test if old does not exist in self.
     fn replace(&self, old: Option<T>, new: Option<T>) {
         if let Some(_old) = old {
             if let Some(_new) = new {
@@ -268,6 +296,7 @@ where
         // }
         if let Some(i) = elem {
             vec[index] = i;
+            self.na_indexes_mut().remove(&index);
         } else {
             vec[index] = self.na_value();
             self.na_indexes_mut().insert(index);

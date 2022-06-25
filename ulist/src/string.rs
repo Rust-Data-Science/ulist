@@ -35,7 +35,7 @@ impl StringList {
         List::_new(vec, hset)
     }
 
-    pub fn all_equal(&self, other: &Self) -> bool {
+    pub fn all_equal(&self, other: &Self) -> Option<bool> {
         List::all_equal(self, other)
     }
 
@@ -66,7 +66,8 @@ impl StringList {
     pub fn contains(&self, elem: &str) -> BooleanList {
         let mut vec: Vec<_> = self.values().iter().map(|x| x.contains(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
-        BooleanList::new(vec, HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     pub fn copy(&self) -> Self {
@@ -89,7 +90,12 @@ impl StringList {
     pub fn ends_with(&self, elem: &str) -> BooleanList {
         let mut vec: Vec<_> = self.values().iter().map(|x| x.ends_with(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
-        BooleanList::new(vec, HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
+    }
+
+    pub fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::equal(self, other)
     }
 
     pub fn equal_scala(&self, elem: String) -> BooleanList {
@@ -106,6 +112,10 @@ impl StringList {
 
     pub fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         List::get_by_indexes(self, indexes)
+    }
+
+    pub fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::not_equal(self, other)
     }
 
     pub fn not_equal_scala(&self, elem: String) -> BooleanList {
@@ -140,13 +150,15 @@ impl StringList {
     pub fn starts_with(&self, elem: &str) -> BooleanList {
         let mut vec: Vec<_> = self.values().iter().map(|x| x.starts_with(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
-        BooleanList::new(vec, HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     pub fn str_len(&self) -> IntegerList64 {
         let mut vec: Vec<_> = self.values().iter().map(|x| x.len() as i64).collect();
         _fill_na(&mut vec, self.na_indexes(), 0);
-        IntegerList64::new(vec, self.na_indexes().clone())
+        let hset = self.na_indexes().clone();
+        IntegerList64::new(vec, hset)
     }
 
     pub fn to_list(&self) -> Vec<Option<String>> {
@@ -195,7 +207,11 @@ impl NonFloatList<String> for StringList {}
 
 impl AsBooleanList for StringList {
     fn as_bool(&self) -> BooleanList {
-        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        let vec = self
+            .values()
+            .iter()
+            .map(|x| x.parse().unwrap_or(false))
+            .collect();
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
     }
@@ -203,7 +219,11 @@ impl AsBooleanList for StringList {
 
 impl AsFloatList32 for StringList {
     fn as_float32(&self) -> FloatList32 {
-        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        let vec = self
+            .values()
+            .iter()
+            .map(|x| x.parse().unwrap_or(0.0))
+            .collect();
         let hset = self.na_indexes().clone();
         FloatList32::new(vec, hset)
     }
@@ -211,7 +231,11 @@ impl AsFloatList32 for StringList {
 
 impl AsFloatList64 for StringList {
     fn as_float64(&self) -> FloatList64 {
-        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        let vec = self
+            .values()
+            .iter()
+            .map(|x| x.parse().unwrap_or(0.0))
+            .collect();
         let hset = self.na_indexes().clone();
         FloatList64::new(vec, hset)
     }
@@ -219,7 +243,11 @@ impl AsFloatList64 for StringList {
 
 impl AsIntegerList32 for StringList {
     fn as_int32(&self) -> IntegerList32 {
-        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        let vec = self
+            .values()
+            .iter()
+            .map(|x| x.parse().unwrap_or(0))
+            .collect();
         let hset = self.na_indexes().clone();
         IntegerList32::new(vec, hset)
     }
@@ -227,7 +255,11 @@ impl AsIntegerList32 for StringList {
 
 impl AsIntegerList64 for StringList {
     fn as_int64(&self) -> IntegerList64 {
-        let vec = self.values().iter().map(|x| x.parse().unwrap()).collect();
+        let vec = self
+            .values()
+            .iter()
+            .map(|x| x.parse().unwrap_or(0))
+            .collect();
         let hset = self.na_indexes().clone();
         IntegerList64::new(vec, hset)
     }

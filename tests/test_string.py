@@ -19,9 +19,10 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
         (
             "contains",
             ["num1", "num2", "element1", None],
-            [True, True, False, False],
+            [True, True, False, None],
             {"elem": "num"},
         ),
+
         (
             "starts_with",
             ["num", "1num2", "3num", "num1"],
@@ -31,9 +32,10 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
         (
             "starts_with",
             ["num", "1num2", "3num", "num1", None],
-            [True, False, False, True, False],
+            [True, False, False, True, None],
             {"elem": "num"},
         ),
+
         (
             "ends_with",
             ["num", "1num2", "3num", "num1"],
@@ -43,9 +45,10 @@ LIST_TYPE = Union[List[float], List[int], List[bool], List[str]]
         (
             "ends_with",
             ["num", "1num2", "3num", "num1", None],
-            [True, False, True, False, False],
+            [True, False, True, False, None],
             {"elem": "num"},
         ),
+
         (
             "str_len",
             ["num", "1num", "", "*", " ", "sp ace", "ta	b"],
