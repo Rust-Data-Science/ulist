@@ -79,11 +79,8 @@ where
                 r -= 1;
             }
             vec.swap(l, r);
-        }
-        // Update na indexes.
-        hset.clear();
-        for i in (n - m)..n {
-            hset.insert(i);
+            hset.remove(&l);
+            hset.insert(r);
         }
     }
 
