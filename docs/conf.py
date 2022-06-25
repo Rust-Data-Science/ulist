@@ -22,7 +22,7 @@ copyright = '2021, tushushu'
 author = 'tushushu'
 
 # The full version, including alpha/beta/rc tags
-release = '0.10.0'
+release = '0.11.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -59,4 +59,4 @@ html_static_path = []
 
 master_doc = 'index'
 
-source_suffix = { '.rst': 'restructuredtext' }
+source_suffix = {'.rst': 'restructuredtext'}
