@@ -232,6 +232,44 @@ def test_statistics_methods(
         ),
 
         (
+            "greater_than",
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            "greater_than",
+            'int',
+            [1, 2, 3, None, 4, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+
+        (
+            "greater_than_or_equal",
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, True, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            "greater_than_or_equal",
+            'int',
+            [1, 2, 3, None, 4, None],
+            [False, True, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+
+        (
             "greater_than_or_equal_scala",
             'float',
             [1.0, 2.0, 3.0],
@@ -249,7 +287,7 @@ def test_statistics_methods(
             "greater_than_or_equal_scala",
             'int',
             [1, 2, None],
-            [False, True, False],
+            [False, True, None],
             {"elem": 2}
         ),
 
@@ -271,8 +309,46 @@ def test_statistics_methods(
             'greater_than_scala',
             'int',
             [1, 2, 3, 4, None],
-            [False, False, True, True, False],
+            [False, False, True, True, None],
             {'elem': 2},
+        ),
+
+        (
+            "less_than",
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            "less_than",
+            'int',
+            [1, 2, 3, None, 4, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+
+        (
+            "less_than_or_equal",
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, True, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            "less_than_or_equal",
+            'int',
+            [1, 2, 3, None, 4, None],
+            [True, True, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
         ),
 
         (
@@ -293,7 +369,7 @@ def test_statistics_methods(
             "less_than_or_equal_scala",
             'int',
             [None, 2, 3],
-            [False, True, False],
+            [None, True, False],
             {"elem": 2},
         ),
 
@@ -315,7 +391,7 @@ def test_statistics_methods(
             'less_than_scala',
             'int',
             [1, 2, None, 4, 5],
-            [True, False, False, False, False],
+            [True, False, None, False, False],
             {'elem': 2},
         ),
 
@@ -404,6 +480,13 @@ def test_statistics_methods(
             [1, 2, None, 4, 5],
             [1, 4, None, 16, 25],
             {'elem': 2},
+        ),
+        (
+            'pow_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [1, 1, 1, 1, 1],
+            {'elem': 0},
         ),
 
         (
@@ -495,57 +578,424 @@ def test_arithmetic_methods(
 @pytest.mark.parametrize(
     "test_method, dtype, nums, expected_value, kwargs",
     [
-        (op.add, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         2.0, 4.0, 6.0, 8.0, 10.0], {'other': [1, 2, 3, 4, 5]}),
-        (op.add, 'float', [1.0, 2.0, 3.0, 4.0, 5.0],
-         [2.0, 3.0, 4.0, 5.0, 6.0], {'other': 1}),
-        (op.add, 'int', [1, 2, 3, 4, 5], [
-         2, 4, 6, 8, 10], {'other': [1, 2, 3, 4, 5]}),
-        (op.add, 'int', [1, 2, 3, 4, 5], [2, 3, 4, 5, 6], {'other': 1}),
+        (
+            op.add,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [2.0, 4.0, 6.0, 8.0, 10.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.add,
+            'int',
+            [1, 2, 3, 4, 5],
+            [2, 4, 6, 8, 10],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.add,
+            'int',
+            [1, 2, None, 4, 5],
+            [2, 4, None, 8, 10],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.add,
+            'int',
+            [1, 2, 3, 4, 5],
+            [2, 4, None, 8, 10],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.add,
+            'int',
+            [1, 2, None, 4, 5],
+            [2, 4, None, 8, 10],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.add,
+            'int',
+            [1, None, 3, 4, 5],
+            [2, None, 6, None, 10],
+            {'other': [1, 2, 3, None, 5]},
+        ),
+        (
+            op.add,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [2.0, 3.0, 4.0, 5.0, 6.0],
+            {'other': 1},
+        ),
+        (
+            op.add,
+            'int',
+            [1, 2, 3, 4, 5],
+            [2, 3, 4, 5, 6],
+            {'other': 1},
+        ),
+        (
+            op.add,
+            'int',
+            [1, 2, None, 4, 5],
+            [2, 3, None, 5, 6],
+            {'other': 1},
+        ),
 
-        (op.ge, 'float', [1.0, 2.0, 3.0], [False, True, True], {"other": 2.0}),
-        (op.ge, 'int', [1, 2, 3], [False, True, True], {"other": 2}),
+        (
+            op.ge,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, True, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.ge,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [False, True, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.ge,
+            'float',
+            [1.0, 2.0, 3.0],
+            [False, True, True],
+            {"other": 2.0}
+        ),
+        (
+            op.ge,
+            'int',
+            [1, 2, 3],
+            [False, True, True],
+            {"other": 2}
+        ),
+        (
+            op.ge,
+            'int',
+            [1, 2, None],
+            [False, True, None],
+            {"other": 2}
+        ),
 
-        (op.gt, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         False, False, True, True, True], {'other': 2}),
-        (op.gt, 'int', [1, 2, 3, 4, 5], [
-         False, False, True, True, True], {'other': 2}),
+        (
+            op.gt,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.gt,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [False, False, True, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.gt,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [False, False, True, True, True],
+            {'other': 2},
+        ),
+        (
+            op.gt,
+            'int',
+            [1, 2, 3, 4, 5],
+            [False, False, True, True, True],
+            {'other': 2},
+        ),
+        (
+            op.gt,
+            'int',
+            [1, 2, 3, 4, None],
+            [False, False, True, True, None],
+            {'other': 2},
+        ),
 
-        (op.le, 'float', [1.0, 2.0, 3.0], [True, True, False], {"other": 2.0}),
-        (op.le, 'int', [1, 2, 3], [True, True, False], {"other": 2}),
+        (
+            op.le,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, True, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.le,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [True, True, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.le,
+            'float',
+            [1.0, 2.0, 3.0],
+            [True, True, False],
+            {"other": 2.0},
+        ),
+        (
+            op.le,
+            'int',
+            [1, 2, 3],
+            [True, True, False],
+            {"other": 2},
+        ),
+        (
+            op.le,
+            'int',
+            [None, 2, 3],
+            [None, True, False],
+            {"other": 2},
+        ),
 
-        (op.lt, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         True, False, False, False, False], {'other': 2}),
-        (op.lt, 'int', [1, 2, 3, 4, 5], [
-         True, False, False, False, False], {'other': 2}),
+        (
+            op.lt,
+            'float',
+            [1.0, 2.0, 3.0, None, 4.0, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2.0, 2.0, 2.0, 2.0, None, None]
+            }
+        ),
+        (
+            op.lt,
+            'int',
+            [1, 2, 3, None, 4, None],
+            [True, False, False, None, None, None],
+            {
+                "other": [2, 2, 2, 2, None, None]
+            }
+        ),
+        (
+            op.lt,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [True, False, False, False, False],
+            {'other': 2},
+        ),
+        (
+            op.lt,
+            'int',
+            [1, 2, 3, 4, 5],
+            [True, False, False, False, False],
+            {'other': 2},
+        ),
+        (
+            op.lt,
+            'int',
+            [1, 2, None, 4, 5],
+            [True, False, None, False, False],
+            {'other': 2},
+        ),
 
-        (op.mul, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         1.0, 4.0, 9.0, 16.0, 25.0], {'other': [1, 2, 3, 4, 5]}),
-        (op.mul, 'float', [1.0, 2.0, 3.0, 4.0, 5.0],
-         [2.0, 4.0, 6.0, 8.0, 10.0], {'other': 2}),
-        (op.mul, 'int', [1, 2, 3, 4, 5], [
-         1, 4, 9, 16, 25], {'other': [1, 2, 3, 4, 5]}),
-        (op.mul, 'int', [1, 2, 3, 4, 5], [2, 4, 6, 8, 10], {'other': 2}),
+        (
+            op.mul,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [1.0, 4.0, 9.0, 16.0, 25.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, 2, 3, 4, 5],
+            [1, 4, 9, 16, 25],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, 2, None, 4, 5],
+            [1, 4, None, 16, 25],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, 2, 3, 4, 5],
+            [1, 4, None, 16, 25],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, 2, None, 4, 5],
+            [1, 4, None, 16, 25],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, None, 3, 4, 5],
+            [1, None, 9, None, 25],
+            {'other': [1, 2, 3, None, 5]},
+        ),
+        (
+            op.mul,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [2.0, 4.0, 6.0, 8.0, 10.0],
+            {'other': 2},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, 2, 3, 4, 5],
+            [2, 4, 6, 8, 10],
+            {'other': 2},
+        ),
+        (
+            op.mul,
+            'int',
+            [1, 2, None, 4, 5],
+            [2, 4, None, 8, 10],
+            {'other': 2},
+        ),
 
         (op.pow, 'float', [1.0, 2.0, 3.0], [1.0, 4.0, 9.0], {"other": 2}),
         (op.pow, 'int', [1, 2, 3], [1, 4, 9], {"other": 2}),
 
-        (op.sub, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         0.0, 0.0, 0.0, 0.0, 0.0], {'other': [1, 2, 3, 4, 5]}),
-        (op.sub, 'float', [1.0, 2.0, 3.0, 4.0, 5.0],
-         [0.0, 1.0, 2.0, 3.0, 4.0], {'other': 1}),
-        (op.sub, 'int', [1, 2, 3, 4, 5], [
-         0, 0, 0, 0, 0], {'other': [1, 2, 3, 4, 5]}),
-        (op.sub, 'int', [1, 2, 3, 4, 5], [0, 1, 2, 3, 4], {'other': 1}),
+        (
+            op.sub,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, 2, 3, 4, 5],
+            [0, 0, 0, 0, 0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, 2, None, 4, 5],
+            [0, 0, None, 0, 0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, 2, 3, 4, 5],
+            [0, 0, None, 0, 0],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, 2, None, 4, 5],
+            [0, 0, None, 0, 0],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, None, 3, 4, 5],
+            [0, None, 0, None, 0],
+            {'other': [1, 2, 3, None, 5]},
+        ),
+        (
+            op.sub,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [0.0, 1.0, 2.0, 3.0, 4.0],
+            {'other': 1},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, 2, 3, 4, 5],
+            [0, 1, 2, 3, 4],
+            {'other': 1},
+        ),
+        (
+            op.sub,
+            'int',
+            [1, 2, None, 4, 5],
+            [0, 1, None, 3, 4],
+            {'other': 1},
+        ),
 
-        (op.truediv, 'float', [1.0, 2.0, 3.0, 4.0, 5.0], [
-         1.0, 1.0, 1.0, 1.0, 1.0], {'other': [1, 2, 3, 4, 5]}),
-        (op.truediv, 'float', [1.0, 2.0, 3.0, 4.0, 5.0],
-         [0.5, 1.0, 1.5, 2.0, 2.5], {'other': 2}),
-        (op.truediv, 'int', [1, 2, 3, 4, 5], [
-         1.0, 1.0, 1.0, 1.0, 1.0], {'other': [1, 2, 3, 4, 5]}),
-        (op.truediv, 'int', [1, 2, 3, 4, 5], [
-         0.5, 1.0, 1.5, 2.0, 2.5], {'other': 2}),
+        (
+            op.truediv,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, 2, None, 4, 5],
+            [1.0, 1.0, None, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5]},
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, 1.0, None, 1.0, 1.0],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, 2, None, 4, 5],
+            [1.0, 1.0, None, 1.0, 1.0],
+            {'other': [1, 2, None, 4, 5]},
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, None, 3, 4, 5],
+            [1.0, None, 1.0, None, 1.0],
+            {'other': [1, 2, 3, None, 5]},
+        ),
+        (
+            op.truediv,
+            'float',
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'other': 2}
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, 2, 3, 4, 5],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'other': 2}
+        ),
+        (
+            op.truediv,
+            'int',
+            [1, 2, None, 4, 5],
+            [0.5, 1.0, None, 2.0, 2.5],
+            {'other': 2}
+        ),
     ],
 )
 def test_operators(

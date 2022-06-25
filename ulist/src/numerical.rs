@@ -26,8 +26,16 @@ where
         }
     }
 
+    fn _check_empty(&self) -> PyResult<()> {
+        if self.size() == 0 {
+            Err(PyRuntimeError::new_err("Current ulist object is empty!"))
+        } else {
+            Ok(())
+        }
+    }
+
     fn _fn_num<W: Clone>(&self, func: impl Fn(T) -> W, default: W) -> Vec<W> {
-        let mut vec = self.values().iter().map(|&x| func(x)).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|&x| func(x)).collect();
         _fill_na(&mut vec, self.na_indexes(), default);
         vec
     }
@@ -44,7 +52,7 @@ where
             .na_indexes()
             .iter()
             .chain(other.na_indexes().iter())
-            .map(|x| x.clone())
+            .copied()
             .collect();
         let result: Self = List::_new(vec, hset);
         _fill_na(
@@ -72,20 +80,40 @@ where
 
     fn div_scala(&self, elem: V) -> Vec<V>;
 
+    fn greater_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x >= y)
+    }
+
     fn greater_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_num(|x| x >= elem, false), HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x >= elem, false), hset)
+    }
+
+    fn greater_than(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x > y)
     }
 
     fn greater_than_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_num(|x| x > elem, false), HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x > elem, false), hset)
+    }
+
+    fn less_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x <= y)
     }
 
     fn less_than_or_equal_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_num(|x| x <= elem, false), HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x <= elem, false), hset)
+    }
+
+    fn less_than(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x < y)
     }
 
     fn less_than_scala(&self, elem: T) -> BooleanList {
-        BooleanList::new(self._fn_num(|x| x < elem, false), HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(self._fn_num(|x| x < elem, false), hset)
     }
 
     fn max(&self) -> PyResult<T>;

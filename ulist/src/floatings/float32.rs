@@ -41,7 +41,7 @@ impl FloatList32 {
         NumericalList::add_scala(self, elem)
     }
 
-    pub fn all_equal(&self, other: &Self) -> bool {
+    pub fn all_equal(&self, other: &Self) -> Option<bool> {
         List::all_equal(self, other)
     }
 
@@ -100,6 +100,10 @@ impl FloatList32 {
         FloatList32::new(NumericalList::div_scala(self, elem), hset)
     }
 
+    pub fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::equal(self, other)
+    }
+
     pub fn equal_scala(&self, elem: f32) -> BooleanList {
         List::equal_scala(self, elem)
     }
@@ -116,16 +120,32 @@ impl FloatList32 {
         List::get_by_indexes(self, indexes)
     }
 
+    pub fn greater_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::greater_than_or_equal(self, other)
+    }
+
     pub fn greater_than_or_equal_scala(&self, elem: f32) -> BooleanList {
         NumericalList::greater_than_or_equal_scala(self, elem)
+    }
+
+    pub fn greater_than(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::greater_than(self, other)
     }
 
     pub fn greater_than_scala(&self, elem: f32) -> BooleanList {
         NumericalList::greater_than_scala(self, elem)
     }
 
+    pub fn less_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::less_than_or_equal(self, other)
+    }
+
     pub fn less_than_or_equal_scala(&self, elem: f32) -> BooleanList {
         NumericalList::less_than_or_equal_scala(self, elem)
+    }
+
+    pub fn less_than(&self, other: &Self) -> PyResult<BooleanList> {
+        NumericalList::less_than(self, other)
     }
 
     pub fn less_than_scala(&self, elem: f32) -> BooleanList {
@@ -146,6 +166,10 @@ impl FloatList32 {
 
     pub fn mul_scala(&self, elem: f32) -> Self {
         NumericalList::mul_scala(self, elem)
+    }
+
+    pub fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::not_equal(self, other)
     }
 
     pub fn not_equal_scala(&self, elem: f32) -> BooleanList {
@@ -268,6 +292,7 @@ impl List<f32> for FloatList32 {
 
 impl NumericalList<f32, i32, f32> for FloatList32 {
     fn argmax(&self) -> PyResult<usize> {
+        self._check_empty()?;
         self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
@@ -281,6 +306,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn argmin(&self) -> PyResult<usize> {
+        self._check_empty()?;
         self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
@@ -308,6 +334,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn max(&self) -> PyResult<f32> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self
@@ -321,6 +348,7 @@ impl NumericalList<f32, i32, f32> for FloatList32 {
     }
 
     fn min(&self) -> PyResult<f32> {
+        self._check_empty()?;
         self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self

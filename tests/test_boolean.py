@@ -10,85 +10,295 @@ from ulist.utils import check_test_result
     "test_method, nums, expected_value",
     [
         (
-            "all",
-            [False, False, False],
-            False,
-        ),
-        (
-            "all",
-            [True, False, True],
-            False,
-        ),
-        (
-            "all",
+            'all',
             [True, True, True],
             True,
         ),
         (
-            "all",
-            [True, True, None],
+            'all',
+            [True, True, False],
             False,
         ),
         (
-            "all",
+            'all',
+            [True, True, None],
+            None,
+        ),
+        (
+            'all',
+            [True, False, True],
+            False,
+        ),
+        (
+            'all',
+            [True, False, False],
+            False,
+        ),
+        (
+            'all',
             [True, False, None],
             False,
         ),
         (
-            "all",
-            [False, False, None],
+            'all',
+            [True, None, True],
+            None,
+        ),
+        (
+            'all',
+            [True, None, False],
             False,
         ),
-
         (
-            "any",
+            'all',
+            [True, None, None],
+            None,
+        ),
+        (
+            'all',
+            [False, True, True],
+            False,
+        ),
+        (
+            'all',
+            [False, True, False],
+            False,
+        ),
+        (
+            'all',
+            [False, True, None],
+            False,
+        ),
+        (
+            'all',
+            [False, False, True],
+            False,
+        ),
+        (
+            'all',
             [False, False, False],
             False,
         ),
         (
-            "any",
-            [True, False, True],
-            True,
+            'all',
+            [False, False, None],
+            False,
         ),
         (
-            "any",
+            'all',
+            [False, None, True],
+            False,
+        ),
+        (
+            'all',
+            [False, None, False],
+            False,
+        ),
+        (
+            'all',
+            [False, None, None],
+            False,
+        ),
+        (
+            'all',
+            [None, True, True],
+            None,
+        ),
+        (
+            'all',
+            [None, True, False],
+            False,
+        ),
+        (
+            'all',
+            [None, True, None],
+            None,
+        ),
+        (
+            'all',
+            [None, False, True],
+            False,
+        ),
+        (
+            'all',
+            [None, False, False],
+            False,
+        ),
+        (
+            'all',
+            [None, False, None],
+            False,
+        ),
+        (
+            'all',
+            [None, None, True],
+            None,
+        ),
+        (
+            'all',
+            [None, None, False],
+            False,
+        ),
+        (
+            'all',
+            [None, None, None],
+            None,
+        ),
+
+        (
+            'any',
             [True, True, True],
             True,
         ),
         (
-            "any",
+            'any',
+            [True, True, False],
+            True,
+        ),
+        (
+            'any',
             [True, True, None],
             True,
         ),
         (
-            "any",
+            'any',
+            [True, False, True],
+            True,
+        ),
+        (
+            'any',
+            [True, False, False],
+            True,
+        ),
+        (
+            'any',
             [True, False, None],
             True,
         ),
         (
-            "any",
-            [False, False, None],
+            'any',
+            [True, None, True],
+            True,
+        ),
+        (
+            'any',
+            [True, None, False],
+            True,
+        ),
+        (
+            'any',
+            [True, None, None],
+            True,
+        ),
+        (
+            'any',
+            [False, True, True],
+            True,
+        ),
+        (
+            'any',
+            [False, True, False],
+            True,
+        ),
+        (
+            'any',
+            [False, True, None],
+            True,
+        ),
+        (
+            'any',
+            [False, False, True],
+            True,
+        ),
+        (
+            'any',
+            [False, False, False],
             False,
+        ),
+        (
+            'any',
+            [False, False, None],
+            None,
+        ),
+        (
+            'any',
+            [False, None, True],
+            True,
+        ),
+        (
+            'any',
+            [False, None, False],
+            None,
+        ),
+        (
+            'any',
+            [False, None, None],
+            None,
+        ),
+        (
+            'any',
+            [None, True, True],
+            True,
+        ),
+        (
+            'any',
+            [None, True, False],
+            True,
+        ),
+        (
+            'any',
+            [None, True, None],
+            True,
+        ),
+        (
+            'any',
+            [None, False, True],
+            True,
+        ),
+        (
+            'any',
+            [None, False, False],
+            None,
+        ),
+        (
+            'any',
+            [None, False, None],
+            None,
+        ),
+        (
+            'any',
+            [None, None, True],
+            True,
+        ),
+        (
+            'any',
+            [None, None, False],
+            None,
+        ),
+        (
+            'any',
+            [None, None, None],
+            None,
         ),
 
         (
-            "not_",
+            'not_',
             [True, False],
             [False, True],
         ),
         (
-            "not_",
+            'not_',
             [True, False, None],
             [False, True, None],
         ),
 
         (
-            "to_index",
+            'to_index',
             [True, False, True],
             [0, 2],
         ),
         (
-            "to_index",
+            'to_index',
             [True, False, True, None],
             [0, 2],
         ),
@@ -109,29 +319,29 @@ def test_methods(
     "test_method, nums, other, expected_value",
     [
         (
-            "and_",
+            'and_',
             [False, False, True, True],
             [False, True, False, True],
             [False, False, False, True],
         ),
         (
-            "and_",
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, False, False, True, False, False],
+            'and_',
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, False, None, False, False, False, None, False, None],
         ),
 
         (
-            "or_",
+            'or_',
             [False, False, True, True],
             [False, True, False, True],
             [False, True, True, True],
         ),
         (
-            "or_",
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, True, True, True, True, False],
+            'or_',
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, True, True, True, False, None, True, None, None],
         ),
     ],
 )
@@ -148,20 +358,20 @@ def test_methods_with_args(
     check_test_result(dtype, test_method, result, expected_value)
 
 
-@ pytest.mark.parametrize(
+@pytest.mark.parametrize(
     "test_method, nums, other, expected_value",
     [
         (
             op.and_,
-            [True, True, False, False],
-            [True, False, True, False],
-            [True, False, False, False],
+            [False, False, True, True],
+            [False, True, False, True],
+            [False, False, False, True],
         ),
         (
             op.and_,
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, False, False, True, False, False],
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, False, None, False, False, False, None, False, None],
         ),
 
         (
@@ -179,15 +389,15 @@ def test_methods_with_args(
 
         (
             op.or_,
-            [True, True, False, False],
-            [True, False, True, False],
-            [True, True, True, False],
+            [False, False, True, True],
+            [False, True, False, True],
+            [False, True, True, True],
         ),
         (
             op.or_,
-            [False, False, True, True, None, None],
-            [False, True, False, True, True, False],
-            [False, True, True, True, True, False],
+            [True, True, True, False, False, False, None, None, None],
+            [True, False, None, True, False, None, True, False, None],
+            [True, True, True, True, False, None, True, None, None],
         ),
     ],
 )
