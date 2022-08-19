@@ -36,20 +36,67 @@ impl BooleanList {
         List::_new(vec, hset)
     }
 
-    pub fn all(&self) -> bool {
-        self.values().iter().all(|&x| x)
+    pub fn all(&self) -> Option<bool> {
+        let hset = self.na_indexes();
+        let mut result = Some(true);
+        for (i, x) in self.values().iter().enumerate() {
+            if hset.contains(&i) {
+                result = None;
+            } else if !x {
+                return Some(false);
+            }
+        }
+        result
     }
 
-    pub fn all_equal(&self, other: &Self) -> bool {
+    pub fn all_equal(&self, other: &Self) -> Option<bool> {
         List::all_equal(self, other)
     }
 
-    pub fn and_(&self, other: &Self) -> Self {
-        _logical_operate(&self, &other, |x, y| x && y)
+    pub fn and_(&self, other: &Self) -> PyResult<Self> {
+        self._check_len_eq(other)?;
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
+        let mut hset: HashSet<usize> = HashSet::new();
+        let vec = self
+            .values()
+            .iter()
+            .zip(other.values().iter())
+            .enumerate()
+            .map(|(i, (x1, x2))| {
+                if hset1.contains(&i) {
+                    if hset2.contains(&i) | *x2 {
+                        hset.insert(i);
+                        false
+                    } else {
+                        false
+                    }
+                } else if hset2.contains(&i) {
+                    if *x1 {
+                        hset.insert(i);
+                        false
+                    } else {
+                        false
+                    }
+                } else {
+                    *x1 & *x2
+                }
+            })
+            .collect();
+        Ok(BooleanList::new(vec, hset))
     }
 
-    pub fn any(&self) -> bool {
-        self.values().iter().any(|&x| x)
+    pub fn any(&self) -> Option<bool> {
+        let hset = self.na_indexes();
+        let mut result = Some(false);
+        for (i, x) in self.values().iter().enumerate() {
+            if hset.contains(&i) {
+                result = None;
+            } else if *x {
+                return Some(true);
+            }
+        }
+        result
     }
 
     pub fn append(&self, elem: Option<bool>) {
@@ -93,11 +140,15 @@ impl BooleanList {
         List::cycle(&vec, size)
     }
 
+    pub fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::equal(self, other)
+    }
+
     pub fn equal_scala(&self, elem: bool) -> BooleanList {
         List::equal_scala(self, elem)
     }
 
-    pub fn filter(&self, condition: &BooleanList) -> Self {
+    pub fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         List::filter(self, condition)
     }
 
@@ -105,23 +156,56 @@ impl BooleanList {
         List::get(self, index)
     }
 
-    pub fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    pub fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         List::get_by_indexes(self, indexes)
     }
 
     pub fn not_(&self) -> Self {
-        let mut vec = self.values().iter().map(|&x| !x).collect();
+        let mut vec: Vec<_> = self.values().iter().map(|&x| !x).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
+    }
+
+    pub fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        List::not_equal(self, other)
     }
 
     pub fn not_equal_scala(&self, elem: bool) -> BooleanList {
         List::not_equal_scala(self, elem)
     }
 
-    pub fn or_(&self, other: &Self) -> Self {
-        _logical_operate(&self, &other, |x, y| x || y)
+    pub fn or_(&self, other: &Self) -> PyResult<Self> {
+        self._check_len_eq(other)?;
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
+        let mut hset: HashSet<usize> = HashSet::new();
+        let vec = self
+            .values()
+            .iter()
+            .zip(other.values().iter())
+            .enumerate()
+            .map(|(i, (x1, x2))| {
+                if hset1.contains(&i) {
+                    if hset2.contains(&i) | !*x2 {
+                        hset.insert(i);
+                        false
+                    } else {
+                        true
+                    }
+                } else if hset2.contains(&i) {
+                    if *x1 {
+                        true
+                    } else {
+                        hset.insert(i);
+                        false
+                    }
+                } else {
+                    *x1 | *x2
+                }
+            })
+            .collect();
+        Ok(BooleanList::new(vec, hset))
     }
 
     pub fn pop(&self) {
@@ -137,7 +221,7 @@ impl BooleanList {
         List::replace(self, old, new)
     }
 
-    pub fn set(&self, index: usize, elem: Option<bool>) {
+    pub fn set(&self, index: usize, elem: Option<bool>) -> PyResult<()> {
         List::set(self, index, elem)
     }
 
@@ -159,7 +243,7 @@ impl BooleanList {
             .iter()
             .enumerate()
             .filter(|(_, y)| **y)
-            .map(|(x, _)| x.clone())
+            .map(|(x, _)| x)
             .collect();
         IndexList::new(vec)
     }
@@ -212,15 +296,15 @@ fn _logical_operate(
     this: &BooleanList,
     other: &BooleanList,
     func: impl Fn(bool, bool) -> bool,
-) -> BooleanList {
-    this._check_len_eq(other);
+) -> PyResult<BooleanList> {
+    this._check_len_eq(other)?;
     let vec = this
         .values()
         .iter()
         .zip(other.values().iter())
         .map(|(&x, &y)| func(x, y))
         .collect();
-    BooleanList::new(vec, HashSet::new())
+    Ok(BooleanList::new(vec, HashSet::new()))
 }
 
 impl AsFloatList32 for BooleanList {

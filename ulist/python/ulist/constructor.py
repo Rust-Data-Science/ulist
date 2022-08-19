@@ -1,7 +1,7 @@
 from typing import Optional, Sequence, Union, Type
 
 from .core import UltraFastList
-from .typedef import ELEM_OPT, ELEM
+from .typedef import ELEM
 from .ulist import (BooleanList, FloatList32, FloatList64, IntegerList32,
                     IntegerList64, StringList, arange32, arange64)
 
@@ -192,11 +192,11 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     return result
 
 
-def repeat(elem: ELEM_OPT, size: int) -> UltraFastList:
+def repeat(elem: ELEM, size: int) -> UltraFastList:
     """Return a new ulist of given size, filled with elem.
 
     Args:
-        elem (ELEM_OPT): Element to repeat.
+        elem (ELEM): Element to repeat.
         size (int): Size of the new ulist.
 
     Raises:

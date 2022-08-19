@@ -1,4 +1,12 @@
+. ./check_version.sh
+
 EXIT_STATUS=0
+
+check_version || EXIT_STATUS=$?
+
+echo "Running clippy..."
+cargo clippy --manifest-path ../ulist/Cargo.toml -- -D warnings|| EXIT_STATUS=$?
+echo "\n"
 
 echo "Running unit tests..."
 pytest ../tests|| EXIT_STATUS=$?

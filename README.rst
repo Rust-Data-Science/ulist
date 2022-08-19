@@ -1,7 +1,7 @@
 ulist
 =====
 
-|PyPI| |License| |CI| |doc| |publish| |code style| |Coverage|
+|PyPI| |License| |CI| |doc| |publish| |code style| |Coverage| |downloads/month|
 
 `Documentation <https://rust-data-science.github.io/ulist/>`__ \| `Source
 Code <https://github.com/tushushu/ulist>`__
@@ -102,19 +102,21 @@ Given the ages of people as ``arr``, and suppose the adults are equal or above 1
 Contribute
 ~~~~~~~~~~
 
-All contributions are welcome. See `Developer Guide <https://github.com/tushushu/ulist/blob/main/develop.md>`__
+All contributions are welcome. See `Developer Guide <https://github.com/tushushu/ulist/blob/main/develop.rst>`__
 
 .. |PyPI| image:: https://badge.fury.io/py/ulist.svg
    :target: https://pypi.org/project/ulist/
 .. |License| image:: https://img.shields.io/github/license/tushushu/ulist
    :target: https://github.com/tushushu/ulist/blob/main/LICENSE
-.. |CI| image:: https://github.com/tushushu/ulist/actions/workflows/main.yml/badge.svg
+.. |CI| image:: https://github.com/Rust-Data-Science/ulist/actions/workflows/main.yml/badge.svg?branch=0.11.0
    :target: https://github.com/tushushu/ulist/actions/workflows/main.yml
-.. |doc| image:: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml/badge.svg
+.. |doc| image:: https://github.com/Rust-Data-Science/ulist/actions/workflows/sphinx.yml/badge.svg?branch=0.11.0
    :target: https://github.com/tushushu/ulist/actions/workflows/sphinx.yml
-.. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.10.0
+.. |publish| image:: https://github.com/tushushu/ulist/actions/workflows/publish.yml/badge.svg?branch=0.11.0
    :target: https://github.com/tushushu/ulist/actions/workflows/publish.yml
 .. |code style| image:: https://img.shields.io/badge/style-flake8-blue
    :target: https://github.com/PyCQA/flake8
 .. |Coverage| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1/raw/metacov.json
    :target: https://github.com/tushushu/ulist/actions/workflows/coverage.yml
+.. |downloads/month| image:: https://static.pepy.tech/badge/ulist/month
+   :target: https://pypi.org/project/ulist/

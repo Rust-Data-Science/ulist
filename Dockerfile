@@ -1,7 +1,7 @@
 FROM konstin2/maturin
 
 # if you forked ulist, you can pass in your own GitHub username to use your fork
-# i.e. gh_username=myname
+# i.e. gh_username=your_github_user_name
 ARG gh_username=tushushu
 ARG ulist_home="/home/ulist"
 ARG branch="<your-branch-name>"

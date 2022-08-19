@@ -3,11 +3,18 @@ use crate::boolean::BooleanList;
 use crate::floatings::FloatList64;
 use crate::integers::IntegerList64;
 use crate::string::StringList;
+use pyo3::exceptions::PyRuntimeError;
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use pyo3::Py;
 use std::collections::HashSet;
 
-fn select<T, U>(py: Python, conditions: &Vec<Py<BooleanList>>, choices: &Vec<T>, default: T) -> U
+fn select<T, U>(
+    py: Python,
+    conditions: &[Py<BooleanList>],
+    choices: &[T],
+    default: T,
+) -> PyResult<U>
 where
     T: PartialEq + Clone,
     U: List<T>,
@@ -16,24 +23,28 @@ where
     let n = cond[0].size();
     for c in cond.iter() {
         if c.size() != n {
-            panic!("BooleanList sizes in conditions should be equal!");
-        }
-        if c.count_na() > 0 {
-            panic!("Parameter `condition` should not contain missing values!");
+            return Err(PyRuntimeError::new_err(
+                "BooleanList sizes in conditions should be equal!",
+            ));
+        } else if c.count_na() > 0 {
+            return Err(PyValueError::new_err(
+                "Parameter `condition` should not contain missing values!",
+            ));
         }
     }
 
     let mut vec = vec![default; cond[0].size()];
-    for j in 0..cond[0].size() {
+    // for j in 0..cond[0].size() {
+    for (j, item) in vec.iter_mut().enumerate().take(cond[0].size()) {
         for i in 0..cond.len() {
             // TODO: Improve the benchmark.
             if cond[i].get(j).unwrap().unwrap() {
-                vec[j] = choices[i].clone();
+                *item = choices[i].clone();
                 break;
             }
         }
     }
-    U::_new(vec, HashSet::new())
+    Ok(U::_new(vec, HashSet::new()))
 }
 
 #[pyfunction]
@@ -42,7 +53,7 @@ pub fn select_bool(
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<bool>,
     default: bool,
-) -> BooleanList {
+) -> PyResult<BooleanList> {
     select::<bool, BooleanList>(py, &conditions, &choices, default)
 }
 
@@ -52,7 +63,7 @@ pub fn select_float(
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<f64>,
     default: f64,
-) -> FloatList64 {
+) -> PyResult<FloatList64> {
     select::<f64, FloatList64>(py, &conditions, &choices, default)
 }
 
@@ -62,7 +73,7 @@ pub fn select_int(
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<i64>,
     default: i64,
-) -> IntegerList64 {
+) -> PyResult<IntegerList64> {
     select::<i64, IntegerList64>(py, &conditions, &choices, default)
 }
 
@@ -72,6 +83,6 @@ pub fn select_string(
     conditions: Vec<Py<BooleanList>>,
     choices: Vec<String>,
     default: String,
-) -> StringList {
+) -> PyResult<StringList> {
     select::<String, StringList>(py, &conditions, &choices, default)
 }

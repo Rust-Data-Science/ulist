@@ -5,6 +5,8 @@ import ulist as ul
 
 _ARR1 = ul.from_seq(range(3), dtype='int')
 _ARR1._values = [0, 1, 2]  # type: ignore
+_ARR2 = ul.from_seq([], dtype='int')
+_ARR3 = ul.from_seq([None, None], dtype='int')
 
 
 class _Foo:
@@ -14,6 +16,28 @@ class _Foo:
 @pytest.mark.parametrize(
     "test_method, kwargs, expected_error",
     [
+        (
+            _ARR2.argmax,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.argmax,
+            {},
+            RuntimeError
+        ),
+
+        (
+            _ARR2.argmin,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.argmin,
+            {},
+            RuntimeError
+        ),
+
         (
             _ARR1._arithmetic_method,
             {
@@ -41,6 +65,28 @@ class _Foo:
         ),
 
         (
+            _ARR2.max,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.max,
+            {},
+            RuntimeError
+        ),
+
+        (
+            _ARR2.min,
+            {},
+            RuntimeError
+        ),
+        (
+            _ARR3.min,
+            {},
+            RuntimeError
+        ),
+
+        (
             ul.repeat,
             {"elem": dict(), "size": 3},
             TypeError
@@ -57,6 +103,30 @@ class _Foo:
                 "default": _Foo(),
             },
             TypeError
+        ),
+        (
+            ul.select,
+            {
+                "conditions": [
+                    ul.from_seq([True], dtype='bool'),
+                    ul.from_seq([False, False], dtype='bool')
+                ],
+                "choices": [1, 2],
+                "default": 0,
+            },
+            RuntimeError
+        ),
+        (
+            ul.select,
+            {
+                "conditions": [
+                    ul.from_seq([True, None], dtype='bool'),
+                    ul.from_seq([False, False], dtype='bool')
+                ],
+                "choices": [1, 2],
+                "default": 0,
+            },
+            ValueError
         ),
 
         (

@@ -1,12 +1,13 @@
 use crate::boolean::BooleanList;
 use crate::index::IndexList;
 use pyo3::exceptions::PyIndexError;
+use pyo3::exceptions::PyRuntimeError;
 use pyo3::PyResult;
 use std::cell::Ref;
 use std::cell::RefMut;
 use std::collections::HashSet;
 
-pub fn _fill_na<T: Clone>(vec: &mut Vec<T>, na_indexes: Ref<HashSet<usize>>, na_value: T) {
+pub fn _fill_na<T: Clone>(vec: &mut [T], na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
         // TODO: Use get_unchecked_mut instead.
         // let ptr = unsafe { vec.get_unchecked_mut(*i) };
@@ -25,14 +26,38 @@ where
 
     fn _new(vec: Vec<T>, hset: HashSet<usize>) -> Self;
 
-    fn _check_len_eq(&self, other: &Self) {
+    fn _check_len_eq(&self, other: &Self) -> PyResult<()> {
         if self.size() != other.size() {
-            panic!("The sizes of `self` and `other` should be equal!");
+            Err(PyRuntimeError::new_err(
+                "The sizes of `self` and `other` should be equal!",
+            ))
+        } else {
+            Ok(())
         }
     }
 
+    // TODO: Better abstraction for List::_cmp and NumericalList::_fn methods.
+    fn _cmp(&self, other: &Self, func: impl Fn(T, T) -> bool) -> PyResult<BooleanList> {
+        self._check_len_eq(other)?;
+        let vec = self
+            .values()
+            .iter()
+            .zip(other.values().iter())
+            .map(|(x, y)| func(x.clone(), y.clone()))
+            .collect();
+        let hset: HashSet<usize> = self
+            .na_indexes()
+            .iter()
+            .chain(other.na_indexes().iter())
+            .copied()
+            .collect();
+        let result = BooleanList::_new(vec, hset);
+        _fill_na(&mut result.values_mut(), result.na_indexes(), false);
+        Ok(result)
+    }
+
     fn _fn_scala<U>(&self, func: impl Fn(&T) -> U) -> Vec<U> {
-        self.values().iter().map(|x| func(x)).collect()
+        self.values().iter().map(func).collect()
     }
 
     fn _sort(&self) {
@@ -54,24 +79,26 @@ where
                 r -= 1;
             }
             vec.swap(l, r);
-        }
-        // Update na indexes.
-        hset.clear();
-        for i in (n - m)..n {
-            hset.insert(i);
+            hset.remove(&l);
+            hset.insert(r);
         }
     }
 
-    fn all_equal(&self, other: &Self) -> bool {
-        if self.size() != other.size() || self.count_na() > 0 || other.count_na() > 0 {
-            return false;
+    fn all_equal(&self, other: &Self) -> Option<bool> {
+        if self.size() != other.size() {
+            return Some(false);
         };
-        for (x, y) in self.values().iter().zip(other.values().iter()) {
-            if x != y {
-                return false;
+        let hset1 = self.na_indexes();
+        let hset2 = other.na_indexes();
+        let mut result = Some(true);
+        for (i, (x1, x2)) in self.values().iter().zip(other.values().iter()).enumerate() {
+            if hset1.contains(&i) || hset2.contains(&i) {
+                result = None;
+            } else if x1 != x2 {
+                return Some(false);
             }
         }
-        return true;
+        result
     }
 
     fn append(&self, elem: Option<T>) {
@@ -92,24 +119,27 @@ where
         self.na_indexes().len()
     }
 
-    fn cycle(vec: &Vec<T>, size: usize) -> Self {
-        let v = vec.iter().cycle().take(size).map(|x| x.clone()).collect();
+    fn cycle(vec: &[T], size: usize) -> Self {
+        let v: Vec<_> = vec.iter().cycle().take(size).cloned().collect();
         List::_new(v, HashSet::new())
+    }
+
+    fn equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x == y)
     }
 
     fn equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x == &elem);
         _fill_na(&mut vec, self.na_indexes(), false);
-        BooleanList::new(vec, HashSet::new())
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
-    fn filter(&self, condition: &BooleanList) -> Self {
+    fn filter(&self, condition: &BooleanList) -> PyResult<Self> {
         if self.size() != condition.size() {
-            panic!("The sizes of `self` and `other` should be equal!");
-        }
-
-        if condition.count_na() > 0 {
-            panic!("Parameter `condition` should not contain missing values!");
+            return Err(PyRuntimeError::new_err(
+                "The sizes of `self` and `other` should be equal!",
+            ));
         }
 
         let n = self.size();
@@ -132,7 +162,7 @@ where
         }
         vec.shrink_to_fit();
         hset.shrink_to_fit();
-        List::_new(vec, hset)
+        Ok(List::_new(vec, hset))
     }
 
     fn get(&self, index: usize) -> PyResult<Option<T>> {
@@ -148,24 +178,22 @@ where
         }
     }
 
-    fn get_by_indexes(&self, indexes: &IndexList) -> Self {
+    fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
         // TODO: Put this kind of check
         // where there is unsafe block.
         if indexes.back() >= self.size() {
-            panic!("Index out of range!")
+            return Err(PyIndexError::new_err("Index out of range!"));
         }
         // TODO: use get_unchecked instead.
         let mut vec: Vec<T> = Vec::new();
         let mut hset: HashSet<usize> = HashSet::new();
-        let mut i: usize = 0;
-        for j in indexes.values().iter() {
+        for (i, j) in indexes.values().iter().enumerate() {
             vec.push(self.values()[*j].clone());
             if self.na_indexes().contains(j) {
                 hset.insert(i);
             }
-            i += 1;
         }
-        List::_new(vec, hset)
+        Ok(List::_new(vec, hset))
     }
 
     fn has_na(&self) -> bool {
@@ -178,10 +206,15 @@ where
 
     fn na_value(&self) -> T;
 
+    fn not_equal(&self, other: &Self) -> PyResult<BooleanList> {
+        self._cmp(other, |x, y| x != y)
+    }
+
     fn not_equal_scala(&self, elem: T) -> BooleanList {
         let mut vec = self._fn_scala(|x| x != &elem);
-        _fill_na(&mut vec, self.na_indexes(), true);
-        BooleanList::new(vec, HashSet::new())
+        _fill_na(&mut vec, self.na_indexes(), false);
+        let hset = self.na_indexes().clone();
+        BooleanList::new(vec, hset)
     }
 
     fn pop(&self) {
@@ -192,6 +225,7 @@ where
         self.values_mut().pop();
     }
 
+    // TODO: Test if old does not exist in self.
     fn replace(&self, old: Option<T>, new: Option<T>) {
         if let Some(_old) = old {
             if let Some(_new) = new {
@@ -199,10 +233,8 @@ where
             } else {
                 self.replace_by_na(_old)
             }
-        } else {
-            if let Some(_new) = new {
-                self.replace_na(_new)
-            }
+        } else if let Some(_new) = new {
+            self.replace_na(_new)
         }
     }
 
@@ -249,9 +281,9 @@ where
         self.na_indexes_mut().clear();
     }
 
-    fn set(&self, index: usize, elem: Option<T>) {
+    fn set(&self, index: usize, elem: Option<T>) -> PyResult<()> {
         if index >= self.size() {
-            panic!("Index out of range!");
+            return Err(PyIndexError::new_err("Index out of range!"));
         }
         let mut vec = self.values_mut();
         // TODO: Use get_unchecked_mut instead.
@@ -264,10 +296,12 @@ where
         // }
         if let Some(i) = elem {
             vec[index] = i;
+            self.na_indexes_mut().remove(&index);
         } else {
             vec[index] = self.na_value();
             self.na_indexes_mut().insert(index);
         }
+        Ok(())
     }
 
     fn repeat(elem: T, size: usize) -> Self {
