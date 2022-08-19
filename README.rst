@@ -1,7 +1,7 @@
 ulist
 =====
 
-|PyPI| |License| |CI| |doc| |publish| |code style| |Coverage| |downloads/month|
+|PyPI| |License| |CI| |doc| |publish| |code style| |Coverage| |downloads/month| |downloads|
 
 `Documentation <https://rust-data-science.github.io/ulist/>`__ \| `Source
 Code <https://github.com/tushushu/ulist>`__
