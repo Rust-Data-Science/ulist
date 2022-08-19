@@ -63,8 +63,8 @@ impl StringList {
         AsIntegerList64::as_int64(self)
     }
 
-    pub fn contains(&self, elem: &str) -> BooleanList {
-        let mut vec: Vec<_> = self.values().iter().map(|x| x.contains(elem)).collect();
+    pub fn contains(&self, elem: String) -> BooleanList {
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.contains(&elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
@@ -87,8 +87,8 @@ impl StringList {
         List::cycle(&vec, size)
     }
 
-    pub fn ends_with(&self, elem: &str) -> BooleanList {
-        let mut vec: Vec<_> = self.values().iter().map(|x| x.ends_with(elem)).collect();
+    pub fn ends_with(&self, elem: String) -> BooleanList {
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.ends_with(&elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
@@ -147,8 +147,8 @@ impl StringList {
         NonFloatList::sort(self, ascending)
     }
 
-    pub fn starts_with(&self, elem: &str) -> BooleanList {
-        let mut vec: Vec<_> = self.values().iter().map(|x| x.starts_with(elem)).collect();
+    pub fn starts_with(&self, elem: String) -> BooleanList {
+        let mut vec: Vec<_> = self.values().iter().map(|x| x.starts_with(&elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);
         let hset = self.na_indexes().clone();
         BooleanList::new(vec, hset)
