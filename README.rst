@@ -120,3 +120,5 @@ All contributions are welcome. See `Developer Guide <https://github.com/tushushu
    :target: https://github.com/tushushu/ulist/actions/workflows/coverage.yml
 .. |downloads/month| image:: https://static.pepy.tech/badge/ulist/month
    :target: https://pypi.org/project/ulist/
+.. |downloads| image:: https://pepy.tech/badge/ulist
+   :target: https://pypi.org/project/ulist/
