@@ -1,7 +1,7 @@
 ulist
 =====
 
-|PyPI| |License| |CI| |doc| |publish| |code style| |Coverage| |downloads/month|
+|PyPI| |License| |CI| |doc| |publish| |code style| |Coverage| |downloads/month| |downloads|
 
 `Documentation <https://rust-data-science.github.io/ulist/>`__ \| `Source
 Code <https://github.com/tushushu/ulist>`__
@@ -119,4 +119,6 @@ All contributions are welcome. See `Developer Guide <https://github.com/tushushu
 .. |Coverage| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tushushu/3a76a8f4c0d25c24b840fe66a3cf44c1/raw/metacov.json
    :target: https://github.com/tushushu/ulist/actions/workflows/coverage.yml
 .. |downloads/month| image:: https://static.pepy.tech/badge/ulist/month
+   :target: https://pypi.org/project/ulist/
+.. |downloads| image:: https://pepy.tech/badge/ulist
    :target: https://pypi.org/project/ulist/
