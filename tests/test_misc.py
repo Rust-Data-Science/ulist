@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Sequence, Type
 
 import pytest
 from ulist.utils import (MAX_DTYPE_LEN, MAX_ITEM_LEN, Benchmarker,
@@ -72,7 +72,7 @@ def test_benchmark_score() -> None:
     bench.display(False)
 
 
-def _test_bench_marker(bench_marker):
+def _test_bench_marker(bench_marker: Type[Benchmarker]) -> None:
     bench = bench_marker(debug=True)
     bench.n_runs = (1, 1, 1, 1, 1)
     bench.run()
@@ -88,10 +88,10 @@ class _Int(Benchmarker):
             ([0], 1),
         ]
 
-    def ulist_fn(self, args) -> None:
+    def ulist_fn(self, args: Sequence[Any]) -> None:
         pass
 
-    def other_fn(self, args) -> None:
+    def other_fn(self, args: Sequence[Any]) -> None:
         pass
 
 
@@ -105,10 +105,10 @@ class _Float(Benchmarker):
             ([0.0],),
         ]
 
-    def ulist_fn(self, args) -> None:
+    def ulist_fn(self, args: Sequence[Any]) -> None:
         pass
 
-    def other_fn(self, args) -> None:
+    def other_fn(self, args: Sequence[Any]) -> None:
         pass
 
 
@@ -122,10 +122,10 @@ class _Bool(Benchmarker):
             ([True],),
         ]
 
-    def ulist_fn(self, args) -> None:
+    def ulist_fn(self, args: Sequence[Any]) -> None:
         pass
 
-    def other_fn(self, args) -> None:
+    def other_fn(self, args: Sequence[Any]) -> None:
         pass
 
 
@@ -139,10 +139,10 @@ class _String(Benchmarker):
             (['a'],),
         ]
 
-    def ulist_fn(self, args) -> None:
+    def ulist_fn(self, args: Sequence[Any]) -> None:
         pass
 
-    def other_fn(self, args) -> None:
+    def other_fn(self, args: Sequence[Any]) -> None:
         pass
 
 
@@ -155,5 +155,5 @@ class _String(Benchmarker):
         _String,
     ],
 )
-def test_bench_marker(test_class: Benchmarker) -> None:
+def test_bench_marker(test_class: Type[Benchmarker]) -> None:
     _test_bench_marker(test_class)
