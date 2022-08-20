@@ -13,6 +13,9 @@ name = "ulist"
 # crate-type = ["cdylib", "rlib"]
 crate-type = ["cdylib"]
 
+[dependencies]
+csv = "1.1"
+
 [dependencies.pyo3]
 version = "0.16.4"
 features = ["extension-module"]

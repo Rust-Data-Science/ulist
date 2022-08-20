@@ -151,6 +151,44 @@ class _Foo:
             {"fn": lambda x: x < 2, "then": 1.0},
             TypeError
         ),
+        (
+            ul.read_csv,  # mismatch dtype
+            {
+                "path": "./test_csv/00_test_int.csv",
+                "schema": {"int32": "bool", "int64": "string"}
+            },
+            TypeError
+        ),
+        (
+            ul.read_csv,  # mismatch dtype test case 2
+            {
+                "path": "./test_csv/04_test_nan.csv",
+                "schema": {"int": "bool",
+                           "float": "int",
+                           "string": "float",
+                           "bool": "int"}
+            },
+            TypeError
+        ),
+        (
+            ul.read_csv,
+            {
+                "path": "./non_exists_csv.csv",
+                "schema": {"whatever": "int32"}
+            },
+            IOError
+        ),
+        (
+            ul.read_csv,  # wrong dtype
+            {
+                "path": "./test_csv/04_test_nan.csv",
+                "schema": {"int": "integer",
+                           "float": "double",
+                           "string": "str",
+                           "bool": "boolean"}
+            },
+            ValueError
+        )
     ],
 )
 def test_exceptions(

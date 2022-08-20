@@ -2,8 +2,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from timeit import timeit
 from typing import Any, Callable, Dict, List, Sequence, Tuple, Union
+import math
 
 import ulist as ul
+from ulist import UltraFastList
 
 from .typedef import COUNTER, LIST_PY, ELEM_OPT
 
@@ -49,8 +51,8 @@ def compare_dtypes(dtype1: str, dtype2: str) -> bool:
 def check_test_result(
     dtype: str,
     test_method: Union[Callable, str],
-    result: Union[ELEM_OPT, LIST_PY, ul.UltraFastList],
-    expected_value: Union[ELEM_OPT, LIST_PY, COUNTER],
+    result: Union[ELEM_OPT, LIST_PY, UltraFastList, Dict[str, UltraFastList]],
+    expected_value: Union[ELEM_OPT, LIST_PY, COUNTER, Dict[str, List]],
 ):
     """Test if the result is as expected. Both value and type.
     Args:
@@ -66,19 +68,32 @@ def check_test_result(
         + f" result - {result}"
         + f" expected - {expected_value}"
     )
+
+    def assert_eq(x, y):
+        assert type(x) == type(y), msg
+        if type(x) == float:
+            assert math.isclose(x, y, rel_tol=1e-7), msg
+        else:
+            assert x == y, msg
+
     if hasattr(result, "to_list"):
         result = result.to_list()  # type: ignore
     if isinstance(result, list) and \
             isinstance(expected_value, list):
         assert len(result) == len(expected_value), msg
         for x, y in zip(result, expected_value):
-            assert type(x) == type(y) and x == y, msg
+            assert_eq(x, y)
     elif isinstance(result, dict) and \
             isinstance(expected_value, dict):
         for key in result.keys():
-            x = result[key]
-            y = result[key]
-            assert type(x) == type(y) and x == y
+            x = result[key]  # type: ignore
+            y = expected_value[key]  # type: ignore
+            if isinstance(x, UltraFastList):
+                assert len(x) == len(y), msg
+                for a, b in zip(x, y):
+                    assert_eq(a, b)
+            else:
+                assert_eq(x, y)
         assert len(result) == len(expected_value)
     else:
         assert type(result) == type(expected_value), msg
