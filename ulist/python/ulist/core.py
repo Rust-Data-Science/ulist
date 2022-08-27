@@ -419,6 +419,10 @@ class UltraFastList:
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.greater_than_scala(elem))
 
+    def has_zero(self) -> bool:
+        assert not isinstance(self._values, (BooleanList, StringList))
+        return self._values.has_zero()
+
     def less_than(self, other: "UltraFastList") -> "UltraFastList":
         """Return self < other."""
         assert not isinstance(self._values, (BooleanList, StringList))

@@ -49,6 +49,15 @@ LIST_TYPE = Union[List[Optional[float]], List[Optional[int]]]
         ('argmin', 'float', [None, 0.0, 1.0, -1.0], 3),
         ('argmin', 'float', [None, -2.0, None, -1.0], 1),
 
+        ('has_zero', 'float', [0.0, 0.0], True),
+        ('has_zero', 'float', [0.0, 1.0], True),
+        ('has_zero', 'float', [0.0, 1.0], True),
+        ('has_zero', 'float', [1.1, 1.0], False),
+        ('has_zero', 'int', [0, 0], True),
+        ('has_zero', 'int', [0, 1], True),
+        ('has_zero', 'int', [0, 1], True),
+        ('has_zero', 'int', [1, 1], False),
+
         ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
         ('max', 'float', [5.0, 1.0, 2.0, 3.0, 4.0], 5.0),
         ('max', 'float', [1.0, 2.0, 5.0, 3.0, 4.0], 5.0),
