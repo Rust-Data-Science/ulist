@@ -161,6 +161,11 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
         ('counter', 'string', ['foo', 'bar', 'foo'], {'foo': 2, 'bar': 1}),
         ('counter', 'string', ['foo', None, 'foo'], {'foo': 2, None: 1}),
 
+        ('has_na', 'bool', [True, False, True], False),
+        ('has_na', 'int', [1, 0, 1], False),
+        ('has_na', 'string', ['foo', 'bar', 'foo'], False),
+        ('has_na', 'string', ['foo', None, 'foo'], True),
+
         ('mean', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 3.0),
         ('mean', 'int', [1, 2, 3, 4, 5], 3.0),
         ('mean', 'bool', [True, False, True, False], 0.5),

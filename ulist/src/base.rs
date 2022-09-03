@@ -196,10 +196,6 @@ where
         Ok(List::_new(vec, hset))
     }
 
-    fn has_na(&self) -> bool {
-        self.count_na() > 0
-    }
-
     fn na_indexes(&self) -> Ref<HashSet<usize>>;
 
     fn na_indexes_mut(&self) -> RefMut<HashSet<usize>>;

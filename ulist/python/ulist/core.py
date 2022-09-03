@@ -430,7 +430,12 @@ class UltraFastList:
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.greater_than_scala(elem))
 
+    def has_na(self) -> bool:
+        """Return NA in self."""
+        return self.count_na() > 0
+
     def has_zero(self) -> bool:
+        """Return zero in self."""
         assert not isinstance(self._values, (BooleanList, StringList))
         return self._values.has_zero()
 
