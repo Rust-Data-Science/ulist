@@ -100,8 +100,8 @@ where
 
     fn has_zero(&self) -> bool{
         let y = self.na_value();
-        for &x in self.values().iter(){
-            if x == y{
+        for (i, &x) in self.values().iter().enumerate(){
+            if !self.na_indexes().contains(&i) && x == y{
                 return true;
             }
         }
