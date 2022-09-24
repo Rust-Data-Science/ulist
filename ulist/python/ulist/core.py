@@ -368,15 +368,19 @@ class UltraFastList:
             result[None] = m
         return result
 
-    def div(self, other: "UltraFastList") -> "UltraFastList":
+    def div(self, other: "UltraFastList", zero_div: bool = False) -> "UltraFastList":
         """Return self / other."""
         assert not isinstance(self._values, (BooleanList, StringList))
         assert not isinstance(other._values, (BooleanList, StringList))
+        if not zero_div and self.has_zero():
+            raise ValueError("Does not allow zero division!")
         return UltraFastList(self._values.div(other._values))
 
-    def div_scala(self, elem: float) -> "UltraFastList":
+    def div_scala(self, elem: float, zero_div: bool = False) -> "UltraFastList":
         """Return self / elem."""
         assert not isinstance(self._values, (BooleanList, StringList))
+        if not zero_div and elem == 0.0:
+            raise ValueError("Does not allow zero division!")
         return UltraFastList(self._values.div_scala(elem))
 
     def ends_with(self, elem: str) -> UltraFastList:

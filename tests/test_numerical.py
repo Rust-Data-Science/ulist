@@ -184,7 +184,7 @@ def test_statistics_methods(
             'float',
             [1.0, 2.0, 3.0, 4.0, 5.0],
             [1.0, 1.0, 1.0, 1.0, 1.0],
-            {'other': [1, 2, 3, 4, 5]},
+            {'other': [1, 2, 3, 4, 5], },
         ),
         (
             'div',
@@ -221,6 +221,69 @@ def test_statistics_methods(
             [1.0, None, 1.0, None, 1.0],
             {'other': [1, 2, 3, None, 5]},
         ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5], 'zero_div': False},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [float('inf'), 1.0, 1.0, 1.0, 1.0],
+            {'other': [0, 2, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, float('nan'), 1.0, 1.0, 1.0],
+            {'other': [1, 0, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, None, 4, 5],
+            [1.0, 1.0, None, 1.0, 1.0],
+            {'other': [1, 2, 0, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 0, 3, 4, 5],
+            [float('inf'), float('nan'), 1.0, 1.0, 1.0],
+            {'other': [0, 0, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, None, 4, 5],
+            [float('inf'), 1.0, None, 1.0, 1.0],
+            {'other': [0, 2, 0, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 0, None, 4, 5],
+            [1.0, float('nan'), None, 1.0, 1.0],
+            {'other': [1, 0, 0, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 0, None, 4, 5],
+            [float('inf'), float('nan'), None, 1.0, 1.0],
+            {'other': [0, 0, 0, 4, 5], 'zero_div': True},
+        ),
 
         (
             'div_scala',
@@ -242,6 +305,67 @@ def test_statistics_methods(
             [1, 2, None, 4, 5],
             [0.5, 1.0, None, 2.0, 2.5],
             {'elem': 2}
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'elem': 2, 'zero_div': False},
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'elem': 2, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [float('inf'), float('inf'), float(
+                'inf'), float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [0, 0, 0, 0, 0],
+            [float('nan'), float('nan'), float(
+                'nan'), float('nan'), float('nan')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [None, None, None, None, None],
+            [None, None, None, None, None],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [0, 2, 3, 4, 5],
+            [float('nan'), float('inf'), float(
+                'inf'), float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [float('inf'), float('inf'), None,
+             float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [0, 2, None, 4, 5],
+            [float('nan'), float('inf'), None,
+             float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
         ),
 
         (

@@ -59,6 +59,18 @@ class _Foo:
         ),
 
         (
+            _ARR1.div,
+            {"other": ul.cycle(0, 3, dtype='int'), "zero_div": False},
+            ValueError
+        ),
+
+        (
+            _ARR1.div_scala,
+            {"other": 0, "zero_div": False},
+            ValueError
+        ),
+
+        (
             ul.from_seq,
             {"obj": [1, 2], "dtype": "foo"},
             ValueError
