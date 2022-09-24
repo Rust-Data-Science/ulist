@@ -49,6 +49,19 @@ LIST_TYPE = Union[List[Optional[float]], List[Optional[int]]]
         ('argmin', 'float', [None, 0.0, 1.0, -1.0], 3),
         ('argmin', 'float', [None, -2.0, None, -1.0], 1),
 
+        ('has_zero', 'float', [0.0, 0.0], True),
+        ('has_zero', 'float', [0.0, 1.0], True),
+        ('has_zero', 'float', [0.0, 1.0], True),
+        ('has_zero', 'float', [1.0, 1.0], False),
+        ('has_zero', 'float', [None, 1.0], False),
+        ('has_zero', 'float', [None, 0.0], True),
+        ('has_zero', 'int', [0, 0], True),
+        ('has_zero', 'int', [0, 1], True),
+        ('has_zero', 'int', [0, 1], True),
+        ('has_zero', 'int', [1, 1], False),
+        ('has_zero', 'int', [None, 1], False),
+        ('has_zero', 'int', [None, 0], True),
+
         ('max', 'float', [1.0, 2.0, 3.0, 4.0, 5.0], 5.0),
         ('max', 'float', [5.0, 1.0, 2.0, 3.0, 4.0], 5.0),
         ('max', 'float', [1.0, 2.0, 5.0, 3.0, 4.0], 5.0),
@@ -171,7 +184,7 @@ def test_statistics_methods(
             'float',
             [1.0, 2.0, 3.0, 4.0, 5.0],
             [1.0, 1.0, 1.0, 1.0, 1.0],
-            {'other': [1, 2, 3, 4, 5]},
+            {'other': [1, 2, 3, 4, 5], },
         ),
         (
             'div',
@@ -208,6 +221,69 @@ def test_statistics_methods(
             [1.0, None, 1.0, None, 1.0],
             {'other': [1, 2, 3, None, 5]},
         ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5], 'zero_div': False},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            {'other': [1, 2, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [float('inf'), 1.0, 1.0, 1.0, 1.0],
+            {'other': [0, 2, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, 3, 4, 5],
+            [1.0, float('inf'), 1.0, 1.0, 1.0],
+            {'other': [1, 0, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, None, 4, 5],
+            [1.0, 1.0, None, 1.0, 1.0],
+            {'other': [1, 2, 0, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 0, 3, 4, 5],
+            [float('inf'), float('nan'), 1.0, 1.0, 1.0],
+            {'other': [0, 0, 3, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 2, None, 4, 5],
+            [float('inf'), 1.0, None, 1.0, 1.0],
+            {'other': [0, 2, 0, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 0, None, 4, 5],
+            [1.0, float('nan'), None, 1.0, 1.0],
+            {'other': [1, 0, 0, 4, 5], 'zero_div': True},
+        ),
+        (
+            'div',
+            'int',
+            [1, 0, None, 4, 5],
+            [float('inf'), float('nan'), None, 1.0, 1.0],
+            {'other': [0, 0, 0, 4, 5], 'zero_div': True},
+        ),
 
         (
             'div_scala',
@@ -229,6 +305,67 @@ def test_statistics_methods(
             [1, 2, None, 4, 5],
             [0.5, 1.0, None, 2.0, 2.5],
             {'elem': 2}
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'elem': 2, 'zero_div': False},
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [0.5, 1.0, 1.5, 2.0, 2.5],
+            {'elem': 2, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, 3, 4, 5],
+            [float('inf'), float('inf'), float(
+                'inf'), float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [0, 0, 0, 0, 0],
+            [float('nan'), float('nan'), float(
+                'nan'), float('nan'), float('nan')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [None, None, None, None, None],
+            [None, None, None, None, None],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [0, 2, 3, 4, 5],
+            [float('nan'), float('inf'), float(
+                'inf'), float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [1, 2, None, 4, 5],
+            [float('inf'), float('inf'), None,
+             float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
+        ),
+        (
+            'div_scala',
+            'int',
+            [0, 2, None, 4, 5],
+            [float('nan'), float('inf'), None,
+             float('inf'), float('inf')],
+            {'elem': 0, 'zero_div': True},
         ),
 
         (
@@ -564,13 +701,9 @@ def test_arithmetic_methods(
 ) -> None:
     arr = ul.from_seq(nums, dtype)
     if not test_method.endswith("_scala"):
-        fn = getattr(arr, test_method)
         if isinstance(kwargs["other"], list):
-            result = fn(ul.from_seq(kwargs["other"], dtype))
-        else:
-            result = fn(kwargs["other"])
-    else:
-        result = getattr(arr, test_method)(**kwargs)
+            kwargs["other"] = ul.from_seq(kwargs["other"], dtype)
+    result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
 

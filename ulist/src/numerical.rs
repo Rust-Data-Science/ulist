@@ -98,6 +98,16 @@ where
         BooleanList::new(self._fn_num(|x| x > elem, false), hset)
     }
 
+    fn has_zero(&self) -> bool{
+        let y = self.na_value();
+        for (i, &x) in self.values().iter().enumerate(){
+            if !self.na_indexes().contains(&i) && x == y{
+                return true;
+            }
+        }
+        return false;
+    }
+
     fn less_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
         self._cmp(other, |x, y| x <= y)
     }

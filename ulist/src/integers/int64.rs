@@ -149,6 +149,10 @@ impl IntegerList64 {
         NumericalList::greater_than_scala(self, elem)
     }
 
+    pub fn has_zero(&self) -> bool{
+        NumericalList::has_zero(self)
+    }
+
     pub fn less_than_or_equal(&self, other: &Self) -> PyResult<BooleanList> {
         NumericalList::less_than_or_equal(self, other)
     }

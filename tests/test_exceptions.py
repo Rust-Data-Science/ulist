@@ -7,6 +7,7 @@ _ARR1 = ul.from_seq(range(3), dtype='int')
 _ARR1._values = [0, 1, 2]  # type: ignore
 _ARR2 = ul.from_seq([], dtype='int')
 _ARR3 = ul.from_seq([None, None], dtype='int')
+_ARR4 = ul.from_seq(range(3), dtype='int')
 
 
 class _Foo:
@@ -55,6 +56,18 @@ class _Foo:
         (
             ul.cycle,
             {"obj": [1, 2], "size": 3, "dtype": "foo"},
+            ValueError
+        ),
+
+        (
+            _ARR4.div,
+            {"other": ul.repeat(0, 3), "zero_div": False},
+            ValueError
+        ),
+
+        (
+            _ARR4.div_scala,
+            {"elem": 0, "zero_div": False},
             ValueError
         ),
 

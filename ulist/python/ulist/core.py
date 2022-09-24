@@ -1,6 +1,6 @@
 from __future__ import annotations  # To avoid circular import.
 
-from typing import TYPE_CHECKING, Callable, Union, Optional
+from typing import TYPE_CHECKING, Callable, Union, Optional, Any
 
 from .typedef import COUNTER, ELEM, LIST_PY, LIST_RS, NUM, ELEM_OPT
 from .ulist import (
@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # To avoid circular import.
     from .control_flow import CaseObject
 
 NUM_OR_LIST = Union[NUM, "UltraFastList"]
-ELEM_OR_LIST = Union[ELEM_OPT, "UltraFastList"]
+ELEM_OR_LIST = Union[ELEM, "UltraFastList"]
 
 
 class UltraFastList:
@@ -52,7 +52,10 @@ class UltraFastList:
         return self.size()
 
     def _arithmetic_method(
-        self, other: NUM_OR_LIST, fn: Callable, fn_scala: Callable
+        self,
+        other: NUM_OR_LIST,
+        fn: Callable[["UltraFastList"], "UltraFastList"],
+        fn_scala: Callable[[NUM], "UltraFastList"]
     ) -> "UltraFastList":
         if isinstance(other, int) or isinstance(other, float):
             return fn_scala(other)
@@ -63,7 +66,10 @@ class UltraFastList:
         )
 
     def _cmp_method(
-        self, other: ELEM_OR_LIST, fn: Callable, fn_scala: Callable
+        self,
+        other: ELEM_OR_LIST,
+        fn: Callable[["UltraFastList"], "UltraFastList"],
+        fn_scala: Callable[[Any], "UltraFastList"]
     ) -> "UltraFastList":
         if isinstance(other, (int, float, bool, str)):
             return fn_scala(other)
@@ -86,7 +92,8 @@ class UltraFastList:
         """Return self == other."""
         return self._cmp_method(other, self.equal, self.equal_scala)
 
-    def __getitem__(self, index: Union[int, IndexList]) -> ELEM_OR_LIST:
+    def __getitem__(self, index: Union[int, IndexList]
+                    ) -> Union[ELEM_OPT, "UltraFastList"]:
         """Return self[index]."""
         if isinstance(index, int):
             return self._values.get(index)
@@ -147,7 +154,11 @@ class UltraFastList:
 
     def __pow__(self, other: int) -> "UltraFastList":
         """Return self ** other."""
-        return self._arithmetic_method(other, lambda: None, self.pow_scala)
+        return self._arithmetic_method(
+            other,
+            lambda: None,  # type: ignore
+            self.pow_scala
+        )
 
     def __repr__(self) -> str:
         """Return repr(self)."""
@@ -163,7 +174,7 @@ class UltraFastList:
         if n < 100:
             return str(self.to_list())
 
-        def fmt(x) -> str:
+        def fmt(x: Union[ELEM_OPT, "UltraFastList"]) -> str:
             if isinstance(x, str):
                 return f"'{x}'"
             return f"{x}"
@@ -357,15 +368,27 @@ class UltraFastList:
             result[None] = m
         return result
 
-    def div(self, other: "UltraFastList") -> "UltraFastList":
+    def div(
+        self,
+        other: "UltraFastList",
+        zero_div: bool = False,
+    ) -> "UltraFastList":
         """Return self / other."""
         assert not isinstance(self._values, (BooleanList, StringList))
         assert not isinstance(other._values, (BooleanList, StringList))
+        if not zero_div and self.has_zero():
+            raise ValueError("Does not allow zero division!")
         return UltraFastList(self._values.div(other._values))
 
-    def div_scala(self, elem: float) -> "UltraFastList":
+    def div_scala(
+        self,
+        elem: float,
+        zero_div: bool = False,
+    ) -> "UltraFastList":
         """Return self / elem."""
         assert not isinstance(self._values, (BooleanList, StringList))
+        if not zero_div and elem == 0.0:
+            raise ValueError("Does not allow zero division!")
         return UltraFastList(self._values.div_scala(elem))
 
     def ends_with(self, elem: str) -> UltraFastList:
@@ -418,6 +441,15 @@ class UltraFastList:
         """Return self > elem."""
         assert not isinstance(self._values, (BooleanList, StringList))
         return UltraFastList(self._values.greater_than_scala(elem))
+
+    def has_na(self) -> bool:
+        """Return NA in self."""
+        return self.count_na() > 0
+
+    def has_zero(self) -> bool:
+        """Return zero in self."""
+        assert not isinstance(self._values, (BooleanList, StringList))
+        return self._values.has_zero()
 
     def less_than(self, other: "UltraFastList") -> "UltraFastList":
         """Return self < other."""
@@ -489,7 +521,7 @@ class UltraFastList:
         """Removes the last element of self."""
         self._values.pop()
 
-    def pow_scala(self, elem: int) -> "UltraFastList":
+    def pow_scala(self, elem: NUM) -> "UltraFastList":
         """Return self ** elem."""
         assert not isinstance(self._values, (BooleanList, StringList))
         if elem == 0:

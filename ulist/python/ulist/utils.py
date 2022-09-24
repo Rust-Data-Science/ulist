@@ -53,7 +53,7 @@ def check_test_result(
     test_method: Union[Callable, str],
     result: Union[ELEM_OPT, LIST_PY, UltraFastList, Dict[str, UltraFastList]],
     expected_value: Union[ELEM_OPT, LIST_PY, COUNTER, Dict[str, List]],
-):
+) -> None:
     """Test if the result is as expected. Both value and type.
     Args:
         dtype (str): 'int', 'int32', 'int64', 'float', 'float32',
@@ -69,10 +69,11 @@ def check_test_result(
         + f" expected - {expected_value}"
     )
 
-    def assert_eq(x, y):
+    def assert_eq(x: Any, y: Any) -> None:
         assert type(x) == type(y), msg
         if type(x) == float:
-            assert math.isclose(x, y, rel_tol=1e-7), msg
+            assert math.isclose(x, y, rel_tol=1e-7) \
+                or str(x) == str(y), msg
         else:
             assert x == y, msg
 
@@ -236,7 +237,7 @@ class Benchmarker(ABC):
     def cases(self) -> List[Tuple[Any, ...]]:
         """Benchmark cases for each round."""
 
-    def other_constructor(self, arr: list):
+    def other_constructor(self, arr: list) -> Any:
         if self.debug:
             return None
         import numpy as np  # type: ignore
