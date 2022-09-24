@@ -60,7 +60,7 @@ class _Foo:
 
         (
             _ARR1.div,
-            {"other": ul.cycle(0, 3, dtype='int'), "zero_div": False},
+            {"other": ul.repeat(0, 3), "zero_div": False},
             ValueError
         ),
 
