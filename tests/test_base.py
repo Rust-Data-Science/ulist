@@ -153,6 +153,7 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
         ('count_na', 'bool', [True, False, True], 0),
         ('count_na', 'int', [1, 0, 1], 0),
+        ('count_na', 'float', [1.0, 0.0, 1.0], 0),
         ('count_na', 'string', ['foo', 'bar', 'foo'], 0),
         ('count_na', 'string', ['foo', None, 'foo'], 1),
 
@@ -163,6 +164,7 @@ RESULT = Union[ELEM_TYPE, LIST_TYPE, COUNTER]
 
         ('has_na', 'bool', [True, False, True], False),
         ('has_na', 'int', [1, 0, 1], False),
+        ('has_na', 'float', [1.0, 0.0, 1.0], False),
         ('has_na', 'string', ['foo', 'bar', 'foo'], False),
         ('has_na', 'string', ['foo', None, 'foo'], True),
 
