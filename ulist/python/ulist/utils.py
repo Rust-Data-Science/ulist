@@ -72,7 +72,8 @@ def check_test_result(
     def assert_eq(x: Any, y: Any) -> None:
         assert type(x) == type(y), msg
         if type(x) == float:
-            assert math.isclose(x, y, rel_tol=1e-7), msg
+            assert math.isclose(x, y, rel_tol=1e-7) \
+                or str(x) == str(y), msg
         else:
             assert x == y, msg
 

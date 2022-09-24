@@ -246,7 +246,7 @@ def test_statistics_methods(
             'div',
             'int',
             [1, 2, 3, 4, 5],
-            [1.0, float('nan'), 1.0, 1.0, 1.0],
+            [1.0, float('inf'), 1.0, 1.0, 1.0],
             {'other': [1, 0, 3, 4, 5], 'zero_div': True},
         ),
         (
@@ -701,13 +701,9 @@ def test_arithmetic_methods(
 ) -> None:
     arr = ul.from_seq(nums, dtype)
     if not test_method.endswith("_scala"):
-        fn = getattr(arr, test_method)
         if isinstance(kwargs["other"], list):
-            result = fn(ul.from_seq(kwargs["other"], dtype))
-        else:
-            result = fn(kwargs["other"])
-    else:
-        result = getattr(arr, test_method)(**kwargs)
+            kwargs["other"] = ul.from_seq(kwargs["other"], dtype)
+    result = getattr(arr, test_method)(**kwargs)
     check_test_result(dtype, test_method, result, expected_value)
 
 
