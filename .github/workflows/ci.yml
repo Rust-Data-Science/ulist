@@ -1,19 +1,23 @@
-name: Unit Tests
+name: CI
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on pull request and release events
   pull_request:
   release:
     types: [published]
 
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 
 jobs:
-  pytest:
+  linters:
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.10']
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -29,13 +33,7 @@ jobs:
       - name: Install Python packages
         run: |
           pip install -r ./requirements/dev.txt
-      - name: Build ulist
-        run: |
-          maturin build --out dist -m ulist/Cargo.toml
-      - name: Install ulist
-        run: |
-          pip install ulist --no-index --find-links dist --force-reinstall 
       - name: Python UnitTest
         run: |
           cd tests
-          pytest ../tests
+          sh test.sh
