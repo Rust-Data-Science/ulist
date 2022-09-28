@@ -13,7 +13,7 @@ on:
 
 
 jobs:
-  pytest:
+  linters:
     strategy:
       matrix:
         python-version: ['3.10']
