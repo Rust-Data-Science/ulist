@@ -9,10 +9,8 @@ use std::collections::HashSet;
 
 pub fn _fill_na<T: Clone>(vec: &mut [T], na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
-        // TODO: Use get_unchecked_mut instead.
-        // let ptr = unsafe { vec.get_unchecked_mut(*i) };
-        // *ptr = na_value.clone();
-        vec[*i] = na_value.clone();
+        let ptr = unsafe { vec.get_unchecked_mut(*i) };
+        *ptr = na_value.clone();
     }
 }
 
