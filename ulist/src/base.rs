@@ -233,14 +233,9 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            // TODO: Use get_unchecked_mut instead.
-            // let ptr = unsafe { vec.get_unchecked_mut(i) };
-            // if *ptr == old {
-            //     *ptr = self.na_value();
-            //     self.na_indexes_mut().insert(i);
-            // }
-            if vec[i] == old {
-                vec[i] = self.na_value();
+            let ptr = unsafe{ vec.get_unchecked_mut(i)};
+            if *ptr == old {
+                *ptr = self.na_value();
                 self.na_indexes_mut().insert(i);
             }
         }
