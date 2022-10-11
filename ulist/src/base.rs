@@ -179,11 +179,11 @@ where
         if indexes.back() >= self.size() {
             return Err(PyIndexError::new_err("Index out of range!"));
         }
-        // TODO: use get_unchecked instead.
         let mut vec: Vec<T> = Vec::new();
         let mut hset: HashSet<usize> = HashSet::new();
         for (i, j) in indexes.values().iter().enumerate() {
-            vec.push(self.values()[*j].clone());
+            let elem = unsafe { self.values().get_unchecked(*j).clone() };
+            vec.push(elem);
             if self.na_indexes().contains(j) {
                 hset.insert(i);
             }
