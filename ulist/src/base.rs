@@ -148,9 +148,6 @@ where
         let mut i = 0;
         for ((j, x), cond) in self.values().iter().enumerate().zip(cond.iter()) {
             if *cond {
-                // TODO: Use get_unchecked_mut instead
-                // let ptr = unsafe { vec.get_unchecked_mut(i) };
-                // *ptr = x.clone();
                 vec.push(x.clone());
                 if self.na_indexes().contains(&j) {
                     hset.insert(i);
