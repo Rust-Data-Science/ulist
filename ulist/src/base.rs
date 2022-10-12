@@ -245,13 +245,9 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            // TODO: Use get_unchecked_mut instead.
-            // let ptr = unsafe { vec.get_unchecked_mut(i) };
-            // if *ptr == old {
-            //     *ptr = new.clone();
-            // }
-            if vec[i] == old {
-                vec[i] = new.clone();
+            let ptr = unsafe { vec.get_unchecked_mut(i) };
+            if *ptr == old {
+                *ptr = new.clone();
             }
         }
     }
