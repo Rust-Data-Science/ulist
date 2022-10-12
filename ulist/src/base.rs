@@ -266,19 +266,12 @@ where
             return Err(PyIndexError::new_err("Index out of range!"));
         }
         let mut vec = self.values_mut();
-        // TODO: Use get_unchecked_mut instead.
-        // let ptr = unsafe { vec.get_unchecked_mut(index) };
-        // if let Some(i) = elem {
-        //     *ptr = i;
-        // } else {
-        //     *ptr = self.na_value();
-        //     self.na_indexes_mut().insert(index);
-        // }
+        let ptr = unsafe{vec.get_unchecked_mut(index)};
         if let Some(i) = elem {
-            vec[index] = i;
+            *ptr = i;
             self.na_indexes_mut().remove(&index);
         } else {
-            vec[index] = self.na_value();
+            *ptr = self.na_value();
             self.na_indexes_mut().insert(index);
         }
         Ok(())
