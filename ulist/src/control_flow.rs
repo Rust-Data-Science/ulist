@@ -34,12 +34,13 @@ where
     }
 
     let mut vec = vec![default; cond[0].size()];
-    // for j in 0..cond[0].size() {
-    for (j, item) in vec.iter_mut().enumerate().take(cond[0].size()) {
+    for j in 0..vec.len() {
         for i in 0..cond.len() {
-            // TODO: Improve the benchmark.
-            if cond[i].get(j).unwrap().unwrap() {
-                *item = choices[i].clone();
+            let ptr = unsafe { cond.get_unchecked(i) };
+            let choice = unsafe { choices.get_unchecked(i) };
+            // TODO: implement iter() for BooleanList
+            if ptr.get(j).unwrap().unwrap() {
+                vec[j] = choice.clone();
                 break;
             }
         }
