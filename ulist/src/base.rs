@@ -255,10 +255,8 @@ where
     fn replace_na(&self, new: T) {
         let mut vec = self.values_mut();
         for i in self.na_indexes().iter() {
-            // TODO: Use get_unchecked_mut instead.
-            // let ptr = unsafe { vec.get_unchecked_mut(*i) };
-            // *ptr = new.clone();
-            vec[*i] = new.clone();
+            let ptr = unsafe { vec.get_unchecked_mut(*i) };
+            *ptr = new.clone();
         }
         self.na_indexes_mut().clear();
     }
