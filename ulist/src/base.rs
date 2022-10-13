@@ -174,12 +174,10 @@ where
     }
 
     fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
-        // TODO: Put this kind of check
-        // where there is unsafe block.
         if indexes.back() >= self.size() {
             return Err(PyIndexError::new_err("Index out of range!"));
         }
-        let mut vec: Vec<T> = Vec::new();
+        let mut vec: Vec<T> = Vec::with_capacity(indexes.size());
         let mut hset: HashSet<usize> = HashSet::new();
         for (i, j) in indexes.values().iter().enumerate() {
             let elem = unsafe { self.values().get_unchecked(*j).clone() };
@@ -188,6 +186,7 @@ where
                 hset.insert(i);
             }
         }
+        hset.shrink_to_fit();
         Ok(List::_new(vec, hset))
     }
 
