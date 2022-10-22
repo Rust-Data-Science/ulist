@@ -9,10 +9,8 @@ use std::collections::HashSet;
 
 pub fn _fill_na<T: Clone>(vec: &mut [T], na_indexes: Ref<HashSet<usize>>, na_value: T) {
     for i in na_indexes.iter() {
-        // TODO: Use get_unchecked_mut instead.
-        // let ptr = unsafe { vec.get_unchecked_mut(*i) };
-        // *ptr = na_value.clone();
-        vec[*i] = na_value.clone();
+        let ptr = unsafe { vec.get_unchecked_mut(*i) };
+        *ptr = na_value.clone();
     }
 }
 
@@ -150,9 +148,6 @@ where
         let mut i = 0;
         for ((j, x), cond) in self.values().iter().enumerate().zip(cond.iter()) {
             if *cond {
-                // TODO: Use get_unchecked_mut instead
-                // let ptr = unsafe { vec.get_unchecked_mut(i) };
-                // *ptr = x.clone();
                 vec.push(x.clone());
                 if self.na_indexes().contains(&j) {
                     hset.insert(i);
@@ -179,20 +174,19 @@ where
     }
 
     fn get_by_indexes(&self, indexes: &IndexList) -> PyResult<Self> {
-        // TODO: Put this kind of check
-        // where there is unsafe block.
         if indexes.back() >= self.size() {
             return Err(PyIndexError::new_err("Index out of range!"));
         }
-        // TODO: use get_unchecked instead.
-        let mut vec: Vec<T> = Vec::new();
+        let mut vec: Vec<T> = Vec::with_capacity(indexes.size());
         let mut hset: HashSet<usize> = HashSet::new();
         for (i, j) in indexes.values().iter().enumerate() {
-            vec.push(self.values()[*j].clone());
+            let elem = unsafe { self.values().get_unchecked(*j).clone() };
+            vec.push(elem);
             if self.na_indexes().contains(j) {
                 hset.insert(i);
             }
         }
+        hset.shrink_to_fit();
         Ok(List::_new(vec, hset))
     }
 
@@ -238,14 +232,9 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            // TODO: Use get_unchecked_mut instead.
-            // let ptr = unsafe { vec.get_unchecked_mut(i) };
-            // if *ptr == old {
-            //     *ptr = self.na_value();
-            //     self.na_indexes_mut().insert(i);
-            // }
-            if vec[i] == old {
-                vec[i] = self.na_value();
+            let ptr = unsafe{ vec.get_unchecked_mut(i)};
+            if *ptr == old {
+                *ptr = self.na_value();
                 self.na_indexes_mut().insert(i);
             }
         }
@@ -255,13 +244,9 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            // TODO: Use get_unchecked_mut instead.
-            // let ptr = unsafe { vec.get_unchecked_mut(i) };
-            // if *ptr == old {
-            //     *ptr = new.clone();
-            // }
-            if vec[i] == old {
-                vec[i] = new.clone();
+            let ptr = unsafe { vec.get_unchecked_mut(i) };
+            if *ptr == old {
+                *ptr = new.clone();
             }
         }
     }
@@ -269,10 +254,8 @@ where
     fn replace_na(&self, new: T) {
         let mut vec = self.values_mut();
         for i in self.na_indexes().iter() {
-            // TODO: Use get_unchecked_mut instead.
-            // let ptr = unsafe { vec.get_unchecked_mut(*i) };
-            // *ptr = new.clone();
-            vec[*i] = new.clone();
+            let ptr = unsafe { vec.get_unchecked_mut(*i) };
+            *ptr = new.clone();
         }
         self.na_indexes_mut().clear();
     }
@@ -282,19 +265,12 @@ where
             return Err(PyIndexError::new_err("Index out of range!"));
         }
         let mut vec = self.values_mut();
-        // TODO: Use get_unchecked_mut instead.
-        // let ptr = unsafe { vec.get_unchecked_mut(index) };
-        // if let Some(i) = elem {
-        //     *ptr = i;
-        // } else {
-        //     *ptr = self.na_value();
-        //     self.na_indexes_mut().insert(index);
-        // }
+        let ptr = unsafe{vec.get_unchecked_mut(index)};
         if let Some(i) = elem {
-            vec[index] = i;
+            *ptr = i;
             self.na_indexes_mut().remove(&index);
         } else {
-            vec[index] = self.na_value();
+            *ptr = self.na_value();
             self.na_indexes_mut().insert(index);
         }
         Ok(())

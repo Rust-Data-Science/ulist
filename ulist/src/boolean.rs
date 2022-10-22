@@ -19,6 +19,7 @@ use std::cell::RefMut;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::ops::Fn;
+use std::cmp::max;
 
 /// List with boolean type elements.
 #[pyclass]
@@ -57,7 +58,7 @@ impl BooleanList {
         self._check_len_eq(other)?;
         let hset1 = self.na_indexes();
         let hset2 = other.na_indexes();
-        let mut hset: HashSet<usize> = HashSet::new();
+        let mut hset: HashSet<usize> = HashSet::with_capacity(max(hset1.len(), hset2.len()));
         let vec = self
             .values()
             .iter()
@@ -83,6 +84,7 @@ impl BooleanList {
                 }
             })
             .collect();
+        hset.shrink_to_fit();
         Ok(BooleanList::new(vec, hset))
     }
 
@@ -179,7 +181,7 @@ impl BooleanList {
         self._check_len_eq(other)?;
         let hset1 = self.na_indexes();
         let hset2 = other.na_indexes();
-        let mut hset: HashSet<usize> = HashSet::new();
+        let mut hset: HashSet<usize> = HashSet::with_capacity(max(hset1.len(), hset2.len()));
         let vec = self
             .values()
             .iter()
@@ -205,6 +207,7 @@ impl BooleanList {
                 }
             })
             .collect();
+        hset.shrink_to_fit();
         Ok(BooleanList::new(vec, hset))
     }
 

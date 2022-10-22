@@ -65,7 +65,7 @@ where
             }
         };
         // Construct List.
-        let mut hset = HashSet::new();
+        let mut hset = HashSet::with_capacity(1);
         if self.count_na() > 0 {
             hset.insert(vec_dedup.len() - 1);
         }

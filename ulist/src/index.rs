@@ -49,4 +49,8 @@ impl IndexList {
     pub fn to_list(&self) -> Vec<usize> {
         self._values.clone()
     }
+
+    pub fn size(&self) -> usize {
+        self._values.len()
+    }
 }
