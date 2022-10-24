@@ -297,7 +297,7 @@ impl List<f64> for FloatList64 {
 impl NumericalList<f64, i32, f64> for FloatList64 {
     fn argmax(&self) -> PyResult<usize> {
         self._check_empty()?;
-self._check_all_na()?;
+        self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
         let val_0 = &f64::NEG_INFINITY;
@@ -311,7 +311,7 @@ self._check_all_na()?;
 
     fn argmin(&self) -> PyResult<usize> {
         self._check_empty()?;
-self._check_all_na()?;
+        self._check_all_na()?;
         let vec = self.values();
         let hset = self.na_indexes();
         let val_0 = &f64::INFINITY;
@@ -339,7 +339,7 @@ self._check_all_na()?;
 
     fn max(&self) -> PyResult<f64> {
         self._check_empty()?;
-self._check_all_na()?;
+        self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self
             .values()
@@ -353,7 +353,7 @@ self._check_all_na()?;
 
     fn min(&self) -> PyResult<f64> {
         self._check_empty()?;
-self._check_all_na()?;
+        self._check_all_na()?;
         let hset = self.na_indexes();
         Ok(*self
             .values()
