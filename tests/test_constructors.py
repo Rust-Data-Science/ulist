@@ -23,28 +23,6 @@ from ulist.utils import check_test_result
         (ul.arange, (5,), {"step": 2}, [0, 2, 4],),
         (ul.arange, (0,), {"stop": 5, "step": 2}, [0, 2, 4],),
 
-        (ul.repeat, (0, 3), {}, [0, 0, 0],),
-        (ul.repeat, (1.0, 3), {}, [1.0, 1.0, 1.0],),
-        (ul.repeat, (False, 3), {}, [False, False, False],),
-        (ul.repeat, ('foo', 3), {}, ['foo', 'foo', 'foo'],),
-
-        (ul.from_seq, (range(3), "float"), {}, [0.0, 1.0, 2.0],),
-        (ul.from_seq, (range(3), "int"), {}, [0, 1, 2],),
-        (ul.from_seq, (range(3), "int32"), {}, [0, 1, 2],),
-        (ul.from_seq, (range(3), "int64"), {}, [0, 1, 2],),
-
-        (ul.from_seq, ([False, True], "bool"), {}, [False, True],),
-        (ul.from_seq, ([0.0, 1.0, 2.0], "float"), {}, [0.0, 1.0, 2.0],),
-        (ul.from_seq, ([0, 1, 2], "int"), {}, [0, 1, 2],),
-        (ul.from_seq, (['foo', 'bar'], "string"), {}, ['foo', 'bar'],),
-
-        (ul.from_seq, ((False, True), "bool"), {}, [False, True],),
-        (ul.from_seq, ((0.0, 1.0, 2.0), "float"), {}, [0.0, 1.0, 2.0],),
-        (ul.from_seq, ((0, 1, 2), "int"), {}, [0, 1, 2],),
-        (ul.from_seq, (('foo', 'bar'), "string"), {}, ['foo', 'bar'],),
-        (ul.from_seq, (('foo', 'bar', None), "string"),
-         {}, ['foo', 'bar', None],),
-
         (ul.cycle, (range(3), 1, 'float'), {}, [0.0],),
         (ul.cycle, (range(3), 1, 'int32'), {}, [0],),
         (ul.cycle, (range(3), 1, 'int64'), {}, [0],),
@@ -64,6 +42,29 @@ from ulist.utils import check_test_result
         (ul.cycle, ((0.0, 1.0), 3, 'float'), {}, [0.0, 1.0, 0.0],),
         (ul.cycle, ((0, 1), 3, 'int'), {}, [0, 1, 0],),
         (ul.cycle, (('foo', 'bar'), 3, 'string'), {}, ['foo', 'bar', 'foo'],),
+
+
+        (ul.from_seq, (range(3), "float"), {}, [0.0, 1.0, 2.0],),
+        (ul.from_seq, (range(3), "int"), {}, [0, 1, 2],),
+        (ul.from_seq, (range(3), "int32"), {}, [0, 1, 2],),
+        (ul.from_seq, (range(3), "int64"), {}, [0, 1, 2],),
+
+        (ul.from_seq, ([False, True], "bool"), {}, [False, True],),
+        (ul.from_seq, ([0.0, 1.0, 2.0], "float"), {}, [0.0, 1.0, 2.0],),
+        (ul.from_seq, ([0, 1, 2], "int"), {}, [0, 1, 2],),
+        (ul.from_seq, (['foo', 'bar'], "string"), {}, ['foo', 'bar'],),
+
+        (ul.from_seq, ((False, True), "bool"), {}, [False, True],),
+        (ul.from_seq, ((0.0, 1.0, 2.0), "float"), {}, [0.0, 1.0, 2.0],),
+        (ul.from_seq, ((0, 1, 2), "int"), {}, [0, 1, 2],),
+        (ul.from_seq, (('foo', 'bar'), "string"), {}, ['foo', 'bar'],),
+        (ul.from_seq, (('foo', 'bar', None), "string"),
+         {}, ['foo', 'bar', None],),
+
+        (ul.repeat, (0, 3), {}, [0, 0, 0],),
+        (ul.repeat, (1.0, 3), {}, [1.0, 1.0, 1.0],),
+        (ul.repeat, (False, 3), {}, [False, False, False],),
+        (ul.repeat, ('foo', 3), {}, ['foo', 'foo', 'foo'],),
     ],
 )
 def test_constructors(
@@ -84,3 +85,21 @@ def test_constructors(
     else:
         raise TypeError(f"Unexpected type {type(expected_value[0])}!")
     check_test_result(dtype, test_method, result, expected_value)
+
+
+@pytest.mark.parametrize(
+    "test_method, args, kwargs",
+    [
+        (ul.random, (), {"size": 3, "dtype": "float32"},),
+    ],
+)
+def test_rand(
+    test_method: Callable,
+    args: tuple,
+    kwargs: dict,
+) -> None:
+    arr1 = test_method(*args, **kwargs)
+    arr2 = test_method(*args, **kwargs)
+    assert arr1.not_equal(arr2).all()
+    assert len(arr1) == len(arr2)
+    assert len(arr1) == kwargs["size"]
