@@ -85,3 +85,21 @@ def test_constructors(
     else:
         raise TypeError(f"Unexpected type {type(expected_value[0])}!")
     check_test_result(dtype, test_method, result, expected_value)
+
+
+@pytest.mark.parametrize(
+    "test_method, args, kwargs",
+    [
+        (ul.random, (), {"size": 3, "dtype": "float32"},),
+    ],
+)
+def test_rand(
+    test_method: Callable,
+    args: tuple,
+    kwargs: dict,
+) -> None:
+    arr1 = test_method(*args, **kwargs)
+    arr2 = test_method(*args, **kwargs)
+    assert arr1.not_equal(arr2).all()
+    assert len(arr1) == len(arr2)
+    assert len(arr1) == kwargs["size"]
