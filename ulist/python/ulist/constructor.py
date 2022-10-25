@@ -192,6 +192,27 @@ def from_seq(obj: Sequence, dtype: str) -> UltraFastList:
     return result
 
 
+def random(size: int, dtype: str) -> UltraFastList:
+    """Return a new ulist of random number in [0.0, 1.0).
+
+    Args:
+        size (int):
+            size (int): Size of the new ulist.
+        dtype (str):
+            The type of the output ulist. 'float', 'float32' or 'float64'.
+    """
+    if dtype == "float" or dtype == "float64":
+        raise NotImplementedError("Not implemented for float64!")
+        # result = UltraFastList(FloatList64.random(size))
+    elif dtype == "float32":
+        result = UltraFastList(FloatList32.random(size))
+    else:
+        raise ValueError(
+            "Parameter dtype should be 'float', 'float32' or 'float64'!"
+        )
+    return result
+
+
 def repeat(elem: ELEM, size: int) -> UltraFastList:
     """Return a new ulist of given size, filled with elem.
 
