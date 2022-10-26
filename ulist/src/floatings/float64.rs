@@ -12,6 +12,8 @@ use crate::types::AsIntegerList32;
 use crate::types::AsIntegerList64;
 use crate::types::AsStringList;
 use pyo3::prelude::*;
+use rand::distributions::Uniform;
+use rand::Rng;
 use std::cell::Ref;
 use std::cell::RefCell;
 use std::cell::RefMut;
@@ -136,7 +138,7 @@ impl FloatList64 {
         NumericalList::greater_than_scala(self, elem)
     }
 
-    pub fn has_zero(&self) -> bool{
+    pub fn has_zero(&self) -> bool {
         NumericalList::has_zero(self)
     }
 
@@ -186,6 +188,13 @@ impl FloatList64 {
 
     pub fn pow_scala(&self, elem: i32) -> Self {
         NumericalList::pow_scala(self, elem)
+    }
+
+    #[staticmethod]
+    fn random(size: usize) -> Self {
+        let range: Uniform<f64> = Uniform::from(0.0..1.0);
+        let v: Vec<f64> = rand::thread_rng().sample_iter(&range).take(size).collect();
+        FloatList64::new(v, HashSet::new())
     }
 
     #[staticmethod]

@@ -202,8 +202,7 @@ def random(size: int, dtype: str) -> UltraFastList:
             The type of the output ulist. 'float', 'float32' or 'float64'.
     """
     if dtype == "float" or dtype == "float64":
-        raise NotImplementedError("Not implemented for float64!")
-        # result = UltraFastList(FloatList64.random(size))
+        result = UltraFastList(FloatList64.random(size))
     elif dtype == "float32":
         result = UltraFastList(FloatList32.random(size))
     else:

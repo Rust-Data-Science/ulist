@@ -91,6 +91,7 @@ def test_constructors(
     "test_method, args, kwargs",
     [
         (ul.random, (), {"size": 3, "dtype": "float32"},),
+        (ul.random, (), {"size": 3, "dtype": "float64"},),
     ],
 )
 def test_rand(
