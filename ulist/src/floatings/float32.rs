@@ -79,6 +79,11 @@ impl FloatList32 {
         AsStringList::as_str(self)
     }
 
+    #[staticmethod]
+    pub fn choices(vec: Vec<f32>, size: usize) -> Self {
+        List::choices(&vec, size)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
     }

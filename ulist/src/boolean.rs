@@ -138,6 +138,11 @@ impl BooleanList {
     }
 
     #[staticmethod]
+    pub fn choices(vec: Vec<bool>, size: usize) -> Self {
+        List::choices(&vec, size)
+    }
+
+    #[staticmethod]
     pub fn cycle(vec: Vec<bool>, size: usize) -> Self {
         List::cycle(&vec, size)
     }
