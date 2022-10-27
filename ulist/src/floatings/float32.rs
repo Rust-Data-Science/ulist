@@ -192,8 +192,8 @@ impl FloatList32 {
 
     #[staticmethod]
     fn random(size: usize) -> Self {
-        let range: Uniform<f32> = Uniform::from(0.0..1.0);
-        let v: Vec<f32> = rand::thread_rng().sample_iter(&range).take(size).collect();
+        let dist: Uniform<f32> = Uniform::from(0.0..1.0);
+        let v: Vec<f32> = rand::thread_rng().sample_iter(&dist).take(size).collect();
         FloatList32::new(v, HashSet::new())
     }
 
