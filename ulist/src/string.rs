@@ -63,6 +63,11 @@ impl StringList {
         AsIntegerList64::as_int64(self)
     }
 
+    #[staticmethod]
+    pub fn choices(vec: Vec<String>, size: usize) -> Self {
+        List::choices(&vec, size)
+    }
+
     pub fn contains(&self, elem: &str) -> BooleanList {
         let mut vec: Vec<_> = self.values().iter().map(|x| x.contains(elem)).collect();
         _fill_na(&mut vec, self.na_indexes(), false);

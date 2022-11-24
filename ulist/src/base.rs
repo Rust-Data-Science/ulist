@@ -3,6 +3,8 @@ use crate::index::IndexList;
 use pyo3::exceptions::PyIndexError;
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::PyResult;
+use rand::distributions::Uniform;
+use rand::Rng;
 use std::cell::Ref;
 use std::cell::RefMut;
 use std::collections::HashSet;
@@ -106,6 +108,17 @@ where
             self.na_indexes_mut().insert(self.size());
             self.values_mut().push(self.na_value());
         }
+    }
+
+    fn choices(vec: &[T], size: usize) -> Self {
+        let n = vec.len();
+        let dist: Uniform<usize> = Uniform::from(0..n);
+        let v = rand::thread_rng()
+            .sample_iter(dist)
+            .map(|x| unsafe { vec.get_unchecked(x).clone() })
+            .take(size)
+            .collect();
+        List::_new(v, HashSet::new())
     }
 
     fn copy(&self) -> Self {
@@ -232,7 +245,7 @@ where
         let n = self.size();
         let mut vec = self.values_mut();
         for i in 0..n {
-            let ptr = unsafe{ vec.get_unchecked_mut(i)};
+            let ptr = unsafe { vec.get_unchecked_mut(i) };
             if *ptr == old {
                 *ptr = self.na_value();
                 self.na_indexes_mut().insert(i);
@@ -265,7 +278,7 @@ where
             return Err(PyIndexError::new_err("Index out of range!"));
         }
         let mut vec = self.values_mut();
-        let ptr = unsafe{vec.get_unchecked_mut(index)};
+        let ptr = unsafe { vec.get_unchecked_mut(index) };
         if let Some(i) = elem {
             *ptr = i;
             self.na_indexes_mut().remove(&index);

@@ -67,6 +67,47 @@ def arange(
             "Parameter dtype should be 'int', 'int32' or 'int64'!")
 
 
+def choices(obj: Sequence, size: int, dtype: str) -> UltraFastList:
+    """Choose element from a sequence randomly and endlessly until
+    the size is met.
+
+    Args:
+        obj (Sequence):
+            Sequence object such as list, tuple and range.
+        size (int):
+            size (int): Size of the new ulist.
+        dtype (str):
+            The type of the output ulist. 'int', 'int32', 'int64',
+            'float', 'float32', 'float64', 'bool' or 'string'.
+
+    Raises:
+        ValueError:
+            Parameter dtype should be 'int', 'int32', 'int64',
+            'float', 'float32', 'float64', 'bool' or 'string'!
+
+    Returns:
+        UltraFastList: A ulist object.
+    """
+    if dtype == "int" or dtype == "int64":
+        result = UltraFastList(IntegerList64.choices(obj, size))
+    elif dtype == "int32":
+        result = UltraFastList(IntegerList32.choices(obj, size))
+    elif dtype == "float" or dtype == "float64":
+        result = UltraFastList(FloatList64.choices(obj, size))
+    elif dtype == "float32":
+        result = UltraFastList(FloatList32.choices(obj, size))
+    elif dtype == "bool":
+        result = UltraFastList(BooleanList.choices(obj, size))
+    elif dtype == "string":
+        result = UltraFastList(StringList.choices(obj, size))
+    else:
+        raise ValueError(
+            "Parameter dtype should be 'int', 'int32', 'int64', " +
+            "'float', 'float32', 'float64', 'bool' or 'string'!"
+        )
+    return result
+
+
 def cycle(obj: Sequence, size: int, dtype: str) -> UltraFastList:
     """Repeats a sequence endlessly until the size is met.
 

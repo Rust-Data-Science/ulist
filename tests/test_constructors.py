@@ -104,3 +104,28 @@ def test_rand(
     assert arr1.not_equal(arr2).all()
     assert len(arr1) == len(arr2)
     assert len(arr1) == kwargs["size"]
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"obj": list(range(1000)), "size": 1000, "dtype": "float"},
+        {"obj": list(range(1000)), "size": 1000, "dtype": "float32"},
+        {"obj": list(range(1000)), "size": 1000, "dtype": "float64"},
+        {"obj": list(range(1000)), "size": 1000, "dtype": "int"},
+        {"obj": list(range(1000)), "size": 1000, "dtype": "int32"},
+        {"obj": list(range(1000)), "size": 1000, "dtype": "int64"},
+        {"obj": [True, False], "size": 1000, "dtype": "bool"},
+        {"obj": ['foo', 'bar'], "size": 1000, "dtype": "string"},
+    ],
+)
+def test_choices(kwargs: dict) -> None:
+    arr1 = ul.choices(**kwargs)
+    arr2 = ul.choices(**kwargs)
+    assert all([x in kwargs["obj"] for x in arr1.to_list()])
+    assert all([x in kwargs["obj"] for x in arr2.to_list()])
+    assert arr1.not_equal(arr2).any()
+    assert len(arr1) == len(arr2)
+    assert len(arr1) == kwargs["size"]
+    assert arr1.dtype.startswith(kwargs["dtype"])
+    assert arr2.dtype.startswith(kwargs["dtype"])

@@ -79,6 +79,11 @@ impl FloatList64 {
         AsStringList::as_str(self)
     }
 
+    #[staticmethod]
+    pub fn choices(vec: Vec<f64>, size: usize) -> Self {
+        List::choices(&vec, size)
+    }
+
     pub fn copy(&self) -> Self {
         List::copy(self)
     }
@@ -192,8 +197,8 @@ impl FloatList64 {
 
     #[staticmethod]
     fn random(size: usize) -> Self {
-        let range: Uniform<f64> = Uniform::from(0.0..1.0);
-        let v: Vec<f64> = rand::thread_rng().sample_iter(&range).take(size).collect();
+        let dist: Uniform<f64> = Uniform::from(0.0..1.0);
+        let v: Vec<f64> = rand::thread_rng().sample_iter(&dist).take(size).collect();
         FloatList64::new(v, HashSet::new())
     }
 
