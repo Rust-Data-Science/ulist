@@ -1,6 +1,5 @@
 from random import random, seed
 
-import numpy as np
 from ulist.utils import Benchmarker
 
 seed(100)
@@ -102,7 +101,7 @@ class Sort(Benchmarker):
         ]
 
     def ulist_fn(self, args) -> None:
-        args[0].sort(ascending=True)
+        args[0].copy().sort(ascending=True)
 
     def other_fn(self, args) -> None:
-        np.sort(args[0])
+        args[0].copy().sort()
