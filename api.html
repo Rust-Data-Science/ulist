@@ -79,6 +79,33 @@ Defaults to None.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ulist.constructor.choices">
+<span class="sig-prename descclassname"><span class="pre">ulist.constructor.</span></span><span class="sig-name descname"><span class="pre">choices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.constructor.choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose element from a sequence randomly and endlessly until
+the size is met.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>obj (Sequence):</dt><dd><p>Sequence object such as list, tuple and range.</p>
+</dd>
+<dt>size (int):</dt><dd><p>size (int): Size of the new ulist.</p>
+</dd>
+<dt>dtype (str):</dt><dd><p>The type of the output ulist. ‘int’, ‘int32’, ‘int64’,
+‘float’, ‘float32’, ‘float64’, ‘bool’ or ‘string’.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>ValueError:</dt><dd><p>Parameter dtype should be ‘int’, ‘int32’, ‘int64’,
+‘float’, ‘float32’, ‘float64’, ‘bool’ or ‘string’!</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>UltraFastList: A ulist object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ulist.constructor.cycle">
 <span class="sig-prename descclassname"><span class="pre">ulist.constructor.</span></span><span class="sig-name descname"><span class="pre">cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.constructor.cycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Repeats a sequence endlessly until the size is met.</p>
@@ -168,6 +195,21 @@ Defaults to None.</p>
 <span class="go">UltraFastList([&#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39;])</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ulist.constructor.random">
+<span class="sig-prename descclassname"><span class="pre">ulist.constructor.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">ulist.core.UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.constructor.random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new ulist of random number in [0.0, 1.0).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>size (int):</dt><dd><p>size (int): Size of the new ulist.</p>
+</dd>
+<dt>dtype (str):</dt><dd><p>The type of the output ulist. ‘float’, ‘float32’ or ‘float64’.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -446,13 +488,13 @@ dictionary keys and their counts are stored as dictionary values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.div">
-<span class="sig-name descname"><span class="pre">div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.div" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_div</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.div" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self / other.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.div_scala">
-<span class="sig-name descname"><span class="pre">div_scala</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.div_scala" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">div_scala</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_div</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.div_scala" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self / elem.</p>
 </dd></dl>
 
@@ -515,6 +557,18 @@ correspondingly.</p>
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.greater_than_scala">
 <span class="sig-name descname"><span class="pre">greater_than_scala</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.greater_than_scala" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self &gt; elem.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ulist.core.UltraFastList.has_na">
+<span class="sig-name descname"><span class="pre">has_na</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#ulist.core.UltraFastList.has_na" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return NA in self.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ulist.core.UltraFastList.has_zero">
+<span class="sig-name descname"><span class="pre">has_zero</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#ulist.core.UltraFastList.has_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return zero in self.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -603,7 +657,7 @@ correspondingly.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ulist.core.UltraFastList.pow_scala">
-<span class="sig-name descname"><span class="pre">pow_scala</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.pow_scala" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pow_scala</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ulist.core.UltraFastList" title="ulist.core.UltraFastList"><span class="pre">UltraFastList</span></a></span></span><a class="headerlink" href="#ulist.core.UltraFastList.pow_scala" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self ** elem.</p>
 </dd></dl>
 
