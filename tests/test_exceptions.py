@@ -1,7 +1,11 @@
+from pathlib import Path
 from typing import Callable, Type
 
 import pytest
+
 import ulist as ul
+
+here = Path(__file__).parent.resolve()
 
 _ARR1 = ul.from_seq(range(3), dtype='int')
 _ARR1._values = [0, 1, 2]  # type: ignore
@@ -167,7 +171,7 @@ class _Foo:
         (
             ul.read_csv,  # mismatch dtype
             {
-                "path": "./test_csv/00_test_int.csv",
+                "path": str(here / "test_csv/00_test_int.csv"),
                 "schema": {"int32": "bool", "int64": "string"}
             },
             TypeError
@@ -175,7 +179,7 @@ class _Foo:
         (
             ul.read_csv,  # mismatch dtype test case 2
             {
-                "path": "./test_csv/04_test_nan.csv",
+                "path": str(here / "test_csv/04_test_nan.csv"),
                 "schema": {"int": "bool",
                            "float": "int",
                            "string": "float",
@@ -186,7 +190,7 @@ class _Foo:
         (
             ul.read_csv,
             {
-                "path": "./non_exists_csv.csv",
+                "path": str(here / "non_exists_csv.csv"),
                 "schema": {"whatever": "int32"}
             },
             IOError
@@ -194,7 +198,7 @@ class _Foo:
         (
             ul.read_csv,  # wrong dtype
             {
-                "path": "./test_csv/04_test_nan.csv",
+                "path": str(here / "test_csv/04_test_nan.csv"),
                 "schema": {"int": "integer",
                            "float": "double",
                            "string": "str",
