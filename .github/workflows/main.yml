@@ -36,4 +36,4 @@ jobs:
           maturin build --out dist -m ulist/Cargo.toml
       - name: Install ulist and Python UnitTest
         run: |
-          pip install ulist --no-index --find-links dist --force-reinstall && python -m pytest ./tests
+          pip install ulist --no-index --find-links dist --force-reinstall && python -m pytest tests
