@@ -1,2 +1,2 @@
 # A-Z
-maturin==0.13.7
+maturin==1.1.0
