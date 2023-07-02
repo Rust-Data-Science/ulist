@@ -29,10 +29,13 @@ jobs:
       - name: Install Python packages
         run: |
           pip install -r ./requirements/dev.txt
-      - name: Build and install ulist
+      - name: Build ulist
         run: |
-          cd ulist && maturin develop
+          maturin build --out dist -m ulist/Cargo.toml
+      - name: Install ulist
+        run: |
+          pip install ulist --no-index --find-links dist --force-reinstall 
       - name: Python UnitTest
         run: |
-          cd ../tests
+          cd tests
           pytest ../tests
