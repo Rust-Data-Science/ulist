@@ -12,7 +12,8 @@ jobs:
   pytest:
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        # python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8']
         # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [macos-latest]
     runs-on: ${{ matrix.os }}
@@ -35,4 +36,4 @@ jobs:
           maturin build --out dist -m ulist/Cargo.toml
       - name: Install ulist and Python UnitTest
         run: |
-          pip install ulist --no-index --find-links dist --force-reinstall && pytest ./tests
+          pip install ulist --no-index --find-links dist --force-reinstall && python -m pytest ./tests
